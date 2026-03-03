@@ -1529,7 +1529,7 @@
         start: "30 oct 2025",
         resolution: "0535-2025-JNE",
         interest: "#",
-        photo: "funcionario-1.png"
+        photo: ""
       },
       {
         name: "Betty Marina Morón Larrú",
@@ -1540,7 +1540,7 @@
         start: "—",
         resolution: "—",
         interest: "#",
-        photo: "funcionario-2.png"
+        photo: ""
       },
       {
         name: "Palacios Santa Cruz Julio Cesar",
@@ -2100,18 +2100,39 @@
     // Fotos de funcionarios (fallback por rutas)
     // ========================
     function buildFuncionarioPhotoCandidates(seq, customSrc){
+      // En GitHub Pages a veces ayuda usar "./" para forzar "misma carpeta"
       const base = `funcionario-${seq}.png`;
+      const baseCap = `Funcionario-${seq}.png`; // por si subieron con mayúscula
       const list = [];
       const clean = (customSrc || "").toString().trim();
       if(clean) list.push(clean);
+
+      // raíz del sitio / misma carpeta del HTML
       list.push(
+        `./${base}`,
         base,
+        `./${baseCap}`,
+        baseCap,
+
+        // posibles carpetas (por si luego ordenas)
+        `./funcionarios/${base}`,
         `funcionarios/${base}`,
+        `./img/funcionarios/${base}`,
         `img/funcionarios/${base}`,
-        `assets/funcionarios/${base}`
+        `./assets/funcionarios/${base}`,
+        `assets/funcionarios/${base}`,
+
+        // y las variantes con mayúscula
+        `./funcionarios/${baseCap}`,
+        `funcionarios/${baseCap}`,
+        `./img/funcionarios/${baseCap}`,
+        `img/funcionarios/${baseCap}`,
+        `./assets/funcionarios/${baseCap}`,
+        `assets/funcionarios/${baseCap}`
       );
-      // quitar duplicados
-      return Array.from(new Set(list));
+
+      // quitar duplicados y vacíos
+      return Array.from(new Set(list.filter(Boolean)));
     }
 
     function applyImgFallback(imgEl, candidates, onAllFail){
@@ -2220,6 +2241,11 @@
         const img = el.querySelector(".personPhoto");
         const ph = el.querySelector(".photo-placeholder");
         const candidates = buildFuncionarioPhotoCandidates(seq, p.photo);
+        img.onload = () => {
+          // si carga, aseguramos que se vea la foto y se oculte el placeholder
+          img.hidden = false;
+          ph.hidden = true;
+        };
         applyImgFallback(img, candidates, () => {
           img.hidden = true;
           ph.hidden = false;
