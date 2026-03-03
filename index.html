@@ -650,6 +650,35 @@
       z-index:90;
     }
     .toast[data-show="true"]{opacity:1}
+
+    /* Editor de funcionarios */
+    .formgrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width:720px){.formgrid{grid-template-columns:1fr}}
+    .field{display:grid;gap:6px}
+    .field label{font-weight:800;font-size:13px;color:#111827}
+    .field input, .field select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+    }
+    .field input:focus, .field select:focus{border-color:#cbd5e1}
+    .formhint{font-size:12px;color:var(--muted)}
+    .formactions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      margin-top:12px;
+    }
+
   </style>
 </head>
 <body>
@@ -1031,6 +1060,7 @@
                       </button>
                     </div>
                     <a href="#" class="btn" data-route="directorio">Ver directorio</a>
+                    <button class="btn btn--primary" type="button" id="btnOpenPeopleEditor">Registrar / editar (25)</button>
                   </div>
                 </div>
 
@@ -1185,6 +1215,7 @@
               </button>
             </div>
             <a class="btn" href="#" data-route="inicio">Volver a Inicio</a>
+            <button class="btn btn--primary" type="button" id="btnOpenPeopleEditor2">Registrar / editar (25)</button>
           </div>
         </div>
 
@@ -1495,6 +1526,86 @@
     </div>
   </div>
 
+
+  <!-- Modal registrar/editar funcionarios (demo) -->
+  <div class="modal" id="peopleEditorModal" aria-hidden="true" role="dialog" aria-label="Registrar o editar funcionario">
+    <div class="modal__panel" role="document">
+      <div class="modal__top">
+        <h3>Registrar / editar funcionarios (25)</h3>
+        <button class="close" type="button" id="peopleEditorClose" aria-label="Cerrar">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal__body" style="grid-template-columns:1fr">
+        <div class="modal__detail">
+          <div class="formgrid">
+            <div class="field">
+              <label for="peIndex">Funcionario</label>
+              <select id="peIndex"></select>
+              <div class="formhint">Selecciona el funcionario a registrar/editar.</div>
+            </div>
+            <div class="field">
+              <label>Foto</label>
+              <div class="formhint">
+                Se busca automáticamente: <b>funcionario-1.png</b>, <b>funcionario-2.png</b>, ... según el orden.
+                (Si subes esas imágenes en la misma carpeta, se verán en tarjeta y perfil.)
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="peName">Nombres y apellidos</label>
+              <input id="peName" type="text" placeholder="Ej. Juan Pérez García">
+            </div>
+            <div class="field">
+              <label for="peRole">Cargo</label>
+              <input id="peRole" type="text" placeholder="Ej. Director Académico">
+            </div>
+
+            <div class="field">
+              <label for="peEmail">Correo</label>
+              <input id="peEmail" type="email" placeholder="correo@dominio.com">
+            </div>
+            <div class="field">
+              <label for="pePhone">Teléfono</label>
+              <input id="pePhone" type="text" placeholder="999999999">
+            </div>
+
+            <div class="field">
+              <label for="peExt">Anexo</label>
+              <input id="peExt" type="text" placeholder="Anexo: no aplica / Anexo 1234">
+            </div>
+            <div class="field">
+              <label for="peStart">Fecha de inicio</label>
+              <input id="peStart" type="text" placeholder="Ej. 13 Feb 2026">
+            </div>
+
+            <div class="field" style="grid-column:1/-1">
+              <label for="peResolution">Norma de nombramiento / referencia</label>
+              <input id="peResolution" type="text" placeholder="Ej. Resolución / Partida Registral / Documento">
+            </div>
+
+            <div class="field" style="grid-column:1/-1">
+              <label for="peInterest">Link DJ Intereses (opcional)</label>
+              <input id="peInterest" type="text" placeholder="https://...">
+            </div>
+          </div>
+
+          <div class="formactions">
+            <button class="btn" type="button" id="peResetOne">Reiniciar este</button>
+            <button class="btn btn--danger" type="button" id="peResetAll">Reiniciar todo</button>
+            <button class="btn btn--primary" type="button" id="peSave">Guardar cambios</button>
+          </div>
+
+          <div class="formhint" style="margin-top:10px">
+            *Los cambios se guardan en este navegador (localStorage). Si necesitas que todos vean lo mismo, luego lo conectamos a una base (Sheets/Firebase).
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <div class="toast" id="toast">Copiado</div>
 
   <script>
@@ -1569,8 +1680,9 @@
       }
     ];
 
-    // 25 tarjetas (4 reales + 21 placeholders). Reemplaza "Funcionario XX" y "Puesto XX" por los cargos reales.
-    const PEOPLE = [
+    // 25 funcionarios (4 registrados + 21 por registrar).
+    // Puedes registrar/editar en la misma web (se guarda en este navegador con localStorage).
+    const PEOPLE_DEFAULT = [
       ...PEOPLE_BASE,
       ...Array.from({length: 21}, (_, i) => {
         const n = i + 5;
@@ -1578,18 +1690,57 @@
         return {
           name: `Funcionario ${k}`,
           role: `Puesto ${k}`,
-          email: "correo@munichorrillos.gob.pe",
-          phone: "6803030",
-          ext: "Anexo —",
-          start: "—",
-          resolution: "—",
+          email: "",
+          phone: "",
+          ext: "Anexo: no aplica",
+          start: "",
+          resolution: "",
           interest: "#",
           photo: ""
         };
       })
     ];
 
+    const PEOPLE_STORAGE_KEY = "altumlumen_people_v1";
 
+    function loadPeople(){
+      try{
+        const raw = localStorage.getItem(PEOPLE_STORAGE_KEY);
+        if(!raw) return PEOPLE_DEFAULT.map(p => ({...p}));
+        const saved = JSON.parse(raw);
+        if(!Array.isArray(saved)) return PEOPLE_DEFAULT.map(p => ({...p}));
+
+        const merged = PEOPLE_DEFAULT.map((p, idx) => {
+          const s = saved[idx];
+          if(!s || typeof s !== "object") return ({...p});
+          return ({...p, ...s});
+        });
+        return merged;
+      }catch(err){
+        return PEOPLE_DEFAULT.map(p => ({...p}));
+      }
+    }
+
+    function savePeople(){
+      try{
+        localStorage.setItem(PEOPLE_STORAGE_KEY, JSON.stringify(PEOPLE));
+      }catch(err){
+        // si no hay espacio o está bloqueado, no hacemos nada
+      }
+    }
+
+    function resetPeopleAll(){
+      PEOPLE = PEOPLE_DEFAULT.map(p => ({...p}));
+      localStorage.removeItem(PEOPLE_STORAGE_KEY);
+    }
+
+    function resetPeopleOne(idx){
+      if(idx < 0 || idx >= PEOPLE_DEFAULT.length) return;
+      PEOPLE[idx] = ({...PEOPLE_DEFAULT[idx]});
+      savePeople();
+    }
+
+    let PEOPLE = loadPeople();
     const DOCS = [
       {
         title: "Resolución Gerencial N.° RGM N.° 00078-2026-MDCH",
@@ -2670,7 +2821,129 @@
       $("#docBtnSearch").addEventListener("click", filterDocs);
     }
 
-    function initProfileModal(){
+    
+    // ========================
+    // Editor de funcionarios (demo)
+    // ========================
+    function refreshPeopleUI(){
+      const q1 = ($("#dirSearch") ? $("#dirSearch").value : "");
+      const q2 = ($("#dirSearch2") ? $("#dirSearch2").value : "");
+      renderPeopleCards($("#dirCards"), filterPeople(q1));
+      renderPeopleCards($("#dirCards2"), filterPeople(q2));
+    }
+
+    function initPeopleEditor(){
+      const modal = $("#peopleEditorModal");
+      if(!modal) return;
+
+      const btn1 = $("#btnOpenPeopleEditor");
+      const btn2 = $("#btnOpenPeopleEditor2");
+      const sel = $("#peIndex");
+      const closeBtn = $("#peopleEditorClose");
+      const saveBtn = $("#peSave");
+      const resetOneBtn = $("#peResetOne");
+      const resetAllBtn = $("#peResetAll");
+
+      const f = {
+        name: $("#peName"),
+        role: $("#peRole"),
+        email: $("#peEmail"),
+        phone: $("#pePhone"),
+        ext: $("#peExt"),
+        start: $("#peStart"),
+        resolution: $("#peResolution"),
+        interest: $("#peInterest"),
+      };
+
+      function openEditor(idx=0){
+        // llenar select
+        sel.innerHTML = "";
+        PEOPLE.forEach((p,i) => {
+          const opt = document.createElement("option");
+          const num = String(i+1).padStart(2,"0");
+          const labelName = (p.name && p.name.trim()) ? p.name : `Funcionario ${num}`;
+          const labelRole = (p.role && p.role.trim()) ? p.role : `Puesto ${num}`;
+          opt.value = String(i);
+          opt.textContent = `${num} – ${labelRole} | ${labelName}`;
+          sel.appendChild(opt);
+        });
+        sel.value = String(Math.max(0, Math.min(idx, PEOPLE.length-1)));
+        fillForm(parseInt(sel.value,10));
+
+        modal.setAttribute("data-open", "true");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeEditor(){
+        modal.setAttribute("data-open", "false");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+
+      function fillForm(idx){
+        const p = PEOPLE[idx];
+        if(!p) return;
+        f.name.value = p.name || "";
+        f.role.value = p.role || "";
+        f.email.value = p.email || "";
+        f.phone.value = p.phone || "";
+        f.ext.value = p.ext || "Anexo: no aplica";
+        f.start.value = p.start || "";
+        f.resolution.value = p.resolution || "";
+        f.interest.value = (p.interest && p.interest !== "#") ? p.interest : "";
+      }
+
+      function readForm(){
+        return {
+          name: f.name.value.trim(),
+          role: f.role.value.trim(),
+          email: f.email.value.trim(),
+          phone: f.phone.value.trim(),
+          ext: f.ext.value.trim() || "Anexo: no aplica",
+          start: f.start.value.trim(),
+          resolution: f.resolution.value.trim(),
+          interest: f.interest.value.trim() || "#"
+        };
+      }
+
+      // eventos
+      if(btn1) btn1.addEventListener("click", (e) => { e.preventDefault(); openEditor(0); });
+      if(btn2) btn2.addEventListener("click", (e) => { e.preventDefault(); openEditor(0); });
+
+      sel.addEventListener("change", () => fillForm(parseInt(sel.value,10)));
+
+      saveBtn.addEventListener("click", () => {
+        const idx = parseInt(sel.value,10);
+        if(!(idx >= 0)) return;
+        PEOPLE[idx] = ({...PEOPLE[idx], ...readForm()});
+        savePeople();
+        refreshPeopleUI();
+        toast("Guardado ✓");
+      });
+
+      resetOneBtn.addEventListener("click", () => {
+        const idx = parseInt(sel.value,10);
+        resetPeopleOne(idx);
+        refreshPeopleUI();
+        fillForm(idx);
+        toast("Reiniciado ✓");
+      });
+
+      resetAllBtn.addEventListener("click", () => {
+        resetPeopleAll();
+        refreshPeopleUI();
+        // reconstruimos select con defaults
+        openEditor(parseInt(sel.value,10) || 0);
+        toast("Todo reiniciado ✓");
+      });
+
+      closeBtn.addEventListener("click", closeEditor);
+      modal.addEventListener("click", (e) => { if(e.target === modal) closeEditor(); });
+      document.addEventListener("keydown", (e) => { if(e.key === "Escape" && modal.getAttribute("data-open") === "true") closeEditor(); });
+    }
+
+function initProfileModal(){
       document.addEventListener("click", (e) => {
         const t = e.target.closest("[data-open-profile]");
         if(!t) return;
@@ -2701,8 +2974,7 @@
     initRoutes();
     initNavDropdowns();
 
-    renderPeopleCards($("#dirCards"), PEOPLE);
-    renderPeopleCards($("#dirCards2"), PEOPLE);
+    refreshPeopleUI();
     // Docs: cargar Google Drive (si está configurado) y luego pintar
     (async () => {
       await loadDriveDocs();
@@ -2717,6 +2989,7 @@
     initDocUpload();
     initDocModal();
     initProfileModal();
+    initPeopleEditor();
 
     // Start route
     const initial = (location.hash || "#inicio").slice(1);
