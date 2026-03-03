@@ -388,12 +388,14 @@
       min-height:280px;
     }
     .person__img{
-      height:140px;
+      aspect-ratio: 1 / 1;
+      height:auto;
       background:linear-gradient(180deg,#f3f4f6,#ffffff);
-      display:grid; place-items:center;
+      display:block;
       border-bottom:1px solid var(--line);
       position:relative;
-    }
+      overflow:hidden;
+}
     .person__img .badge{
       position:absolute;
       left:10px; top:10px;
@@ -406,8 +408,20 @@
       display:flex; gap:8px; align-items:center;
       box-shadow:0 10px 25px rgba(17,24,39,.06);
     }
+
+    .person__img img{width:100%;height:100%;object-fit:cover;display:block}
+    .photo-placeholder{
+      width:100%;height:100%;
+      display:grid;place-items:center;
+      gap:8px;
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+    .photo-placeholder svg{width:48px;height:48px;opacity:.30}
+    .photo-placeholder .hint{font-weight:800;color:#9ca3af}
     .avatar{
-      width:84px;height:84px;border-radius:999px;
+      width:96px;height:96px;border-radius:12px;
       border:2px solid #fff;
       box-shadow:0 10px 25px rgba(17,24,39,.12);
       background:radial-gradient(circle at 30% 30%, #fff 0, #e5e7eb 40%, #f3f4f6 100%);
@@ -478,6 +492,48 @@
     .comp ul{margin:8px 0 0; padding-left:18px}
     .comp li{margin:6px 0; color:#1f2937}
     .comp .btn{width:100%; margin-top:8px}
+
+
+    /* Upload (demo) */
+    .upload{
+      border:1px dashed #d1d5db;
+      border-radius:14px;
+      padding:14px;
+      background:#fafafa;
+      display:grid;
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .upload__row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .upload__row .left{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .upload__drop{
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fff;
+      color:#6b7280;
+      font-size:13px;
+    }
+    .upload__drop[data-drag="true"]{outline:3px solid #cfe0ff; outline-offset:2px}
+    .upload__small{font-size:12px;color:var(--muted)}
+    .btn--danger{border-color:#fecaca;background:#fff1f2;color:#991b1b}
+    .btn--danger:hover{background:#ffe4e6}
+
+    /* Doc viewer modal */
+    .docviewer{
+      height:70vh;
+      border:1px solid var(--line);
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .docviewer iframe{width:100%;height:100%;border:0;}
 
     /* Footer */
     footer{
@@ -1150,6 +1206,24 @@
 
         <div class="card">
           <div class="card__body">
+            <div class="upload" id="uploadBox">
+              <div class="upload__row">
+                <div class="left">
+                  <input id="docUploadInput" type="file" multiple
+                         accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png"
+                         class="sr-only" />
+                  <button class="btn btn--dark" type="button" id="btnUploadPick">
+                    Subir documentación
+                  </button>
+                  <div class="upload__drop" id="uploadDrop">O arrastra y suelta aquí tus archivos</div>
+                </div>
+                <button class="btn btn--danger" type="button" id="btnUploadClear">
+                  Limpiar documentos subidos
+                </button>
+              </div>
+              <div class="upload__small" id="uploadStatus">0 documentos subidos (demo)</div>
+            </div>
+
             <div class="filters" style="margin-bottom:12px">
               <div class="input">
                 <input id="docSearch" type="search" placeholder="Filtrar por palabra clave" />
@@ -1166,6 +1240,7 @@
                 <option value="Resolución Gerencial">Resolución Gerencial</option>
                 <option value="Decreto">Decreto</option>
                 <option value="Ordenanza">Ordenanza</option>
+                <option value="Archivo subido">Archivo subido</option>
               </select>
 
               <select id="docSort" class="btn" style="padding:10px 12px" aria-label="Ordenar">
@@ -1391,7 +1466,31 @@
     </div>
   </div>
 
-  <div class="toast" id="toast">Copiado</div>
+    <div class="modal" id="docModal" aria-hidden="true" role="dialog" aria-label="Vista previa del documento">
+    <div class="modal__panel" role="document">
+      <div class="modal__top">
+        <h3 id="docModalTitle">Vista previa</h3>
+        <button class="close" type="button" id="docModalClose" aria-label="Cerrar">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal__body" style="grid-template-columns:1fr">
+        <div class="modal__detail" style="border:none;padding:0">
+          <div class="docviewer">
+            <iframe id="docFrame" title="Documento"></iframe>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px;padding:0 16px 16px">
+            <a class="btn btn--primary" href="#" id="docModalDownload" download>Descargar</a>
+            <button class="btn" type="button" id="docModalClose2">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="toast" id="toast">Copiado</div>
 
   <script>
     // ========================
@@ -1418,8 +1517,7 @@
       whatsapp_denuncia: "#",
       maps: "#"
     };
-
-    const PEOPLE = [
+    const PEOPLE_BASE = [
       {
         name: "Richard Cortez Melgarejo",
         role: "Alcalde",
@@ -1428,7 +1526,8 @@
         ext: "Anexo 9012",
         start: "30 oct 2025",
         resolution: "0535-2025-JNE",
-        interest: "#"
+        interest: "#",
+        photo: ""
       },
       {
         name: "Betty Marina Morón Larrú",
@@ -1438,7 +1537,8 @@
         ext: "Anexo 2041",
         start: "—",
         resolution: "—",
-        interest: "#"
+        interest: "#",
+        photo: ""
       },
       {
         name: "Palacios Santa Cruz Julio Cesar",
@@ -1448,7 +1548,8 @@
         ext: "Anexo 2031",
         start: "—",
         resolution: "—",
-        interest: "#"
+        interest: "#",
+        photo: ""
       },
       {
         name: "Medina Bolo Jose Carlos",
@@ -1458,9 +1559,31 @@
         ext: "Anexo 2024",
         start: "—",
         resolution: "—",
-        interest: "#"
+        interest: "#",
+        photo: ""
       }
     ];
+
+    // 25 tarjetas (4 reales + 21 placeholders). Reemplaza "Funcionario XX" y "Puesto XX" por los cargos reales.
+    const PEOPLE = [
+      ...PEOPLE_BASE,
+      ...Array.from({length: 21}, (_, i) => {
+        const n = i + 5;
+        const k = String(n).padStart(2,"0");
+        return {
+          name: `Funcionario ${k}`,
+          role: `Puesto ${k}`,
+          email: "correo@munichorrillos.gob.pe",
+          phone: "6803030",
+          ext: "Anexo —",
+          start: "—",
+          resolution: "—",
+          interest: "#",
+          photo: ""
+        };
+      })
+    ];
+
 
     const DOCS = [
       {
@@ -1488,6 +1611,300 @@
         read: "#"
       }
     ];
+
+    // ========================
+    // Upload de documentos (frontend demo con IndexedDB)
+    // ========================
+    let UPLOADED_DOCS = [];
+    const DOC_DB = { name: "mdch_docs_db_v1", store: "docs" };
+
+    function uid(){
+      if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return "doc_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+    }
+
+    function idbOpen(){
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DOC_DB.name, 1);
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if(!db.objectStoreNames.contains(DOC_DB.store)){
+            db.createObjectStore(DOC_DB.store, { keyPath: "id" });
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbGetAll(){
+      const db = await idbOpen();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(DOC_DB.store, "readonly");
+        const st = tx.objectStore(DOC_DB.store);
+        const req = st.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbPutMany(records){
+      const db = await idbOpen();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(DOC_DB.store, "readwrite");
+        const st = tx.objectStore(DOC_DB.store);
+        records.forEach(r => st.put(r));
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function idbDelete(id){
+      const db = await idbOpen();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(DOC_DB.store, "readwrite");
+        const st = tx.objectStore(DOC_DB.store);
+        st.delete(id);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function idbClear(){
+      const db = await idbOpen();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(DOC_DB.store, "readwrite");
+        const st = tx.objectStore(DOC_DB.store);
+        st.clear();
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    function classifyUpload(file){
+      // Para tu maqueta: todo lo subido cae como "Archivo subido"
+      return "Archivo subido";
+    }
+
+    function toDocRecord(file){
+      const today = new Date().toISOString().slice(0,10);
+      return {
+        id: uid(),
+        _uploaded: true,
+        title: file.name,
+        type: classifyUpload(file),
+        dateISO: today,
+        summary: "Documento subido (demo).",
+        filename: file.name,
+        mime: file.type || "application/octet-stream",
+        blob: file
+      };
+    }
+
+    function getAllDocs(){
+      // DOCS (demo público) + uploads (local)
+      return DOCS.concat(UPLOADED_DOCS);
+    }
+
+    function updateUploadStatus(){
+      const el = $("#uploadStatus");
+      if(!el) return;
+      el.textContent = `${UPLOADED_DOCS.length} documentos subidos (demo)`;
+    }
+
+    async function loadUploadedDocs(){
+      try{
+        const rows = await idbGetAll();
+        // Ordenar por más reciente primero
+        rows.sort((a,b) => (b.dateISO || "").localeCompare(a.dateISO || ""));
+        UPLOADED_DOCS = rows.map(r => ({...r, _uploaded:true}));
+        updateUploadStatus();
+      }catch(e){
+        console.warn("No se pudo cargar uploads", e);
+        UPLOADED_DOCS = [];
+        updateUploadStatus();
+      }
+    }
+
+    // ========================
+    // Modal de vista previa
+    // ========================
+    let _docUrlToRevoke = null;
+
+    function openDocModal(record){
+      const modal = $("#docModal");
+      const frame = $("#docFrame");
+      const dl = $("#docModalDownload");
+
+      $("#docModalTitle").textContent = record.title || "Vista previa";
+      modal.dataset.open = "true";
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+
+      // Limpiar frame
+      frame.removeAttribute("src");
+      frame.removeAttribute("srcdoc");
+
+      // Crear URL para descarga / vista previa
+      const blob = record.blob;
+      const isPdf = (record.mime || "").includes("pdf");
+      const isImg = (record.mime || "").startsWith("image/");
+      const url = URL.createObjectURL(blob);
+      _docUrlToRevoke = url;
+
+      dl.href = url;
+      dl.download = record.filename || "documento";
+
+      if(isPdf){
+        frame.src = url;
+      }else if(isImg){
+        frame.srcdoc = `
+          <!doctype html>
+          <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Vista previa</title>
+          <style>body{margin:0;display:grid;place-items:center;background:#f6f7f9}img{max-width:100%;max-height:100vh}</style>
+          </head><body><img src="${url}" alt="Imagen"></body></html>`;
+      }else{
+        frame.srcdoc = `
+          <!doctype html>
+          <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Vista previa</title>
+          <style>
+            body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;padding:18px;background:#f6f7f9;color:#111827}
+            .box{max-width:720px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:16px}
+            h1{font-size:16px;margin:0 0 10px}
+            p{margin:6px 0;color:#6b7280}
+            .k{font-weight:800;color:#111827}
+          </style>
+          </head><body>
+            <div class="box">
+              <h1>Vista previa no disponible en maqueta</h1>
+              <p>Tipo de archivo: <span class="k">${record.mime || "—"}</span></p>
+              <p>Igual puedes descargarlo con el botón “Descargar”.</p>
+            </div>
+          </body></html>`;
+      }
+    }
+
+    function closeDocModal(){
+      const modal = $("#docModal");
+      const frame = $("#docFrame");
+      modal.dataset.open = "false";
+      modal.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+
+      if(_docUrlToRevoke){
+        try{ URL.revokeObjectURL(_docUrlToRevoke); }catch{}
+        _docUrlToRevoke = null;
+      }
+      frame.removeAttribute("src");
+      frame.removeAttribute("srcdoc");
+    }
+
+    function initDocModal(){
+      $("#docModalClose").addEventListener("click", closeDocModal);
+      $("#docModalClose2").addEventListener("click", closeDocModal);
+      $("#docModal").addEventListener("click", (e) => {
+        if(e.target === $("#docModal")) closeDocModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if(e.key === "Escape"){
+          if($("#docModal").dataset.open === "true") closeDocModal();
+        }
+      });
+    }
+
+    function initDocUpload(){
+      const pick = $("#btnUploadPick");
+      const input = $("#docUploadInput");
+      const drop = $("#uploadDrop");
+      const clear = $("#btnUploadClear");
+
+      if(!pick || !input || !drop || !clear) return;
+
+      pick.addEventListener("click", () => input.click());
+
+      input.addEventListener("change", async () => {
+        const files = Array.from(input.files || []);
+        if(!files.length) return;
+        const recs = files.map(toDocRecord);
+        await idbPutMany(recs);
+        await loadUploadedDocs();
+        filterDocs();
+        showToast("Documentos subidos ✅");
+        input.value = "";
+      });
+
+      // Drag & Drop
+      ["dragenter","dragover"].forEach(ev => {
+        drop.addEventListener(ev, (e) => {
+          e.preventDefault();
+          drop.dataset.drag = "true";
+        });
+      });
+      ["dragleave","drop"].forEach(ev => {
+        drop.addEventListener(ev, (e) => {
+          e.preventDefault();
+          drop.dataset.drag = "false";
+        });
+      });
+      drop.addEventListener("drop", async (e) => {
+        const files = Array.from(e.dataTransfer?.files || []);
+        if(!files.length) return;
+        const recs = files.map(toDocRecord);
+        await idbPutMany(recs);
+        await loadUploadedDocs();
+        filterDocs();
+        showToast("Documentos subidos ✅");
+      });
+
+      clear.addEventListener("click", async () => {
+        await idbClear();
+        await loadUploadedDocs();
+        filterDocs();
+        showToast("Documentos eliminados");
+      });
+
+      // Acciones en lista: preview / download / delete
+      document.addEventListener("click", async (e) => {
+        const pv = e.target.closest("[data-doc-preview]");
+        if(pv){
+          e.preventDefault();
+          const id = pv.dataset.docPreview;
+          const rec = UPLOADED_DOCS.find(d => d.id === id);
+          if(rec) openDocModal(rec);
+          return;
+        }
+        const dl = e.target.closest("[data-doc-download]");
+        if(dl){
+          e.preventDefault();
+          const id = dl.dataset.docDownload;
+          const rec = UPLOADED_DOCS.find(d => d.id === id);
+          if(!rec) return;
+          const url = URL.createObjectURL(rec.blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = rec.filename || "documento";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(()=>{ try{URL.revokeObjectURL(url)}catch{} }, 800);
+          return;
+        }
+        const del = e.target.closest("[data-doc-delete]");
+        if(del){
+          e.preventDefault();
+          const id = del.dataset.docDelete;
+          await idbDelete(id);
+          await loadUploadedDocs();
+          filterDocs();
+          showToast("Documento eliminado");
+          return;
+        }
+      });
+    }
+
+
 
     // ========================
     // Helpers UI
@@ -1535,11 +1952,26 @@
     // ========================
     // Rendering
     // ========================
-    function renderPeopleCards(targetEl, list){
+        function renderPeopleCards(targetEl, list){
       targetEl.innerHTML = "";
-      list.forEach((p, idx) => {
+      list.forEach((p) => {
+        const realIdx = PEOPLE.indexOf(p);
         const el = document.createElement("article");
         el.className = "person";
+
+        const photo = p.photo
+          ? `<img src="${p.photo}" alt="Foto de ${p.name}">`
+          : `
+            <div class="photo-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 6h16v12H4V6Z" stroke="#111827" stroke-width="1.6"/>
+                <path d="m7 14 3-3 3 3 2-2 3 3" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="9" cy="9" r="1.3" fill="#111827" opacity=".6"/>
+              </svg>
+              <div class="hint">Foto por actualizar</div>
+            </div>
+          `;
+
         el.innerHTML = `
           <div class="person__img">
             <div class="badge" title="Ficha rápida">
@@ -1550,10 +1982,10 @@
               </svg>
               Perfil (demo)
             </div>
-            <div class="avatar" aria-hidden="true">${initials(p.name)}</div>
+            ${photo}
           </div>
           <div class="person__body">
-            <a href="#" class="person__name" data-open-profile="${idx}">${p.name}</a>
+            <a href="#" class="person__name" data-open-profile="${realIdx}">${p.name}</a>
             <div class="person__role">${p.role}</div>
             <div class="minirow">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1570,12 +2002,13 @@
             </div>
           </div>
           <div class="person__foot">
-            <a href="#" data-open-profile="${idx}">Ver perfil profesional</a>
+            <a href="#" data-open-profile="${realIdx}">Ver perfil profesional</a>
           </div>
         `;
         targetEl.appendChild(el);
       });
     }
+
 
     function renderFeaturedDocs(){
       const wrap = $("#featuredDocs");
@@ -1616,10 +2049,31 @@
       filtered.forEach(d => {
         const row = document.createElement("div");
         row.className = "doc";
-        row.innerHTML = `
-          <a href="${d.read}">${d.title}</a>
-          <div class="card__muted">${d.summary}</div>
-          <div class="actions">
+
+        const isUp = d._uploaded === true;
+
+        const actions = isUp
+          ? `
+            <button class="btn" type="button" data-doc-preview="${d.id}">
+              Vista previa
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </button>
+            <button class="btn btn--primary" type="button" data-doc-download="${d.id}">
+              Descargar
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 10l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <button class="btn btn--danger" type="button" data-doc-delete="${d.id}">
+              Eliminar
+            </button>
+          `
+          : `
             <a class="btn" href="${d.read}">
               Leer más
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1634,9 +2088,15 @@
                 <path d="M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </a>
-          </div>
+          `;
+
+        row.innerHTML = `
+          <a href="${isUp ? "#" : d.read}">${d.title}</a>
+          <div class="card__muted">${d.summary}</div>
+          <div class="actions">${actions}</div>
           <div class="meta">${d.type} · ${formatDate(d.dateISO)}</div>
         `;
+
         listEl.appendChild(row);
       });
     }
@@ -1776,7 +2236,7 @@
       const t = $("#docType").value || "";
       const sort = $("#docSort").value;
 
-      let list = DOCS.slice();
+      let list = getAllDocs().slice();
 
       if(t){
         list = list.filter(d => d.type === t);
@@ -1956,10 +2416,15 @@
     renderPeopleCards($("#dirCards"), PEOPLE);
     renderPeopleCards($("#dirCards2"), PEOPLE);
     renderFeaturedDocs();
-    renderDocList(DOCS);
+    // Carga uploads locales y pinta lista de normas
+    loadUploadedDocs().then(() => {
+      filterDocs();
+    });
 
     initDirectorySearch();
     initDocFilters();
+    initDocUpload();
+    initDocModal();
     initProfileModal();
 
     // Start route
