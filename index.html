@@ -428,6 +428,8 @@
       display:grid; place-items:center;
       font-weight:900; color:#6b7280;
     }
+    .avatar img{width:100%;height:100%;object-fit:cover;border-radius:12px;display:block}
+
     .person__body{padding:12px 14px 14px; display:grid; gap:8px}
     .person__name{
       font-weight:800;
@@ -1519,15 +1521,15 @@
     };
     const PEOPLE_BASE = [
       {
-        name: "Jeanfranco Martín Vargas Luque",
-        role: "Gerente General",
-        email: "gerenciageneral.altumlumen@gmail.com",
+        name: "Richard Cortez Melgarejo",
+        role: "Alcalde",
+        email: "rcortez@munichorrillos.gob.pe",
         phone: "6803030",
         ext: "Anexo 9012",
         start: "30 oct 2025",
         resolution: "0535-2025-JNE",
         interest: "#",
-        photo: "funcionario-1.png"
+        photo: ""
       },
       {
         name: "Betty Marina Morón Larrú",
@@ -1611,6 +1613,82 @@
         read: "#"
       }
     ];
+
+        // ========================
+    // Google Drive (repositorio compartido)
+    // ========================
+    // ✅ Para que TODOS vean los mismos documentos:
+    // 1) Crea una carpeta en Google Drive
+    // 2) Comparte la carpeta: "Cualquier persona con el enlace" (lector)
+    // 3) Activa Google Drive API y crea una API KEY (Google Cloud Console)
+    // 4) Pega aquí el FOLDER_ID y la API KEY
+    const DRIVE = {
+      enabled: true,
+      folderId: "PON_AQUI_TU_FOLDER_ID",
+      apiKey: "PON_AQUI_TU_API_KEY",
+      // URL para que el administrador suba archivos (abre Drive)
+      adminUrl: "https://drive.google.com/drive/folders/PON_AQUI_TU_FOLDER_ID"
+    };
+
+    let DRIVE_DOCS = [];
+
+    // Asignar ids a DOCS demo (fallback)
+    DOCS.forEach((d,i)=>{ if(!d.id) d.id = `demo_${i+1}`; });
+
+    function inferDocType(name, mime){
+      const n = (name || "").toLowerCase();
+      if(n.includes("resolución") || n.includes("resolucion")) return "Resolución Gerencial";
+      if(n.includes("decreto")) return "Decreto";
+      if(n.includes("ordenanza")) return "Ordenanza";
+      if(n.includes("acuerdo")) return "Acuerdo";
+      if((mime||"").includes("pdf")) return "PDF";
+      if((mime||"").startsWith("image/")) return "Imagen";
+      return "Documento";
+    }
+
+    async function loadDriveDocs(){
+      if(!DRIVE.enabled || !DRIVE.folderId || !DRIVE.apiKey) return [];
+      const q = encodeURIComponent(`'${DRIVE.folderId}' in parents and trashed=false`);
+      const fields = encodeURIComponent("files(id,name,mimeType,modifiedTime,size,description)");
+      const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=modifiedTime desc&key=${encodeURIComponent(DRIVE.apiKey)}`;
+
+      try{
+        const res = await fetch(url, { method:"GET" });
+        if(!res.ok) throw new Error(`Drive API: ${res.status}`);
+        const data = await res.json();
+        const files = data.files || [];
+
+        DRIVE_DOCS = files.map(f => ({
+          id: f.id,
+          title: f.name || "Documento",
+          type: inferDocType(f.name, f.mimeType),
+          dateISO: (f.modifiedTime || "").slice(0,10),
+          summary: (f.description && String(f.description).trim()) ? f.description : "Documento publicado en Google Drive.",
+          read: `https://drive.google.com/file/d/${f.id}/view?usp=sharing`,
+          preview: `https://drive.google.com/file/d/${f.id}/preview`,
+          download: `https://drive.google.com/uc?export=download&id=${f.id}`,
+          _drive: true
+        }));
+
+        const st = $("#uploadStatus");
+        if(st){
+          st.textContent = `${DRIVE_DOCS.length} documentos publicados (Google Drive)`;
+        }
+        return DRIVE_DOCS;
+      }catch(err){
+        console.warn(err);
+        const st = $("#uploadStatus");
+        if(st){
+          st.textContent = "No se pudo cargar Google Drive. Mostrando demo local.";
+        }
+        DRIVE_DOCS = [];
+        return [];
+      }
+    }
+
+    function docsSource(){
+      return (DRIVE.enabled && DRIVE_DOCS && DRIVE_DOCS.length) ? DRIVE_DOCS : DOCS;
+    }
 
     // ========================
     // Upload de documentos (frontend demo con IndexedDB)
@@ -1702,17 +1780,32 @@
     }
 
     function getAllDocs(){
-      // DOCS (demo público) + uploads (local)
-      return DOCS.concat(UPLOADED_DOCS);
+      // Fuente principal: Google Drive (si está configurado) o DOCS demo.
+      // Uploads locales quedan deshabilitados cuando DRIVE.enabled = true.
+      const base = docsSource().slice();
+      return base.concat(DRIVE.enabled ? [] : UPLOADED_DOCS);
     }
 
     function updateUploadStatus(){
       const el = $("#uploadStatus");
       if(!el) return;
+      if(DRIVE.enabled){
+        if(DRIVE_DOCS && DRIVE_DOCS.length){
+          el.textContent = `${DRIVE_DOCS.length} documentos publicados (Google Drive)`;
+        }else{
+          el.textContent = "Fuente: Google Drive (configura Folder ID y API Key)";
+        }
+        return;
+      }
       el.textContent = `${UPLOADED_DOCS.length} documentos subidos (demo)`;
     }
 
     async function loadUploadedDocs(){
+      if(DRIVE.enabled){
+        UPLOADED_DOCS = [];
+        updateUploadStatus();
+        return;
+      }
       try{
         const rows = await idbGetAll();
         // Ordenar por más reciente primero
@@ -1745,44 +1838,81 @@
       frame.removeAttribute("src");
       frame.removeAttribute("srcdoc");
 
-      // Crear URL para descarga / vista previa
-      const blob = record.blob;
-      const isPdf = (record.mime || "").includes("pdf");
-      const isImg = (record.mime || "").startsWith("image/");
-      const url = URL.createObjectURL(blob);
-      _docUrlToRevoke = url;
+      // Si es upload local (tiene blob), usamos URL local
+      if(record && record.blob){
+        const blob = record.blob;
+        const isPdf = (record.mime || "").includes("pdf");
+        const isImg = (record.mime || "").startsWith("image/");
+        const url = URL.createObjectURL(blob);
 
-      dl.href = url;
-      dl.download = record.filename || "documento";
+        // Revocar el anterior si existía
+        if(_docUrlToRevoke){ try{URL.revokeObjectURL(_docUrlToRevoke)}catch{} }
+        _docUrlToRevoke = url;
 
-      if(isPdf){
-        frame.src = url;
-      }else if(isImg){
-        frame.srcdoc = `
-          <!doctype html>
-          <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>Vista previa</title>
-          <style>body{margin:0;display:grid;place-items:center;background:#f6f7f9}img{max-width:100%;max-height:100vh}</style>
-          </head><body><img src="${url}" alt="Imagen"></body></html>`;
+        dl.href = url;
+        dl.download = record.filename || "documento";
+
+        if(isPdf){
+          frame.src = url;
+        }else if(isImg){
+          frame.srcdoc = `
+            <!doctype html>
+            <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+            <style>body{margin:0;font-family:system-ui;background:#111827;color:#fff;display:grid;place-items:center;height:100vh}
+            img{max-width:96vw;max-height:92vh;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+            </style></head><body>
+              <img src="${url}" alt="Imagen" />
+            </body></html>
+          `;
+        }else{
+          frame.srcdoc = `
+            <!doctype html>
+            <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+            <style>body{margin:0;font-family:system-ui;background:#f9fafb;color:#111827;display:grid;place-items:center;height:100vh}
+            .box{max-width:680px;padding:18px 16px;border:1px solid #e5e7eb;border-radius:14px;background:#fff}
+            </style></head><body>
+              <div class="box">
+                <strong>Vista previa no disponible</strong>
+                <div style="margin-top:8px;color:#6b7280">Puedes descargar el archivo con el botón “Descargar”.</div>
+              </div>
+            </body></html>
+          `;
+        }
+        return;
+      }
+
+      // Si viene de Google Drive (o fuente externa), usamos URL externa
+      if(_docUrlToRevoke){ try{URL.revokeObjectURL(_docUrlToRevoke)}catch{} }
+      _docUrlToRevoke = null;
+
+      const previewUrl =
+        record.preview
+        || (record.read ? record.read.replace("/view", "/preview") : "")
+        || record.download
+        || "";
+
+      if(record.download || record.read){
+        dl.href = record.download || record.read;
+        dl.removeAttribute("download"); // cross-origin
+      }else{
+        dl.href = "#";
+      }
+
+      if(previewUrl){
+        frame.src = previewUrl;
       }else{
         frame.srcdoc = `
           <!doctype html>
-          <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>Vista previa</title>
-          <style>
-            body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;padding:18px;background:#f6f7f9;color:#111827}
-            .box{max-width:720px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:16px}
-            h1{font-size:16px;margin:0 0 10px}
-            p{margin:6px 0;color:#6b7280}
-            .k{font-weight:800;color:#111827}
-          </style>
-          </head><body>
+          <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+          <style>body{margin:0;font-family:system-ui;background:#f9fafb;color:#111827;display:grid;place-items:center;height:100vh}
+          .box{max-width:680px;padding:18px 16px;border:1px solid #e5e7eb;border-radius:14px;background:#fff}
+          </style></head><body>
             <div class="box">
-              <h1>Vista previa no disponible en maqueta</h1>
-              <p>Tipo de archivo: <span class="k">${record.mime || "—"}</span></p>
-              <p>Igual puedes descargarlo con el botón “Descargar”.</p>
+              <strong>Vista previa no disponible</strong>
+              <div style="margin-top:8px;color:#6b7280">Abre el documento con “Leer más” o descarga el archivo.</div>
             </div>
-          </body></html>`;
+          </body></html>
+        `;
       }
     }
 
@@ -1820,53 +1950,96 @@
       const drop = $("#uploadDrop");
       const clear = $("#btnUploadClear");
 
-      if(!pick || !input || !drop || !clear) return;
+      if(!pick || !drop) return;
 
-      pick.addEventListener("click", () => input.click());
+      // Modo Google Drive: la subida se hace en Drive (admin) y aquí solo se lista/visualiza.
+      if(DRIVE.enabled){
+        if(input){
+          input.disabled = true;
+          input.style.display = "none";
+        }
+        if(clear){
+          clear.style.display = "none";
+        }
 
-      input.addEventListener("change", async () => {
-        const files = Array.from(input.files || []);
-        if(!files.length) return;
-        const recs = files.map(toDocRecord);
-        await idbPutMany(recs);
-        await loadUploadedDocs();
-        filterDocs();
-        showToast("Documentos subidos ✅");
-        input.value = "";
-      });
+        const openDrive = () => {
+          const url = (DRIVE.adminUrl && !DRIVE.adminUrl.includes("PON_AQUI"))
+            ? DRIVE.adminUrl
+            : (DRIVE.folderId && !DRIVE.folderId.includes("PON_AQUI"))
+              ? `https://drive.google.com/drive/folders/${DRIVE.folderId}`
+              : "https://drive.google.com/";
+          window.open(url, "_blank");
+        };
 
-      // Drag & Drop
-      ["dragenter","dragover"].forEach(ev => {
-        drop.addEventListener(ev, (e) => {
-          e.preventDefault();
-          drop.dataset.drag = "true";
+        pick.textContent = "Abrir carpeta en Drive (subir)";
+        pick.addEventListener("click", openDrive);
+
+        drop.textContent = "Repositorio compartido: Google Drive (para subir, abrir carpeta).";
+        drop.style.cursor = "pointer";
+        drop.addEventListener("click", openDrive);
+
+        // Igual dejamos el listener global de acciones (vista previa)
+      }else{
+        // Modo demo local (IndexedDB)
+        if(!input || !clear) return;
+
+        pick.addEventListener("click", () => input.click());
+
+        input.addEventListener("change", async () => {
+          const files = Array.from(input.files || []);
+          if(!files.length) return;
+          const recs = files.map(toDocRecord);
+          await idbPutMany(recs);
+          await loadUploadedDocs();
+          filterDocs();
+          showToast("Documentos subidos ✅");
+          input.value = "";
         });
-      });
-      ["dragleave","drop"].forEach(ev => {
-        drop.addEventListener(ev, (e) => {
-          e.preventDefault();
-          drop.dataset.drag = "false";
+
+        // Drag & Drop
+        ["dragenter","dragover"].forEach(ev => {
+          drop.addEventListener(ev, (e) => {
+            e.preventDefault();
+            drop.dataset.drag = "true";
+          });
         });
-      });
-      drop.addEventListener("drop", async (e) => {
-        const files = Array.from(e.dataTransfer?.files || []);
-        if(!files.length) return;
-        const recs = files.map(toDocRecord);
-        await idbPutMany(recs);
-        await loadUploadedDocs();
-        filterDocs();
-        showToast("Documentos subidos ✅");
-      });
+        ["dragleave","drop"].forEach(ev => {
+          drop.addEventListener(ev, (e) => {
+            e.preventDefault();
+            drop.dataset.drag = "false";
+          });
+        });
+        drop.addEventListener("drop", async (e) => {
+          const files = Array.from(e.dataTransfer?.files || []);
+          if(!files.length) return;
+          const recs = files.map(toDocRecord);
+          await idbPutMany(recs);
+          await loadUploadedDocs();
+          filterDocs();
+          showToast("Documentos subidos ✅");
+        });
 
-      clear.addEventListener("click", async () => {
-        await idbClear();
-        await loadUploadedDocs();
-        filterDocs();
-        showToast("Documentos eliminados");
-      });
+        clear.addEventListener("click", async () => {
+          await idbClear();
+          await loadUploadedDocs();
+          filterDocs();
+          showToast("Documentos eliminados");
+        });
+      }
 
-      // Acciones en lista: preview / download / delete
+      // Acciones en lista:
       document.addEventListener("click", async (e) => {
+        // Vista previa de documentos "compartidos" (Drive / DOCS)
+        const any = e.target.closest("[data-doc-preview-any]");
+        if(any){
+          e.preventDefault();
+          const id = any.dataset.docPreviewAny;
+          const rec = getAllDocs().find(d => String(d.id) === String(id));
+          if(rec) openDocModal(rec);
+          return;
+        }
+
+        // Vista previa (uploads locales)
         const pv = e.target.closest("[data-doc-preview]");
         if(pv){
           e.preventDefault();
@@ -1875,6 +2048,8 @@
           if(rec) openDocModal(rec);
           return;
         }
+
+        // Descargar (uploads locales)
         const dl = e.target.closest("[data-doc-download]");
         if(dl){
           e.preventDefault();
@@ -1891,6 +2066,8 @@
           setTimeout(()=>{ try{URL.revokeObjectURL(url)}catch{} }, 800);
           return;
         }
+
+        // Eliminar (uploads locales)
         const del = e.target.closest("[data-doc-delete]");
         if(del){
           e.preventDefault();
@@ -1959,10 +2136,10 @@
         const el = document.createElement("article");
         el.className = "person";
 
-        const photo = p.photo
-          ? `<img src="${p.photo}" alt="Foto de ${p.name}">`
-          : `
-            <div class="photo-placeholder" aria-hidden="true">
+        const seq = (realIdx >= 0 ? realIdx : 0) + 1;
+        const src = p.photo || `funcionario-${seq}.png`;
+        const photo = `
+            <div class="photo-placeholder" aria-hidden="true" hidden>
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 6h16v12H4V6Z" stroke="#111827" stroke-width="1.6"/>
                 <path d="m7 14 3-3 3 3 2-2 3 3" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1970,6 +2147,8 @@
               </svg>
               <div class="hint">Foto por actualizar</div>
             </div>
+            <img src="${src}" alt="Foto de ${p.name}" loading="lazy"
+                 onerror="this.hidden=true; if(this.previousElementSibling) this.previousElementSibling.hidden=false;">
           `;
 
         el.innerHTML = `
@@ -2013,20 +2192,34 @@
     function renderFeaturedDocs(){
       const wrap = $("#featuredDocs");
       wrap.innerHTML = "";
-      DOCS.slice(0,2).forEach(d => {
+
+      const src = docsSource();
+      const featured = (src && src.length) ? src.slice(0,2) : DOCS.slice(0,2);
+
+      featured.forEach(d => {
         const el = document.createElement("div");
         el.className = "doc";
         el.innerHTML = `
           <a href="#" data-route="normas">${d.title}</a>
           <div class="card__muted">${d.summary}</div>
           <div class="actions">
-            <a class="btn" href="${d.read}">
-              Leer más
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-            <a class="btn btn--primary" href="${d.download}">
+            ${d.preview ? `
+              <button class="btn" type="button" data-doc-preview-any="${d.id}">
+                Vista previa
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </button>
+            ` : `
+              <a class="btn" href="${d.read}" target="_blank" rel="noopener">
+                Leer más
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            `}
+            <a class="btn btn--primary" href="${d.download}" target="_blank" rel="noopener">
               Descargar
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -2051,6 +2244,7 @@
         row.className = "doc";
 
         const isUp = d._uploaded === true;
+        const hasPreview = !!d.preview;
 
         const actions = isUp
           ? `
@@ -2074,13 +2268,22 @@
             </button>
           `
           : `
-            <a class="btn" href="${d.read}">
+            ${hasPreview ? `
+              <button class="btn" type="button" data-doc-preview-any="${d.id}">
+                Vista previa
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </button>
+            ` : ``}
+            <a class="btn" href="${d.read}" target="_blank" rel="noopener">
               Leer más
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
-            <a class="btn btn--primary" href="${d.download}">
+            <a class="btn btn--primary" href="${d.download}" target="_blank" rel="noopener">
               Descargar
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -2091,7 +2294,7 @@
           `;
 
         row.innerHTML = `
-          <a href="${isUp ? "#" : d.read}">${d.title}</a>
+          <a href="${isUp ? "#" : d.read}" ${isUp ? "" : 'target="_blank" rel="noopener"'}>${d.title}</a>
           <div class="card__muted">${d.summary}</div>
           <div class="actions">${actions}</div>
           <div class="meta">${d.type} · ${formatDate(d.dateISO)}</div>
@@ -2106,7 +2309,16 @@
     // ========================
     function openProfile(p){
       const modal = $("#profileModal");
-      $("#modalAvatar").textContent = initials(p.name);
+      const avatar = $("#modalAvatar");
+      avatar.textContent = "";
+      const img = document.createElement("img");
+      const idx = PEOPLE.indexOf(p);
+      const seq = (idx >= 0 ? idx : 0) + 1;
+      img.src = p.photo || `funcionario-${seq}.png`;
+      img.alt = `Foto de ${p.name}`;
+      img.loading = "lazy";
+      img.onerror = () => { avatar.textContent = initials(p.name); };
+      avatar.appendChild(img);
       $("#modalName").textContent = p.name;
       $("#modalRole").textContent = p.role;
       $("#modalTitle").textContent = p.name;
@@ -2415,11 +2627,14 @@
 
     renderPeopleCards($("#dirCards"), PEOPLE);
     renderPeopleCards($("#dirCards2"), PEOPLE);
-    renderFeaturedDocs();
-    // Carga uploads locales y pinta lista de normas
-    loadUploadedDocs().then(() => {
+    // Docs: cargar Google Drive (si está configurado) y luego pintar
+    (async () => {
+      await loadDriveDocs();
+      renderFeaturedDocs();
+      await loadUploadedDocs(); // fallback local (solo si DRIVE.enabled = false)
       filterDocs();
-    });
+      updateUploadStatus();
+    })();
 
     initDirectorySearch();
     initDocFilters();
