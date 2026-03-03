@@ -2096,6 +2096,38 @@
       return (a+b).toUpperCase();
     }
 
+    // ========================
+    // Fotos de funcionarios (fallback por rutas)
+    // ========================
+    function buildFuncionarioPhotoCandidates(seq, customSrc){
+      const base = `funcionario-${seq}.png`;
+      const list = [];
+      const clean = (customSrc || "").toString().trim();
+      if(clean) list.push(clean);
+      list.push(
+        base,
+        `funcionarios/${base}`,
+        `img/funcionarios/${base}`,
+        `assets/funcionarios/${base}`
+      );
+      // quitar duplicados
+      return Array.from(new Set(list));
+    }
+
+    function applyImgFallback(imgEl, candidates, onAllFail){
+      let i = 0;
+      const next = () => {
+        if(i >= candidates.length){
+          if(typeof onAllFail === "function") onAllFail();
+          return;
+        }
+        imgEl.src = candidates[i++];
+      };
+      imgEl.onerror = () => next();
+      next();
+    }
+
+
     function formatDate(iso){
       try{
         const d = new Date(iso + "T00:00:00");
@@ -2133,23 +2165,10 @@
       targetEl.innerHTML = "";
       list.forEach((p) => {
         const realIdx = PEOPLE.indexOf(p);
+        const seq = (realIdx >= 0 ? realIdx : 0) + 1;
+
         const el = document.createElement("article");
         el.className = "person";
-
-        const seq = (realIdx >= 0 ? realIdx : 0) + 1;
-        const src = p.photo || `funcionario-${seq}.png`;
-        const photo = `
-            <div class="photo-placeholder" aria-hidden="true" hidden>
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 6h16v12H4V6Z" stroke="#111827" stroke-width="1.6"/>
-                <path d="m7 14 3-3 3 3 2-2 3 3" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="9" cy="9" r="1.3" fill="#111827" opacity=".6"/>
-              </svg>
-              <div class="hint">Foto por actualizar</div>
-            </div>
-            <img src="${src}" alt="Foto de ${p.name}" loading="lazy"
-                 onerror="this.hidden=true; if(this.previousElementSibling) this.previousElementSibling.hidden=false;">
-          `;
 
         el.innerHTML = `
           <div class="person__img">
@@ -2161,8 +2180,19 @@
               </svg>
               Perfil (demo)
             </div>
-            ${photo}
+
+            <div class="photo-placeholder" aria-hidden="true" hidden>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 6h16v12H4V6Z" stroke="#111827" stroke-width="1.6"/>
+                <path d="m7 14 3-3 3 3 2-2 3 3" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="9" cy="9" r="1.3" fill="#111827" opacity=".6"/>
+              </svg>
+              <div class="hint">Foto por actualizar</div>
+            </div>
+
+            <img class="personPhoto" alt="Foto de ${p.name}" loading="lazy">
           </div>
+
           <div class="person__body">
             <a href="#" class="person__name" data-open-profile="${realIdx}">${p.name}</a>
             <div class="person__role">${p.role}</div>
@@ -2175,15 +2205,26 @@
             <div class="minirow">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 6h16v12H4V6Z" stroke="#111827" stroke-width="1.8"/>
-                <path d="m4 7 8 6 8-6" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="m4 7 8 6 8-6" stroke="#111827" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
               <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.email}</span>
             </div>
           </div>
+
           <div class="person__foot">
             <a href="#" data-open-profile="${realIdx}">Ver perfil profesional</a>
           </div>
         `;
+
+        // Foto con fallback (misma lógica que el modal)
+        const img = el.querySelector(".personPhoto");
+        const ph = el.querySelector(".photo-placeholder");
+        const candidates = buildFuncionarioPhotoCandidates(seq, p.photo);
+        applyImgFallback(img, candidates, () => {
+          img.hidden = true;
+          ph.hidden = false;
+        });
+
         targetEl.appendChild(el);
       });
     }
@@ -2311,14 +2352,22 @@
       const modal = $("#profileModal");
       const avatar = $("#modalAvatar");
       avatar.textContent = "";
+
       const img = document.createElement("img");
       const idx = PEOPLE.indexOf(p);
       const seq = (idx >= 0 ? idx : 0) + 1;
-      img.src = p.photo || `funcionario-${seq}.png`;
+
       img.alt = `Foto de ${p.name}`;
       img.loading = "lazy";
-      img.onerror = () => { avatar.textContent = initials(p.name); };
+
+      // Importante: aplicar la misma lógica de fallback que en tarjetas
+      const candidates = buildFuncionarioPhotoCandidates(seq, p.photo);
+      applyImgFallback(img, candidates, () => {
+        avatar.textContent = initials(p.name);
+      });
+
       avatar.appendChild(img);
+
       $("#modalName").textContent = p.name;
       $("#modalRole").textContent = p.role;
       $("#modalTitle").textContent = p.name;
@@ -2352,7 +2401,7 @@
           <div class="k">Teléfono / anexo</div>
           <div class="v">
             <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap">
-              <a href="tel:+5101${p.phone}" style="color:#2563eb;font-weight:800">${p.phone}</a>
+              <a href="tel:${p.phone}" style="color:#2563eb;font-weight:800">${p.phone}</a>
               <span style="color:var(--muted)">${p.ext}</span>
               <button class="copybtn" type="button" data-copy="${p.phone}">
                 Copiar
@@ -2374,9 +2423,7 @@
         </div>
       `;
 
-      modal.dataset.open = "true";
-      modal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
+      modal.setAttribute("data-open", "true");
     }
 
     function closeModal(){
