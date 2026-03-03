@@ -1521,15 +1521,15 @@
     };
     const PEOPLE_BASE = [
       {
-        name: "Jeanfranco Martín Vargas Luque",
-        role: "Gerente General",
-        email: "gerenciageneral.altumlumen@gmail.com",
-        phone: "938796261",
-        ext: "Anexo: no aplica",
-        start: "30 jun 2025",
-        resolution: "Partida Registral N.° 15949500",
+        name: "Richard Cortez Melgarejo",
+        role: "Alcalde",
+        email: "rcortez@munichorrillos.gob.pe",
+        phone: "6803030",
+        ext: "Anexo 9012",
+        start: "30 oct 2025",
+        resolution: "0535-2025-JNE",
         interest: "#",
-        photo: "funcionario-1.png"
+        photo: ""
       },
       {
         name: "Betty Marina Morón Larrú",
@@ -2126,18 +2126,56 @@
       }
     }
 
+    
     // ========================
+    // Fotos de funcionarios (fallback)
+    // ========================
+    function getPhotoCandidates(seq, custom){
+      const file = `funcionario-${seq}.png`;
+      const candidates = [];
+      if(custom) candidates.push(custom);
+      candidates.push(
+        file,
+        `funcionarios/${file}`,
+        `img/funcionarios/${file}`,
+        `assets/funcionarios/${file}`
+      );
+      // quitar duplicados
+      return Array.from(new Set(candidates));
+    }
+
+    function setImgWithFallback(img, candidates, onFail){
+      let i = 0;
+      if(!candidates || !candidates.length){
+        if(onFail) onFail();
+        return;
+      }
+      const tryNext = () => {
+        i += 1;
+        if(i < candidates.length){
+          img.src = candidates[i];
+        }else{
+          img.onerror = null;
+          if(onFail) onFail();
+        }
+      };
+      img.onerror = tryNext;
+      img.src = candidates[0];
+    }
+
+// ========================
     // Rendering
     // ========================
         function renderPeopleCards(targetEl, list){
       targetEl.innerHTML = "";
       list.forEach((p) => {
         const realIdx = PEOPLE.indexOf(p);
+        const safeIdx = (realIdx >= 0 ? realIdx : 0);
         const el = document.createElement("article");
         el.className = "person";
 
         const seq = (realIdx >= 0 ? realIdx : 0) + 1;
-        const src = p.photo || `funcionario-${seq}.png`;
+
         const photo = `
             <div class="photo-placeholder" aria-hidden="true" hidden>
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -2147,43 +2185,39 @@
               </svg>
               <div class="hint">Foto por actualizar</div>
             </div>
-            <img src="${src}" alt="Foto de ${p.name}" loading="lazy"
-                 onerror="this.hidden=true; if(this.previousElementSibling) this.previousElementSibling.hidden=false;">
+            <img data-func-photo="1" alt="Foto de ${escapeHtml(p.name)}" loading="lazy">
           `;
 
         el.innerHTML = `
           <div class="person__img">
-            <div class="badge" title="Ficha rápida">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:16px;height:16px">
-                <path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Z" stroke="#111827" stroke-width="2"/>
-                <path d="M12 8v5" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="12" cy="16.5" r="1" fill="#111827"/>
-              </svg>
-              Perfil (demo)
-            </div>
+            <div class="badge" title="Ficha rápida">Perfil</div>
             ${photo}
           </div>
           <div class="person__body">
-            <a href="#" class="person__name" data-open-profile="${realIdx}">${p.name}</a>
-            <div class="person__role">${p.role}</div>
+            <a href="#" class="person__name" data-person="${safeIdx}">${escapeHtml(p.name)}</a>
+            <div class="person__role">${escapeHtml(p.role)}</div>
+
             <div class="minirow">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M6 3h4l2 5-3 2c1.2 2.4 3.1 4.3 5.5 5.5l2-3 5 2v4c0 1-1 2-2 2C10 21 3 14 3 5c0-1 1-2 2-2Z" stroke="#111827" stroke-width="1.8" stroke-linejoin="round"/>
-              </svg>
-              ${p.phone} <span style="color:var(--muted)">/ ${p.ext}</span>
+              ${escapeHtml(p.phone)} <span style="color:var(--muted)">/ ${escapeHtml(p.ext)}</span>
             </div>
             <div class="minirow">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 6h16v12H4V6Z" stroke="#111827" stroke-width="1.8"/>
-                <path d="m4 7 8 6 8-6" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.email}</span>
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(p.email)}</span>
             </div>
           </div>
           <div class="person__foot">
-            <a href="#" data-open-profile="${realIdx}">Ver perfil profesional</a>
+            <a href="#" data-person="${safeIdx}">Ver perfil profesional</a>
           </div>
         `;
+
+        // activar fallback de foto (root /funcionarios /img/funcionarios /assets/funcionarios)
+        const img = el.querySelector('img[data-func-photo]');
+        const placeholder = el.querySelector('.photo-placeholder');
+        setImgWithFallback(
+          img,
+          getPhotoCandidates(seq, p.photo),
+          () => { img.hidden = true; placeholder.hidden = false; }
+        );
+
         targetEl.appendChild(el);
       });
     }
@@ -2311,14 +2345,18 @@
       const modal = $("#profileModal");
       const avatar = $("#modalAvatar");
       avatar.textContent = "";
-      const img = document.createElement("img");
+
       const idx = PEOPLE.indexOf(p);
       const seq = (idx >= 0 ? idx : 0) + 1;
-      img.src = p.photo || `funcionario-${seq}.png`;
+
+      const img = document.createElement("img");
       img.alt = `Foto de ${p.name}`;
       img.loading = "lazy";
-      img.onerror = () => { avatar.textContent = initials(p.name); };
       avatar.appendChild(img);
+
+      setImgWithFallback(img, getPhotoCandidates(seq, p.photo), () => {
+        avatar.textContent = initials(p.name);
+      });
       $("#modalName").textContent = p.name;
       $("#modalRole").textContent = p.role;
       $("#modalTitle").textContent = p.name;
@@ -2349,7 +2387,7 @@
           </div>
         </div>
         <div class="detail-row">
-          <div class="k">Teléfono</div>
+          <div class="k">Teléfono / anexo</div>
           <div class="v">
             <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap">
               <a href="tel:+5101${p.phone}" style="color:#2563eb;font-weight:800">${p.phone}</a>
@@ -2365,12 +2403,12 @@
           </div>
         </div>
         <div class="detail-row">
-          <div class="k">Norma de nombramiento</div>
+          <div class="k">Resolución</div>
           <div class="v">${p.resolution || "—"}</div>
         </div>
         <div class="detail-row">
           <div class="k">Declaración jurada de intereses</div>
-          <div class="v"><a href="${p.interest || "#"}" style="color:#2563eb;font-weight:800">Descargar</a></div>
+          <div class="v"><a href="${p.interest || "#"}" style="color:#2563eb;font-weight:800">Ver (demo)</a></div>
         </div>
       `;
 
