@@ -410,6 +410,9 @@
     }
 
     .person__img img{width:100%;height:100%;object-fit:cover;display:block}
+    .person__img .personPhoto{position:absolute;inset:0}
+    .person__img .photo-placeholder{position:absolute;inset:0}
+
     .photo-placeholder{
       width:100%;height:100%;
       display:grid;place-items:center;
@@ -2240,7 +2243,7 @@
         // Foto con fallback (misma lógica que el modal)
         const img = el.querySelector(".personPhoto");
         const ph = el.querySelector(".photo-placeholder");
-        const candidates = buildFuncionarioPhotoCandidates(seq, p.photo);
+        const candidates = buildFuncionarioPhotoCandidates(seq, (p.photo && p.photo.trim()) ? p.photo : `funcionario-${seq}.png`);
         img.onload = () => {
           // si carga, aseguramos que se vea la foto y se oculte el placeholder
           img.hidden = false;
@@ -2387,7 +2390,7 @@
       img.loading = "lazy";
 
       // Importante: aplicar la misma lógica de fallback que en tarjetas
-      const candidates = buildFuncionarioPhotoCandidates(seq, p.photo);
+      const candidates = buildFuncionarioPhotoCandidates(seq, (p.photo && p.photo.trim()) ? p.photo : `funcionario-${seq}.png`);
       applyImgFallback(img, candidates, () => {
         avatar.textContent = initials(p.name);
       });
