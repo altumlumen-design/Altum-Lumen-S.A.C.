@@ -1,0 +1,1970 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Municipalidad Distrital de Chorrillos – réplica (interfaz)</title>
+  <meta name="description" content="Interfaz tipo gob.pe (demo) inspirada en la página de la Municipalidad Distrital de Chorrillos." />
+  <style>
+    :root{
+      --gob-red:#d60a2e;
+      --gob-red-2:#b40723;
+      --text:#111827;
+      --muted:#6b7280;
+      --bg:#ffffff;
+      --bg-soft:#f6f7f9;
+      --line:#e5e7eb;
+      --shadow:0 10px 25px rgba(17,24,39,.08);
+      --shadow-sm:0 6px 18px rgba(17,24,39,.07);
+      --radius:14px;
+      --radius-sm:10px;
+      --max:1180px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.45;
+    }
+    a{color:inherit;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:var(--max); margin:0 auto; padding:0 18px}
+    .sr-only{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+    /* Top header */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background:#fff;
+      border-bottom:1px solid var(--line);
+    }
+    .topbar__inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; min-width:220px;
+    }
+    .brand__mark{
+      width:34px; height:34px; flex:0 0 auto;
+    }
+    .brand__word{
+      font-weight:800; letter-spacing:.2px;
+      color:var(--gob-red);
+      font-size:22px;
+    }
+    .search{
+      display:flex; align-items:center;
+      width:min(520px, 100%);
+      gap:0;
+    }
+    .search input{
+      width:100%;
+      border:1px solid var(--line);
+      border-right:none;
+      border-radius:10px 0 0 10px;
+      padding:12px 12px;
+      outline:none;
+      font-size:14px;
+      background:#fff;
+    }
+    .search input:focus{border-color:#cbd5e1}
+    .search button{
+      border:1px solid var(--line);
+      border-left:none;
+      background:#111827;
+      color:#fff;
+      padding:12px 14px;
+      border-radius:0 10px 10px 0;
+      cursor:pointer;
+    }
+    .search button:hover{background:#0b1220}
+
+    /* Breadcrumb */
+    .crumbs{
+      border-bottom:1px solid var(--line);
+      background:#fff;
+    }
+    .crumbs__inner{
+      padding:10px 0;
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .crumbs a{color:#2563eb}
+    .crumbs .sep{color:#9ca3af}
+    .crumbs .here{color:#374151}
+
+    /* Main nav */
+    .nav{
+      background:#fff;
+      border-bottom:1px solid var(--line);
+    }
+    .nav__inner{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      padding:0;
+    }
+    .nav__list{
+      display:flex; gap:0;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    .nav__item{
+      position:relative;
+      border-right:1px solid #f0f1f3;
+      flex:0 0 auto;
+    }
+    .nav__item:first-child{border-left:1px solid #f0f1f3}
+    .nav__btn{
+      appearance:none;
+      border:0;
+      background:transparent;
+      padding:14px 18px;
+      font-size:14px;
+      cursor:pointer;
+      color:#111827;
+      display:flex; gap:8px; align-items:center;
+      white-space:nowrap;
+    }
+    .nav__btn .caret{opacity:.8}
+    .nav__btn:hover{background:var(--bg-soft)}
+    .nav__btn[aria-current="page"]{
+      color:var(--gob-red);
+      font-weight:700;
+      border-bottom:3px solid var(--gob-red);
+      padding-bottom:11px;
+    }
+
+    /* Dropdown */
+    .menu{
+      position:absolute;
+      top:100%;
+      left:0;
+      min-width:260px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      box-shadow:var(--shadow-sm);
+      padding:8px;
+      display:none;
+    }
+    .menu a{
+      display:flex; gap:10px; align-items:center;
+      padding:10px 10px;
+      border-radius:10px;
+      font-size:14px;
+      color:#111827;
+    }
+    .menu a:hover{background:var(--bg-soft); text-decoration:none}
+    .nav__item[data-open="true"] .menu{display:block}
+    .menu .dot{
+      width:8px; height:8px; border-radius:999px;
+      background:#93c5fd; flex:0 0 auto;
+    }
+
+    /* Layout */
+    main{background:#fff}
+    .page{
+      padding:22px 0 36px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:22px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      .brand{min-width:auto}
+    }
+
+    /* Entity header */
+    .entity{
+      padding:8px 0 0;
+    }
+    .entity__top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .entity__name{
+      display:flex; gap:14px; align-items:flex-start;
+      min-width:min(640px,100%);
+    }
+    .entity__logo{
+      width:46px;height:46px;border-radius:12px;
+      display:grid; place-items:center;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#f7f7f7);
+      flex:0 0 auto;
+    }
+    .entity__logo svg{width:28px;height:28px}
+    .entity__title{
+      margin:0;
+      font-size:34px;
+      letter-spacing:-.3px;
+      line-height:1.1;
+    }
+    .entity__desc{
+      margin:10px 0 0;
+      color:var(--muted);
+      max-width:68ch;
+      font-size:14px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      padding:12px 14px;
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+      background:#fff;
+      color:#111827;
+      box-shadow:0 1px 0 rgba(17,24,39,.03);
+    }
+    .btn:hover{background:var(--bg-soft); text-decoration:none}
+    .btn--primary{
+      border-color:#cfe0ff;
+      background:#f0f6ff;
+      color:#0b3a9a;
+    }
+    .btn--primary:hover{background:#e6f0ff}
+    .btn--dark{
+      background:#111827;color:#fff;border-color:#111827;
+    }
+    .btn--dark:hover{background:#0b1220}
+    .btn svg{width:18px;height:18px}
+
+    .linkrow{
+      margin-top:14px;
+      display:flex; gap:16px; flex-wrap:wrap;
+      align-items:center;
+    }
+    .linkrow a{
+      color:#2563eb;
+      font-size:14px;
+      font-weight:600;
+    }
+
+    /* Cards */
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 2px 0 rgba(17,24,39,.02);
+      overflow:hidden;
+    }
+    .card__head{
+      padding:16px 16px 10px;
+      border-bottom:1px solid #f1f5f9;
+    }
+    .card__title{
+      margin:0;
+      font-size:18px;
+      letter-spacing:-.2px;
+    }
+    .card__body{padding:14px 16px 16px}
+    .card__muted{color:var(--muted); font-size:13px}
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+    }
+    @media (max-width:720px){.split{grid-template-columns:1fr}}
+
+    /* Contact area */
+    .contact-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width:720px){.contact-grid{grid-template-columns:1fr}}
+    .kv{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:10px 0; border-top:1px dashed #eef2f7}
+    .kv:first-child{border-top:none}
+    .kv .k{color:#111827;font-weight:700;font-size:13px}
+    .kv .v{color:#111827;font-size:13px;text-align:right}
+    .kv .v a{color:#2563eb;font-weight:600}
+    .icons{
+      display:flex; gap:10px; align-items:center; margin-top:10px;
+    }
+    .iconbtn{
+      width:34px;height:34px;border-radius:10px;
+      display:grid;place-items:center;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+    }
+    .iconbtn:hover{background:var(--bg-soft)}
+    .iconbtn svg{width:18px;height:18px}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:12px;
+      color:#111827;
+      background:#fff;
+    }
+    .pill svg{width:14px;height:14px;opacity:.9}
+
+    /* Institutional links */
+    .inst-links{display:grid; gap:10px; margin-top:10px}
+    .inst-links a{
+      display:flex; gap:10px; align-items:center;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid #eef2f7;
+      background:#fff;
+      font-weight:650;
+      font-size:14px;
+    }
+    .inst-links a:hover{background:var(--bg-soft); text-decoration:none}
+    .inst-links svg{width:18px;height:18px; opacity:.85}
+
+    /* Section heading */
+    .section{
+      margin-top:26px;
+    }
+    .section__head{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:14px; flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .section__title{
+      margin:0;
+      font-size:26px;
+      letter-spacing:-.2px;
+    }
+    .section__subtitle{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    /* Directory cards */
+    .filters{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .filters .input{
+      display:flex; align-items:center; gap:0;
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .filters input{
+      border:0; outline:none; padding:10px 12px; min-width:280px;
+      font-size:14px;
+    }
+    .filters button{
+      border:0; background:#111827; color:#fff;
+      padding:10px 12px; cursor:pointer;
+    }
+    .filters button:hover{background:#0b1220}
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:16px;
+    }
+    @media (max-width:1050px){.cards{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:800px){.cards{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:520px){.cards{grid-template-columns:1fr}}
+    .person{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:#fff;
+      overflow:hidden;
+      box-shadow:0 2px 0 rgba(17,24,39,.02);
+      display:flex;
+      flex-direction:column;
+      min-height:280px;
+    }
+    .person__img{
+      height:140px;
+      background:linear-gradient(180deg,#f3f4f6,#ffffff);
+      display:grid; place-items:center;
+      border-bottom:1px solid var(--line);
+      position:relative;
+    }
+    .person__img .badge{
+      position:absolute;
+      left:10px; top:10px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:#111827;
+      display:flex; gap:8px; align-items:center;
+      box-shadow:0 10px 25px rgba(17,24,39,.06);
+    }
+    .avatar{
+      width:84px;height:84px;border-radius:999px;
+      border:2px solid #fff;
+      box-shadow:0 10px 25px rgba(17,24,39,.12);
+      background:radial-gradient(circle at 30% 30%, #fff 0, #e5e7eb 40%, #f3f4f6 100%);
+      display:grid; place-items:center;
+      font-weight:900; color:#6b7280;
+    }
+    .person__body{padding:12px 14px 14px; display:grid; gap:8px}
+    .person__name{
+      font-weight:800;
+      color:#2563eb;
+      font-size:16px;
+      line-height:1.2;
+      text-decoration:underline;
+    }
+    .person__role{font-size:13px; color:#111827}
+    .minirow{
+      display:flex; align-items:center; gap:10px;
+      color:#374151;
+      font-size:13px;
+      padding:4px 0;
+    }
+    .minirow svg{width:16px;height:16px;opacity:.85}
+    .person__foot{
+      padding:12px 14px 14px;
+      margin-top:auto;
+      border-top:1px solid #f1f5f9;
+    }
+    .person__foot a{
+      font-size:13px;
+      color:#2563eb;
+      font-weight:700;
+    }
+
+    /* Docs */
+    .docs-grid{
+      display:grid;
+      grid-template-columns: 1fr .55fr;
+      gap:18px;
+    }
+    @media (max-width:980px){.docs-grid{grid-template-columns:1fr}}
+    .doc-cards{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:16px;
+    }
+    @media (max-width:720px){.doc-cards{grid-template-columns:1fr}}
+    .doc{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:14px;
+      background:#fff;
+      box-shadow:0 2px 0 rgba(17,24,39,.02);
+      display:grid;
+      gap:10px;
+      align-content:start;
+    }
+    .doc a{color:#1f4fbf;font-weight:800}
+    .doc .meta{font-size:12px;color:var(--muted)}
+    .doc .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .doc .actions .btn{padding:10px 12px; border-radius:12px; font-weight:800}
+    .doc .actions .btn svg{width:16px;height:16px}
+
+    .comp{
+      display:grid; gap:10px;
+      padding:10px 0 0;
+    }
+    .comp a{color:#2563eb;font-weight:750;font-size:14px}
+    .comp ul{margin:8px 0 0; padding-left:18px}
+    .comp li{margin:6px 0; color:#1f2937}
+    .comp .btn{width:100%; margin-top:8px}
+
+    /* Footer */
+    footer{
+      border-top:1px solid var(--line);
+      background:#fff;
+      margin-top:22px;
+      padding:22px 0 26px;
+      color:#374151;
+      font-size:13px;
+    }
+    footer .footgrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+    }
+    @media (max-width:900px){footer .footgrid{grid-template-columns:1fr}}
+    .footnote{color:var(--muted); margin-top:6px}
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0;
+      background:rgba(17,24,39,.55);
+      display:none;
+      place-items:center;
+      z-index:80;
+      padding:18px;
+    }
+    .modal[data-open="true"]{display:grid}
+    .modal__panel{
+      width:min(820px, 100%);
+      background:#fff;
+      border-radius:18px;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .modal__top{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#ffffff, #fafafa);
+    }
+    .modal__top h3{margin:0;font-size:16px}
+    .close{
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      width:40px;height:40px;
+      display:grid;place-items:center;
+      cursor:pointer;
+    }
+    .close:hover{background:var(--bg-soft)}
+    .modal__body{
+      padding:16px;
+      display:grid;
+      grid-template-columns: 220px 1fr;
+      gap:16px;
+      align-items:start;
+    }
+    @media (max-width:700px){.modal__body{grid-template-columns:1fr}}
+    .profile{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+    }
+    .profile .avatar{width:110px;height:110px;margin:6px auto 10px}
+    .profile .name{font-weight:900; text-align:center}
+    .profile .role{color:var(--muted); text-align:center; margin-top:4px; font-size:13px}
+    .modal__detail{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+    }
+    .detail-row{
+      display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
+      padding:10px 0;
+      border-top:1px dashed #eef2f7;
+    }
+    .detail-row:first-child{border-top:none}
+    .detail-row .k{font-weight:800;font-size:13px}
+    .detail-row .v{font-size:13px;color:#111827;text-align:right}
+    .copybtn{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:8px 10px;
+      background:#fff;
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    .copybtn:hover{background:var(--bg-soft)}
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      background:#111827;
+      color:#fff;
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:13px;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s ease;
+      z-index:90;
+    }
+    .toast[data-show="true"]{opacity:1}
+  </style>
+</head>
+<body>
+  <!-- =====================
+    DEMO / RÉPLICA: UI inspirada en gob.pe
+    - No está afiliada a gob.pe
+    - Reemplaza textos, números y enlaces por los reales
+    ====================== -->
+
+  <header class="topbar" role="banner">
+    <div class="container topbar__inner">
+      <div class="brand" aria-label="gob.pe (demo)">
+        <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#d60a2e"/>
+              <stop offset="1" stop-color="#b40723"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="52" height="52" rx="14" fill="url(#g)"/>
+          <path d="M20 41c0-9 8-18 20-18" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M18 31h28" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="20" cy="23" r="3" fill="#fff"/>
+          <circle cx="44" cy="23" r="3" fill="#fff"/>
+        </svg>
+        <div class="brand__word">gob.pe</div>
+      </div>
+
+      <form class="search" id="globalSearch" autocomplete="off">
+        <label class="sr-only" for="q">Buscar en MDCH</label>
+        <input id="q" name="q" type="search" placeholder="Buscar en MDCH" />
+        <button type="submit" title="Buscar" aria-label="Buscar">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <div class="crumbs" aria-label="breadcrumb">
+      <div class="container crumbs__inner" id="crumbs">
+        <a href="#" data-route="inicio">Inicio</a>
+        <span class="sep">›</span>
+        <a href="#" data-route="inicio">El Estado</a>
+        <span class="sep">›</span>
+        <a href="#" data-route="inicio">MML</a>
+        <span class="sep">›</span>
+        <span class="here">MDCH</span>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="navegación principal">
+      <div class="container nav__inner">
+        <div class="nav__list" id="mainNav">
+          <div class="nav__item">
+            <button class="nav__btn" data-route="inicio" aria-current="page">Inicio</button>
+          </div>
+
+          <div class="nav__item" data-dropdown="true">
+            <button class="nav__btn" data-route="tramites">Trámites y servicios <span class="caret">▾</span></button>
+            <div class="menu" role="menu" aria-label="Trámites y servicios">
+              <a href="#" role="menuitem" data-route="tramites"><span class="dot"></span>Buscar trámites</a>
+              <a href="#" role="menuitem" data-route="tramites"><span class="dot"></span>Guías y requisitos</a>
+              <a href="#" role="menuitem" data-route="tramites"><span class="dot"></span>Canales de atención</a>
+            </div>
+          </div>
+
+          <div class="nav__item" data-dropdown="true">
+            <button class="nav__btn" data-route="normas">Normas y documentos <span class="caret">▾</span></button>
+            <div class="menu" role="menu" aria-label="Normas y documentos">
+              <a href="#" role="menuitem" data-route="normas"><span class="dot"></span>Normas y documentos legales</a>
+              <a href="#" role="menuitem" data-route="normas"><span class="dot"></span>Compendios</a>
+              <a href="#" role="menuitem" data-route="normas"><span class="dot"></span>Documentos de gestión</a>
+            </div>
+          </div>
+
+          <div class="nav__item" data-dropdown="true">
+            <button class="nav__btn" data-route="noticias">Noticias y campañas <span class="caret">▾</span></button>
+            <div class="menu" role="menu" aria-label="Noticias y campañas">
+              <a href="#" role="menuitem" data-route="noticias"><span class="dot"></span>Últimas noticias</a>
+              <a href="#" role="menuitem" data-route="noticias"><span class="dot"></span>Campañas</a>
+              <a href="#" role="menuitem" data-route="noticias"><span class="dot"></span>Comunicados</a>
+            </div>
+          </div>
+
+          <div class="nav__item">
+            <button class="nav__btn" data-route="institucional">Información institucional</button>
+          </div>
+
+          <div class="nav__item">
+            <button class="nav__btn" data-route="contacto">Contacto</button>
+          </div>
+        </div>
+
+        <span class="pill" title="Demo UI">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 7v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Interfaz (demo)
+        </span>
+      </div>
+    </nav>
+  </header>
+
+  <main id="app">
+    <div class="container page">
+
+      <!-- =========================
+        SECCIÓN: INICIO (Entidad)
+      ========================== -->
+      <section id="view-inicio" class="view">
+        <div class="grid">
+          <div class="entity">
+            <div class="entity__top">
+              <div class="entity__name">
+                <div class="entity__logo" aria-hidden="true">
+                  <!-- Logo placeholder (reemplazar por logo real si deseas) -->
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2 3 6v6c0 5 3.7 9.6 9 10 5.3-.4 9-5 9-10V6l-9-4Z" stroke="#111827" stroke-width="1.8"/>
+                    <path d="M8 12h8" stroke="#d60a2e" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 8v8" stroke="#d60a2e" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h1 class="entity__title">Municipalidad Distrital de Chorrillos</h1>
+                  <p class="entity__desc">
+                    Creamos mejores condiciones para el desarrollo integral de la comunidad con oportunidades de inversión,
+                    en base al conocimiento de las necesidades y potencialidades del Distrito.
+                  </p>
+                </div>
+              </div>
+
+              <a class="btn btn--primary" href="#" id="btnTransparencia" title="Portal de transparencia (demo)">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 12a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M7 12a5 5 0 0 1 10 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M10 12a2 2 0 0 1 4 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 14v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Portal de transparencia
+              </a>
+            </div>
+
+            <div class="linkrow">
+              <a href="#" id="lnkConocer">Conocer más sobre la entidad</a>
+              <a href="#" data-route="directorio">Directorio de funcionarios</a>
+              <a href="#" data-route="normas">Normas y documentos legales</a>
+            </div>
+
+            <div class="section" style="margin-top:18px">
+              <div class="card">
+                <div class="card__head">
+                  <h2 class="card__title">Contacto</h2>
+                  <div class="card__muted">Canales de atención y sedes</div>
+                </div>
+                <div class="card__body">
+                  <div class="contact-grid">
+                    <div>
+                      <div class="card__muted" style="font-weight:800; color:#111827; margin-bottom:8px">Canales de atención</div>
+
+                      <div class="kv">
+                        <div class="k">Alerta Chorrillos</div>
+                        <div class="v"><a href="#" id="waAlerta">Ir a whatsapp</a></div>
+                      </div>
+                      <div class="kv">
+                        <div class="k">Denuncia vía WhatsApp</div>
+                        <div class="v"><a href="#" id="waDenuncia">Ir a whatsapp</a></div>
+                      </div>
+                      <div class="kv">
+                        <div class="k">Central Telefónica</div>
+                        <div class="v">
+                          <span style="display:inline-flex;gap:8px;align-items:center;justify-content:flex-end">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:16px;height:16px;opacity:.85">
+                              <path d="M6 3h4l2 5-3 2c1.2 2.4 3.1 4.3 5.5 5.5l2-3 5 2v4c0 1-1 2-2 2C10 21 3 14 3 5c0-1 1-2 2-2Z" stroke="#111827" stroke-width="1.8" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="tel:+51016803030" id="telCentral">6803030</a>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="kv">
+                        <div class="k">Alerta Chorrillos</div>
+                        <div class="v">
+                          <span style="display:inline-flex;gap:8px;align-items:center;justify-content:flex-end">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:16px;height:16px;opacity:.85">
+                              <path d="M6 3h4l2 5-3 2c1.2 2.4 3.1 4.3 5.5 5.5l2-3 5 2v4c0 1-1 2-2 2C10 21 3 14 3 5c0-1 1-2 2-2Z" stroke="#111827" stroke-width="1.8" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="tel:+51016803000" id="telAlerta">6803000</a>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="kv">
+                        <div class="k">Denunciar presuntos actos de corrupción</div>
+                        <div class="v">
+                          <span style="display:inline-flex;gap:8px;align-items:center;justify-content:flex-end">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:16px;height:16px;opacity:.85">
+                              <path d="M6 3h4l2 5-3 2c1.2 2.4 3.1 4.3 5.5 5.5l2-3 5 2v4c0 1-1 2-2 2C10 21 3 14 3 5c0-1 1-2 2-2Z" stroke="#111827" stroke-width="1.8" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="tel:+51986391117" id="telCorrup">986391117</a>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="kv">
+                        <div class="k">Alo Rentas</div>
+                        <div class="v">
+                          <span style="display:inline-flex;gap:8px;align-items:center;justify-content:flex-end">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:16px;height:16px;opacity:.85">
+                              <path d="M6 3h4l2 5-3 2c1.2 2.4 3.1 4.3 5.5 5.5l2-3 5 2v4c0 1-1 2-2 2C10 21 3 14 3 5c0-1 1-2 2-2Z" stroke="#111827" stroke-width="1.8" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="tel:+51016803030,3016" id="telRentas">6803030 Anexo 3016</a>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="icons" aria-label="redes sociales (demo)">
+                        <button class="iconbtn" type="button" title="Facebook (demo)" data-social="facebook" aria-label="Facebook">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M14 8h2V5h-2c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.2l.8-3H14V8Z" fill="#111827"/>
+                          </svg>
+                        </button>
+                        <button class="iconbtn" type="button" title="X (demo)" data-social="x" aria-label="X">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M6 5h4l3 4 3-4h4l-5 7 5 7h-4l-3-4-3 4H6l5-7-5-7Z" fill="#111827"/>
+                          </svg>
+                        </button>
+                        <button class="iconbtn" type="button" title="Instagram (demo)" data-social="instagram" aria-label="Instagram">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Z" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="#111827" stroke-width="1.8"/>
+                            <circle cx="17.5" cy="6.5" r="1" fill="#111827"/>
+                          </svg>
+                        </button>
+                        <button class="iconbtn" type="button" title="YouTube (demo)" data-social="youtube" aria-label="YouTube">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M10 9.5v5l5-2.5-5-2.5Z" fill="#111827"/>
+                            <path d="M3.8 8.2a3 3 0 0 1 2.1-2.1C7.7 5.6 12 5.6 12 5.6s4.3 0 6.1.5a3 3 0 0 1 2.1 2.1c.5 1.8.5 3.8.5 3.8s0 2-.5 3.8a3 3 0 0 1-2.1 2.1c-1.8.5-6.1.5-6.1.5s-4.3 0-6.1-.5a3 3 0 0 1-2.1-2.1c-.5-1.8-.5-3.8-.5-3.8s0-2 .5-3.8Z" stroke="#111827" stroke-width="1.4"/>
+                          </svg>
+                        </button>
+                      </div>
+
+                      <a href="#" class="btn" style="margin-top:12px" id="btnVerMasContacto">
+                        Ver más
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </a>
+                    </div>
+
+                    <div>
+                      <div class="card__muted" style="font-weight:800; color:#111827; margin-bottom:8px">Sedes</div>
+                      <div class="kv">
+                        <div class="k">LA CURVA</div>
+                        <div class="v">
+                          Av. Defensores del Morro N° 2765 (ex Av. Huaylas) - Chorrillos - Lima - Lima - Perú
+                        </div>
+                      </div>
+
+                      <a href="#" class="btn" style="margin-top:12px" id="btnVerMasSedes">
+                        Ver más
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="section">
+                <div class="section__head">
+                  <div>
+                    <h2 class="section__title">Vista rápida</h2>
+                    <div class="section__subtitle">Directorio, normas y accesos institucionales (demo)</div>
+                  </div>
+                  <div class="filters">
+                    <span class="pill" title="Rutas demo">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M4 12h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M14 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      Usa el menú superior
+                    </span>
+                  </div>
+                </div>
+
+                <div class="split">
+                  <div class="card">
+                    <div class="card__head">
+                      <h3 class="card__title">Información institucional</h3>
+                      <div class="card__muted">Accesos directos (enlaces configurables)</div>
+                    </div>
+                    <div class="card__body">
+                      <div class="inst-links">
+                        <a href="#" id="lnkOrganigrama">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M10 4h4v4h-4V4Z" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M4 16h4v4H4v-4Zm12 0h4v4h-4v-4Z" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M12 8v4M6 12v4M18 12v4M6 12h12" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+                          </svg>
+                          Organigrama
+                        </a>
+                        <a href="#" id="lnkAgenda">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M7 3v3M17 3v3" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M8 11h8M8 15h6" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                          </svg>
+                          Agenda institucional
+                        </a>
+                        <a href="#" data-route="directorio" id="lnkDirectorio">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M7 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" transform="translate(5 5)" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M4 21c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+                          </svg>
+                          Directorio de funcionarios
+                        </a>
+                        <a href="#" id="lnkDocsGestion">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M7 3h7l3 3v15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M14 3v4h4" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M8 12h8M8 16h8" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                          </svg>
+                          Documentos de gestión
+                        </a>
+                      </div>
+
+                      <a class="btn btn--dark" href="#" style="margin-top:12px; width:100%" id="btnVerInstitucional">
+                        Ver todo el contenido institucional
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card__head">
+                      <h3 class="card__title">Accesos reales (gob.pe)</h3>
+                      <div class="card__muted">Para comparar contra la web oficial</div>
+                    </div>
+                    <div class="card__body">
+                      <div class="kv">
+                        <div class="k">Página oficial</div>
+                        <div class="v"><a href="https://www.gob.pe/munichorrillos" target="_blank" rel="noreferrer">Ver en gob.pe</a></div>
+                      </div>
+                      <div class="kv">
+                        <div class="k">Directorio de funcionarios</div>
+                        <div class="v"><a href="https://www.gob.pe/institucion/munichorrillos/funcionarios" target="_blank" rel="noreferrer">Ver en gob.pe</a></div>
+                      </div>
+                      <div class="kv">
+                        <div class="k">Normas y documentos</div>
+                        <div class="v"><a href="https://www.gob.pe/institucion/munichorrillos/normas-legales" target="_blank" rel="noreferrer">Ver en gob.pe</a></div>
+                      </div>
+                      <p class="card__muted" style="margin-top:10px">
+                        *Esta página es una interfaz demo (para tu proyecto).
+                        Reemplaza los enlaces demo por tus PDF, páginas internas o tu portal.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preview directory -->
+              <div class="section">
+                <div class="section__head">
+                  <div>
+                    <h2 class="section__title">Directorio completo</h2>
+                    <div class="section__subtitle">Vista tipo tarjetas (demo) con búsqueda</div>
+                  </div>
+                  <div class="filters" role="search">
+                    <div class="input">
+                      <input id="dirSearch" type="search" placeholder="Filtrar por palabra clave" />
+                      <button type="button" id="dirBtnSearch" aria-label="Buscar">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:18px;height:18px">
+                          <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
+                          <path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                    <a href="#" class="btn" data-route="directorio">Ver directorio</a>
+                  </div>
+                </div>
+
+                <div class="cards" id="dirCards"></div>
+              </div>
+
+              <!-- Preview docs -->
+              <div class="section">
+                <div class="section__head">
+                  <div>
+                    <h2 class="section__title">Normas y documentos legales</h2>
+                    <div class="section__subtitle">Destacados y compendios (demo)</div>
+                  </div>
+                  <div class="filters">
+                    <a href="#" class="btn" data-route="normas">Ver todos</a>
+                  </div>
+                </div>
+
+                <div class="docs-grid">
+                  <div class="card">
+                    <div class="card__head">
+                      <h3 class="card__title">Destacados</h3>
+                      <div class="card__muted">Resoluciones / documentos recientes (demo)</div>
+                    </div>
+                    <div class="card__body">
+                      <div class="doc-cards" id="featuredDocs"></div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card__head">
+                      <h3 class="card__title">Compendios más visitados</h3>
+                      <div class="card__muted">Accesos directos (demo)</div>
+                    </div>
+                    <div class="card__body">
+                      <div class="comp">
+                        <ul>
+                          <li><a href="#" id="cmpPP">Presupuesto Participativo 2024</a></li>
+                          <li><a href="#" id="cmpROF">Compendio de Normas - Reglamento de Organización y Funciones (ROF)</a></li>
+                          <li><a href="#" id="cmpTUPA">Compendio de Normas - Texto Único de Procedimientos - TUPA</a></li>
+                        </ul>
+                        <a class="btn btn--primary" href="#" id="btnCompendios">
+                          Ver todos los compendios
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <aside>
+            <div class="card">
+              <div class="card__head">
+                <h2 class="card__title">Información institucional</h2>
+                <div class="card__muted">Enlaces rápidos</div>
+              </div>
+              <div class="card__body">
+                <div class="inst-links">
+                  <a href="#" id="sideOrganigrama">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M10 4h4v4h-4V4Z" stroke="#111827" stroke-width="1.8"/>
+                      <path d="M4 16h4v4H4v-4Zm12 0h4v4h-4v-4Z" stroke="#111827" stroke-width="1.8"/>
+                      <path d="M12 8v4M6 12v4M18 12v4M6 12h12" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    Organigrama
+                  </a>
+                  <a href="#" id="sideAgenda">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M7 3v3M17 3v3" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                      <path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="#111827" stroke-width="1.8"/>
+                      <path d="M8 11h8M8 15h6" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Agenda institucional
+                  </a>
+                  <a href="#" data-route="directorio" id="sideDirectorio">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M7 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" transform="translate(5 5)" stroke="#111827" stroke-width="1.8"/>
+                      <path d="M4 21c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    Directorio de funcionarios
+                  </a>
+                  <a href="#" id="sideDocsGestion">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M7 3h7l3 3v15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="#111827" stroke-width="1.8"/>
+                      <path d="M14 3v4h4" stroke="#111827" stroke-width="1.8"/>
+                      <path d="M8 12h8M8 16h8" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Documentos de gestión
+                  </a>
+                </div>
+
+                <a class="btn btn--dark" href="#" style="margin-top:12px; width:100%" data-route="institucional">
+                  Ver todo el contenido institucional
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:16px">
+              <div class="card__head">
+                <h2 class="card__title">Atajos (demo)</h2>
+                <div class="card__muted">Configura tus PDF / enlaces</div>
+              </div>
+              <div class="card__body">
+                <div class="kv">
+                  <div class="k">PDF Organigrama</div>
+                  <div class="v"><a href="#" id="pdfOrganigrama">Definir enlace</a></div>
+                </div>
+                <div class="kv">
+                  <div class="k">PDF ROF</div>
+                  <div class="v"><a href="#" id="pdfROF">Definir enlace</a></div>
+                </div>
+                <div class="kv">
+                  <div class="k">PDF TUPA</div>
+                  <div class="v"><a href="#" id="pdfTUPA">Definir enlace</a></div>
+                </div>
+                <p class="card__muted" style="margin-top:10px">
+                  Si quieres, en el siguiente paso me pasas los enlaces finales (PDF o rutas de tu web) y los dejo conectados.
+                </p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- =========================
+        SECCIÓN: DIRECTORIO
+      ========================== -->
+      <section id="view-directorio" class="view" hidden>
+        <div class="section__head" style="margin-top:6px">
+          <div>
+            <h2 class="section__title">Directorio completo</h2>
+            <div class="section__subtitle">Municipalidad Distrital de Chorrillos – Funcionarios (demo)</div>
+          </div>
+          <div class="filters" role="search">
+            <div class="input">
+              <input id="dirSearch2" type="search" placeholder="Filtrar por palabra clave" />
+              <button type="button" id="dirBtnSearch2" aria-label="Buscar">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:18px;height:18px">
+                  <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <a class="btn" href="#" data-route="inicio">Volver a Inicio</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__body">
+            <div class="cards" id="dirCards2"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================
+        SECCIÓN: NORMAS
+      ========================== -->
+      <section id="view-normas" class="view" hidden>
+        <div class="section__head" style="margin-top:6px">
+          <div>
+            <h2 class="section__title">Normas y documentos legales</h2>
+            <div class="section__subtitle">Filtro, orden y descarga (demo)</div>
+          </div>
+          <div class="filters">
+            <a class="btn" href="#" data-route="inicio">Volver a Inicio</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__body">
+            <div class="filters" style="margin-bottom:12px">
+              <div class="input">
+                <input id="docSearch" type="search" placeholder="Filtrar por palabra clave" />
+                <button type="button" id="docBtnSearch" aria-label="Buscar">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:18px;height:18px">
+                    <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+
+              <select id="docType" class="btn" style="padding:10px 12px" aria-label="Filtrar por tipo">
+                <option value="">Filtrar por tipo de publicación</option>
+                <option value="Resolución Gerencial">Resolución Gerencial</option>
+                <option value="Decreto">Decreto</option>
+                <option value="Ordenanza">Ordenanza</option>
+              </select>
+
+              <select id="docSort" class="btn" style="padding:10px 12px" aria-label="Ordenar">
+                <option value="recent">Más recientes primero</option>
+                <option value="old">Más antiguos primero</option>
+                <option value="title">Por título</option>
+              </select>
+            </div>
+
+            <div class="card__muted" id="docCount">0 resultados</div>
+            <div style="height:10px"></div>
+
+            <div id="docList" style="display:grid;gap:12px"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================
+        SECCIÓN: INSTITUCIONAL
+      ========================== -->
+      <section id="view-institucional" class="view" hidden>
+        <div class="section__head" style="margin-top:6px">
+          <div>
+            <h2 class="section__title">Información institucional</h2>
+            <div class="section__subtitle">Organigrama, agenda, directorio y documentos (demo)</div>
+          </div>
+          <div class="filters">
+            <a class="btn" href="#" data-route="inicio">Volver a Inicio</a>
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="card">
+            <div class="card__head">
+              <h3 class="card__title">Enlaces</h3>
+              <div class="card__muted">Configura tus rutas o PDF</div>
+            </div>
+            <div class="card__body">
+              <div class="inst-links">
+                <a href="#" id="instOrganigrama">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M10 4h4v4h-4V4Z" stroke="#111827" stroke-width="1.8"/>
+                    <path d="M4 16h4v4H4v-4Zm12 0h4v4h-4v-4Z" stroke="#111827" stroke-width="1.8"/>
+                    <path d="M12 8v4M6 12v4M18 12v4M6 12h12" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  Organigrama (PDF)
+                </a>
+                <a href="#" id="instAgenda">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 3v3M17 3v3" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="#111827" stroke-width="1.8"/>
+                    <path d="M8 11h8M8 15h6" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                  Agenda institucional
+                </a>
+                <a href="#" data-route="directorio" id="instDirectorio">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" transform="translate(5 5)" stroke="#111827" stroke-width="1.8"/>
+                    <path d="M4 21c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  Directorio de funcionarios
+                </a>
+                <a href="#" id="instDocsGestion">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 3h7l3 3v15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="#111827" stroke-width="1.8"/>
+                    <path d="M14 3v4h4" stroke="#111827" stroke-width="1.8"/>
+                    <path d="M8 12h8M8 16h8" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                  Documentos de gestión
+                </a>
+              </div>
+              <p class="card__muted" style="margin-top:10px">
+                Tip: si me pasas los enlaces finales (PDF/URLs), yo los dejo conectados para que todo funcione perfecto.
+              </p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__head">
+              <h3 class="card__title">Notas</h3>
+              <div class="card__muted">Personaliza la interfaz</div>
+            </div>
+            <div class="card__body">
+              <ul style="margin:0; padding-left:18px; color:#1f2937">
+                <li>Cambia el logo placeholder por el logo real de la municipalidad.</li>
+                <li>Actualiza números telefónicos, sedes y enlaces de WhatsApp.</li>
+                <li>Reemplaza los “docs demo” por tus resoluciones reales o tu base de datos.</li>
+                <li>Si quieres una réplica aún más exacta: dime si la harás con Bootstrap/Tailwind o “CSS puro” como aquí.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================
+        SECCIÓN: CONTACTO (simple)
+      ========================== -->
+      <section id="view-contacto" class="view" hidden>
+        <div class="section__head" style="margin-top:6px">
+          <div>
+            <h2 class="section__title">Contacto</h2>
+            <div class="section__subtitle">Resumen rápido (demo)</div>
+          </div>
+          <div class="filters">
+            <a class="btn" href="#" data-route="inicio">Volver a Inicio</a>
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="card">
+            <div class="card__head">
+              <h3 class="card__title">Canales</h3>
+              <div class="card__muted">Teléfonos y WhatsApp</div>
+            </div>
+            <div class="card__body">
+              <div class="kv"><div class="k">Central Telefónica</div><div class="v"><a href="tel:+51016803030">6803030</a></div></div>
+              <div class="kv"><div class="k">Alerta Chorrillos</div><div class="v"><a href="tel:+51016803000">6803000</a></div></div>
+              <div class="kv"><div class="k">Anticorrupción</div><div class="v"><a href="tel:+51986391117">986391117</a></div></div>
+              <div class="kv"><div class="k">Alo Rentas</div><div class="v"><a href="tel:+51016803030,3016">Anexo 3016</a></div></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__head">
+              <h3 class="card__title">Sede</h3>
+              <div class="card__muted">Dirección</div>
+            </div>
+            <div class="card__body">
+              <div class="kv">
+                <div class="k">LA CURVA</div>
+                <div class="v">Av. Defensores del Morro N° 2765 (ex Av. Huaylas) - Chorrillos - Lima - Lima - Perú</div>
+              </div>
+              <a class="btn btn--primary" href="#" id="btnMaps">
+                Ver en mapa (demo)
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 21s7-5 7-11a7 7 0 1 0-14 0c0 6 7 11 7 11Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================
+        SECCIÓN: TRÁMITES / NOTICIAS (placeholder)
+      ========================== -->
+      <section id="view-tramites" class="view" hidden>
+        <div class="section__head" style="margin-top:6px">
+          <div>
+            <h2 class="section__title">Trámites y servicios</h2>
+            <div class="section__subtitle">Sección placeholder (demo)</div>
+          </div>
+          <div class="filters">
+            <a class="btn" href="#" data-route="inicio">Volver a Inicio</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__body">
+            <p class="card__muted" style="margin:0">
+              Aquí puedes integrar tu listado de trámites, TUPA o botones de acceso rápido.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-noticias" class="view" hidden>
+        <div class="section__head" style="margin-top:6px">
+          <div>
+            <h2 class="section__title">Noticias y campañas</h2>
+            <div class="section__subtitle">Sección placeholder (demo)</div>
+          </div>
+          <div class="filters">
+            <a class="btn" href="#" data-route="inicio">Volver a Inicio</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__body">
+            <p class="card__muted" style="margin:0">
+              Aquí puedes mostrar noticias, campañas, banners o galerías.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer>
+      <div class="container footgrid">
+        <div>
+          <div style="font-weight:900; color:var(--gob-red)">gob.pe</div>
+          <div class="footnote">Interfaz demo inspirada en una página pública para fines de maqueta/replicación UI.</div>
+        </div>
+        <div>
+          <div style="font-weight:900">Estado de la maqueta</div>
+          <div class="footnote">Búsqueda, filtros, modales y “copiar” funcionando (frontend).</div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Modal perfil (demo) -->
+  <div class="modal" id="profileModal" aria-hidden="true" role="dialog" aria-label="Perfil del funcionario">
+    <div class="modal__panel" role="document">
+      <div class="modal__top">
+        <h3 id="modalTitle">Perfil profesional</h3>
+        <button class="close" type="button" id="modalClose" aria-label="Cerrar">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <div class="profile">
+          <div class="avatar" id="modalAvatar">RC</div>
+          <div class="name" id="modalName">Nombre</div>
+          <div class="role" id="modalRole">Cargo</div>
+        </div>
+        <div class="modal__detail" id="modalDetail">
+          <!-- se rellena con JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copiado</div>
+
+  <script>
+    // ========================
+    // Datos demo (reemplaza por los reales)
+    // ========================
+    const SOCIAL_LINKS = {
+      facebook: "https://facebook.com",
+      x: "https://x.com",
+      instagram: "https://instagram.com",
+      youtube: "https://youtube.com"
+    };
+
+    // PDFs / enlaces institucionales (DEMO)
+    // -> Reemplaza por tus URLs reales (PDF / páginas internas)
+    const LINKS = {
+      transparencia: "#",
+      organigrama_pdf: "#",
+      rof_pdf: "#",
+      tupa_pdf: "#",
+      agenda: "#",
+      docs_gestion: "#",
+      compendios: "#",
+      whatsapp_alerta: "#",
+      whatsapp_denuncia: "#",
+      maps: "#"
+    };
+
+    const PEOPLE = [
+      {
+        name: "Richard Cortez Melgarejo",
+        role: "Alcalde",
+        email: "rcortez@munichorrillos.gob.pe",
+        phone: "6803030",
+        ext: "Anexo 9012",
+        start: "30 oct 2025",
+        resolution: "0535-2025-JNE",
+        interest: "#"
+      },
+      {
+        name: "Betty Marina Morón Larrú",
+        role: "Jefe del Órgano de Control Institucional",
+        email: "oci@munichorrillos.gob.pe",
+        phone: "6803030",
+        ext: "Anexo 2041",
+        start: "—",
+        resolution: "—",
+        interest: "#"
+      },
+      {
+        name: "Palacios Santa Cruz Julio Cesar",
+        role: "Procurador Público Municipal",
+        email: "ppmdchabogada@gmail.com",
+        phone: "6803030",
+        ext: "Anexo 2031",
+        start: "—",
+        resolution: "—",
+        interest: "#"
+      },
+      {
+        name: "Medina Bolo Jose Carlos",
+        role: "Gerente Municipal",
+        email: "jmedina@munichorrillos.gob.pe",
+        phone: "6803030",
+        ext: "Anexo 2024",
+        start: "—",
+        resolution: "—",
+        interest: "#"
+      }
+    ];
+
+    const DOCS = [
+      {
+        title: "Resolución Gerencial N.° RGM N.° 00078-2026-MDCH",
+        type: "Resolución Gerencial",
+        dateISO: "2026-03-02",
+        summary: "ENCARGAR a la servidora TATIANA NORKA SOLIS VILLANUEVA, las funciones del cargo de la SUBGERENCIA DE MANTENIMIENTO VIAL Y ORNATO...",
+        download: "#",
+        read: "#"
+      },
+      {
+        title: "Resolución Gerencial N.° RGM N.° 00077-2026-MDCH",
+        type: "Resolución Gerencial",
+        dateISO: "2026-03-02",
+        summary: "DESIGNAR a la ARQ. TATIANA NORKA SOLIS VILLANUEVA, en el cargo de confianza de SUBGERENTE DE OBRAS PRIVADAS Y CONTROL URBANO...",
+        download: "#",
+        read: "#"
+      },
+      {
+        title: "Resolución Gerencial N.° RGM N.° 00076-2026-MDCH",
+        type: "Resolución Gerencial",
+        dateISO: "2026-03-02",
+        summary: "DESIGNAR al ÑAHUE SIVIRICHI JORGE ROBERTO, en el cargo de confianza de Gerente de Desarrollo Urbano...",
+        download: "#",
+        read: "#"
+      }
+    ];
+
+    // ========================
+    // Helpers UI
+    // ========================
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    function initials(fullName){
+      const parts = fullName.trim().split(/\s+/).filter(Boolean);
+      const a = parts[0]?.[0] || "";
+      const b = parts[1]?.[0] || parts[0]?.[1] || "";
+      return (a+b).toUpperCase();
+    }
+
+    function formatDate(iso){
+      try{
+        const d = new Date(iso + "T00:00:00");
+        return d.toLocaleDateString("es-PE", { day:"numeric", month:"long", year:"numeric" });
+      }catch{ return iso; }
+    }
+
+    function showToast(text){
+      const t = $("#toast");
+      t.textContent = text;
+      t.dataset.show = "true";
+      setTimeout(()=> t.dataset.show = "false", 1400);
+    }
+
+    async function copyToClipboard(value){
+      try{
+        await navigator.clipboard.writeText(value);
+        showToast("Copiado ✅");
+      }catch{
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = value;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        showToast("Copiado ✅");
+      }
+    }
+
+    // ========================
+    // Rendering
+    // ========================
+    function renderPeopleCards(targetEl, list){
+      targetEl.innerHTML = "";
+      list.forEach((p, idx) => {
+        const el = document.createElement("article");
+        el.className = "person";
+        el.innerHTML = `
+          <div class="person__img">
+            <div class="badge" title="Ficha rápida">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:16px;height:16px">
+                <path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Z" stroke="#111827" stroke-width="2"/>
+                <path d="M12 8v5" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="12" cy="16.5" r="1" fill="#111827"/>
+              </svg>
+              Perfil (demo)
+            </div>
+            <div class="avatar" aria-hidden="true">${initials(p.name)}</div>
+          </div>
+          <div class="person__body">
+            <a href="#" class="person__name" data-open-profile="${idx}">${p.name}</a>
+            <div class="person__role">${p.role}</div>
+            <div class="minirow">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 3h4l2 5-3 2c1.2 2.4 3.1 4.3 5.5 5.5l2-3 5 2v4c0 1-1 2-2 2C10 21 3 14 3 5c0-1 1-2 2-2Z" stroke="#111827" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+              ${p.phone} <span style="color:var(--muted)">/ ${p.ext}</span>
+            </div>
+            <div class="minirow">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 6h16v12H4V6Z" stroke="#111827" stroke-width="1.8"/>
+                <path d="m4 7 8 6 8-6" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.email}</span>
+            </div>
+          </div>
+          <div class="person__foot">
+            <a href="#" data-open-profile="${idx}">Ver perfil profesional</a>
+          </div>
+        `;
+        targetEl.appendChild(el);
+      });
+    }
+
+    function renderFeaturedDocs(){
+      const wrap = $("#featuredDocs");
+      wrap.innerHTML = "";
+      DOCS.slice(0,2).forEach(d => {
+        const el = document.createElement("div");
+        el.className = "doc";
+        el.innerHTML = `
+          <a href="#" data-route="normas">${d.title}</a>
+          <div class="card__muted">${d.summary}</div>
+          <div class="actions">
+            <a class="btn" href="${d.read}">
+              Leer más
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a class="btn btn--primary" href="${d.download}">
+              Descargar
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 10l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </a>
+          </div>
+          <div class="meta">${formatDate(d.dateISO)}</div>
+        `;
+        wrap.appendChild(el);
+      });
+    }
+
+    function renderDocList(filtered){
+      const listEl = $("#docList");
+      listEl.innerHTML = "";
+      $("#docCount").textContent = `${filtered.length} resultados`;
+
+      filtered.forEach(d => {
+        const row = document.createElement("div");
+        row.className = "doc";
+        row.innerHTML = `
+          <a href="${d.read}">${d.title}</a>
+          <div class="card__muted">${d.summary}</div>
+          <div class="actions">
+            <a class="btn" href="${d.read}">
+              Leer más
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a class="btn btn--primary" href="${d.download}">
+              Descargar
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 10l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </a>
+          </div>
+          <div class="meta">${d.type} · ${formatDate(d.dateISO)}</div>
+        `;
+        listEl.appendChild(row);
+      });
+    }
+
+    // ========================
+    // Modal
+    // ========================
+    function openProfile(p){
+      const modal = $("#profileModal");
+      $("#modalAvatar").textContent = initials(p.name);
+      $("#modalName").textContent = p.name;
+      $("#modalRole").textContent = p.role;
+      $("#modalTitle").textContent = p.name;
+
+      const detail = $("#modalDetail");
+      detail.innerHTML = `
+        <div class="detail-row">
+          <div class="k">Cargo</div>
+          <div class="v">${p.role}</div>
+        </div>
+        <div class="detail-row">
+          <div class="k">Fecha de inicio</div>
+          <div class="v">${p.start || "—"}</div>
+        </div>
+        <div class="detail-row">
+          <div class="k">Correo</div>
+          <div class="v">
+            <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap">
+              <a href="mailto:${p.email}" style="color:#2563eb;font-weight:800">${p.email}</a>
+              <button class="copybtn" type="button" data-copy="${p.email}">
+                Copiar
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px">
+                  <path d="M9 9h10v10H9V9Z" stroke="#111827" stroke-width="1.8"/>
+                  <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" stroke="#111827" stroke-width="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="k">Teléfono / anexo</div>
+          <div class="v">
+            <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap">
+              <a href="tel:+5101${p.phone}" style="color:#2563eb;font-weight:800">${p.phone}</a>
+              <span style="color:var(--muted)">${p.ext}</span>
+              <button class="copybtn" type="button" data-copy="${p.phone}">
+                Copiar
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px">
+                  <path d="M9 9h10v10H9V9Z" stroke="#111827" stroke-width="1.8"/>
+                  <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" stroke="#111827" stroke-width="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="k">Resolución</div>
+          <div class="v">${p.resolution || "—"}</div>
+        </div>
+        <div class="detail-row">
+          <div class="k">Declaración jurada de intereses</div>
+          <div class="v"><a href="${p.interest || "#"}" style="color:#2563eb;font-weight:800">Ver (demo)</a></div>
+        </div>
+      `;
+
+      modal.dataset.open = "true";
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      const modal = $("#profileModal");
+      modal.dataset.open = "false";
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    // ========================
+    // Routing (SPA simple)
+    // ========================
+    const ROUTES = ["inicio","directorio","normas","institucional","contacto","tramites","noticias"];
+
+    function setActiveNav(route){
+      $$("#mainNav .nav__btn").forEach(btn => {
+        const is = btn.dataset.route === route;
+        if(is) btn.setAttribute("aria-current","page");
+        else btn.removeAttribute("aria-current");
+      });
+    }
+
+    function showView(route){
+      ROUTES.forEach(r => {
+        const el = $("#view-" + r);
+        if(!el) return;
+        el.hidden = r !== route;
+      });
+      setActiveNav(route === "inicio" ? "inicio" : route);
+      // Breadcrumb simple
+      const crumbs = $("#crumbs");
+      crumbs.innerHTML = `
+        <a href="#" data-route="inicio">Inicio</a>
+        <span class="sep">›</span>
+        <a href="#" data-route="inicio">El Estado</a>
+        <span class="sep">›</span>
+        <a href="#" data-route="inicio">MML</a>
+        <span class="sep">›</span>
+        <a href="#" data-route="inicio">MDCH</a>
+        ${route !== "inicio" ? `<span class="sep">›</span><span class="here">${route.charAt(0).toUpperCase()+route.slice(1)}</span>` : ``}
+      `;
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    function go(route){
+      if(!ROUTES.includes(route)) route = "inicio";
+      history.pushState({route}, "", "#" + route);
+      showView(route);
+    }
+
+    window.addEventListener("popstate", (e) => {
+      const r = e.state?.route || (location.hash || "#inicio").slice(1);
+      showView(ROUTES.includes(r) ? r : "inicio");
+    });
+
+    // ========================
+    // Filters
+    // ========================
+    function filterPeople(query){
+      const q = (query || "").trim().toLowerCase();
+      if(!q) return PEOPLE;
+      return PEOPLE.filter(p =>
+        (p.name + " " + p.role + " " + p.email).toLowerCase().includes(q)
+      );
+    }
+
+    function filterDocs(){
+      const q = ($("#docSearch").value || "").trim().toLowerCase();
+      const t = $("#docType").value || "";
+      const sort = $("#docSort").value;
+
+      let list = DOCS.slice();
+
+      if(t){
+        list = list.filter(d => d.type === t);
+      }
+      if(q){
+        list = list.filter(d =>
+          (d.title + " " + d.summary + " " + d.type).toLowerCase().includes(q)
+        );
+      }
+
+      if(sort === "recent"){
+        list.sort((a,b) => (b.dateISO || "").localeCompare(a.dateISO || ""));
+      }else if(sort === "old"){
+        list.sort((a,b) => (a.dateISO || "").localeCompare(b.dateISO || ""));
+      }else if(sort === "title"){
+        list.sort((a,b) => (a.title || "").localeCompare(b.title || ""));
+      }
+
+      renderDocList(list);
+    }
+
+    // ========================
+    // Dropdown behavior
+    // ========================
+    function closeAllMenus(){
+      $$(".nav__item[data-dropdown='true']").forEach(it => it.dataset.open = "false");
+    }
+
+    function initNavDropdowns(){
+      const items = $$(".nav__item[data-dropdown='true']");
+      items.forEach(item => {
+        const btn = $(".nav__btn", item);
+        btn.addEventListener("click", (e) => {
+          // si el click es para ruta, cerramos o alternamos menú
+          e.preventDefault();
+          const willOpen = item.dataset.open !== "true";
+          closeAllMenus();
+          item.dataset.open = willOpen ? "true" : "false";
+        });
+        // clicking menu items routes too
+        $$(".menu a", item).forEach(a => {
+          a.addEventListener("click", (e) => {
+            e.preventDefault();
+            closeAllMenus();
+            go(a.dataset.route || "inicio");
+          });
+        });
+      });
+
+      document.addEventListener("click", (e) => {
+        const inside = e.target.closest(".nav__item[data-dropdown='true']");
+        if(!inside) closeAllMenus();
+      });
+    }
+
+    // ========================
+    // Init
+    // ========================
+    function wireLinks(){
+      $("#btnTransparencia").href = LINKS.transparencia;
+      $("#pdfOrganigrama").href = LINKS.organigrama_pdf;
+      $("#pdfROF").href = LINKS.rof_pdf;
+      $("#pdfTUPA").href = LINKS.tupa_pdf;
+
+      // duplicados
+      $("#lnkOrganigrama").href = LINKS.organigrama_pdf;
+      $("#sideOrganigrama").href = LINKS.organigrama_pdf;
+      $("#instOrganigrama").href = LINKS.organigrama_pdf;
+
+      $("#lnkAgenda").href = LINKS.agenda;
+      $("#sideAgenda").href = LINKS.agenda;
+      $("#instAgenda").href = LINKS.agenda;
+
+      $("#lnkDocsGestion").href = LINKS.docs_gestion;
+      $("#sideDocsGestion").href = LINKS.docs_gestion;
+      $("#instDocsGestion").href = LINKS.docs_gestion;
+
+      $("#btnCompendios").href = LINKS.compendios;
+      $("#btnMaps").href = LINKS.maps;
+
+      $("#waAlerta").href = LINKS.whatsapp_alerta;
+      $("#waDenuncia").href = LINKS.whatsapp_denuncia;
+
+      // Compendios demo
+      $("#cmpPP").href = "#";
+      $("#cmpROF").href = LINKS.rof_pdf;
+      $("#cmpTUPA").href = LINKS.tupa_pdf;
+
+      // Redes
+      $$(".iconbtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const key = btn.dataset.social;
+          const url = SOCIAL_LINKS[key] || "#";
+          if(url === "#"){ showToast("Enlace pendiente"); return; }
+          window.open(url, "_blank", "noreferrer");
+        });
+      });
+    }
+
+    function initRoutes(){
+      // Global clicks on data-route
+      document.addEventListener("click", (e) => {
+        const a = e.target.closest("[data-route]");
+        if(!a) return;
+        e.preventDefault();
+        const route = a.dataset.route;
+        closeAllMenus();
+        go(route);
+      });
+
+      // Search form (demo): routes to norms + applies query
+      $("#globalSearch").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const q = ($("#q").value || "").trim();
+        go("normas");
+        $("#docSearch").value = q;
+        filterDocs();
+      });
+    }
+
+    function initDirectorySearch(){
+      const input1 = $("#dirSearch");
+      const input2 = $("#dirSearch2");
+      const btn1 = $("#dirBtnSearch");
+      const btn2 = $("#dirBtnSearch2");
+
+      function applyFrom(value){
+        const list = filterPeople(value);
+        renderPeopleCards($("#dirCards"), list);
+        renderPeopleCards($("#dirCards2"), list);
+      }
+
+      input1.addEventListener("input", () => applyFrom(input1.value));
+      input2.addEventListener("input", () => applyFrom(input2.value));
+      btn1.addEventListener("click", () => applyFrom(input1.value));
+      btn2.addEventListener("click", () => applyFrom(input2.value));
+    }
+
+    function initDocFilters(){
+      $("#docSearch").addEventListener("input", filterDocs);
+      $("#docType").addEventListener("change", filterDocs);
+      $("#docSort").addEventListener("change", filterDocs);
+      $("#docBtnSearch").addEventListener("click", filterDocs);
+    }
+
+    function initProfileModal(){
+      document.addEventListener("click", (e) => {
+        const t = e.target.closest("[data-open-profile]");
+        if(!t) return;
+        e.preventDefault();
+        const idx = Number(t.dataset.openProfile);
+        const p = PEOPLE[idx];
+        if(p) openProfile(p);
+      });
+
+      $("#modalClose").addEventListener("click", closeModal);
+      $("#profileModal").addEventListener("click", (e) => {
+        if(e.target === $("#profileModal")) closeModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if(e.key === "Escape") closeModal();
+      });
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-copy]");
+        if(!btn) return;
+        e.preventDefault();
+        copyToClipboard(btn.dataset.copy);
+      });
+    }
+
+    // Boot
+    wireLinks();
+    initRoutes();
+    initNavDropdowns();
+
+    renderPeopleCards($("#dirCards"), PEOPLE);
+    renderPeopleCards($("#dirCards2"), PEOPLE);
+    renderFeaturedDocs();
+    renderDocList(DOCS);
+
+    initDirectorySearch();
+    initDocFilters();
+    initProfileModal();
+
+    // Start route
+    const initial = (location.hash || "#inicio").slice(1);
+    showView(ROUTES.includes(initial) ? initial : "inicio");
+  </script>
+</body>
+</html>
