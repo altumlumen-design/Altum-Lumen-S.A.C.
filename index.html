@@ -657,7 +657,10 @@
       z-index:90;
     }
     .toast[data-show="true"]{opacity:1}
-  </style>
+  
+/* Ocultar previews en Inicio (sin romper JS) */
+#view-inicio .home-hide{display:none !important;}
+</style>
 </head>
 <body>
   <!-- =====================
@@ -903,11 +906,149 @@
                 </div>
               </div>
 
-              
+              <div class="section home-hide">
+                <div class="section__head">
+                  <div>
+                    <h2 class="section__title">Vista rápida</h2>
+                    <div class="section__subtitle">Directorio, normas y accesos institucionales (demo)</div>
+                  </div>
+                  <div class="filters">
+                    <span class="pill" title="Rutas demo">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M4 12h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M14 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      Usa el menú superior
+                    </span>
+                  </div>
+                </div>
 
-              
+                <div class="split">
+                  <div class="card">
+                    <div class="card__head">
+                      <h3 class="card__title">Información institucional</h3>
+                      <div class="card__muted">Accesos directos (enlaces configurables)</div>
+                    </div>
+                    <div class="card__body">
+                      <div class="inst-links">
+                        <a href="#" id="lnkOrganigrama">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M10 4h4v4h-4V4Z" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M4 16h4v4H4v-4Zm12 0h4v4h-4v-4Z" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M12 8v4M6 12v4M18 12v4M6 12h12" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+                          </svg>
+                          Organigrama
+                        </a>
+                        <a href="#" id="lnkAgenda">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M7 3v3M17 3v3" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M8 11h8M8 15h6" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                          </svg>
+                          Agenda institucional
+                        </a>
+                        <a href="#" data-route="directorio" id="lnkDirectorio">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M7 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" transform="translate(5 5)" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M4 21c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+                          </svg>
+                          Directorio de funcionarios
+                        </a>
+                        <a href="#" id="lnkDocsGestion">
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M7 3h7l3 3v15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M14 3v4h4" stroke="#111827" stroke-width="1.8"/>
+                            <path d="M8 12h8M8 16h8" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+                          </svg>
+                          Documentos de gestión
+                        </a>
+                      </div>
 
-              
+                      <a class="btn btn--dark" href="#" style="margin-top:12px; width:100%" id="btnVerInstitucional">
+                        Ver todo el contenido institucional
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+
+                  
+
+                </div>
+              </div>
+
+              <!-- Preview directory -->
+              <div class="section home-hide">
+                <div class="section__head">
+                  <div>
+                    <h2 class="section__title">Directorio completo</h2>
+                    <div class="section__subtitle">Vista tipo tarjetas (demo) con búsqueda</div>
+                  </div>
+                  <div class="filters" role="search">
+                    <div class="input">
+                      <input id="dirSearch" type="search" placeholder="Filtrar por palabra clave" />
+                      <button type="button" id="dirBtnSearch" aria-label="Buscar">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:18px;height:18px">
+                          <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
+                          <path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                    <a href="#" class="btn" data-route="directorio">Ver directorio</a>
+                  </div>
+                </div>
+
+                <div class="cards" id="dirCards"></div>
+              </div>
+
+              <!-- Preview docs -->
+              <div class="section home-hide">
+                <div class="section__head">
+                  <div>
+                    <h2 class="section__title">Normas y documentos legales</h2>
+                    <div class="section__subtitle">Destacados y compendios (demo)</div>
+                  </div>
+                  <div class="filters">
+                    <a href="#" class="btn" data-route="normas">Ver todos</a>
+                  </div>
+                </div>
+
+                <div class="docs-grid">
+                  <div class="card">
+                    <div class="card__head">
+                      <h3 class="card__title">Destacados</h3>
+                      <div class="card__muted">Resoluciones / documentos recientes (demo)</div>
+                    </div>
+                    <div class="card__body">
+                      <div class="doc-cards" id="featuredDocs"></div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card__head">
+                      <h3 class="card__title">Compendios más visitados</h3>
+                      <div class="card__muted">Accesos directos (demo)</div>
+                    </div>
+                    <div class="card__body">
+                      <div class="comp">
+                        <ul>
+                          <li><a href="#" id="cmpPP">Presupuesto Participativo 2024</a></li>
+                          <li><a href="#" id="cmpROF">Compendio de Normas - Reglamento de Organización y Funciones (ROF)</a></li>
+                          <li><a href="#" id="cmpTUPA">Compendio de Normas - Texto Único de Procedimientos - TUPA</a></li>
+                        </ul>
+                        <a class="btn btn--primary" href="#" id="btnCompendios">
+                          Ver todos los compendios
+                          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
 
             </div>
           </div>
@@ -962,8 +1103,11 @@
               </div>
             </div>
 
-            <div class="card" style="margin-top:16px">
-              
+            <div class="card home-hide" style="margin-top:16px">
+              <div class="card__head">
+                <h2 class="card__title">Atajos (demo)</h2>
+                <div class="card__muted">Configura tus PDF / enlaces</div>
+              </div>
               <div class="card__body">
                 <div class="kv">
                   <div class="k">PDF Organigrama</div>
