@@ -56,7 +56,14 @@
       color:var(--gob-red);
       font-size:22px;
     }
-    .search{
+        .brand__logo{
+      height:46px;
+      width:auto;
+      max-width:320px;
+      object-fit:contain;
+      display:block;
+    }
+.search{
       display:flex; align-items:center;
       width:min(520px, 100%);
       gap:0;
@@ -661,22 +668,10 @@
 
   <header class="topbar" role="banner">
     <div class="container topbar__inner">
-      <div class="brand" aria-label="gob.pe (demo)">
-        <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
-          <defs>
-            <linearGradient id="g" x1="0" x2="1">
-              <stop offset="0" stop-color="#d60a2e"/>
-              <stop offset="1" stop-color="#b40723"/>
-            </linearGradient>
-          </defs>
-          <rect x="6" y="6" width="52" height="52" rx="14" fill="url(#g)"/>
-          <path d="M20 41c0-9 8-18 20-18" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
-          <path d="M18 31h28" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="20" cy="23" r="3" fill="#fff"/>
-          <circle cx="44" cy="23" r="3" fill="#fff"/>
-        </svg>
-        <div class="brand__word">gob.pe</div>
+      <div class="brand" aria-label="Altum Lumen S.A.C.">
+        <img class="brand__logo" src="logo-1.png" alt="Altum Lumen S.A.C.">
       </div>
+</div>
 
       <form class="search" id="globalSearch" autocomplete="off">
         <label class="sr-only" for="q">Buscar en MDCH</label>
@@ -726,17 +721,7 @@
               <a href="#" role="menuitem" data-route="normas"><span class="dot"></span>Documentos de gestión</a>
             </div>
           </div>
-
-          <div class="nav__item" data-dropdown="true">
-            <button class="nav__btn" data-route="noticias">Noticias y campañas <span class="caret">▾</span></button>
-            <div class="menu" role="menu" aria-label="Noticias y campañas">
-              <a href="#" role="menuitem" data-route="noticias"><span class="dot"></span>Últimas noticias</a>
-              <a href="#" role="menuitem" data-route="noticias"><span class="dot"></span>Campañas</a>
-              <a href="#" role="menuitem" data-route="noticias"><span class="dot"></span>Comunicados</a>
-            </div>
-          </div>
-
-          <div class="nav__item">
+<div class="nav__item">
             <button class="nav__btn" data-route="institucional">Información institucional</button>
           </div>
 
@@ -1411,27 +1396,7 @@
           </div>
         </div>
       </section>
-
-      <section id="view-noticias" class="view" hidden>
-        <div class="section__head" style="margin-top:6px">
-          <div>
-            <h2 class="section__title">Noticias y campañas</h2>
-            <div class="section__subtitle">Sección placeholder (demo)</div>
-          </div>
-          <div class="filters">
-            <a class="btn" href="#" data-route="inicio">Volver a Inicio</a>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card__body">
-            <p class="card__muted" style="margin:0">
-              Aquí puedes mostrar noticias, campañas, banners o galerías.
-            </p>
-          </div>
-        </div>
-      </section>
-
-    </div>
+</div>
 
     <footer>
       <div class="container footgrid">
@@ -2643,7 +2608,7 @@ const DOCS = [
     // ========================
     // Routing (SPA simple)
     // ========================
-    const ROUTES = ["inicio","directorio","normas","institucional","contacto","tramites","noticias"];
+    const ROUTES = ["inicio","directorio","normas","institucional","contacto","tramites"];
 
     function setActiveNav(route){
       $$("#mainNav .nav__btn").forEach(btn => {
