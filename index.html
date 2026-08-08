@@ -419,6 +419,11 @@
       line-height: 1.82;
     }
 
+    .about-copy .about-signature {
+      color: var(--blue-deep);
+      font-weight: 720;
+    }
+
     .identity-card {
       padding: 28px;
       border: 1px solid var(--line);
@@ -474,7 +479,7 @@
 
     .service-card {
       position: relative;
-      min-height: 370px;
+      min-height: 590px;
       display: flex;
       flex-direction: column;
       padding: clamp(26px, 4vw, 38px);
@@ -503,24 +508,27 @@
       box-shadow: 0 18px 42px rgba(18, 63, 90, 0.11);
     }
 
-    .service-icon {
-      width: 52px;
-      height: 52px;
+    .service-brand {
+      min-height: 126px;
       display: grid;
       place-items: center;
-      margin-bottom: 24px;
-      border-radius: 15px;
-      color: var(--blue-deep);
-      background: var(--blue-pale);
+      margin: 0 0 28px;
+      padding: 16px 18px;
+      overflow: hidden;
+      border: 1px solid #e5edf1;
+      border-radius: 16px;
+      background: #ffffff;
     }
 
-    .service-icon svg {
-      width: 26px;
-      height: 26px;
+    .service-brand img {
+      width: 100%;
+      height: auto;
+      max-height: 98px;
+      object-fit: contain;
     }
 
     .service-card h3 {
-      max-width: 21ch;
+      max-width: 25ch;
       margin: 0;
       color: #17394a;
       font-size: clamp(1.35rem, 2.2vw, 1.72rem);
@@ -529,8 +537,14 @@
       line-height: 1.25;
     }
 
-    .service-card p {
-      margin: 16px 0 24px;
+    .service-description {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0 26px;
+    }
+
+    .service-description p {
+      margin: 0;
       color: var(--ink-soft);
       font-size: 0.96rem;
       line-height: 1.75;
@@ -1467,9 +1481,10 @@
           <p class="eyebrow">Portal corporativo</p>
           <h1 id="hero-title">Excelencia que transforma.</h1>
           <p class="hero-copy">
-            ALTUM LUMEN S.A.C. articula servicios especializados en formación profesional,
-            obras e inversiones, asesoría contable y servicios legales, con una gestión
-            institucional clara y orientada a resultados.
+            ALTUM LUMEN S.A.C. integra formación continua, asistencia técnica, consultoría,
+            obras e inversiones, asesoría jurídica y gestión empresarial-contable. Sus cuatro
+            líneas trabajan de manera articulada para acompañar a personas e instituciones
+            desde la estrategia hasta la ejecución y los resultados.
           </p>
 
           <div class="hero-actions">
@@ -1490,12 +1505,12 @@
               <span>Sociedad Anónima Cerrada</span>
             </div>
             <div class="hero-fact">
-              <strong>RUC 20614458918</strong>
-              <span>Identificación tributaria</span>
+              <strong>4 líneas especializadas</strong>
+              <span>Capacidades que se complementan</span>
             </div>
             <div class="hero-fact">
-              <strong>Partida N.° 15949500</strong>
-              <span>Registro institucional</span>
+              <strong>RUC 20614458918</strong>
+              <span>Identificación tributaria</span>
             </div>
           </div>
         </div>
@@ -1506,17 +1521,28 @@
       <div class="container about-grid">
         <div class="about-copy reveal">
           <p class="eyebrow">Quiénes somos</p>
-          <h2 id="about-title">Una organización, cuatro capacidades especializadas.</h2>
+          <h2 id="about-title">Conocimiento, gestión y ejecución bajo una misma identidad.</h2>
           <p>
-            ALTUM LUMEN S.A.C. es una sociedad anónima cerrada constituida conforme a la
-            Ley General de Sociedades. Su portafolio reúne líneas institucionales con conducción
-            técnica definida, articuladas bajo una misma identidad corporativa.
+            ALTUM LUMEN S.A.C. es una empresa privada constituida como Sociedad Anónima Cerrada
+            que reúne formación profesional, asistencia técnica, consultoría y servicios
+            especializados. Su modelo integra cuatro líneas de servicio para acompañar a personas,
+            empresas e instituciones con una mirada coordinada, desde el análisis de una necesidad
+            hasta la puesta en marcha de una solución.
           </p>
           <p>
-            El portal presenta exclusivamente información aplicable a la empresa y sus servicios.
-            Los documentos internos, los instrumentos de gestión y los canales institucionales
-            conservan su propio ámbito y finalidad.
+            No se trata de áreas aisladas: el conocimiento académico, la gestión de proyectos,
+            el soporte legal y la orientación contable-empresarial se complementan dentro de un
+            mismo ecosistema. Esta estructura permite articular equipos y capacidades según la
+            naturaleza de cada encargo, manteniendo una conducción corporativa común.
           </p>
+          <p>
+            ALTUM también cuenta con aula virtual, mecanismos de verificación académica y procesos
+            sistematizados para organizar la formación, la atención y el seguimiento institucional.
+            A ello suma iniciativas de cooperación, investigación aplicada, innovación y
+            fortalecimiento de capacidades, especialmente vinculadas con la gestión pública y el
+            desarrollo profesional.
+          </p>
+          <p class="about-signature">Somos Altum Lumen, excelencia que transforma.</p>
         </div>
 
         <aside class="identity-card reveal" aria-label="Identidad legal de ALTUM LUMEN S.A.C.">
@@ -1535,8 +1561,12 @@
               <dd>20614458918</dd>
             </div>
             <div class="identity-row">
-              <dt>Partida</dt>
-              <dd>N.° 15949500</dd>
+              <dt>Portafolio</dt>
+              <dd>Cuatro líneas de servicio especializadas</dd>
+            </div>
+            <div class="identity-row">
+              <dt>Enfoque</dt>
+              <dd>Formación, asistencia técnica y servicios profesionales</dd>
             </div>
           </dl>
         </aside>
@@ -1547,26 +1577,42 @@
       <div class="container">
         <div class="section-heading reveal">
           <p class="eyebrow">Áreas de servicio</p>
-          <h2 id="services-title">Líneas formalizadas para necesidades distintas.</h2>
+          <h2 id="services-title">Cuatro líneas que amplían la capacidad de ALTUM.</h2>
           <p>
-            Cada línea responde a una finalidad específica y cuenta con una conducción
-            institucional definida por su resolución de creación.
+            Cada línea responde a una finalidad propia, cuenta con identidad y conducción
+            institucional definidas, y se articula con las demás cuando una necesidad requiere
+            capacidades complementarias.
           </p>
         </div>
 
         <div class="services-grid">
           <article class="service-card reveal">
-            <div class="service-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="m3 10 9-5 9 5-9 5-9-5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M7 12.4v4.3c2.7 2 7.3 2 10 0v-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </div>
+            <figure class="service-brand">
+              <img
+                src="centro-formacion-altum-lumen.png?v=20260808"
+                width="980"
+                height="245"
+                loading="lazy"
+                decoding="async"
+                alt="Centro de Formación y Capacitación Profesional de ALTUM LUMEN"
+              >
+            </figure>
             <h3>Centro de Formación y Capacitación Profesional</h3>
-            <p>
-              Denominación institucional de la oferta académica gestionada por la Dirección
-              Académica, orientada a la formación y capacitación profesional.
-            </p>
+            <div class="service-description">
+              <p>
+                Desarrolla formación continua, capacitación profesional, asistencia técnica,
+                investigación aplicada, consultoría, innovación y apoyo a la gestión institucional,
+                mediante modalidades presenciales, virtuales o digitales. Su propuesta se dirige
+                principalmente a profesionales y organizaciones vinculadas con el sector público.
+              </p>
+              <p>
+                Su oferta aborda gestión pública, inversiones, derecho, contrataciones del Estado,
+                obras públicas, desarrollo social y económico, seguridad ciudadana, gestión
+                ambiental, planeamiento, presupuesto, modernización, transformación digital,
+                regulación de servicios públicos y gestión de infraestructuras. Integra gestión
+                docente, aula virtual, materiales, acompañamiento y verificación académica.
+              </p>
+            </div>
             <div class="service-meta">
               <span>
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1586,17 +1632,30 @@
           </article>
 
           <article class="service-card reveal">
-            <div class="service-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M4 20h16M6 20V9l6-5 6 5v11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9 20v-6h6v6M9 10h.01M15 10h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </div>
+            <figure class="service-brand">
+              <img
+                src="altum-obras-inversiones.png?v=20260808"
+                width="1200"
+                height="360"
+                loading="lazy"
+                decoding="async"
+                alt="Constructora y Consultora ALTUM Obras e Inversiones"
+              >
+            </figure>
             <h3>Constructora &amp; Consultora Altum Obras e Inversiones</h3>
-            <p>
-              Línea especializada en consultoría, estudios, proyectos, ejecución de obras
-              e inversiones, bajo responsabilidad de la Dirección de Proyectos e Inversiones.
-            </p>
+            <div class="service-description">
+              <p>
+                Articula consultoría, estudios, proyectos, ejecución de obras e inversiones bajo
+                la Dirección de Proyectos e Inversiones. Su enfoque combina análisis técnico,
+                planificación y gestión para ordenar las distintas etapas de una intervención y
+                convertir necesidades de infraestructura o inversión en propuestas viables.
+              </p>
+              <p>
+                Puede acompañar a instituciones y organizaciones en la estructuración de
+                iniciativas, el soporte técnico y la coordinación de su ejecución, integrando
+                criterios de eficiencia, trazabilidad y orientación a resultados.
+              </p>
+            </div>
             <div class="service-meta">
               <span>
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1616,17 +1675,30 @@
           </article>
 
           <article class="service-card reveal">
-            <div class="service-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M5 3h14v18H5V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M8 7h8M8 11h2M14 11h2M8 15h2M14 15h2M8 18h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </div>
+            <figure class="service-brand">
+              <img
+                src="altum-contadores.png?v=20260808"
+                width="1200"
+                height="360"
+                loading="lazy"
+                decoding="async"
+                alt="Asesoría Empresarial y Contable ALTUM Contadores y Asociados"
+              >
+            </figure>
             <h3>Altum Contadores &amp; Asociados</h3>
-            <p>
-              Estudio contable y de asesoría empresarial para servicios contables, tributarios,
-              financieros, administrativos y de acompañamiento empresarial.
-            </p>
+            <div class="service-description">
+              <p>
+                Brinda asesoría empresarial y contable orientada a ordenar la información
+                económica y fortalecer la gestión de organizaciones y emprendimientos. Comprende
+                servicios contables, tributarios, financieros y administrativos, así como
+                acompañamiento para una toma de decisiones mejor informada.
+              </p>
+              <p>
+                Su trabajo vincula el cumplimiento de obligaciones con la planificación
+                empresarial, ofreciendo soporte para procesos internos, control financiero y
+                organización documentaria desde una perspectiva práctica y preventiva.
+              </p>
+            </div>
             <div class="service-meta">
               <span>
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1646,16 +1718,30 @@
           </article>
 
           <article class="service-card reveal">
-            <div class="service-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M12 3v18M7 6h10M5 9l-3 5h6L5 9Zm14 0-3 5h6l-3-5ZM7 21h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <figure class="service-brand">
+              <img
+                src="altum-abogados.png?v=20260808"
+                width="1200"
+                height="360"
+                loading="lazy"
+                decoding="async"
+                alt="Estudio Jurídico ALTUM Abogados y Asociados"
+              >
+            </figure>
             <h3>Altum Abogados &amp; Asociados</h3>
-            <p>
-              Estudio jurídico de ALTUM LUMEN S.A.C. para asesoría, defensa, representación
-              legal y otras prestaciones jurídicas dirigidas a terceros.
-            </p>
+            <div class="service-description">
+              <p>
+                Es la línea jurídica de ALTUM LUMEN S.A.C. para asesoría, defensa,
+                representación legal y otras prestaciones dirigidas a personas e instituciones.
+                Atiende necesidades que requieren análisis normativo, estrategia legal y
+                acompañamiento profesional.
+              </p>
+              <p>
+                Su enfoque combina prevención y atención de contingencias, revisión y elaboración
+                de documentos, orientación para decisiones y representación cuando corresponda,
+                procurando soluciones claras y consistentes con el marco aplicable.
+              </p>
+            </div>
             <div class="service-meta">
               <span>
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1727,7 +1813,7 @@
 
         </div>
 
-        <div class="officials-grid" aria-label="Funcionarios en orden institucional">
+        <div class="officials-grid">
           <div class="officials-flow">
             <article class="official-card reveal">
               <div class="official-head">
@@ -1748,7 +1834,7 @@
                 gerenciageneral.altumlumen@gmail.com
               </a>
               <div class="official-resolution">
-                <span>Designación principal</span>
+                <span>Información registral</span>
                 <strong>Partida Registral N.° 15949500</strong>
               </div>
             </article>
@@ -2272,7 +2358,7 @@
         </p>
       </div>
       <p class="footer-meta">
-        Sociedad Anónima Cerrada · RUC 20614458918 · Partida Registral N.° 15949500
+        Sociedad Anónima Cerrada · RUC 20614458918
       </p>
     </div>
   </footer>
