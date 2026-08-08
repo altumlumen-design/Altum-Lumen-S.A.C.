@@ -394,41 +394,144 @@
       line-height: 1.78;
     }
 
-    .about-grid {
+    .about-page {
+      padding-block: clamp(34px, 5.5vw, 68px);
+      background: linear-gradient(180deg, #f9fcfd 0%, #ffffff 42%, #f7fafb 100%);
+    }
+
+    .about-sky {
+      position: relative;
+      min-height: 390px;
       display: grid;
-      grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.72fr);
-      gap: clamp(36px, 7vw, 90px);
+      grid-template-columns: minmax(0, 1.35fr) minmax(230px, 0.65fr);
+      gap: clamp(30px, 6vw, 80px);
       align-items: center;
+      padding: clamp(34px, 6vw, 68px);
+      overflow: hidden;
+      isolation: isolate;
+      border: 1px solid rgba(190, 215, 226, 0.84);
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(100deg, rgba(255, 255, 255, 0.97) 0%, rgba(245, 251, 253, 0.9) 49%, rgba(226, 242, 249, 0.34) 100%),
+        url("cielo.jpg?v=20260808") center 42% / cover no-repeat;
+      box-shadow: var(--shadow-lg);
     }
 
-    .about-copy h2 {
-      max-width: 15ch;
+    .about-sky::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      bottom: -120px;
+      z-index: -1;
+      width: 360px;
+      aspect-ratio: 1;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 0 42px rgba(255, 255, 255, 0.09);
+    }
+
+    .about-sky-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-sky h2 {
+      max-width: 16ch;
       margin: 0;
-      color: #15384a;
-      font-size: clamp(2rem, 4vw, 3.3rem);
-      font-weight: 590;
-      letter-spacing: -0.044em;
-      line-height: 1.12;
+      color: #123548;
+      font-size: clamp(2.25rem, 4.8vw, 4rem);
+      font-weight: 600;
+      letter-spacing: -0.052em;
+      line-height: 1.04;
     }
 
-    .about-copy p:not(.eyebrow) {
-      max-width: 66ch;
-      margin: 22px 0 0;
-      color: var(--ink-soft);
-      font-size: 1.02rem;
-      line-height: 1.82;
+    .about-sky-copy > p:not(.eyebrow) {
+      max-width: 64ch;
+      margin: 24px 0 0;
+      color: #36515f;
+      font-size: clamp(1rem, 1.5vw, 1.1rem);
+      line-height: 1.78;
     }
 
-    .about-copy .about-signature {
-      color: var(--blue-deep);
-      font-weight: 720;
+    .about-sky-brand {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 310px);
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      justify-self: end;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 20px 48px rgba(18, 63, 90, 0.16);
+      backdrop-filter: blur(16px);
     }
 
-    .identity-card {
-      padding: 28px;
+    .about-sky-brand img {
+      width: min(100%, 245px);
+      height: auto;
+      object-fit: contain;
+    }
+
+    .about-overview {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(310px, 0.72fr);
+      gap: clamp(28px, 5vw, 64px);
+      align-items: stretch;
+      margin-top: clamp(34px, 5vw, 58px);
+    }
+
+    .about-story {
+      padding: clamp(28px, 4vw, 42px);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .about-story h3 {
+      max-width: 18ch;
+      margin: 0;
+      color: #15384a;
+      font-size: clamp(1.75rem, 3.2vw, 2.6rem);
+      font-weight: 600;
+      letter-spacing: -0.042em;
+      line-height: 1.12;
+    }
+
+    .about-story p:not(.eyebrow) {
+      max-width: 68ch;
+      margin: 19px 0 0;
+      color: var(--ink-soft);
+      font-size: 0.99rem;
+      line-height: 1.78;
+    }
+
+    .about-pillars {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 25px;
+    }
+
+    .about-pillars span {
+      padding: 8px 12px;
+      border: 1px solid #d7e5eb;
+      border-radius: 999px;
+      color: #315264;
+      background: #f5fafc;
+      font-size: 0.78rem;
+      font-weight: 680;
+    }
+
+    .identity-card {
+      padding: clamp(26px, 4vw, 36px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, #ffffff, #f1f8fb);
       box-shadow: var(--shadow-sm);
     }
 
@@ -469,6 +572,143 @@
       font-size: 0.93rem;
       font-weight: 610;
       overflow-wrap: anywhere;
+    }
+
+    .about-lines {
+      margin-top: clamp(48px, 7vw, 82px);
+    }
+
+    .about-lines-heading {
+      max-width: 760px;
+      margin-bottom: 28px;
+    }
+
+    .about-lines-heading h3 {
+      margin: 0;
+      color: #15384a;
+      font-size: clamp(1.9rem, 3.7vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -0.044em;
+      line-height: 1.12;
+    }
+
+    .about-lines-heading p:not(.eyebrow) {
+      margin: 16px 0 0;
+      color: var(--ink-soft);
+      line-height: 1.75;
+    }
+
+    .about-lines-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .about-line-card {
+      position: relative;
+      min-height: 210px;
+      display: grid;
+      grid-template-columns: 50px minmax(0, 1fr);
+      gap: 18px;
+      align-content: start;
+      padding: 26px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--white);
+      box-shadow: 0 8px 26px rgba(18, 63, 90, 0.06);
+    }
+
+    .about-line-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--blue));
+    }
+
+    .about-line-icon {
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--blue-deep);
+      background: var(--blue-pale);
+    }
+
+    .about-line-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .about-line-card h4 {
+      margin: 1px 0 0;
+      color: #17394a;
+      font-size: 1.12rem;
+      font-weight: 690;
+      letter-spacing: -0.02em;
+      line-height: 1.28;
+    }
+
+    .about-line-card p {
+      grid-column: 2;
+      margin: -4px 0 0;
+      color: #526873;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .about-articulation {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 20px;
+      align-items: center;
+      margin-top: 18px;
+      padding: 24px 26px;
+      border: 1px solid #cfe0e7;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #f7fcfe, #eaf5f9);
+    }
+
+    .about-articulation-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: var(--white);
+      background: var(--blue-deep);
+      box-shadow: 0 10px 22px rgba(18, 63, 90, 0.18);
+    }
+
+    .about-articulation-icon svg {
+      width: 27px;
+      height: 27px;
+    }
+
+    .about-articulation strong {
+      display: block;
+      color: #17394a;
+      font-size: 1rem;
+      font-weight: 720;
+    }
+
+    .about-articulation p {
+      margin: 5px 0 0;
+      color: #536a76;
+      font-size: 0.9rem;
+      line-height: 1.68;
+    }
+
+    .about-signature {
+      margin: 34px 0 0;
+      color: var(--blue-deep);
+      font-size: clamp(1.15rem, 2vw, 1.45rem);
+      font-weight: 740;
+      text-align: center;
     }
 
     .services-grid {
@@ -1445,7 +1685,8 @@
       }
 
       .hero-inner,
-      .about-grid,
+      .about-sky,
+      .about-overview,
       .officials-heading-row,
       .movements-panel,
       .documents-wrap,
@@ -1457,9 +1698,14 @@
         padding-block: 64px;
       }
 
-      .about-grid,
+      .about-overview,
       .documents-wrap {
         gap: 44px;
+      }
+
+      .about-sky-brand {
+        width: min(100%, 280px);
+        justify-self: start;
       }
 
       .documents-intro {
@@ -1526,6 +1772,7 @@
 
       .hero-facts,
       .services-grid,
+      .about-lines-grid,
       .movements-list,
       .officials-grid {
         grid-template-columns: 1fr;
@@ -1546,6 +1793,59 @@
 
       .section {
         padding-block: 72px;
+      }
+
+      .about-page {
+        padding-block: 24px 64px;
+      }
+
+      .about-sky {
+        min-height: auto;
+        gap: 28px;
+        padding: 30px 22px;
+        border-radius: 23px;
+        background-position: 62% center;
+      }
+
+      .about-sky h2 {
+        font-size: clamp(2.15rem, 11vw, 3.15rem);
+      }
+
+      .about-sky-brand {
+        min-height: 145px;
+        padding: 24px;
+        border-radius: 24px;
+      }
+
+      .about-overview {
+        gap: 18px;
+      }
+
+      .about-story,
+      .identity-card {
+        padding: 24px 20px;
+      }
+
+      .about-line-card {
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 15px;
+        min-height: 0;
+        padding: 22px 19px;
+      }
+
+      .about-line-icon {
+        width: 46px;
+        height: 46px;
+      }
+
+      .about-line-card p {
+        grid-column: 1 / -1;
+        margin-top: 0;
+      }
+
+      .about-articulation {
+        grid-template-columns: 1fr;
+        padding: 22px 20px;
       }
 
       .identity-row {
@@ -1660,12 +1960,17 @@
       }
 
       .hero,
+      .about-sky,
       .contact-panel {
         min-height: auto;
         background: var(--white) !important;
       }
 
       .hero-panel,
+      .about-sky,
+      .about-story,
+      .about-line-card,
+      .about-articulation,
       .service-card,
       .identity-card,
       .official-card,
@@ -1676,6 +1981,7 @@
       }
 
       .official-card,
+      .about-line-card,
       .movement-item {
         break-inside: avoid;
       }
@@ -1762,59 +2068,162 @@
       </div>
     </section>
 
-    <section class="section page-view" id="nosotros" data-title="Nosotros" aria-labelledby="about-title">
-      <div class="container about-grid">
-        <div class="about-copy reveal">
-          <p class="eyebrow">Quiénes somos</p>
-          <h2 id="about-title">Conocimiento, gestión y ejecución bajo una misma identidad.</h2>
-          <p>
-            ALTUM LUMEN S.A.C. es una empresa privada constituida como Sociedad Anónima Cerrada
-            que reúne formación profesional, asistencia técnica, consultoría y servicios
-            especializados. Su modelo integra cuatro líneas de servicio para acompañar a personas,
-            empresas e instituciones con una mirada coordinada, desde el análisis de una necesidad
-            hasta la puesta en marcha de una solución.
-          </p>
-          <p>
-            No se trata de áreas aisladas: el conocimiento académico, la gestión de proyectos,
-            el soporte legal y la orientación contable-empresarial se complementan dentro de un
-            mismo ecosistema. Esta estructura permite articular equipos y capacidades según la
-            naturaleza de cada encargo, manteniendo una conducción corporativa común.
-          </p>
-          <p>
-            ALTUM también cuenta con aula virtual, mecanismos de verificación académica y procesos
-            sistematizados para organizar la formación, la atención y el seguimiento institucional.
-            A ello suma iniciativas de cooperación, investigación aplicada, innovación y
-            fortalecimiento de capacidades, especialmente vinculadas con la gestión pública y el
-            desarrollo profesional.
-          </p>
-          <p class="about-signature">Somos Altum Lumen, excelencia que transforma.</p>
+    <section class="section about-page page-view" id="nosotros" data-title="Nosotros" aria-labelledby="about-title">
+      <div class="container">
+        <div class="about-sky reveal">
+          <div class="about-sky-copy">
+            <p class="eyebrow">Quiénes somos</p>
+            <h2 id="about-title">Una empresa que convierte necesidades en soluciones integrales.</h2>
+            <p>
+              ALTUM LUMEN S.A.C. es una empresa privada peruana que articula capacidades
+              consultivas, técnicas, operativas, formativas, de supervisión y control. Atiende a
+              personas, empresas e instituciones públicas y privadas con soluciones que pueden
+              abarcar desde el diagnóstico y el diseño hasta la ejecución y el seguimiento.
+            </p>
+          </div>
+          <div class="about-sky-brand" aria-hidden="true">
+            <img src="logo-1.png" alt="">
+          </div>
         </div>
 
-        <aside class="identity-card reveal" aria-label="Identidad legal de ALTUM LUMEN S.A.C.">
-          <h3>Identidad institucional</h3>
-          <dl class="identity-list">
-            <div class="identity-row">
-              <dt>Razón social</dt>
-              <dd>ALTUM LUMEN S.A.C.</dd>
+        <div class="about-overview">
+          <article class="about-story reveal">
+            <p class="eyebrow">Una sola organización</p>
+            <h3>De la estrategia a la ejecución.</h3>
+            <p>
+              El modelo de ALTUM reúne planeamiento y modernización institucional, proyectos e
+              inversiones, ingeniería y obras, servicios legales, asesoría tributaria y contable,
+              cooperación interinstitucional y formación profesional. Cada especialidad conserva
+              su ámbito técnico y, cuando el encargo lo requiere, se integra con las demás.
+            </p>
+            <p>
+              Esta articulación permite construir respuestas completas, con coordinación
+              corporativa, claridad documental y seguimiento de resultados. El objetivo es que
+              cada servicio combine conocimiento especializado, viabilidad operativa y una
+              ejecución responsable.
+            </p>
+            <div class="about-pillars" aria-label="Principios de trabajo">
+              <span>Rigor técnico</span>
+              <span>Coordinación multidisciplinaria</span>
+              <span>Gestión documentada</span>
+              <span>Orientación a resultados</span>
             </div>
-            <div class="identity-row">
-              <dt>Tipo societario</dt>
-              <dd>Sociedad Anónima Cerrada</dd>
+          </article>
+
+          <aside class="identity-card reveal" aria-label="Identidad institucional de ALTUM LUMEN S.A.C.">
+            <h3>Identidad institucional</h3>
+            <dl class="identity-list">
+              <div class="identity-row">
+                <dt>Razón social</dt>
+                <dd>ALTUM LUMEN S.A.C.</dd>
+              </div>
+              <div class="identity-row">
+                <dt>Naturaleza</dt>
+                <dd>Sociedad Anónima Cerrada</dd>
+              </div>
+              <div class="identity-row">
+                <dt>RUC</dt>
+                <dd>20614458918</dd>
+              </div>
+              <div class="identity-row">
+                <dt>Atención</dt>
+                <dd>Personas, empresas e instituciones públicas y privadas</dd>
+              </div>
+              <div class="identity-row">
+                <dt>Modelo</dt>
+                <dd>Cuatro líneas especializadas con conducción corporativa común</dd>
+              </div>
+            </dl>
+          </aside>
+        </div>
+
+        <div class="about-lines">
+          <div class="about-lines-heading reveal">
+            <p class="eyebrow">Capacidades especializadas</p>
+            <h3>Cuatro líneas, una misma visión.</h3>
+            <p>
+              El portafolio combina formación, proyectos y obras, servicios jurídicos y gestión
+              tributaria-contable para atender necesidades distintas sin perder unidad institucional.
+            </p>
+          </div>
+
+          <div class="about-lines-grid">
+            <article class="about-line-card reveal">
+              <span class="about-line-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M4 19h16M6 16V8l6-3 6 3v8M9 16v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <h4>ALTUM Obras e Inversiones</h4>
+              <p>
+                Estudios, proyectos, expedientes técnicos, consultoría, supervisión y ejecución
+                de obras e inversiones, incorporando control técnico, seguridad y gestión
+                socioambiental.
+              </p>
+            </article>
+
+            <article class="about-line-card reveal">
+              <span class="about-line-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 4v16M5 8h14M7 8l-3 6h6L7 8Zm10 0-3 6h6l-3-6ZM8 20h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <h4>ALTUM Abogados &amp; Asociados</h4>
+              <p>
+                Asesoría, análisis, contratos, gestiones, defensa y representación legal, con
+                manejo confidencial de expedientes, control de plazos y atención especializada.
+              </p>
+            </article>
+
+            <article class="about-line-card reveal">
+              <span class="about-line-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M5 4h14v16H5V4Zm3 4h8M8 12h2m2 0h4m-8 4h2m2 0h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <h4>ALTUM Contadores &amp; Asociados</h4>
+              <p>
+                Registros y cierres contables, reportes financieros, cumplimiento tributario,
+                declaraciones y atención de requerimientos, con control de vencimientos y respaldo
+                documentario.
+              </p>
+            </article>
+
+            <article class="about-line-card reveal">
+              <span class="about-line-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="m3 10 9-5 9 5-9 5-9-5Zm4 2.3V17c3 2 7 2 10 0v-4.7M21 10v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <h4>Centro de Formación y Capacitación Profesional</h4>
+              <p>
+                Formación continua, programas de posgrado, cursos, diplomados, especializaciones
+                y certificaciones, con planificación académica, acompañamiento y trazabilidad de
+                los procesos formativos.
+              </p>
+            </article>
+          </div>
+
+          <div class="about-articulation reveal">
+            <span class="about-articulation-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="6" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+                <circle cx="18" cy="6" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+                <circle cx="18" cy="18" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+                <path d="m8.3 10.9 7.4-3.8M8.3 13.1l7.4 3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <div>
+              <strong>Planeamiento, desarrollo corporativo y cooperación</strong>
+              <p>
+                La estrategia comercial, la mejora de procesos, los convenios y las alianzas
+                interinstitucionales conectan estas capacidades y amplían el alcance de cada línea.
+              </p>
             </div>
-            <div class="identity-row">
-              <dt>RUC</dt>
-              <dd>20614458918</dd>
-            </div>
-            <div class="identity-row">
-              <dt>Portafolio</dt>
-              <dd>Cuatro líneas de servicio especializadas</dd>
-            </div>
-            <div class="identity-row">
-              <dt>Enfoque</dt>
-              <dd>Formación, asistencia técnica y servicios profesionales</dd>
-            </div>
-          </dl>
-        </aside>
+          </div>
+
+          <p class="about-signature reveal">Somos Altum Lumen, excelencia que transforma.</p>
+        </div>
       </div>
     </section>
 
