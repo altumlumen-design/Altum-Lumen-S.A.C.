@@ -685,8 +685,8 @@
 
     .officials-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
       align-items: stretch;
       margin-top: 32px;
     }
@@ -696,30 +696,36 @@
     }
 
     .officials-grid .official-card {
-      padding: 22px;
+      min-height: 270px;
+      padding: 22px 18px;
     }
 
     .officials-grid .official-head {
-      grid-template-columns: 92px minmax(0, 1fr);
-      gap: 16px;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      justify-items: center;
+      text-align: center;
     }
 
     .officials-grid .official-portrait {
-      width: 92px;
+      width: 116px;
+      margin-inline: auto;
+      border-radius: 50%;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
     }
 
     .officials-grid .official-card h3 {
-      font-size: 1.04rem;
+      font-size: 0.94rem;
+      line-height: 1.35;
     }
 
     .officials-grid .official-role {
-      font-size: 0.78rem;
+      font-size: 0.73rem;
+      line-height: 1.45;
     }
 
-    .officials-grid .official-email {
-      margin-top: 16px;
-      padding-top: 14px;
-      font-size: 0.76rem;
+    .officials-grid .official-data {
+      display: none;
     }
 
     .official-card {
@@ -734,12 +740,25 @@
       background: var(--white);
       box-shadow: 0 8px 26px rgba(18, 63, 90, 0.055);
       transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+      cursor: pointer;
     }
 
     .official-card:hover {
       transform: translateY(-3px);
       border-color: #bfd5df;
       box-shadow: 0 15px 34px rgba(18, 63, 90, 0.1);
+    }
+
+    .official-card:hover .official-portrait {
+      border-color: #9fc4d4;
+      box-shadow: 0 0 0 5px rgba(35, 111, 145, 0.08);
+      transform: scale(1.025);
+    }
+
+    .official-card:focus-visible {
+      outline: 3px solid rgba(35, 111, 145, 0.3);
+      outline-offset: 3px;
+      border-color: #8eb8ca;
     }
 
     .official-head {
@@ -936,6 +955,115 @@
       color: #667b85;
       font-size: 0.78rem;
       line-height: 1.6;
+    }
+
+    body.official-dialog-open {
+      overflow: hidden;
+    }
+
+    .official-dialog {
+      width: min(640px, calc(100% - 32px));
+      max-height: min(760px, calc(100vh - 32px));
+      padding: 0;
+      overflow: auto;
+      border: 0;
+      border-radius: 24px;
+      background: var(--white);
+      box-shadow: 0 28px 80px rgba(10, 42, 59, 0.28);
+    }
+
+    .official-dialog::backdrop {
+      background: rgba(13, 39, 52, 0.58);
+      backdrop-filter: blur(5px);
+    }
+
+    .official-dialog-shell {
+      position: relative;
+      padding: 34px;
+    }
+
+    .official-dialog-label {
+      margin: 0 52px 22px 0;
+      color: var(--red);
+      font-size: 0.7rem;
+      font-weight: 760;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .official-dialog-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid #d9e6eb;
+      border-radius: 50%;
+      color: #365662;
+      background: #f7fafb;
+      cursor: pointer;
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .official-dialog-close:hover {
+      color: var(--blue-deep);
+      border-color: #b9d2dc;
+      background: #edf5f8;
+    }
+
+    .official-dialog-close:focus-visible {
+      outline: 3px solid rgba(35, 111, 145, 0.28);
+      outline-offset: 2px;
+    }
+
+    .official-dialog-close svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .official-dialog .official-head {
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
+    }
+
+    .official-dialog .official-portrait {
+      width: 132px;
+      border-radius: 50%;
+    }
+
+    .official-dialog .official-card h3,
+    .official-dialog h3 {
+      font-size: clamp(1.18rem, 3vw, 1.55rem);
+    }
+
+    .official-dialog .official-role {
+      margin-top: 9px;
+      color: #385361;
+      font-size: 0.83rem;
+      font-weight: 620;
+    }
+
+    .official-dialog .official-data {
+      display: grid;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .official-dialog .official-data > div {
+      padding: 13px 15px;
+    }
+
+    .official-dialog .official-data dt {
+      font-size: 0.66rem;
+    }
+
+    .official-dialog .official-data dd {
+      font-size: 0.8rem;
+      line-height: 1.55;
     }
 
     .documents-wrap {
@@ -1374,6 +1502,22 @@
 
       .official-portrait {
         width: 92px;
+      }
+
+      .official-dialog-shell {
+        padding: 28px 22px 24px;
+      }
+
+      .official-dialog .official-head {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        justify-items: center;
+        padding-top: 8px;
+        text-align: center;
+      }
+
+      .official-dialog .official-portrait {
+        width: 118px;
       }
 
       .document-card {
@@ -2220,6 +2364,18 @@
     </section>
   </main>
 
+  <dialog class="official-dialog" id="officialDialog" aria-label="Ficha de nombramiento">
+    <div class="official-dialog-shell">
+      <button class="official-dialog-close" id="officialDialogClose" type="button" aria-label="Cerrar ficha">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <p class="official-dialog-label">Ficha de nombramiento</p>
+      <div id="officialDialogContent"></div>
+    </div>
+  </dialog>
+
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-brand">
@@ -2255,6 +2411,72 @@
     const navLinks = [...siteNav.querySelectorAll('a[href^="#"]')];
     const pageViews = [...document.querySelectorAll(".page-view")];
     const viewByHash = new Map(pageViews.map((view) => ["#" + view.id, view]));
+    const officialCards = [...document.querySelectorAll(".official-card")];
+    const officialDialog = document.querySelector("#officialDialog");
+    const officialDialogClose = document.querySelector("#officialDialogClose");
+    const officialDialogContent = document.querySelector("#officialDialogContent");
+    let lastOfficialTrigger = null;
+
+    function closeOfficialDialog() {
+      if (!officialDialog.hasAttribute("open")) return;
+
+      if (typeof officialDialog.close === "function") officialDialog.close();
+      else {
+        officialDialog.removeAttribute("open");
+        document.body.classList.remove("official-dialog-open");
+        lastOfficialTrigger?.focus({ preventScroll: true });
+      }
+    }
+
+    function openOfficialDialog(card) {
+      const head = card.querySelector(".official-head");
+      const data = card.querySelector(".official-data");
+      if (!head || !data) return;
+
+      const headClone = head.cloneNode(true);
+      const dataClone = data.cloneNode(true);
+      headClone.querySelector(".official-portrait")?.removeAttribute("role");
+      headClone.querySelector(".official-portrait")?.removeAttribute("aria-label");
+      officialDialogContent.replaceChildren(headClone, dataClone);
+      lastOfficialTrigger = card;
+
+      if (typeof officialDialog.showModal === "function") officialDialog.showModal();
+      else officialDialog.setAttribute("open", "");
+
+      document.body.classList.add("official-dialog-open");
+      officialDialogClose.focus({ preventScroll: true });
+    }
+
+    officialCards.forEach((card) => {
+      const name = card.querySelector("h3")?.textContent.trim() || "funcionario";
+      const role = card.querySelector(".official-role")?.textContent.trim() || "cargo institucional";
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("aria-haspopup", "dialog");
+      card.setAttribute("aria-label", `Ver ficha de nombramiento de ${name}, ${role}`);
+
+      card.addEventListener("click", () => openOfficialDialog(card));
+      card.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        openOfficialDialog(card);
+      });
+    });
+
+    officialDialogClose.addEventListener("click", closeOfficialDialog);
+
+    officialDialog.addEventListener("click", (event) => {
+      if (event.target !== officialDialog) return;
+      const rect = officialDialog.getBoundingClientRect();
+      const isOutside = event.clientX < rect.left || event.clientX > rect.right ||
+        event.clientY < rect.top || event.clientY > rect.bottom;
+      if (isOutside) closeOfficialDialog();
+    });
+
+    officialDialog.addEventListener("close", () => {
+      document.body.classList.remove("official-dialog-open");
+      lastOfficialTrigger?.focus({ preventScroll: true });
+    });
 
     function setMenu(open) {
       siteNav.dataset.open = String(open);
@@ -2268,6 +2490,7 @@
     });
 
     function showView(hash, { focusHeading = false } = {}) {
+      closeOfficialDialog();
       const resolvedHash = viewByHash.has(hash) ? hash : "#inicio";
       const targetView = viewByHash.get(resolvedHash);
 
@@ -2316,7 +2539,11 @@
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") setMenu(false);
+      if (event.key !== "Escape") return;
+      setMenu(false);
+      if (officialDialog.hasAttribute("open") && typeof officialDialog.close !== "function") {
+        closeOfficialDialog();
+      }
     });
 
     window.addEventListener("resize", () => {
