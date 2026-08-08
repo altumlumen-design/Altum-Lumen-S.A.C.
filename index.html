@@ -683,6 +683,77 @@
       width: min(1480px, calc(100% - 40px));
     }
 
+    .official-groups {
+      display: grid;
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .official-group {
+      overflow: hidden;
+      border: 1px solid rgba(18, 63, 90, 0.13);
+      border-radius: 18px;
+      background: var(--white);
+      box-shadow: 0 8px 28px rgba(18, 63, 90, 0.055);
+    }
+
+    .official-group > summary {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 22px;
+      list-style: none;
+      color: #17394a;
+      font-size: clamp(0.94rem, 1.5vw, 1.08rem);
+      font-weight: 680;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .official-group > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .official-group > summary::after {
+      width: 10px;
+      height: 10px;
+      flex: 0 0 auto;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      content: "";
+      transform: rotate(45deg);
+      transition: transform 0.2s ease;
+    }
+
+    .official-group > summary:hover {
+      color: var(--blue-deep);
+      background: #f7fafb;
+    }
+
+    .official-group > summary:focus-visible {
+      outline: 3px solid rgba(35, 111, 145, 0.28);
+      outline-offset: -3px;
+    }
+
+    .official-group[open] > summary {
+      border-bottom: 1px solid rgba(18, 63, 90, 0.1);
+      color: var(--blue-deep);
+      background: #f3f8fa;
+    }
+
+    .official-group[open] > summary::after {
+      transform: rotate(225deg);
+    }
+
+    .official-group > .officials-grid {
+      margin-top: 0;
+      padding: 22px;
+      background: linear-gradient(180deg, #fbfdfe 0%, #f6fafb 100%);
+    }
+
     .officials-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1488,6 +1559,15 @@
 
       .officials-heading-row {
         gap: 24px;
+      }
+
+      .official-group > summary {
+        min-height: 64px;
+        padding: 16px 18px;
+      }
+
+      .official-group > .officials-grid {
+        padding: 16px;
       }
 
       .movements-panel,
@@ -2416,6 +2496,103 @@
     const officialDialogClose = document.querySelector("#officialDialogClose");
     const officialDialogContent = document.querySelector("#officialDialogContent");
     let lastOfficialTrigger = null;
+
+    function groupOfficialsByRof() {
+      const sourceGrid = document.querySelector("#funcionarios > .officials-container > .officials-grid");
+      if (!sourceGrid || officialCards.length === 0) return;
+
+      const groups = [
+        {
+          title: "Órganos de Alta Dirección",
+          roles: [
+            "GERENTE GENERAL"
+          ]
+        },
+        {
+          title: "Administración interna: Órganos de Asesoramiento",
+          roles: [
+            "JEFE DE LA OFICINA CORPORATIVA DE ASESORÍA JURÍDICA (DT)"
+          ]
+        },
+        {
+          title: "Administración interna: Órganos de Apoyo",
+          roles: [
+            "SECRETARIA GENERAL (DT)",
+            "JEFE DE LA OFICINA DE TRÁMITE DOCUMENTARIO Y ATENCIÓN AL CLIENTE",
+            "JEFE DE LA OFICINA DE IMAGEN INSTITUCIONAL E INFORMÁTICA",
+            "DIRECTOR DE ADMINISTRACIÓN",
+            "SUBDIRECTOR DE RECURSOS HUMANOS",
+            "JEFA DE LA OFICINA DE PREVENCIÓN DE RIESGOS, SEGURIDAD Y CONTINUIDAD OPERATIVA (DT)",
+            "JEFE DE LA OFICINA DE LOGÍSTICA Y CONTROL PATRIMONIAL (DT)",
+            "JEFE DE LA OFICINA DE CONTABILIDAD Y TESORERÍA (DT)"
+          ]
+        },
+        {
+          title: "Órganos de Línea",
+          roles: [
+            "GERENTE DE SERVICIOS COMERCIALES Y COOPERACIÓN",
+            "SUBGERENTE DE PLANEAMIENTO, DESARROLLO CORPORATIVO Y DE SERVICIOS",
+            "JEFE DE LA UNIDAD DE ESTRATEGIA Y COOPERACIÓN INTERINSTITUCIONAL (DT)",
+            "DIRECTOR ACADÉMICO",
+            "JEFE DE LA UNIDAD DE FORMACIÓN Y CAPACITACIÓN PROFESIONAL (DT)",
+            "DIRECTOR DE PROYECTOS E INVERSIONES",
+            "JEFE DE LA UNIDAD DE ESTUDIOS Y PROYECTOS (DT)",
+            "JEFA DE LA UNIDAD DE EDUCACIÓN COMUNITARIA Y RIESGOS SOCIOAMBIENTALES",
+            "JEFE DE LA UNIDAD EJECUTORA DE OBRAS E INVERSIONES (DT)",
+            "DIRECTOR DE SERVICIOS LEGALES, TRIBUTARIOS Y CONTABLES (DT)",
+            "SUBDIRECTOR DE SERVICIOS LEGALES (DT)",
+            "SUBDIRECTOR DE SERVICIOS TRIBUTARIOS Y CONTABLES (DT)"
+          ]
+        }
+      ];
+
+      const cardsByRole = new Map(
+        officialCards.map((card) => [
+          card.querySelector(".official-role")?.textContent.replace(/\s+/g, " ").trim(),
+          card
+        ])
+      );
+      const groupedOfficials = document.createElement("div");
+      groupedOfficials.className = "official-groups";
+      groupedOfficials.setAttribute("aria-label", "Funcionarios agrupados según el ROF");
+
+      groups.forEach((group, index) => {
+        const disclosure = document.createElement("details");
+        disclosure.className = "official-group";
+        disclosure.name = "officials-rof";
+        disclosure.open = index === 0;
+
+        const summary = document.createElement("summary");
+        summary.textContent = group.title;
+
+        const grid = document.createElement("div");
+        grid.className = "officials-grid";
+
+        group.roles.forEach((role) => {
+          const card = cardsByRole.get(role);
+          if (!card) return;
+          grid.append(card);
+          cardsByRole.delete(role);
+        });
+
+        disclosure.append(summary, grid);
+        groupedOfficials.append(disclosure);
+      });
+
+      sourceGrid.replaceWith(groupedOfficials);
+
+      const disclosures = [...groupedOfficials.querySelectorAll(".official-group")];
+      disclosures.forEach((disclosure) => {
+        disclosure.addEventListener("toggle", () => {
+          if (!disclosure.open) return;
+          disclosures.forEach((other) => {
+            if (other !== disclosure) other.open = false;
+          });
+        });
+      });
+    }
+
+    groupOfficialsByRof();
 
     function closeOfficialDialog() {
       if (!officialDialog.hasAttribute("open")) return;
