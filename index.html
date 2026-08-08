@@ -669,143 +669,43 @@
       width: min(1480px, calc(100% - 40px));
     }
 
-    .officials-hierarchy {
+    .officials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      align-items: stretch;
       margin-top: 32px;
     }
 
-    .org-root {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      padding-bottom: 32px;
+    .officials-flow {
+      display: contents;
     }
 
-    .org-root::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      height: 32px;
-      border-left: 1px solid #bfd3dc;
+    .officials-grid .official-card {
+      padding: 22px;
     }
 
-    .org-root .official-card {
-      width: min(100%, 620px);
+    .officials-grid .official-head {
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 16px;
     }
 
-    .org-direct-grid,
-    .org-operational-grid {
-      position: relative;
-      display: grid;
-      gap: 20px;
-      align-items: start;
-      padding-top: 24px;
-      border-top: 1px solid #bfd3dc;
+    .officials-grid .official-portrait {
+      width: 92px;
     }
 
-    .org-direct-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+    .officials-grid .official-card h3 {
+      font-size: 1.04rem;
     }
 
-    .org-operational-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      margin-top: 42px;
+    .officials-grid .official-role {
+      font-size: 0.78rem;
     }
 
-    .org-operational-grid::before {
-      content: "";
-      position: absolute;
-      top: -42px;
-      left: 50%;
-      height: 42px;
-      border-left: 1px solid #bfd3dc;
-    }
-
-    .org-cluster {
-      position: relative;
-      display: grid;
-      gap: 14px;
-      min-width: 0;
-    }
-
-    .org-direct-grid > .org-cluster::before,
-    .org-operational-grid > .org-cluster::before {
-      content: "";
-      position: absolute;
-      top: -24px;
-      left: 50%;
-      height: 24px;
-      border-left: 1px solid #bfd3dc;
-    }
-
-    .org-cluster--secretary {
-      grid-column: 1;
-    }
-
-    .org-cluster--administration {
-      grid-column: 2 / span 2;
-    }
-
-    .org-cluster--offices {
-      grid-column: 4;
-    }
-
-    .org-children,
-    .org-sibling-list {
-      position: relative;
-      display: grid;
-      gap: 14px;
-    }
-
-    .org-children {
+    .officials-grid .official-email {
+      margin-top: 16px;
       padding-top: 14px;
-      border-top: 1px solid #dce8ed;
-    }
-
-    .org-children::before {
-      content: "";
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      height: 14px;
-      border-left: 1px solid #dce8ed;
-    }
-
-    .org-cluster--administration .org-children {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .org-direct-grid .official-card,
-    .org-operational-grid .official-card {
-      padding: 18px;
-    }
-
-    .org-direct-grid .official-head,
-    .org-operational-grid .official-head {
-      grid-template-columns: 82px minmax(0, 1fr);
-      gap: 14px;
-    }
-
-    .org-direct-grid .official-portrait,
-    .org-operational-grid .official-portrait {
-      width: 82px;
-    }
-
-    .org-direct-grid .official-card h3,
-    .org-operational-grid .official-card h3 {
-      font-size: 1rem;
-    }
-
-    .org-direct-grid .official-role,
-    .org-operational-grid .official-role {
       font-size: 0.76rem;
-    }
-
-    .org-direct-grid .official-email,
-    .org-operational-grid .official-email {
-      margin-top: 14px;
-      padding-top: 13px;
-      font-size: 0.74rem;
     }
 
     .official-card {
@@ -1345,21 +1245,7 @@
         max-width: 17ch;
       }
 
-      .org-direct-grid,
-      .org-operational-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .org-cluster--secretary,
-      .org-cluster--administration {
-        grid-column: auto;
-      }
-
-      .org-cluster--offices {
-        grid-column: 1 / -1;
-      }
-
-      .org-cluster--offices .org-sibling-list {
+      .officials-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -1409,38 +1295,6 @@
       .movements-list,
       .officials-grid {
         grid-template-columns: 1fr;
-      }
-
-      .org-direct-grid,
-      .org-operational-grid {
-        grid-template-columns: 1fr;
-        gap: 28px;
-      }
-
-      .org-cluster--secretary,
-      .org-cluster--administration,
-      .org-cluster--offices {
-        grid-column: auto;
-      }
-
-      .org-cluster--administration .org-children,
-      .org-cluster--offices .org-sibling-list {
-        grid-template-columns: 1fr;
-      }
-
-      .org-operational-grid {
-        margin-top: 32px;
-      }
-
-      .org-operational-grid::before,
-      .org-direct-grid > .org-cluster::before,
-      .org-operational-grid > .org-cluster::before {
-        display: none;
-      }
-
-      .org-cluster {
-        padding-left: 12px;
-        border-left: 1px solid #d6e4ea;
       }
 
       .hero-facts {
@@ -1873,8 +1727,8 @@
 
         </div>
 
-        <div class="officials-hierarchy" aria-label="Estructura de funcionarios según el organigrama institucional">
-          <div class="org-root">
+        <div class="officials-grid" aria-label="Funcionarios en orden institucional">
+          <div class="officials-flow">
             <article class="official-card reveal">
               <div class="official-head">
                 <figure class="official-portrait">
@@ -1900,8 +1754,8 @@
             </article>
           </div>
 
-          <div class="org-direct-grid">
-            <div class="org-cluster org-cluster--secretary" aria-label="Secretaría General y Trámite Documentario">
+          <div class="officials-flow">
+            <div class="officials-flow">
               <article class="official-card reveal">
                 <div class="official-head">
                   <figure class="official-portrait"><img src="funcionario-norma-moreno.png" alt="Retrato institucional de Norma Elena F. Moreno Mogollón"></figure>
@@ -1914,7 +1768,7 @@
                 <a class="official-email" href="mailto:secretariageneral.altumlumen@gmail.com">secretariageneral.altumlumen@gmail.com</a>
                 <div class="official-resolution"><span>Designación temporal</span><strong>RGG N.° 00011-2026-AL/GG</strong></div>
               </article>
-              <div class="org-children">
+              <div class="officials-flow">
                 <article class="official-card reveal">
                   <div class="official-head">
                     <div class="official-portrait official-initials" role="img" aria-label="Fotografía institucional pendiente de Víctor Manuel Vásquez Cobos">VV</div>
@@ -1939,7 +1793,7 @@
               </div>
             </div>
 
-            <div class="org-cluster org-cluster--administration" aria-label="Dirección de Administración y dependencias">
+            <div class="officials-flow">
               <article class="official-card reveal">
                 <div class="official-head">
                   <figure class="official-portrait">
@@ -1963,7 +1817,7 @@
                   <strong>RGG N.° 00015-2026-AL/GG</strong>
                 </div>
               </article>
-              <div class="org-children">
+              <div class="officials-flow">
                 <article class="official-card reveal">
                   <div class="official-head">
                     <div class="official-portrait official-initials" role="img" aria-label="Fotografía institucional pendiente de Walter Gerson Angulo Zavaleta">WA</div>
@@ -2024,8 +1878,8 @@
               </div>
             </div>
 
-            <div class="org-cluster org-cluster--offices" aria-label="Oficinas de dependencia directa de Gerencia General">
-              <div class="org-sibling-list">
+            <div class="officials-flow">
+              <div class="officials-flow">
                 <article class="official-card reveal">
                   <div class="official-head">
                     <div class="official-portrait official-initials" role="img" aria-label="Fotografía institucional pendiente de Piero Alessandro Vargas Luque">PV</div>
@@ -2066,8 +1920,8 @@
             </div>
           </div>
 
-          <div class="org-operational-grid">
-            <div class="org-cluster" aria-label="Gerencia de Servicios Comerciales y Cooperación y dependencias">
+          <div class="officials-flow">
+            <div class="officials-flow">
               <article class="official-card reveal">
                 <div class="official-head">
                   <figure class="official-portrait">
@@ -2091,7 +1945,7 @@
                   <strong>RGG N.° 00011-2026-AL/GG</strong>
                 </div>
               </article>
-              <div class="org-children">
+              <div class="officials-flow">
                 <article class="official-card reveal">
                   <div class="official-head">
                     <figure class="official-portrait">
@@ -2130,7 +1984,7 @@
               </div>
             </div>
 
-            <div class="org-cluster" aria-label="Dirección Académica y dependencia">
+            <div class="officials-flow">
               <article class="official-card reveal">
                 <div class="official-head">
                   <figure class="official-portrait">
@@ -2154,7 +2008,7 @@
                   <strong>RGG N.° 00018-2026-AL/GG · desde el 04 de mayo de 2026</strong>
                 </div>
               </article>
-              <div class="org-children">
+              <div class="officials-flow">
                 <article class="official-card reveal">
                   <div class="official-head">
                     <figure class="official-portrait"><img src="funcionario-9.png" alt="Retrato institucional de Gerardo Martín Guerrero García"></figure>
@@ -2170,7 +2024,7 @@
               </div>
             </div>
 
-            <div class="org-cluster" aria-label="Dirección de Servicios Legales, Tributarios y Contables y dependencias">
+            <div class="officials-flow">
               <article class="official-card reveal">
                 <div class="official-head">
                   <figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque"></figure>
@@ -2183,7 +2037,7 @@
                 <a class="official-email" href="mailto:gerenciageneral.altumlumen@gmail.com">gerenciageneral.altumlumen@gmail.com</a>
                 <div class="official-resolution"><span>Designación temporal</span><strong>RGG N.° 00017-2026-AL/GG</strong></div>
               </article>
-              <div class="org-children">
+              <div class="officials-flow">
                 <article class="official-card reveal">
                   <div class="official-head">
                     <figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque"></figure>
@@ -2211,7 +2065,7 @@
               </div>
             </div>
 
-            <div class="org-cluster" aria-label="Dirección de Proyectos e Inversiones y dependencias">
+            <div class="officials-flow">
               <article class="official-card reveal">
                 <div class="official-head">
                   <figure class="official-portrait">
@@ -2235,7 +2089,7 @@
                   <strong>RGG N.° 00013-2026-AL/GG</strong>
                 </div>
               </article>
-              <div class="org-children">
+              <div class="officials-flow">
                 <article class="official-card reveal">
                   <div class="official-head">
                     <figure class="official-portrait"><img src="funcionario-5.png" alt="Retrato institucional de Segundo Raymundo Tabachi Vega"></figure>
