@@ -938,6 +938,19 @@
       line-height: 1.55;
     }
 
+    .movements-action {
+      grid-column: 2;
+      display: flex;
+      justify-content: flex-start;
+      margin-top: -4px;
+    }
+
+    .movements-action .button {
+      min-height: 42px;
+      padding: 9px 15px;
+      font-size: 0.82rem;
+    }
+
     .officials-container {
       width: min(1480px, calc(100% - 40px));
     }
@@ -2045,6 +2058,7 @@
         <a href="#servicios">Áreas de servicio</a>
         <a href="#funcionarios">Funcionarios</a>
         <a href="#documentos">Documentos</a>
+        <a href="transparencia.html">Transparencia</a>
         <a class="nav-cta" href="#contacto">Contacto</a>
       </nav>
     </div>
@@ -2501,6 +2515,14 @@
             </li>
           </ol>
 
+          <div class="movements-action">
+            <a class="button button-secondary" href="transparencia.html#actos-resolutivos">
+              Más información en el Portal de Transparencia
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
         </div>
 
         <div class="officials-grid">
@@ -2776,15 +2798,108 @@
       <div class="container documents-wrap">
         <div class="documents-intro reveal">
           <p class="eyebrow">Información institucional</p>
-          <h2 id="documents-title">Documentos de gestión y ejecución.</h2>
+          <h2 id="documents-title">Documentos de gestión y transparencia.</h2>
           <p>
-            Se mantienen los accesos institucionales vigentes. Los documentos se consultan
-            en sus repositorios de origen para conservar su versión y trazabilidad.
+            Accede directamente a los instrumentos de gestión vigentes, al Portal de Transparencia
+            y a la Mesa de Partes institucional, conservando la ubicación y trazabilidad de los
+            documentos en sus repositorios de origen.
           </p>
         </div>
 
         <div class="reveal">
           <div class="documents-list">
+            <a class="document-card" href="transparencia.html">
+              <span class="document-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M4 5h16v14H4V5Zm4 4h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <div>
+                <h3>Portal de Transparencia</h3>
+                <p>Actos resolutivos, documentos de gestión y canales de atención institucional.</p>
+              </div>
+              <svg class="document-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+
+            <a
+              class="document-card"
+              href="documentos/gestion/organigrama-2026.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="document-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M10 4h4v4h-4V4ZM4 16h4v4H4v-4Zm12 0h4v4h-4v-4ZM12 8v4M6 12v4M18 12v4M6 12h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <div>
+                <h3>Organigrama institucional 2026</h3>
+                <p>Consulta directamente la estructura orgánica institucional vigente.</p>
+              </div>
+              <svg class="document-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+
+            <a
+              class="document-card"
+              href="documentos/gestion/rof-2026.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="document-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M7 3h7l4 4v14H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  <path d="M14 3v5h5M10 12h5M10 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <div>
+                <h3>Reglamento de Organización y Funciones 2026</h3>
+                <p>Acceso directo al ROF institucional vigente.</p>
+              </div>
+              <svg class="document-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+
+            <a
+              class="document-card"
+              href="documentos/gestion/manual-clasificador-cargos-2026.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="document-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M7 3h10v18H7V3Zm3 4h4M10 11h4M10 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <div>
+                <h3>Manual del Clasificador de Cargos 2026</h3>
+                <p>Acceso directo al instrumento de clasificación de cargos vigente.</p>
+              </div>
+              <svg class="document-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+
+            <a class="document-card" href="transparencia.html#mesa-de-partes">
+              <span class="document-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <div>
+                <h3>Mesa de Partes</h3>
+                <p>Presentación documentaria por correo y requisitos mínimos para su derivación.</p>
+              </div>
+              <svg class="document-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+
             <a
               class="document-card"
               href="https://drive.google.com/drive/folders/1VYWFLb2W1WTkPTUZhg7att_Uxu_dyV1N?usp=sharing"
@@ -2798,28 +2913,8 @@
                 </svg>
               </span>
               <div>
-                <h3>Repositorio de documentos de gestión</h3>
-                <p>Consulta el conjunto de documentos institucionales publicados.</p>
-              </div>
-              <svg class="document-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-
-            <a
-              class="document-card"
-              href="https://drive.google.com/file/d/1sotclYIB_M0nh8sU26D1CNrbiDAHGz3t/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span class="document-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path d="M10 4h4v4h-4V4ZM4 16h4v4H4v-4Zm12 0h4v4h-4v-4ZM12 8v4M6 12v4M18 12v4M6 12h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <div>
-                <h3>Organigrama institucional</h3>
-                <p>Accede al documento organizacional actualmente publicado.</p>
+                <h3>Repositorio de instrumentos de gestión</h3>
+                <p>Consulta la carpeta institucional de origen de los instrumentos publicados.</p>
               </div>
               <svg class="document-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2827,7 +2922,8 @@
             </a>
           </div>
           <p class="documents-note">
-            Los enlaces se abren en una pestaña nueva y conservan su ubicación institucional vigente.
+            Los documentos enlazados se abren en Google Drive para consulta. El Portal de Transparencia
+            organiza los actos resolutivos localizados por año y órgano emisor.
           </p>
         </div>
       </div>
