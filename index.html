@@ -9,6 +9,7 @@
     content="Portal corporativo de ALTUM LUMEN S.A.C.: líneas de servicio, información institucional, documentos y canales de contacto."
   >
   <title>ALTUM LUMEN S.A.C. | Portal corporativo</title>
+  <script>document.documentElement.classList.add("js");</script>
   <style>
     :root {
       --ink: #14252e;
@@ -184,7 +185,33 @@
     }
 
     main {
+      min-height: calc(100svh - 88px);
       overflow: clip;
+      background: var(--white);
+    }
+
+    .js .page-view:not(.is-active) {
+      display: none !important;
+    }
+
+    .page-view.is-active {
+      animation: page-enter 0.34s cubic-bezier(0.22, 0.75, 0.24, 1) both;
+    }
+
+    .page-view.section {
+      min-height: calc(100svh - 88px);
+    }
+
+    @keyframes page-enter {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .hero {
@@ -531,44 +558,11 @@
     }
 
     .officials-heading-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(250px, 310px);
-      gap: clamp(28px, 6vw, 72px);
-      align-items: end;
+      max-width: 760px;
     }
 
     .officials-heading-row .section-heading {
       margin-bottom: 0;
-    }
-
-    .officials-cutoff {
-      display: grid;
-      gap: 3px;
-      padding: 20px 22px;
-      border: 1px solid #cfe0e7;
-      border-radius: 16px;
-      background: var(--white);
-      box-shadow: 0 8px 24px rgba(18, 63, 90, 0.05);
-    }
-
-    .officials-cutoff span {
-      color: #71848e;
-      font-size: 0.72rem;
-      font-weight: 720;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .officials-cutoff strong {
-      color: var(--blue-deep);
-      font-size: 1rem;
-      font-weight: 690;
-    }
-
-    .officials-cutoff small {
-      color: #617681;
-      font-size: 0.78rem;
-      line-height: 1.5;
     }
 
     .movements-panel {
@@ -678,6 +672,7 @@
     .official-card {
       display: flex;
       flex-direction: column;
+      height: 100%;
       min-width: 0;
       padding: 24px;
       border: 1px solid var(--line);
@@ -702,7 +697,7 @@
 
     .official-portrait {
       width: 108px;
-      aspect-ratio: 4 / 5;
+      aspect-ratio: 1;
       display: grid;
       place-items: center;
       margin: 0;
@@ -717,7 +712,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center top;
+      object-position: center;
     }
 
     .official-initials {
@@ -751,6 +746,15 @@
       height: 6px;
       border-radius: 50%;
       background: #2d956b;
+    }
+
+    .official-status.is-temporary {
+      color: #1d5c7d;
+      background: #edf6fb;
+    }
+
+    .official-status.is-temporary::before {
+      background: var(--blue);
     }
 
     .official-area {
@@ -1431,7 +1435,7 @@
   </header>
 
   <main id="contenido">
-    <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <section class="hero page-view is-active" id="inicio" data-title="Inicio" aria-labelledby="hero-title">
       <div class="container hero-inner">
         <div class="hero-panel reveal">
           <p class="eyebrow">Portal corporativo</p>
@@ -1472,7 +1476,7 @@
       </div>
     </section>
 
-    <section class="section" id="nosotros" aria-labelledby="about-title">
+    <section class="section page-view" id="nosotros" data-title="Nosotros" aria-labelledby="about-title">
       <div class="container about-grid">
         <div class="about-copy reveal">
           <p class="eyebrow">Quiénes somos</p>
@@ -1513,7 +1517,7 @@
       </div>
     </section>
 
-    <section class="section section-soft" id="servicios" aria-labelledby="services-title">
+    <section class="section section-soft page-view" id="servicios" data-title="Áreas de servicio" aria-labelledby="services-title">
       <div class="container">
         <div class="section-heading reveal">
           <p class="eyebrow">Áreas de servicio</p>
@@ -1647,24 +1651,17 @@
       </div>
     </section>
 
-    <section class="section section-soft" id="funcionarios" aria-labelledby="officials-title">
+    <section class="section section-soft page-view" id="funcionarios" data-title="Funcionarios" aria-labelledby="officials-title">
       <div class="container">
         <div class="officials-heading-row">
           <div class="section-heading reveal">
             <p class="eyebrow">Directorio institucional</p>
-            <h2 id="officials-title">Funcionarios y responsables vigentes.</h2>
+            <h2 id="officials-title">Funcionarios</h2>
             <p>
-              El directorio consolida las funciones por persona para evitar cargos duplicados.
-              Incluye únicamente designaciones que permanecen vigentes según las resoluciones
-              revisadas.
+              Cada designación vigente cuenta con una ficha independiente. Las designaciones
+              temporales se muestran expresamente y sin agruparlas dentro de otro cargo.
             </p>
           </div>
-
-          <aside class="officials-cutoff reveal" aria-label="Fecha de corte del directorio">
-            <span>Corte documental</span>
-            <strong>17 de julio de 2026</strong>
-            <small>Último movimiento de personal identificado en las resoluciones recibidas.</small>
-          </aside>
         </div>
 
         <div class="movements-panel reveal" aria-labelledby="movements-title">
@@ -1675,8 +1672,8 @@
                 <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
               </svg>
             </span>
-            <h3 id="movements-title">Últimos movimientos</h3>
-            <p>Cambios que modifican directamente la composición del directorio.</p>
+            <h3 id="movements-title">Últimas disposiciones</h3>
+            <p>Resoluciones recientes que actualizaron la composición del directorio.</p>
           </div>
 
           <ol class="movements-list">
@@ -1706,24 +1703,19 @@
             </li>
           </ol>
 
-          <p class="movement-note">
-            Las Resoluciones de Gerencia General N.° 00019, 00020 y 00021-2026-AL/GG,
-            del 20 de julio, formalizan líneas de servicio y responsables por cargo; no realizan
-            nuevas designaciones personales.
-          </p>
         </div>
 
         <div class="officials-grid">
           <article class="official-card reveal">
             <div class="official-head">
               <figure class="official-portrait">
-                <img src="funcionario-1.png" alt="Retrato institucional de Jeanfranco Martín Vargas Luque">
+                <img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque">
               </figure>
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Gerencia General</p>
-                <h3>Jeanfranco Martín Vargas Luque</h3>
-                <p class="official-role">Gerente General</p>
+                <h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3>
+                <p class="official-role">GERENTE GENERAL DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:gerenciageneral.altumlumen@gmail.com">
@@ -1737,31 +1729,76 @@
               <span>Designación principal</span>
               <strong>Partida Registral N.° 15949500</strong>
             </div>
-            <details class="official-more">
-              <summary>5 funciones adicionales vigentes</summary>
-              <ul class="assignment-list">
-                <li>
-                  <span>Director de Servicios Legales, Tributarios y Contables</span>
-                  <small>Temporal · RGG N.° 00017-2026-AL/GG</small>
-                </li>
-                <li>
-                  <span>Subdirector de Servicios Tributarios y Contables</span>
-                  <small>Temporal · RGG N.° 00017-2026-AL/GG</small>
-                </li>
-                <li>
-                  <span>Subdirector de Servicios Legales</span>
-                  <small>Temporal · RGG N.° 00018-2026-AL/GG</small>
-                </li>
-                <li>
-                  <span>Jefe de la Unidad Ejecutora de Obras e Inversiones</span>
-                  <small>Temporal · RS N.° 00012-2026-AL/SDRH</small>
-                </li>
-                <li>
-                  <span>Jefe de la Oficina de Contabilidad y Tesorería</span>
-                  <small>Temporal · RS N.° 00012-2026-AL/SDRH</small>
-                </li>
-              </ul>
-            </details>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Servicios especializados</p>
+                <h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3>
+                <p class="official-role">DIRECTOR DE SERVICIOS LEGALES, TRIBUTARIOS Y CONTABLES DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:gerenciageneral.altumlumen@gmail.com">gerenciageneral.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RGG N.° 00017-2026-AL/GG</strong></div>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Servicios tributarios y contables</p>
+                <h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3>
+                <p class="official-role">SUBDIRECTOR DE SERVICIOS TRIBUTARIOS Y CONTABLES DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:gerenciageneral.altumlumen@gmail.com">gerenciageneral.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RGG N.° 00017-2026-AL/GG</strong></div>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Servicios legales</p>
+                <h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3>
+                <p class="official-role">SUBDIRECTOR DE SERVICIOS LEGALES DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:gerenciageneral.altumlumen@gmail.com">gerenciageneral.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RGG N.° 00018-2026-AL/GG</strong></div>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Obras e inversiones</p>
+                <h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3>
+                <p class="official-role">JEFE DE LA UNIDAD EJECUTORA DE OBRAS E INVERSIONES DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:gerenciageneral.altumlumen@gmail.com">gerenciageneral.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RS N.° 00012-2026-AL/SDRH</strong></div>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Contabilidad y tesorería</p>
+                <h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3>
+                <p class="official-role">JEFE DE LA OFICINA DE CONTABILIDAD Y TESORERÍA DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:gerenciageneral.altumlumen@gmail.com">gerenciageneral.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RS N.° 00012-2026-AL/SDRH</strong></div>
           </article>
 
           <article class="official-card reveal">
@@ -1772,8 +1809,8 @@
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Servicios y cooperación</p>
-                <h3>Norma Elena F. Moreno Mogollón</h3>
-                <p class="official-role">Gerente de Servicios Comerciales y Cooperación</p>
+                <h3>NORMA ELENA F. MORENO MOGOLLÓN</h3>
+                <p class="official-role">GERENTE DE SERVICIOS COMERCIALES Y COOPERACIÓN DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:secretariageneral.altumlumen@gmail.com">
@@ -1787,27 +1824,32 @@
               <span>Designación principal</span>
               <strong>RGG N.° 00011-2026-AL/GG</strong>
             </div>
-            <details class="official-more">
-              <summary>1 función adicional vigente</summary>
-              <ul class="assignment-list">
-                <li>
-                  <span>Secretaria General</span>
-                  <small>Temporal · RGG N.° 00011-2026-AL/GG</small>
-                </li>
-              </ul>
-            </details>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-norma-moreno.png" alt="Retrato institucional de Norma Elena F. Moreno Mogollón"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Secretaría General</p>
+                <h3>NORMA ELENA F. MORENO MOGOLLÓN</h3>
+                <p class="official-role">SECRETARIA GENERAL DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:secretariageneral.altumlumen@gmail.com">secretariageneral.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RGG N.° 00011-2026-AL/GG</strong></div>
           </article>
 
           <article class="official-card reveal">
             <div class="official-head">
               <figure class="official-portrait">
-                <img src="funcionario-3.png" alt="Retrato institucional de Martín Ricardo Vargas Castañeda">
+                <img src="funcionario-3.png?v=20260808-2" alt="Retrato institucional de Martín Ricardo Vargas Castañeda">
               </figure>
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Administración</p>
-                <h3>Martín Ricardo Vargas Castañeda</h3>
-                <p class="official-role">Director de Administración</p>
+                <h3>MARTÍN RICARDO VARGAS CASTAÑEDA</h3>
+                <p class="official-role">DIRECTOR DE ADMINISTRACIÓN DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:admiyfinanzas.altumlumen@gmail.com">
@@ -1821,27 +1863,32 @@
               <span>Designación principal</span>
               <strong>RGG N.° 00015-2026-AL/GG</strong>
             </div>
-            <details class="official-more">
-              <summary>1 función adicional vigente</summary>
-              <ul class="assignment-list">
-                <li>
-                  <span>Jefe de la Oficina de Logística y Control Patrimonial</span>
-                  <small>Temporal · RS N.° 00010-2026-AL/SDRH</small>
-                </li>
-              </ul>
-            </details>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-3.png?v=20260808-2" alt="Retrato institucional de Martín Ricardo Vargas Castañeda"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Logística y patrimonio</p>
+                <h3>MARTÍN RICARDO VARGAS CASTAÑEDA</h3>
+                <p class="official-role">JEFE DE LA OFICINA DE LOGÍSTICA Y CONTROL PATRIMONIAL DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:admiyfinanzas.altumlumen@gmail.com">admiyfinanzas.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RS N.° 00010-2026-AL/SDRH</strong></div>
           </article>
 
           <article class="official-card reveal">
             <div class="official-head">
               <figure class="official-portrait">
-                <img src="funcionario-4.png" alt="Retrato institucional de Óscar Felipe Moreno Tupia">
+                <img src="funcionario-4.png?v=20260808-2" alt="Retrato institucional de Óscar Felipe Moreno Tupia">
               </figure>
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Dirección Académica</p>
-                <h3>Óscar Felipe Moreno Tupia</h3>
-                <p class="official-role">Director Académico</p>
+                <h3>ÓSCAR FELIPE MORENO TUPIA</h3>
+                <p class="official-role">DIRECTOR ACADÉMICO DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:direccionacademica.altumlumen@gmail.com">
@@ -1855,15 +1902,23 @@
               <span>Designación principal</span>
               <strong>RGG N.° 00018-2026-AL/GG · desde el 04 de mayo de 2026</strong>
             </div>
-            <details class="official-more">
-              <summary>1 función adicional vigente</summary>
-              <ul class="assignment-list">
-                <li>
-                  <span>Jefe de la Oficina Corporativa de Asesoría Jurídica</span>
-                  <small>Temporal · RS N.° 00008-2026-AL/SDRH, modificada por RS N.° 00014-2026-AL/SDRH</small>
-                </li>
-              </ul>
-            </details>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-4.png?v=20260808-2" alt="Retrato institucional de Óscar Felipe Moreno Tupia"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Asesoría jurídica</p>
+                <h3>ÓSCAR FELIPE MORENO TUPIA</h3>
+                <p class="official-role">JEFE DE LA OFICINA CORPORATIVA DE ASESORÍA JURÍDICA DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:direccionacademica.altumlumen@gmail.com">direccionacademica.altumlumen@gmail.com</a>
+            <div class="official-resolution">
+              <span>Designación temporal</span>
+              <strong>RS N.° 00008-2026-AL/SDRH, modificada por RS N.° 00014-2026-AL/SDRH</strong>
+            </div>
           </article>
 
           <article class="official-card reveal">
@@ -1874,8 +1929,8 @@
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Proyectos e inversiones</p>
-                <h3>Segundo Raymundo Tabachi Vega</h3>
-                <p class="official-role">Director de Proyectos e Inversiones</p>
+                <h3>SEGUNDO RAYMUNDO TABACHI VEGA</h3>
+                <p class="official-role">DIRECTOR DE PROYECTOS E INVERSIONES DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:direcciondeproyectos.altumlumen@gmail.com">
@@ -1889,15 +1944,20 @@
               <span>Designación principal</span>
               <strong>RGG N.° 00013-2026-AL/GG</strong>
             </div>
-            <details class="official-more">
-              <summary>1 función adicional vigente</summary>
-              <ul class="assignment-list">
-                <li>
-                  <span>Jefe de la Unidad de Estudios y Proyectos</span>
-                  <small>Temporal · RS N.° 00009-2026-AL/SDRH</small>
-                </li>
-              </ul>
-            </details>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-5.png" alt="Retrato institucional de Segundo Raymundo Tabachi Vega"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Estudios y proyectos</p>
+                <h3>SEGUNDO RAYMUNDO TABACHI VEGA</h3>
+                <p class="official-role">JEFE DE LA UNIDAD DE ESTUDIOS Y PROYECTOS DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:direcciondeproyectos.altumlumen@gmail.com">direcciondeproyectos.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RS N.° 00009-2026-AL/SDRH</strong></div>
           </article>
 
           <article class="official-card reveal">
@@ -1906,8 +1966,8 @@
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Recursos Humanos</p>
-                <h3>Walter Gerson Angulo Zavaleta</h3>
-                <p class="official-role">Subdirector de Recursos Humanos</p>
+                <h3>WALTER GERSON ANGULO ZAVALETA</h3>
+                <p class="official-role">SUBDIRECTOR DE RECURSOS HUMANOS DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:recursoshumanos.altumlumen@gmail.com">
@@ -1931,8 +1991,8 @@
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Desarrollo corporativo</p>
-                <h3>Gerardo Martín Guerrero García</h3>
-                <p class="official-role">Subgerente de Planeamiento, Desarrollo Corporativo y de Servicios</p>
+                <h3>GERARDO MARTÍN GUERRERO GARCÍA</h3>
+                <p class="official-role">SUBGERENTE DE PLANEAMIENTO, DESARROLLO CORPORATIVO Y DE SERVICIOS DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:desarrolloservicios.altumlumen@gmail.com">
@@ -1946,31 +2006,46 @@
               <span>Designación principal</span>
               <strong>RGG N.° 00016-2026-AL/GG</strong>
             </div>
-            <details class="official-more">
-              <summary>2 funciones adicionales vigentes</summary>
-              <ul class="assignment-list">
-                <li>
-                  <span>Jefe de la Unidad de Estrategia y Cooperación Interinstitucional</span>
-                  <small>Temporal · RS N.° 00011-2026-AL/SDRH</small>
-                </li>
-                <li>
-                  <span>Jefe de la Unidad de Formación y Capacitación Profesional</span>
-                  <small>Temporal · RS N.° 00011-2026-AL/SDRH</small>
-                </li>
-              </ul>
-            </details>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-9.png" alt="Retrato institucional de Gerardo Martín Guerrero García"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Estrategia y cooperación</p>
+                <h3>GERARDO MARTÍN GUERRERO GARCÍA</h3>
+                <p class="official-role">JEFE DE LA UNIDAD DE ESTRATEGIA Y COOPERACIÓN INTERINSTITUCIONAL DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:desarrolloservicios.altumlumen@gmail.com">desarrolloservicios.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RS N.° 00011-2026-AL/SDRH</strong></div>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-9.png" alt="Retrato institucional de Gerardo Martín Guerrero García"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Formación profesional</p>
+                <h3>GERARDO MARTÍN GUERRERO GARCÍA</h3>
+                <p class="official-role">JEFE DE LA UNIDAD DE FORMACIÓN Y CAPACITACIÓN PROFESIONAL DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:desarrolloservicios.altumlumen@gmail.com">desarrolloservicios.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RS N.° 00011-2026-AL/SDRH</strong></div>
           </article>
 
           <article class="official-card reveal">
             <div class="official-head">
               <figure class="official-portrait">
-                <img src="funcionario-12.png" alt="Retrato institucional de María Cecilia Luque Medina">
+                <img src="funcionario-12.png?v=20260808-2" alt="Retrato institucional de María Cecilia Luque Medina">
               </figure>
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Gestión de riesgos</p>
-                <h3>María Cecilia Luque Medina</h3>
-                <p class="official-role">Jefa de la Unidad de Educación Comunitaria y Riesgos Socioambientales</p>
+                <h3>MARÍA CECILIA LUQUE MEDINA</h3>
+                <p class="official-role">JEFA DE LA UNIDAD DE EDUCACIÓN COMUNITARIA Y RIESGOS SOCIOAMBIENTALES DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:educacioncomunit.altumlumen@gmail.com">
@@ -1984,15 +2059,20 @@
               <span>Designación principal</span>
               <strong>RS N.° 00006-2026-AL/SDRH</strong>
             </div>
-            <details class="official-more">
-              <summary>1 función adicional vigente</summary>
-              <ul class="assignment-list">
-                <li>
-                  <span>Jefa de la Oficina de Prevención de Riesgos, Seguridad y Continuidad Operativa</span>
-                  <small>Temporal · RS N.° 00006-2026-AL/SDRH</small>
-                </li>
-              </ul>
-            </details>
+          </article>
+
+          <article class="official-card reveal">
+            <div class="official-head">
+              <figure class="official-portrait"><img src="funcionario-12.png?v=20260808-2" alt="Retrato institucional de María Cecilia Luque Medina"></figure>
+              <div class="official-identity">
+                <span class="official-status is-temporary">Designación temporal</span>
+                <p class="official-area">Prevención y continuidad operativa</p>
+                <h3>MARÍA CECILIA LUQUE MEDINA</h3>
+                <p class="official-role">JEFA DE LA OFICINA DE PREVENCIÓN DE RIESGOS, SEGURIDAD Y CONTINUIDAD OPERATIVA DE ALTUM LUMEN S.A.C.</p>
+              </div>
+            </div>
+            <a class="official-email" href="mailto:educacioncomunit.altumlumen@gmail.com">educacioncomunit.altumlumen@gmail.com</a>
+            <div class="official-resolution"><span>Designación temporal</span><strong>RS N.° 00006-2026-AL/SDRH</strong></div>
           </article>
 
           <article class="official-card reveal">
@@ -2001,8 +2081,8 @@
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Imagen e informática</p>
-                <h3>Piero Alessandro Vargas Luque</h3>
-                <p class="official-role">Jefe de la Oficina de Imagen Institucional e Informática</p>
+                <h3>PIERO ALESSANDRO VARGAS LUQUE</h3>
+                <p class="official-role">JEFE DE LA OFICINA DE IMAGEN INSTITUCIONAL E INFORMÁTICA DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:imageninstitucional.altumlumen@gmail.com">
@@ -2024,8 +2104,8 @@
               <div class="official-identity">
                 <span class="official-status">Vigente</span>
                 <p class="official-area">Atención documentaria</p>
-                <h3>Víctor Manuel Vásquez Cobos</h3>
-                <p class="official-role">Jefe de la Oficina de Trámite Documentario y Atención al Cliente</p>
+                <h3>VÍCTOR MANUEL VÁSQUEZ COBOS</h3>
+                <p class="official-role">JEFE DE LA OFICINA DE TRÁMITE DOCUMENTARIO Y ATENCIÓN AL CLIENTE DE ALTUM LUMEN S.A.C.</p>
               </div>
             </div>
             <a class="official-email" href="mailto:tramiteyatencion.altumlumen@gmail.com">
@@ -2042,16 +2122,10 @@
           </article>
         </div>
 
-        <p class="officials-note">
-          Las designaciones temporales se identifican expresamente. No se publican documentos de
-          identidad ni datos personales; para contrastar una designación, utiliza su referencia
-          resolutiva y el canal de atención documentaria. RGG significa Resolución de Gerencia
-          General y RS, Resolución Subdirectoral.
-        </p>
       </div>
     </section>
 
-    <section class="section" id="documentos" aria-labelledby="documents-title">
+    <section class="section page-view" id="documentos" data-title="Documentos" aria-labelledby="documents-title">
       <div class="container documents-wrap">
         <div class="documents-intro reveal">
           <p class="eyebrow">Información institucional</p>
@@ -2112,7 +2186,7 @@
       </div>
     </section>
 
-    <section class="section section-soft" id="contacto" aria-labelledby="contact-title">
+    <section class="section section-soft page-view" id="contacto" data-title="Contacto" aria-labelledby="contact-title">
       <div class="container">
         <div class="contact-panel reveal">
           <div class="contact-copy">
@@ -2201,9 +2275,8 @@
     const menuToggle = document.querySelector("#menuToggle");
     const siteNav = document.querySelector("#siteNav");
     const navLinks = [...siteNav.querySelectorAll('a[href^="#"]')];
-    const sections = navLinks
-      .map((link) => document.querySelector(link.getAttribute("href")))
-      .filter(Boolean);
+    const pageViews = [...document.querySelectorAll(".page-view")];
+    const viewByHash = new Map(pageViews.map((view) => ["#" + view.id, view]));
 
     function setMenu(open) {
       siteNav.dataset.open = String(open);
@@ -2216,8 +2289,52 @@
       setMenu(siteNav.dataset.open !== "true");
     });
 
-    navLinks.forEach((link) => {
-      link.addEventListener("click", () => setMenu(false));
+    function showView(hash, { focusHeading = false } = {}) {
+      const resolvedHash = viewByHash.has(hash) ? hash : "#inicio";
+      const targetView = viewByHash.get(resolvedHash);
+
+      pageViews.forEach((view) => {
+        const isActive = view === targetView;
+        view.classList.toggle("is-active", isActive);
+        view.setAttribute("aria-hidden", String(!isActive));
+        view.toggleAttribute("inert", !isActive);
+      });
+
+      navLinks.forEach((link) => {
+        const isCurrent = link.getAttribute("href") === resolvedHash;
+        if (isCurrent) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      });
+
+      const pageTitle = targetView.dataset.title || "Portal corporativo";
+      document.title = resolvedHash === "#inicio"
+        ? "ALTUM LUMEN S.A.C. | Portal corporativo"
+        : pageTitle + " | ALTUM LUMEN S.A.C.";
+
+      setMenu(false);
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+      if (focusHeading) {
+        const heading = targetView.querySelector("h1, h2");
+        if (heading) {
+          heading.setAttribute("tabindex", "-1");
+          heading.focus({ preventScroll: true });
+        }
+      }
+    }
+
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest('a[href^="#"]');
+      if (!link || event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const hash = link.getAttribute("href");
+      if (!viewByHash.has(hash)) return;
+
+      event.preventDefault();
+      if (window.location.hash === hash) history.replaceState(null, "", hash);
+      else history.pushState(null, "", hash);
+      showView(hash, { focusHeading: true });
     });
 
     document.addEventListener("keydown", (event) => {
@@ -2227,6 +2344,16 @@
     window.addEventListener("resize", () => {
       if (window.innerWidth > 980) setMenu(false);
     });
+
+    window.addEventListener("popstate", () => {
+      showView(window.location.hash || "#inicio");
+    });
+
+    const initialHash = viewByHash.has(window.location.hash) ? window.location.hash : "#inicio";
+    if (window.location.hash && !viewByHash.has(window.location.hash)) {
+      history.replaceState(null, "", "#inicio");
+    }
+    showView(initialHash);
 
     if ("IntersectionObserver" in window) {
       const revealObserver = new IntersectionObserver(
@@ -2244,24 +2371,6 @@
         revealObserver.observe(element);
       });
 
-      const activeObserver = new IntersectionObserver(
-        (entries) => {
-          const visible = entries
-            .filter((entry) => entry.isIntersecting)
-            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-          if (!visible) return;
-
-          navLinks.forEach((link) => {
-            const isCurrent = link.getAttribute("href") === "#" + visible.target.id;
-            if (isCurrent) link.setAttribute("aria-current", "true");
-            else link.removeAttribute("aria-current");
-          });
-        },
-        { rootMargin: "-35% 0px -55% 0px", threshold: [0, 0.2, 0.5] }
-      );
-
-      sections.forEach((section) => activeObserver.observe(section));
     } else {
       document.querySelectorAll(".reveal").forEach((element) => {
         element.classList.add("is-visible");
