@@ -134,6 +134,11 @@
       .footer-inner{padding-block:28px}
       .footer-meta{text-align:left}
     }
+  
+    .reference-status{width:46px;height:46px;display:grid;place-items:center;border:1px solid #d6e3e9;border-radius:12px;color:#58707c;background:#f7fafb;flex:0 0 auto}
+    .reference-status svg{width:21px;height:21px}
+    .unit-note{margin:0;padding:14px 16px;border-bottom:1px solid #e5edf1;color:#607681;background:#fbfdfe;font-size:.8rem;line-height:1.55}
+
   </style>
   <script type="application/ld+json">
   {
@@ -227,23 +232,22 @@
         <div class="section-head">
           <p class="eyebrow">Gestión documental</p>
           <h2>Actos resolutivos</h2>
-          <p>Consulta las copias digitales recuperadas del archivo institucional. Están ordenadas por año y órgano emisor; cada ícono abre directamente el PDF en modo de lectura.</p>
+          <p>Consulta los actos resolutivos identificados en el archivo institucional, ordenados por año y órgano emisor. Cuando existe una copia digital individual, el ícono abre directamente el PDF en modo de lectura.</p>
         </div>
 
         <div class="resolution-tools" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 22px">
           <label for="resolutionSearch" style="position:absolute;left:-9999px">Buscar resolución</label>
           <input id="resolutionSearch" type="search" placeholder="Buscar por número, órgano o contenido…" autocomplete="off" style="flex:1 1 320px;min-height:46px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font:inherit;color:var(--ink);background:#fff">
-          <span id="resolutionCount" style="color:var(--ink-soft);font-size:.86rem;font-weight:650">70 actos publicados</span>
         </div>
 
         <div class="tabs" role="tablist" aria-label="Año de emisión">
-          <button class="tab" type="button" role="tab" id="tab-2026" aria-controls="year-2026" aria-selected="true" data-year="2026">2026 · 40</button>
-          <button class="tab" type="button" role="tab" id="tab-2025" aria-controls="year-2025" aria-selected="false" data-year="2025">2025 · 30</button>
+          <button class="tab" type="button" role="tab" id="tab-2026" aria-controls="year-2026" aria-selected="true" data-year="2026">2026</button>
+          <button class="tab" type="button" role="tab" id="tab-2025" aria-controls="year-2025" aria-selected="false" data-year="2025">2025</button>
         </div>
 
         <div class="year-panel" id="year-2026" role="tabpanel" aria-labelledby="tab-2026">
           <details class="unit" open>
-            <summary>Gerencia General <span>21 resoluciones</span></summary>
+            <summary>Gerencia General </summary>
             <div class="resolution-list">
               <article class="resolution-row" data-search="00021-2026-al-gg gerencia general aprueba la creación de la línea de servicio denominada “altum abogados &amp; asociados”, como denominación institucional y comercial del estudio jurídico de altum lumen s.a.c. autorizando su uso oficial en propuestas, contratos, comunicaciones y otros materiales comerciales.">
                 <div class="resolution-id"><strong>Resolución de Gerencia General N.° 00021-2026-AL/GG</strong><small>20 jul 2026 · Gerencia General</small></div>
@@ -353,7 +357,7 @@
             </div>
           </details>
           <details class="unit" >
-            <summary>Dirección Académica <span>4 resoluciones</span></summary>
+            <summary>Dirección Académica </summary>
             <div class="resolution-list">
               <article class="resolution-row" data-search="00004-2026-al-da dirección académica confiere el diploma de especialista en orden interno y seguridad ciudadana a los participantes que aprobaron satisfactoriamente el programa.">
                 <div class="resolution-id"><strong>Resolución Directoral N.° 00004-2026-AL/DA</strong><small>11 jun 2026 · Dirección Académica</small></div>
@@ -378,7 +382,7 @@
             </div>
           </details>
           <details class="unit" >
-            <summary>Subdirección de Recursos Humanos <span>15 resoluciones</span></summary>
+            <summary>Subdirección de Recursos Humanos </summary>
             <div class="resolution-list">
               <article class="resolution-row" data-search="00015-2026-al-sdrh subdirección de recursos humanos da por concluida, a partir de la fecha de emisión de la presente resolución, la designación temporal de óscar felipe moreno tupia, en el cargo de confianza de jefe de la oficina de trámite documentario y atención al cliente de altum lumen s.a.c.">
                 <div class="resolution-id"><strong>Resolución Subdirectoral N.° 00015-2026-AL/SDRH</strong><small>17 jul 2026 · Subdirección de Recursos Humanos</small></div>
@@ -460,7 +464,7 @@
         </div>
         <div class="year-panel" id="year-2025" role="tabpanel" aria-labelledby="tab-2025" hidden>
           <details class="unit" open>
-            <summary>Gerencia General <span>12 resoluciones</span></summary>
+            <summary>Gerencia General </summary>
             <div class="resolution-list">
               <article class="resolution-row" data-search="00017-2025-al-gg gerencia general cesa a don walter gerson angulo zavaleta, en el cargo de director académi co de altum lumen s.a.c.">
                 <div class="resolution-id"><strong>Resolución de Gerencia General N.° 00017-2025-AL/GG</strong><small>04 nov 2025 · Gerencia General</small></div>
@@ -476,6 +480,13 @@
                 <div class="resolution-id"><strong>Resolución de Gerencia General N.° 00014-2025-AL/GG</strong><small>08 sep 2025 · Gerencia General</small></div>
                 <p class="resolution-summary">Da por concluida, la ENCARGATURA efectuada a don SEGUNDO RAYMUNDO TABACHI VEGA, en el cargo de confianza de GERENTE DE SERVICIOS CORPORATIVOS Y RELACIONES COMERCIALES DE ALTUM LUMEN S.A.C.</p>
                 <a class="pdf-link" href="documentos/actos-resolutivos/2025/gerencia-general/RGG-00014-2025-AL-GG.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF de Resolución de Gerencia General N.° 00014-2025-AL/GG"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              </article>
+              <article class="resolution-row" data-search="00013-2025-al/gg gerencia general delegó en los órganos de línea de segundo nivel la facultad de formular, aprobar y actualizar los instrumentos de gestión interna de su respectivo ámbito. delegación órganos de línea instrumentos de gestión gerencia servicios corporativos relaciones comerciales dirección académica">
+                <div class="resolution-id"><strong>Resolución de Gerencia General N.° 00013-2025-AL/GG</strong><small>15 ago 2025 · Gerencia General</small></div>
+                <p class="resolution-summary">Delegó en los órganos de línea de segundo nivel la facultad de formular, aprobar y actualizar los instrumentos de gestión interna de su respectivo ámbito.</p>
+                <span class="reference-status" role="img" aria-label="Referencia institucional verificada; copia PDF individual no localizada" title="Referencia institucional verificada. No se localizó una copia PDF individual en el archivo consultado.">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 5v5m0 4h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </span>
               </article>
               <article class="resolution-row" data-search="00012-2025-al-gg gerencia general aprueba la creación del “centro de formación y capacitación profesional de altum lumen s.a.c.” como denominación institucional para la identificación pública de la oferta académica gestionada por la dirección académica.">
                 <div class="resolution-id"><strong>Resolución de Gerencia General N.° 00012-2025-AL/GG</strong><small>30 jul 2025 · Gerencia General</small></div>
@@ -522,10 +533,37 @@
                 <p class="resolution-summary">Designa a doña NORMA ELENA FRANSHESCA MORENO MOGOLLON, en el cargo de confianza de SUBGERENTE DE IMAGEN INSTITUCIONAL E INFORMÁTICA DE ALTUM LUMEN S.A.C.</p>
                 <a class="pdf-link" href="documentos/actos-resolutivos/2025/gerencia-general/RGG-00003-2025-AL-GG.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF de Resolución de Gerencia General N.° 00003-2025-AL/GG"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
               </article>
+              <article class="resolution-row" data-search="00002-2025-al/gg gerencia general aprobó el manual de clasificador de cargos (mcc) de altum lumen s.a.c. como instrumento integrante de su sistema de gestión interna. manual clasificador cargos mcc estructura comercial">
+                <div class="resolution-id"><strong>Resolución de Gerencia General N.° 00002-2025-AL/GG</strong><small>18 jul 2025 · Gerencia General</small></div>
+                <p class="resolution-summary">Aprobó el Manual de Clasificador de Cargos (MCC) de ALTUM LUMEN S.A.C. como instrumento integrante de su sistema de gestión interna.</p>
+                <span class="reference-status" role="img" aria-label="Referencia institucional verificada; copia PDF individual no localizada" title="Referencia institucional verificada. No se localizó una copia PDF individual en el archivo consultado.">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 5v5m0 4h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </span>
+              </article>
+              <article class="resolution-row" data-search="00001-2025-al/gg gerencia general aprobó el reglamento de organización y funciones (rof) de altum lumen s.a.c. y dio por formalmente constituidas las gerencias, direcciones, subgerencias y unidades descritas en dicho instrumento. reglamento organización funciones rof gerencia servicios corporativos relaciones comerciales estructura orgánica">
+                <div class="resolution-id"><strong>Resolución de Gerencia General N.° 00001-2025-AL/GG</strong><small>18 jul 2025 · Gerencia General</small></div>
+                <p class="resolution-summary">Aprobó el Reglamento de Organización y Funciones (ROF) de ALTUM LUMEN S.A.C. y dio por formalmente constituidas las gerencias, direcciones, subgerencias y unidades descritas en dicho instrumento.</p>
+                <span class="reference-status" role="img" aria-label="Referencia institucional verificada; copia PDF individual no localizada" title="Referencia institucional verificada. No se localizó una copia PDF individual en el archivo consultado.">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 5v5m0 4h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </span>
+              </article>
+            </div>
+          </details>
+          <details class="unit">
+            <summary>Gerencia de Servicios Corporativos y Relaciones Comerciales</summary>
+            <p class="unit-note">Denominación institucional vigente en 2025. El ROF 2026 reorganizó esta línea como <strong>Gerencia de Servicios Comerciales y Cooperación</strong>. Los actos vinculados a su evolución —designaciones, ceses y cambios de las unidades comerciales— se conservan clasificados bajo el órgano que efectivamente los emitió (Gerencia General o Recursos Humanos), evitando duplicar resoluciones.</p>
+            <div class="resolution-list">
+              <article class="resolution-row" data-search="00001-2025-al-gscrc gerencia de servicios corporativos y relaciones comerciales gerencia de servicios comerciales y cooperación plan operativo servicio académico versión 1">
+                <div class="resolution-id"><strong>Resolución Gerencial N.° 00001-2025-AL/GSCRC</strong><small>15 ago 2025 · Gerencia de Servicios Corporativos y Relaciones Comerciales</small></div>
+                <p class="resolution-summary">Aprueba el Plan Operativo del Servicio Académico (Versión 1°). Su existencia, fecha, órgano emisor y contenido se encuentran corroborados en resoluciones institucionales posteriores.</p>
+                <span class="reference-status" role="img" aria-label="Referencia institucional verificada; copia PDF individual no localizada" title="Referencia institucional verificada. No se localizó una copia PDF individual en el archivo consultado.">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 5v5m0 4h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </span>
+              </article>
             </div>
           </details>
           <details class="unit" >
-            <summary>Dirección Académica <span>2 resoluciones</span></summary>
+            <summary>Dirección Académica </summary>
             <div class="resolution-list">
               <article class="resolution-row" data-search="00002-2025-al-da dirección académica aprueba el plan de estudios del programa de alta especialización en administración y gestión pública, con mención en desarrollo territorial.">
                 <div class="resolution-id"><strong>Resolución Directoral N.° 00002-2025-AL/DA</strong><small>27 oct 2025 · Dirección Académica</small></div>
@@ -540,7 +578,7 @@
             </div>
           </details>
           <details class="unit" >
-            <summary>Subgerencia de Recursos Humanos <span>16 resoluciones</span></summary>
+            <summary>Subgerencia de Recursos Humanos </summary>
             <div class="resolution-list">
               <article class="resolution-row" data-search="00016-2025-al-sgrh subgerencia de recursos humanos da por concluida la encargatura conferida a doña norma elena franshesca moreno mogollón, en el cargo de confianza de jefa de la unidad de formación y capacitación profesional (e) de altum lumen s.a.c.">
                 <div class="resolution-id"><strong>Resolución Subgerencial N.° 00016-2025-AL/SGRH</strong><small>05 nov 2025 · Subgerencia de Recursos Humanos</small></div>
@@ -624,7 +662,7 @@
               </article>
             </div>
           </details>
-          <div class="history-note"><strong>Archivo histórico.</strong> Se publican las copias digitales de actos resolutivos efectivamente recuperadas del repositorio institucional. Otros actos citados en antecedentes de resoluciones posteriores no se enlazan mientras no se localice su PDF individual definitivo.</div>
+          <div class="history-note"><strong>Archivo histórico.</strong> El portal distingue entre copias digitales individuales disponibles y actos cuya existencia y contenido han sido corroborados mediante otros documentos institucionales. Cuando no se localiza la copia individual, se indica expresamente y no se publica un enlace sustituto.</div>
         </div>
       </div>
     </section>
@@ -645,11 +683,11 @@
             <h3>Cómo presentar un documento</h3>
             <p>Para facilitar su registro y derivación, el correo debe contener información suficiente para identificar el trámite.</p>
             <ol class="requirements">
-              <li>En el asunto, indicar <strong>“MESA DE PARTES”</strong>, el tipo de documento y el nombre o razón social del remitente.</li>
+              <li>En el asunto, consignar de forma <strong>clara y breve el objeto concreto del documento o de la solicitud</strong> (por ejemplo: “Solicitud de…”, “Remisión de…”, “Presentación de…”).</li>
               <li>Identificar al remitente con nombres y apellidos o razón social, DNI/RUC cuando corresponda, correo y teléfono de contacto.</li>
               <li>Adjuntar el documento principal en <strong>formato PDF</strong> y, de corresponder, sus anexos.</li>
               <li>Indicar la unidad orgánica o funcionario a quien se dirige. Si no se conoce, dirigirlo a <strong>Gerencia General</strong> para la derivación correspondiente.</li>
-              <li>Describir brevemente el asunto o solicitud para facilitar su clasificación documentaria.</li>
+              <li>En el cuerpo del correo, precisar brevemente qué se solicita, comunica o remite, para facilitar su clasificación y derivación.</li>
             </ol>
           </div>
 
@@ -657,7 +695,7 @@
             <small>Correo oficial</small>
             <strong>tramiteyatencion.altumlumen@gmail.com</strong>
             <p>El botón prepara un correo con campos orientativos. Revisa la información y adjunta tus archivos antes de enviarlo.</p>
-            <a class="button" href="mailto:tramiteyatencion.altumlumen@gmail.com?subject=MESA%20DE%20PARTES%20-%20%5BTIPO%20DE%20DOCUMENTO%5D%20-%20%5BNOMBRE%20O%20RAZ%C3%93N%20SOCIAL%5D&amp;body=Destinatario%3A%20%5BUnidad%20org%C3%A1nica%20/%20funcionario%20/%20Gerencia%20General%5D%0ARemitente%3A%20%5BNombres%20y%20apellidos%20o%20raz%C3%B3n%20social%5D%0ADNI/RUC%3A%20%5Bdato%2C%20si%20corresponde%5D%0ACorreo%20de%20contacto%3A%20%5Bcorreo%5D%0ATel%C3%A9fono%3A%20%5Bn%C3%BAmero%5D%0AAsunto%3A%20%5Bbreve%20descripci%C3%B3n%5D%0A%0ASe%20adjunta%20el%20documento%20principal%20en%20PDF%20y%2C%20de%20corresponder%2C%20sus%20anexos.">
+            <a class="button" href="mailto:tramiteyatencion.altumlumen@gmail.com?subject=%5BASUNTO%20DEL%20DOCUMENTO%20O%20SOLICITUD%5D&amp;body=Destinatario%3A%20%5BUnidad%20org%C3%A1nica%20/%20funcionario%20/%20Gerencia%20General%5D%0ARemitente%3A%20%5BNombres%20y%20apellidos%20o%20raz%C3%B3n%20social%5D%0ADNI/RUC%3A%20%5Bdato%2C%20si%20corresponde%5D%0ACorreo%20de%20contacto%3A%20%5Bcorreo%5D%0ATel%C3%A9fono%3A%20%5Bn%C3%BAmero%5D%0AObjeto%20/%20solicitud%3A%20%5Bindique%20brevemente%20qu%C3%A9%20solicita%2C%20comunica%20o%20remite%5D%0A%0ASe%20adjunta%20el%20documento%20principal%20en%20PDF%20y%2C%20de%20corresponder%2C%20sus%20anexos.">
               Redactar correo a Mesa de Partes
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16v12H4V6Zm0 1 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
@@ -695,22 +733,18 @@
     tabs.forEach(tab => tab.addEventListener("click", () => activateYear(tab.dataset.year)));
 
     const resolutionSearch = document.getElementById("resolutionSearch");
-    const resolutionCount = document.getElementById("resolutionCount");
     if (resolutionSearch) {
       resolutionSearch.addEventListener("input", () => {
         const q = resolutionSearch.value.trim().toLowerCase();
-        let visible = 0;
         document.querySelectorAll(".resolution-row").forEach(row => {
           const match = !q || (row.dataset.search || row.textContent.toLowerCase()).includes(q);
           row.hidden = !match;
-          if (match) visible += 1;
         });
         document.querySelectorAll("details.unit").forEach(group => {
           const any = Array.from(group.querySelectorAll(".resolution-row")).some(row => !row.hidden);
           group.hidden = !any;
           if (q && any) group.open = true;
         });
-        if (resolutionCount) resolutionCount.textContent = q ? `${visible} coincidencia${visible === 1 ? "" : "s"}` : "70 actos publicados";
       });
     }
 </script>
