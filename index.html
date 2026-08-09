@@ -2022,6 +2022,125 @@
         padding-block: 28px;
       }
     }
+  
+    /* Directorio: últimas actualizaciones al final y en desplegable */
+    @media screen {
+      .movements-disclosure {
+        display: block;
+        margin-top: 24px;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid #cfe0e7;
+        border-radius: var(--radius);
+        background: linear-gradient(135deg, #f8fcfd, #edf7fb);
+      }
+
+      .movements-summary {
+        min-height: 82px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 22px;
+        cursor: pointer;
+        list-style: none;
+        user-select: none;
+      }
+
+      .movements-summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .movements-summary-icon {
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        flex: 0 0 44px;
+        border-radius: 13px;
+        color: var(--blue-deep);
+        background: var(--white);
+        box-shadow: 0 8px 20px rgba(18, 63, 90, 0.08);
+      }
+
+      .movements-summary-icon svg,
+      .movements-chevron svg {
+        width: 21px;
+        height: 21px;
+      }
+
+      .movements-summary-copy {
+        min-width: 0;
+        display: grid;
+        gap: 3px;
+        flex: 1 1 auto;
+      }
+
+      .movements-summary-copy strong {
+        color: #17394a;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+      }
+
+      .movements-summary-copy > span {
+        color: #60747e;
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+
+      .movements-chevron {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        flex: 0 0 34px;
+        border-radius: 50%;
+        color: var(--blue-deep);
+        background: rgba(255,255,255,.72);
+        transition: transform .2s ease;
+      }
+
+      .movements-disclosure[open] .movements-chevron {
+        transform: rotate(180deg);
+      }
+
+      .movements-body {
+        padding: 20px 22px 22px;
+        border-top: 1px solid rgba(18, 63, 90, 0.1);
+      }
+
+      .movements-body .movements-action {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 16px;
+      }
+    }
+
+    @media screen and (max-width: 720px) {
+      .movements-summary {
+        min-height: 74px;
+        padding: 15px 16px;
+      }
+
+      .movements-summary-icon {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+      }
+
+      .movements-summary-copy strong {
+        font-size: 0.92rem;
+      }
+
+      .movements-summary-copy > span {
+        font-size: 0.75rem;
+      }
+
+      .movements-body {
+        padding: 16px;
+      }
+    }
+
   </style>
   <meta name="description" content="ALTUM LUMEN S.A.C.: asesoría jurídica y contable, consultoría, obras e inversiones, gestión de proyectos y formación profesional para personas, empresas e instituciones.">
   <!-- ALTUM SEO SEARCH START -->
@@ -2476,54 +2595,7 @@
           </div>
         </div>
 
-        <div class="movements-panel reveal" aria-labelledby="movements-title">
-          <div class="movements-intro">
-            <span class="movements-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M5 4h14v16H5V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <h3 id="movements-title">Últimas disposiciones</h3>
-            <p>Resoluciones recientes que actualizaron la composición del directorio.</p>
-          </div>
-
-          <ol class="movements-list">
-            <li class="movement-item">
-              <span class="movement-date">17 jul 2026</span>
-              <p>
-                Víctor Manuel Vásquez Cobos asume la Oficina de Trámite Documentario y
-                Atención al Cliente; concluye la asignación temporal de Óscar Felipe Moreno Tupia.
-              </p>
-              <small>Resolución Subdirectoral N.° 00015-2026-AL/SDRH</small>
-            </li>
-            <li class="movement-item">
-              <span class="movement-date">04 may 2026</span>
-              <p>
-                Piero Alessandro Vargas Luque asume la Oficina de Imagen Institucional e
-                Informática; concluye la asignación temporal de Norma Elena F. Moreno Mogollón.
-              </p>
-              <small>Resolución Subdirectoral N.° 00013-2026-AL/SDRH</small>
-            </li>
-            <li class="movement-item">
-              <span class="movement-date">04 may 2026</span>
-              <p>
-                Óscar Felipe Moreno Tupia queda designado como Director Académico y
-                Jeanfranco Martín Vargas Luque asume temporalmente la Subdirección de Servicios Legales.
-              </p>
-              <small>Resolución de Gerencia General N.° 00018-2026-AL/GG</small>
-            </li>
-          </ol>
-
-          <div class="movements-action">
-            <a class="button button-secondary" href="transparencia.html#actos-resolutivos">
-              Más información en el Portal de Transparencia
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-          </div>
-        </div>
+        
 
         <div class="officials-grid">
           <article class="official-card reveal">
@@ -2790,6 +2862,65 @@
             </dl>
           </article>
         </div>
+
+        <details class="movements-panel movements-disclosure reveal" aria-labelledby="movements-title">
+          <summary class="movements-summary">
+            <span class="movements-summary-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M5 4h14v16H5V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="movements-summary-copy">
+              <strong id="movements-title">Últimas actualizaciones del directorio</strong>
+              <span>Consulta los movimientos y disposiciones recientes que modificaron la composición del directorio institucional.</span>
+            </span>
+            <span class="movements-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="m7 9 5 5 5-5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </summary>
+
+          <div class="movements-body">
+            <ol class="movements-list">
+              <li class="movement-item">
+                <span class="movement-date">17 jul 2026</span>
+                <p>
+                  Víctor Manuel Vásquez Cobos asume la Oficina de Trámite Documentario y
+                  Atención al Cliente; concluye la asignación temporal de Óscar Felipe Moreno Tupia.
+                </p>
+                <small>Resolución Subdirectoral N.° 00015-2026-AL/SDRH</small>
+              </li>
+              <li class="movement-item">
+                <span class="movement-date">04 may 2026</span>
+                <p>
+                  Piero Alessandro Vargas Luque asume la Oficina de Imagen Institucional e
+                  Informática; concluye la asignación temporal de Norma Elena F. Moreno Mogollón.
+                </p>
+                <small>Resolución Subdirectoral N.° 00013-2026-AL/SDRH</small>
+              </li>
+              <li class="movement-item">
+                <span class="movement-date">04 may 2026</span>
+                <p>
+                  Óscar Felipe Moreno Tupia queda designado como Director Académico y
+                  Jeanfranco Martín Vargas Luque asume temporalmente la Subdirección de Servicios Legales.
+                </p>
+                <small>Resolución de Gerencia General N.° 00018-2026-AL/GG</small>
+              </li>
+            </ol>
+
+            <div class="movements-action">
+              <a class="button button-secondary" href="transparencia.html#actos-resolutivos">
+                Más información en el Portal de Transparencia
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </details>
+
 
       </div>
     </section>
