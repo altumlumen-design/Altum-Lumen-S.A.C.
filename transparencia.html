@@ -17,7 +17,7 @@
     .loader-card p{margin:14px 0 0;color:#5c727d;line-height:1.65}
     .spinner{width:42px;height:42px;margin:24px auto 0;border:4px solid #dfeaf0;border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
     .fallback{display:none;margin-top:24px;padding:18px;border:1px solid #ead5d9;border-radius:14px;background:#fff8f9;text-align:left}
-    .fallback a{color:var(--red);font-weight:700}
+    .fallback a{display:block;margin-top:8px;color:var(--red);font-weight:700}
     @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
@@ -29,7 +29,8 @@
       <div class="spinner" aria-hidden="true"></div>
       <div class="fallback" id="fallback">
         <strong>No se pudo cargar temporalmente el portal completo.</strong>
-        <p>La Resolución Directoral N.° 00005-2026-AL/DA puede consultarse directamente aquí:</p>
+        <p>Las últimas Resoluciones Directorales pueden consultarse directamente:</p>
+        <a href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00006-2026-AL-DA.pdf" target="_blank" rel="noopener noreferrer">Ver Resolución Directoral N.° 00006-2026-AL/DA</a>
         <a href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00005-2026-AL-DA.pdf" target="_blank" rel="noopener noreferrer">Ver Resolución Directoral N.° 00005-2026-AL/DA</a>
       </div>
     </section>
@@ -39,7 +40,12 @@
     (async () => {
       const BASE_SNAPSHOT = "https://raw.githubusercontent.com/altumlumen-design/Altum-Lumen-S.A.C./d51f30e8825c50fda19e273958398e73986bd2ab/transparencia.html";
 
-      const newResolution = `              <article class="resolution-row" data-search="00005-2026-al-da dirección académica formaliza y aprueba el programa de alta especialización pae en gerencia de seguridad y criminología 384 horas académicas 24 créditos plan de estudios ficha académica efectos institucionales académicos 20 de febrero de 2026">
+      const latestResolutions = `              <article class="resolution-row" data-search="00006-2026-al-da dirección académica confiere especialidad en gerencia de seguridad y criminología primer grupo aptos aprobados pae programa de alta especialización calderón anduaga jaime huaypuna ccalla eloy zenón pacheco argandoña oscar vitaliano arevalo lozano julio cesar">
+                <div class="resolution-id"><strong>Resolución Directoral N.° 00006-2026-AL/DA</strong><small>25 ago 2026 · Dirección Académica</small></div>
+                <p class="resolution-summary">Confiere la Especialidad en Gerencia de Seguridad y Criminología al primer grupo de participantes aptos y aprobados del Programa de Alta Especialización (PAE), y dispone su incorporación a los registros académicos institucionales para fines de control, trazabilidad, verificación y emisión de la documentación académica correspondiente.</p>
+                <a class="pdf-link" href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00006-2026-AL-DA.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF de Resolución Directoral N.° 00006-2026-AL/DA"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              </article>
+              <article class="resolution-row" data-search="00005-2026-al-da dirección académica formaliza y aprueba el programa de alta especialización pae en gerencia de seguridad y criminología 384 horas académicas 24 créditos plan de estudios ficha académica efectos institucionales académicos 20 de febrero de 2026">
                 <div class="resolution-id"><strong>Resolución Directoral N.° 00005-2026-AL/DA</strong><small>24 ago 2026 · Dirección Académica</small></div>
                 <p class="resolution-summary">Formaliza y aprueba el Programa de Alta Especialización (PAE) en Gerencia de Seguridad y Criminología, con 384 horas académicas y 24 créditos; aprueba su Plan de Estudios y Ficha Académica, y reconoce efectos institucionales y académicos desde el 20 de febrero de 2026.</p>
                 <a class="pdf-link" href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00005-2026-AL-DA.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF de Resolución Directoral N.° 00005-2026-AL/DA"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -50,12 +56,12 @@
         if (!response.ok) throw new Error("No se pudo recuperar la versión base del portal");
         let html = await response.text();
 
-        // Inserta la nueva resolución como la más reciente de Dirección Académica 2026.
+        // Inserta las Resoluciones 00006 y 00005 como las más recientes de Dirección Académica 2026.
         const marker = '<article class="resolution-row" data-search="00004-2026-al-da';
         const markerIndex = html.indexOf(marker);
         if (markerIndex === -1) throw new Error("No se encontró el punto de inserción de Dirección Académica");
         const articleStart = html.lastIndexOf('\n', markerIndex) + 1;
-        html = html.slice(0, articleStart) + newResolution + html.slice(articleStart);
+        html = html.slice(0, articleStart) + latestResolutions + html.slice(articleStart);
 
         // Corrige un listener duplicado de la versión base que invocaba una función inexistente.
         html = html.replace('    tabs.forEach(tab => tab.addEventListener("click", () => activateYear(tab.dataset.year)));\n', '');
