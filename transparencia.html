@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
   <meta name="robots" content="index, follow">
-  <meta name="description" content="Portal de Transparencia de ALTUM LUMEN S.A.C.: actos resolutivos, instrumentos de gestión y Mesa de Partes.">
+  <meta name="description" content="Portal de Transparencia de ALTUM LUMEN S.A.C.: actos resolutivos, instrumentos de gestión, tarifario institucional y Mesa de Partes.">
   <title>Portal de Transparencia | ALTUM LUMEN S.A.C.</title>
   <style>
     :root{--ink:#14252e;--blue:#2c6f91;--blue-deep:#123f5a;--red:#b80e29;--line:#dbe6eb;--surface:#f7fafb}
@@ -29,9 +29,11 @@
       <div class="spinner" aria-hidden="true"></div>
       <div class="fallback" id="fallback">
         <strong>No se pudo cargar temporalmente el portal completo.</strong>
-        <p>Las últimas Resoluciones Directorales pueden consultarse directamente:</p>
+        <p>Los documentos más recientes pueden consultarse directamente:</p>
+        <a href="documentos/actos-resolutivos/2026/direccion-administracion/RDADM-00001-2026-AL-DADM.pdf" target="_blank" rel="noopener noreferrer">Ver Tarifario Institucional / Resolución Directoral N.° 00001-2026-AL/DADM</a>
         <a href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00006-2026-AL-DA.pdf" target="_blank" rel="noopener noreferrer">Ver Resolución Directoral N.° 00006-2026-AL/DA</a>
         <a href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00005-2026-AL-DA.pdf" target="_blank" rel="noopener noreferrer">Ver Resolución Directoral N.° 00005-2026-AL/DA</a>
+        <a href="https://altumlumen-design.github.io/Altum-Lumen-centro-formacion/" target="_blank" rel="noopener noreferrer">Ir al Centro de Formación y Capacitación Profesional</a>
       </div>
     </section>
   </main>
@@ -40,7 +42,7 @@
     (async () => {
       const BASE_SNAPSHOT = "https://raw.githubusercontent.com/altumlumen-design/Altum-Lumen-S.A.C./d51f30e8825c50fda19e273958398e73986bd2ab/transparencia.html";
 
-      const latestResolutions = `              <article class="resolution-row" data-search="00006-2026-al-da dirección académica confiere especialidad en gerencia de seguridad y criminología primer grupo aptos aprobados pae programa de alta especialización calderón anduaga jaime huaypuna ccalla eloy zenón pacheco argandoña oscar vitaliano arevalo lozano julio cesar">
+      const latestAcademicResolutions = `              <article class="resolution-row" data-search="00006-2026-al-da dirección académica confiere especialidad en gerencia de seguridad y criminología primer grupo aptos aprobados pae programa de alta especialización calderón anduaga jaime huaypuna ccalla eloy zenón pacheco argandoña oscar vitaliano arevalo lozano julio cesar">
                 <div class="resolution-id"><strong>Resolución Directoral N.° 00006-2026-AL/DA</strong><small>25 ago 2026 · Dirección Académica</small></div>
                 <p class="resolution-summary">Confiere la Especialidad en Gerencia de Seguridad y Criminología al primer grupo de participantes aptos y aprobados del Programa de Alta Especialización (PAE), y dispone su incorporación a los registros académicos institucionales para fines de control, trazabilidad, verificación y emisión de la documentación académica correspondiente.</p>
                 <a class="pdf-link" href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00006-2026-AL-DA.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF de Resolución Directoral N.° 00006-2026-AL/DA"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -51,17 +53,91 @@
                 <a class="pdf-link" href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00005-2026-AL-DA.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF de Resolución Directoral N.° 00005-2026-AL/DA"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
               </article>\n`;
 
+      const administrationUnit = `          <details class="unit" open>
+            <summary>Dirección de Administración</summary>
+            <div class="resolution-list">
+              <article class="resolution-row" data-search="00001-2026-al-dadm dirección de administración tarifario institucional servicios altum lumen v1.0 2026 formación capacitación profesional tarifas costos resolución 1 septiembre 2026">
+                <div class="resolution-id"><strong>Resolución Directoral N.° 00001-2026-AL/DADM</strong><small>01 sep 2026 · Dirección de Administración</small></div>
+                <p class="resolution-summary">Aprueba y formaliza el Tarifario Institucional de Servicios de ALTUM LUMEN S.A.C. – v1.0 2026 y su Anexo N.° 01; dispone su aplicación a los servicios comprendidos y su vigencia a partir del día siguiente de su emisión.</p>
+                <a class="pdf-link" href="documentos/actos-resolutivos/2026/direccion-administracion/RDADM-00001-2026-AL-DADM.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF de Resolución Directoral N.° 00001-2026-AL/DADM"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              </article>
+            </div>
+          </details>\n`;
+
+      const extraQuickLinks = `      <a class="quick-link" href="#tarifario-costos">
+        <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5V4Zm3 4h8M8 12h5M8 16h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <span><strong>Tarifario y costos</strong><small>Tarifas institucionales vigentes</small></span>
+      </a>
+      <a class="quick-link" href="https://altumlumen-design.github.io/Altum-Lumen-centro-formacion/" target="_blank" rel="noopener noreferrer">
+        <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5 12 3l8 3.5-8 3.5-8-3.5Zm3 2.2V15c0 1.8 2.2 3.2 5 3.2s5-1.4 5-3.2V8.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span><strong>Centro de Formación</strong><small>Capacitación profesional y oferta académica</small></span>
+      </a>\n`;
+
+      const tariffSection = `    <section class="section" id="tarifario-costos">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Información económica institucional</p>
+          <h2>Tarifario y costos</h2>
+          <p>Consulta el Tarifario Institucional de Servicios de ALTUM LUMEN S.A.C. – v1.0 2026, aprobado mediante Resolución Directoral N.° 00001-2026-AL/DADM. La versión vigente incorpora la Línea de Servicio de Formación y Capacitación Profesional.</p>
+        </div>
+        <div class="doc-grid">
+          <a class="doc-card" href="documentos/actos-resolutivos/2026/direccion-administracion/RDADM-00001-2026-AL-DADM.pdf" target="_blank" rel="noopener noreferrer">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 12h5M10 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <h3>Tarifario Institucional de Servicios v1.0 – 2026</h3>
+            <p>Tarifas, derechos, condiciones de aplicación y fichas de servicios de Formación y Capacitación Profesional.</p>
+            <span class="open">Consultar documento oficial ↗</span>
+          </a>
+          <a class="doc-card" href="https://altumlumen-design.github.io/Altum-Lumen-centro-formacion/" target="_blank" rel="noopener noreferrer">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5 12 3l8 3.5-8 3.5-8-3.5Zm3 2.2V15c0 1.8 2.2 3.2 5 3.2s5-1.4 5-3.2V8.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <h3>Centro de Formación y Capacitación Profesional</h3>
+            <p>Accede al portal académico institucional para conocer programas, servicios y recursos del Centro.</p>
+            <span class="open">Ir al portal del Centro ↗</span>
+          </a>
+        </div>
+        <div class="history-note"><strong>Vigencia:</strong> la Resolución Directoral N.° 00001-2026-AL/DADM dispone que el Tarifario Institucional v1.0 2026 entra en vigencia a partir del día siguiente de su emisión.</div>
+      </div>
+    </section>\n\n`;
+
+      const cssEnhancement = `<style>
+        @media (min-width:1181px){.quick-links{grid-template-columns:repeat(5,minmax(0,1fr))}}
+        @media (min-width:901px) and (max-width:1180px){.quick-links{grid-template-columns:repeat(3,minmax(0,1fr))}}
+      </style>`;
+
       try {
         const response = await fetch(BASE_SNAPSHOT, {cache: "no-store"});
         if (!response.ok) throw new Error("No se pudo recuperar la versión base del portal");
         let html = await response.text();
 
-        // Inserta las Resoluciones 00006 y 00005 como las más recientes de Dirección Académica 2026.
-        const marker = '<article class="resolution-row" data-search="00004-2026-al-da';
-        const markerIndex = html.indexOf(marker);
-        if (markerIndex === -1) throw new Error("No se encontró el punto de inserción de Dirección Académica");
-        const articleStart = html.lastIndexOf('\n', markerIndex) + 1;
-        html = html.slice(0, articleStart) + latestResolutions + html.slice(articleStart);
+        // Mantiene las Resoluciones 00006 y 00005 ya publicadas como las más recientes de Dirección Académica 2026.
+        const academicMarker = '<article class="resolution-row" data-search="00004-2026-al-da';
+        const academicIndex = html.indexOf(academicMarker);
+        if (academicIndex === -1) throw new Error("No se encontró el punto de inserción de Dirección Académica");
+        const academicArticleStart = html.lastIndexOf('\n', academicIndex) + 1;
+        html = html.slice(0, academicArticleStart) + latestAcademicResolutions + html.slice(academicArticleStart);
+
+        // Agrega Dirección de Administración como órgano emisor en el año 2026.
+        const administrationMarker = '          <details class="unit" >\n            <summary>Dirección Académica </summary>';
+        const administrationIndex = html.indexOf(administrationMarker);
+        if (administrationIndex === -1) throw new Error("No se encontró el bloque 2026 para insertar Dirección de Administración");
+        html = html.slice(0, administrationIndex) + administrationUnit + html.slice(administrationIndex);
+
+        // Agrega accesos rápidos a Tarifario y al Centro de Formación.
+        const quickMarker = '    </div>\n\n    <section class="section" id="documentos-gestion">';
+        const quickIndex = html.indexOf(quickMarker);
+        if (quickIndex === -1) throw new Error("No se encontró el bloque de accesos rápidos");
+        html = html.slice(0, quickIndex) + extraQuickLinks + html.slice(quickIndex);
+
+        // Agrega enlace de navegación al Tarifario.
+        html = html.replace('<a href="#actos-resolutivos">Actos resolutivos</a>\n        <a href="#mesa-de-partes">Mesa de Partes</a>', '<a href="#actos-resolutivos">Actos resolutivos</a>\n        <a href="#tarifario-costos">Tarifario y costos</a>\n        <a href="#mesa-de-partes">Mesa de Partes</a>');
+
+        // Agrega una sección específica de Tarifario antes de Actos resolutivos.
+        const actsMarker = '    <section class="section section-soft" id="actos-resolutivos">';
+        const actsIndex = html.indexOf(actsMarker);
+        if (actsIndex === -1) throw new Error("No se encontró la sección de actos resolutivos");
+        html = html.slice(0, actsIndex) + tariffSection + html.slice(actsIndex);
+
+        // Ajusta la grilla de accesos rápidos para los nuevos botones.
+        html = html.replace('</head>', cssEnhancement + '\n</head>');
 
         // Corrige un listener duplicado de la versión base que invocaba una función inexistente.
         html = html.replace('    tabs.forEach(tab => tab.addEventListener("click", () => activateYear(tab.dataset.year)));\n', '');
