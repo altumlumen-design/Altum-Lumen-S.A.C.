@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/x-icon" href="https://altumlumen-design.github.io/Altum-Lumen-S.A.C./favicon.ico?v=20260905">
+  <link rel="shortcut icon" type="image/x-icon" href="https://altumlumen-design.github.io/Altum-Lumen-S.A.C./favicon.ico?v=20260905">
+  <link rel="icon" type="image/png" sizes="512x512" href="https://altumlumen-design.github.io/Altum-Lumen-S.A.C./favicon.png?v=20260905">
+  <link rel="apple-touch-icon" href="https://altumlumen-design.github.io/Altum-Lumen-S.A.C./favicon.png?v=20260905">
   <meta name="robots" content="index, follow">
   <meta name="description" content="Portal de Transparencia de ALTUM LUMEN S.A.C.: actos resolutivos, instrumentos de gestión, tarifario institucional y Mesa de Partes.">
   <title>Portal de Transparencia | ALTUM LUMEN S.A.C.</title>
@@ -51,9 +55,10 @@
                 <div class="resolution-id"><strong>Resolución Directoral N.° 00005-2026-AL/DA</strong><small>24 ago 2026 · Dirección Académica</small></div>
                 <p class="resolution-summary">Formaliza y aprueba el Programa de Alta Especialización (PAE) en Gerencia de Seguridad y Criminología, con 384 horas académicas y 24 créditos; aprueba su Plan de Estudios y Ficha Académica, y reconoce efectos institucionales y académicos desde el 20 de febrero de 2026.</p>
                 <a class="pdf-link" href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00005-2026-AL-DA.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF de Resolución Directoral N.° 00005-2026-AL/DA"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              </article>\n`;
+              </article>\
+`;
 
-      const administrationUnit = `          <details class="unit" open>
+      const administrationUnit = `          <details class="unit">
             <summary>Dirección de Administración</summary>
             <div class="resolution-list">
               <article class="resolution-row" data-search="00001-2026-al-dadm dirección de administración tarifario institucional servicios altum lumen v1.0 2026 formación capacitación profesional tarifas costos resolución 1 septiembre 2026">
@@ -62,7 +67,8 @@
                 <a class="pdf-link" href="documentos/actos-resolutivos/2026/direccion-administracion/RDADM-00001-2026-AL-DADM.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF de Resolución Directoral N.° 00001-2026-AL/DADM"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
               </article>
             </div>
-          </details>\n`;
+          </details>\
+`;
 
       const extraQuickLinks = `      <a class="quick-link" href="#tarifario-costos">
         <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5V4Zm3 4h8M8 12h5M8 16h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
@@ -71,7 +77,8 @@
       <a class="quick-link" href="https://altumlumen-design.github.io/Altum-Lumen-centro-formacion/" target="_blank" rel="noopener noreferrer">
         <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5 12 3l8 3.5-8 3.5-8-3.5Zm3 2.2V15c0 1.8 2.2 3.2 5 3.2s5-1.4 5-3.2V8.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span><strong>Centro de Formación</strong><small>Capacitación profesional y oferta académica</small></span>
-      </a>\n`;
+      </a>\
+`;
 
       const tariffSection = `    <section class="section" id="tarifario-costos">
       <div class="container">
@@ -96,7 +103,9 @@
         </div>
         <div class="history-note"><strong>Vigencia:</strong> la Resolución Directoral N.° 00001-2026-AL/DADM dispone que el Tarifario Institucional v1.0 2026 entra en vigencia a partir del día siguiente de su emisión.</div>
       </div>
-    </section>\n\n`;
+    </section>\
+\
+`;
 
       const cssEnhancement = `<style>
         @media (min-width:1181px){.quick-links{grid-template-columns:repeat(5,minmax(0,1fr))}}
@@ -112,23 +121,30 @@
         const academicMarker = '<article class="resolution-row" data-search="00004-2026-al-da';
         const academicIndex = html.indexOf(academicMarker);
         if (academicIndex === -1) throw new Error("No se encontró el punto de inserción de Dirección Académica");
-        const academicArticleStart = html.lastIndexOf('\n', academicIndex) + 1;
+        const academicArticleStart = html.lastIndexOf('\
+', academicIndex) + 1;
         html = html.slice(0, academicArticleStart) + latestAcademicResolutions + html.slice(academicArticleStart);
 
         // Agrega Dirección de Administración como órgano emisor en el año 2026.
-        const administrationMarker = '          <details class="unit" >\n            <summary>Dirección Académica </summary>';
+        const administrationMarker = '          <details class="unit" >\
+            <summary>Dirección Académica </summary>';
         const administrationIndex = html.indexOf(administrationMarker);
         if (administrationIndex === -1) throw new Error("No se encontró el bloque 2026 para insertar Dirección de Administración");
         html = html.slice(0, administrationIndex) + administrationUnit + html.slice(administrationIndex);
 
         // Agrega accesos rápidos a Tarifario y al Centro de Formación.
-        const quickMarker = '    </div>\n\n    <section class="section" id="documentos-gestion">';
+        const quickMarker = '    </div>\
+\
+    <section class="section" id="documentos-gestion">';
         const quickIndex = html.indexOf(quickMarker);
         if (quickIndex === -1) throw new Error("No se encontró el bloque de accesos rápidos");
         html = html.slice(0, quickIndex) + extraQuickLinks + html.slice(quickIndex);
 
         // Agrega enlace de navegación al Tarifario.
-        html = html.replace('<a href="#actos-resolutivos">Actos resolutivos</a>\n        <a href="#mesa-de-partes">Mesa de Partes</a>', '<a href="#actos-resolutivos">Actos resolutivos</a>\n        <a href="#tarifario-costos">Tarifario y costos</a>\n        <a href="#mesa-de-partes">Mesa de Partes</a>');
+        html = html.replace('<a href="#actos-resolutivos">Actos resolutivos</a>\
+        <a href="#mesa-de-partes">Mesa de Partes</a>', '<a href="#actos-resolutivos">Actos resolutivos</a>\
+        <a href="#tarifario-costos">Tarifario y costos</a>\
+        <a href="#mesa-de-partes">Mesa de Partes</a>');
 
         // Agrega una sección específica de Tarifario antes de Actos resolutivos.
         const actsMarker = '    <section class="section section-soft" id="actos-resolutivos">';
@@ -137,10 +153,15 @@
         html = html.slice(0, actsIndex) + tariffSection + html.slice(actsIndex);
 
         // Ajusta la grilla de accesos rápidos para los nuevos botones.
-        html = html.replace('</head>', cssEnhancement + '\n</head>');
+        html = html.replace('</head>', cssEnhancement + '\
+</head>');
 
         // Corrige un listener duplicado de la versión base que invocaba una función inexistente.
-        html = html.replace('    tabs.forEach(tab => tab.addEventListener("click", () => activateYear(tab.dataset.year)));\n', '');
+        html = html.replace('    tabs.forEach(tab => tab.addEventListener("click", () => activateYear(tab.dataset.year)));\
+', '');
+
+        // Ningún bloque desplegable inicia abierto: cada usuario decide qué sección consultar.
+        html = html.replace(/<details([^>]*?)\sopen([^>]*)>/g, '<details$1$2>');
 
         document.open();
         document.write(html);
