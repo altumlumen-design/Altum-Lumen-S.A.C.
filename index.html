@@ -156,8 +156,9 @@
     .service-meta { display:grid; gap:9px; margin-top:auto; padding-top:20px; border-top:1px solid #e7eef2; color:#526873; font-size:.82rem; }
     .service-meta span { display:flex; align-items:flex-start; gap:9px; }
     .service-meta svg { width:16px; height:16px; margin-top:2px; flex:0 0 auto; color:var(--blue); }
-    .officials-heading-row { max-width:760px; }
-    .officials-heading-row .section-heading { margin-bottom:0; }
+    .officials-heading-row { width:100%; max-width:1180px; }
+    .officials-heading-row .section-heading { max-width:none; margin-bottom:0; }
+    .officials-heading-row .section-heading p:not(.eyebrow) { max-width:1140px; text-wrap:pretty; }
     .movements-panel { display:grid; grid-template-columns:minmax(210px,.7fr) minmax(0,2.3fr); gap:28px; margin-top:38px; padding:clamp(24px,4vw,34px); border:1px solid #cfe0e7; border-radius:var(--radius); background:linear-gradient(135deg,#f8fcfd,#edf7fb); }
     .movements-intro { display:grid; align-content:start; gap:9px; }
     .movements-icon { width:46px; height:46px; display:grid; place-items:center; margin-bottom:4px; border-radius:13px; color:var(--blue-deep); background:var(--white); box-shadow:0 8px 20px rgba(18,63,90,.08); }
