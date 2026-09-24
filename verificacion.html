@@ -58,23 +58,20 @@
   <div class="container layout">
     <section class="card verify" aria-labelledby="consulta-title">
       <h2 id="consulta-title">Consultar un documento</h2>
-      <p>Ingrese el código de verificación consignado en el documento. En las próximas versiones, el QR podrá abrir esta página con el código cargado automáticamente.</p>
+      <p>Ingrese el código de verificación consignado en el documento. El QR identifica este servicio; ingrese el código que figura al pie del documento.</p>
       <form id="verifyForm">
         <label for="codigo">Código de verificación</label>
         <div class="field">
-          <input id="codigo" name="codigo" autocomplete="off" maxlength="80" placeholder="Ej.: AL-2026-XXXXXXXX" aria-describedby="serviceStatus">
+          <input id="codigo" name="codigo" autocomplete="off" maxlength="80" placeholder="Ej.: AL-2026-A1B2C3D4E5F60718293A4B5C6D7E8F90" aria-describedby="serviceStatus">
           <button type="submit">Verificar documento</button>
         </div>
       </form>
-      <div class="status" id="serviceStatus">
-        <strong>Módulo en integración con el SGD</strong>
-        La ruta pública ya se encuentra definida para ser utilizada en los modelos institucionales. La consulta automática de registros será habilitada cuando se conecte este portal con el Sistema de Gestión Documental.
-      </div>
+      <div class="status" id="serviceStatus" role="status"><strong>Consulta de emisión</strong>La consulta muestra datos del registro institucional. No publica el documento.</div>
       <div class="result" id="result" aria-live="polite"></div>
 
       <div class="notice">
         <h3>Importante</h3>
-        <p>La presencia de un QR que dirija a esta página identifica la ruta institucional de verificación. La validación definitiva del contenido, estado, emisor y firma se realizará contra el registro del SGD una vez culminada la integración.</p>
+        <p>Compare el número, asunto, emisor y dependencia con su documento. Esta consulta acredita la coincidencia con un registro del SGD; no comprueba por sí sola que un PDF o una copia impresa no hayan sido alterados.</p>
       </div>
       <div class="links">
         <a class="link" href="./">← Volver al Portal Corporativo</a>
@@ -83,7 +80,7 @@
     </section>
 
     <aside class="card side">
-      <h3>¿Cómo funcionará?</h3>
+      <h3>¿Cómo se verifica?</h3>
       <p>La página ha sido preparada para mantener una sola dirección web aun cuando se amplíen las funcionalidades de verificación.</p>
       <ol class="steps">
         <li><b>1</b><span>Escanee el QR o ingrese el código consignado en el documento.</span></li>
@@ -103,28 +100,28 @@
 
 <script>
 (() => {
-  const input=document.getElementById('codigo');
-  const form=document.getElementById('verifyForm');
-  const result=document.getElementById('result');
-  const params=new URLSearchParams(location.search);
-  const initial=(params.get('codigo')||params.get('id')||'').trim();
-  if(initial) input.value=initial;
-
+  const ENDPOINT='https://script.google.com/macros/s/AKfycbxmkUxD9CrJQ4WkEPQnCFfu9x32HiJZOAZMKSkEcs9S9lFB3xSdRE8AzSJhbGC3mhVl/exec';
+  const input=document.getElementById('codigo'),form=document.getElementById('verifyForm'),result=document.getElementById('result'),button=form.querySelector('button');
+  let sequence=0,cleanup=null;
+  const params=new URLSearchParams(location.search);input.value=(params.get('codigo')||params.get('id')||'').trim().slice(0,80);
+  function line(label,value){const p=document.createElement('p'),b=document.createElement('b'),s=document.createElement('span');b.textContent=label;s.textContent=value||'—';p.append(b,s);result.append(p);}
+  function message(text){result.replaceChildren();result.classList.add('show');line(text,'');}
   form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const code=input.value.trim().toUpperCase();
-    result.classList.add('show');
-    if(!code){
-      result.innerHTML='<b>Ingrese un código de verificación.</b><span>El código se encontrará impreso junto al QR del documento.</span>';
-      input.focus();
-      return;
+    e.preventDefault();const code=input.value.trim().toUpperCase();
+    if(!/^AL-\d{4}-[A-F0-9]{32}$/.test(code)){message('Revise el código completo impreso en el documento.');input.focus();return;}
+    if(cleanup)cleanup();const current=++sequence,callback='altum_'+crypto.getRandomValues(new Uint32Array(3)).join('_'),script=document.createElement('script');
+    button.disabled=true;message('Consultando el registro del SGD…');
+    let done=false;const timer=setTimeout(()=>finish({error:'El SGD no respondió. Intente nuevamente; no se ha confirmado la autenticidad.'}),20000);
+    cleanup=()=>{clearTimeout(timer);script.remove();delete window[callback];button.disabled=false;};
+    function finish(data){if(done||current!==sequence)return;done=true;cleanup();result.replaceChildren();result.classList.add('show');
+      if(!data||data.error){line('No se pudo comprobar',data?.error||'Respuesta no válida');return;}
+      if(!data.found){line('No se encontró un documento emitido con ese código','Compruebe el código. Solo aparecen versiones vigentes emitidas. Los códigos anulados, borradores y documentos anteriores al servicio no arrojan resultados.');return;}
+      if(data.code!==code||data.state!=='EMITIDO'){line('Respuesta no válida','No se ha confirmado el registro.');return;}
+      line('Registro de emisión encontrado',data.number);
+      [['Código','code'],['Emitido por','issuer'],['Cargo al firmar','cargo'],['Fecha y hora de emisión · Lima','issuedAt'],['Dependencia','office'],['Asunto','subject'],['Expediente','expediente']].forEach(([label,key])=>line(label,String(data[key]||'')));
     }
-    result.innerHTML='<b>Código recibido: '+escapeHtml(code)+'</b><span>La consulta automática todavía no está habilitada. Este código podrá verificarse aquí cuando finalice la integración del portal con el SGD.</span>';
+    window[callback]=finish;script.onerror=()=>finish({error:'No se pudo conectar con el SGD.'});script.src=ENDPOINT+'?action=verificar&codigo='+encodeURIComponent(code)+'&callback='+callback;document.head.append(script);
   });
-
-  function escapeHtml(value){
-    return value.replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
-  }
 })();
 </script>
 </body>
