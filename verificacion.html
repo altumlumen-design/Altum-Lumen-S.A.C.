@@ -32,7 +32,7 @@
   <section class="card verify" aria-labelledby="consulta-title">
     <h2 id="consulta-title">Consultar un documento</h2>
     <p>Ingrese el código que figura al pie del documento.</p>
-    <form id="verifyForm"><label for="codigo">Código de verificación</label><div class="field"><input id="codigo" name="codigo" autocomplete="off" maxlength="80" placeholder="Ej.: AL-2026-A1B2C3D4E5F60718293A4B5C6D7E8F90"><button type="submit">Verificar documento</button></div></form>
+    <form id="verifyForm"><label for="codigo">Código de verificación</label><div class="field"><input id="codigo" name="codigo" autocomplete="off" maxlength="100" placeholder="Ej.: AL-2026-A1B2C3D4E5F60718293A4B5C6D7E8F90"><button type="submit">Verificar documento</button></div></form>
     <div class="result" id="result" aria-live="polite"></div>
     <div class="links"><a class="link" href="./">← Volver al Portal Corporativo</a><a class="link" href="transparencia.html">Portal de Transparencia</a></div>
   </section>
@@ -43,11 +43,17 @@
 (() => {
   const ENDPOINT='https://script.google.com/macros/s/AKfycbxmkUxD9CrJQ4WkEPQnCFfu9x32HiJZOAZMKSkEcs9S9lFB3xSdRE8AzSJhbGC3mhVl/exec';
   const input=document.getElementById('codigo'),form=document.getElementById('verifyForm'),result=document.getElementById('result'),button=form.querySelector('button');
-  let sequence=0,cleanup=null;const params=new URLSearchParams(location.search);input.value=(params.get('codigo')||params.get('id')||'').trim().slice(0,80);
+  let sequence=0,cleanup=null;
+  function normalizeCode(value){
+    const raw=String(value||'').toUpperCase().replace(/[‐‑‒–—―−]/g,'-').replace(/[\s\u00A0\u200B-\u200D\uFEFF]+/g,'');
+    const compact=raw.replace(/-/g,''),m=compact.match(/^AL(\d{4})([A-F0-9]{32})$/);
+    return m?'AL-'+m[1]+'-'+m[2]:raw;
+  }
+  const params=new URLSearchParams(location.search);input.value=normalizeCode(params.get('codigo')||params.get('id')||'').slice(0,100);
   function line(label,value){const p=document.createElement('p'),b=document.createElement('b'),s=document.createElement('span');b.textContent=label;s.textContent=value||'—';p.append(b,s);result.append(p);}
   function message(text){result.replaceChildren();result.classList.add('show');line(text,'');}
   form.addEventListener('submit',e=>{
-    e.preventDefault();const code=input.value.trim().toUpperCase();
+    e.preventDefault();const code=normalizeCode(input.value);input.value=code;
     if(!/^AL-\d{4}-[A-F0-9]{32}$/.test(code)){message('Revise el código completo.');input.focus();return;}
     if(cleanup)cleanup();const current=++sequence,callback='altum_'+crypto.getRandomValues(new Uint32Array(3)).join('_'),script=document.createElement('script');button.disabled=true;message('Consultando…');
     let done=false;const timer=setTimeout(()=>finish({error:'No se pudo conectar con el SGD. Intente nuevamente.'}),20000);
@@ -55,7 +61,7 @@
     function finish(data){if(done||current!==sequence)return;done=true;cleanup();result.replaceChildren();result.classList.add('show');
       if(!data||data.error){line('Consulta no disponible',data?.error||'Respuesta no válida');return;}
       if(!data.found){line('Código no encontrado','Revise el código e intente nuevamente.');return;}
-      if(data.code!==code||data.state!=='EMITIDO'){line('Registro no disponible','Revise el código e intente nuevamente.');return;}
+      if(normalizeCode(data.code)!==code||data.state!=='EMITIDO'){line('Registro no disponible','Revise el código e intente nuevamente.');return;}
       line('Documento emitido',data.number);
       [['Código','code'],['Emitido por','issuer'],['Cargo al firmar','cargo'],['Fecha y hora de emisión · Lima','issuedAt'],['Dependencia','office'],['Asunto','subject'],['Expediente','expediente']].forEach(([label,key])=>line(label,String(data[key]||'')));
     }
