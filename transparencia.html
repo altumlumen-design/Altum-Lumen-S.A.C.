@@ -3,43 +3,50 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="index,follow">
+  <meta name="robots" content="index, follow">
   <title>Portal de Transparencia | ALTUM LUMEN S.A.C.</title>
   <style>
-    body{margin:0;font:16px system-ui,sans-serif;color:#182e3a;background:#f7fafb}
-    main{min-height:95vh;display:flex;justify-content:center;align-items:center;padding:20px}
-    .panel{max-width:650px;background:white;border:1px solid #dae3e8;
-           border-radius:18px;padding:30px;box-shadow:0 16px 44px #15344813}
-    h1{font-size:1.5rem;margin:0 0 14px} p{line-height:1.6}
-    a{color:#176482;font-weight:600;display:block;margin-top:14px}
+  body{margin:0;font:16px/1.5 Inter,system-ui,-apple-system,sans-serif;background:#f7fafb;color:#14252e}
+  .loader{min-height:90vh;padding:30px;display:grid;place-items:center}
+  .panel{max-width:670px;border:1px solid #dbe6eb;background:white;border-radius:18px;padding:28px;box-shadow:0 15px 45px #17395610}
+  h1{font-size:1.5rem;margin:0 0 12px}a{display:block;color:#123f5a;padding:6px 0}
   </style>
 </head>
 <body>
-<main><div class="panel">
-<h1>Portal de Transparencia</h1>
-<p id="msg">Cargando los actos resolutivos institucionales…</p>
+<main class="loader"><div class="panel">
+<h1>Portal de Transparencia</h1><p id="status">Cargando registro oficial de resoluciones...</p>
 <div id="fallback" hidden>
-<a href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00023-2026-AL-GG.pdf">Resolución N.° 00023-2026-AL/GG con anexo (PDF)</a>
-<a href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00022-2026-AL-GG.pdf">Resolución N.° 00022-2026-AL/GG con anexo (PDF)</a>
-<a href="index.html">Volver al portal corporativo</a>
-</div></div></main>
+  <a href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00023-2026-AL-GG.pdf">Resolución GG N.° 00023-2026-AL/GG (con anexo)</a>
+  <a href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00022-2026-AL-GG.pdf">Resolución GG N.° 00022-2026-AL/GG (con anexo)</a>
+  <a href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00007-2026-AL-DA.pdf">Resolución DA N.° 00007-2026-AL/DA</a>
+  <a href="index.html">Volver al portal principal</a>
+</div>
+</div></main>
 <script>
 (async function() {
-  const sourceURL = "https://raw.githubusercontent.com/altumlumen-design/Altum-Lumen-S.A.C./7145dd1f89a006d9c3004adf9c8e3a4451206712/transparencia.html";
-  const gerenciaGeneral = "          <details class=\"unit\">\n            <summary>Gerencia General</summary>\n            <div class=\"resolution-list\">\n              <article class=\"resolution-row\" data-search=\"00023-2026-al-gg gerencia general reglamento general gestión procedimientos internos altum lumen sac 14 octubre 2026 001-2026 al-rg-001-2026\">\n                <div class=\"resolution-id\"><strong>Resolución de Gerencia General N.° 00023-2026-AL/GG</strong><small>14 oct 2026 · Gerencia General</small></div>\n                <p class=\"resolution-summary\">Aprueba el Reglamento General N.° 001-2026-AL/GG de Gestión y Procedimientos Internos de ALTUM LUMEN S.A.C., código AL-RG-001-2026, versión 1.1. Incluye el reglamento íntegro anexo y dispone su publicación institucional.</p>\n                <a class=\"pdf-link\" href=\"documentos/actos-resolutivos/2026/gerencia-general/RGG-00023-2026-AL-GG.pdf\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Ver PDF de Resolución de Gerencia General N.° 00023-2026-AL/GG con anexo\">Consultar resolución y anexo PDF ↗</a>\n              </article>\n              <article class=\"resolution-row\" data-search=\"00022-2026-al-gg gerencia general directiva lineamientos formulación revisión aprobación modificación actualización gestión directivas reglamentos planes instrumentos internos altum lumen 4 octubre 2026 al-di-001-2026\">\n                <div class=\"resolution-id\"><strong>Resolución de Gerencia General N.° 00022-2026-AL/GG</strong><small>04 oct 2026 · Gerencia General</small></div>\n                <p class=\"resolution-summary\">Aprueba la Directiva N.° 001-2026-AL/GG sobre formulación, revisión, aprobación, modificación, actualización y gestión de instrumentos internos, código AL-DI-001-2026, versión 1.0. Incluye la directiva íntegra anexa.</p>\n                <a class=\"pdf-link\" href=\"documentos/actos-resolutivos/2026/gerencia-general/RGG-00022-2026-AL-GG.pdf\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Ver PDF de Resolución de Gerencia General N.° 00022-2026-AL/GG con anexo\">Consultar resolución y anexo PDF ↗</a>\n              </article>\n            </div>\n          </details>\n";
+  const snapshot = "https://raw.githubusercontent.com/altumlumen-design/Altum-Lumen-S.A.C./7145dd1f89a006d9c3004adf9c8e3a4451206712/transparencia.html";
+  const extraAcademic = "              <article class=\"resolution-row\" data-search=\"00007-2026-al-da dirección académica diplomado especializado innovación gobernanza gestión territorial servicios públicos 240 horas cinco módulos certificación 1 octubre 2026\">\n                <div class=\"resolution-id\"><strong>Resolución Directoral N.° 00007-2026-AL/DA</strong><small>01 oct 2026 · Dirección Académica</small></div>\n                <p class=\"resolution-summary\">Aprueba el Diplomado Especializado «Innovación, Gobernanza y Gestión Territorial de los Servicios Públicos» (240 horas académicas), estructurado en cinco cursos especializados de 48 horas, con certificación modular progresiva e independiente.</p>\n                <a class=\"pdf-link\" href=\"documentos/actos-resolutivos/2026/direccion-academica/RDA-00007-2026-AL-DA.pdf\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Ver PDF de Resolución Directoral N.° 00007-2026-AL/DA\"><svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></a>\n              </article>\n";
+  const corporatePatch = "\n        // ALTUM: insertar resoluciones NUEVAS dentro de la unidad existente, manteniendo estilo e iconos.\n        const existingRow = html.indexOf('data-search=\"00021-2026-al-gg');\n        if (existingRow < 0) throw new Error('No se localizó el bloque vigente de Gerencia General (2026)');\n        const openingTag = '<div class=\"resolution-list\">';\n        const parentListAt = html.lastIndexOf(openingTag, existingRow);\n        if (parentListAt < 0 || !/Gerencia General\\s*<\\/summary>/.test(html.slice(Math.max(0, parentListAt - 175), parentListAt))) {\n          throw new Error('La inserción no corresponde a Gerencia General 2026');\n        }\n        const injectAt = parentListAt + openingTag.length;\n        html = html.slice(0, injectAt) + \"\\n              <article class=\\\"resolution-row\\\" data-search=\\\"00023-2026-al-gg gerencia general reglamento general gestión procedimientos internos altum lumen 14 octubre 2026 anexo\\\">\\n                <div class=\\\"resolution-id\\\"><strong>Resolución de Gerencia General N.° 00023-2026-AL/GG</strong><small>14 oct 2026 · Gerencia General</small></div>\\n                <p class=\\\"resolution-summary\\\">Aprueba el Reglamento General N.° 001-2026-AL/GG de Gestión y Procedimientos Internos de ALTUM LUMEN S.A.C., código AL-RG-001-2026, versión 1.1. Incluye el reglamento completo como anexo.</p>\\n                <a class=\\\"pdf-link\\\" href=\\\"documentos/actos-resolutivos/2026/gerencia-general/RGG-00023-2026-AL-GG.pdf\\\" target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\" aria-label=\\\"Ver PDF de Resolución de Gerencia General N.° 00023-2026-AL/GG\\\"><svg viewBox=\\\"0 0 24 24\\\" fill=\\\"none\\\" aria-hidden=\\\"true\\\"><path d=\\\"M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4\\\" stroke=\\\"currentColor\\\" stroke-width=\\\"1.8\\\" stroke-linecap=\\\"round\\\" stroke-linejoin=\\\"round\\\"/></svg></a>\\n              </article>\\n              <article class=\\\"resolution-row\\\" data-search=\\\"00022-2026-al-gg gerencia general directiva lineamientos formulación revisión aprobación modificación actualización instrumentos internos altum lumen 4 octubre 2026 anexo\\\">\\n                <div class=\\\"resolution-id\\\"><strong>Resolución de Gerencia General N.° 00022-2026-AL/GG</strong><small>04 oct 2026 · Gerencia General</small></div>\\n                <p class=\\\"resolution-summary\\\">Aprueba la Directiva N.° 001-2026-AL/GG, código AL-DI-001-2026, versión 1.0, sobre formulación, revisión, aprobación, modificación, actualización y gestión de directivas, reglamentos, planes y otros instrumentos internos. Incluye la directiva completa como anexo.</p>\\n                <a class=\\\"pdf-link\\\" href=\\\"documentos/actos-resolutivos/2026/gerencia-general/RGG-00022-2026-AL-GG.pdf\\\" target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\" aria-label=\\\"Ver PDF de Resolución de Gerencia General N.° 00022-2026-AL/GG\\\"><svg viewBox=\\\"0 0 24 24\\\" fill=\\\"none\\\" aria-hidden=\\\"true\\\"><path d=\\\"M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4\\\" stroke=\\\"currentColor\\\" stroke-width=\\\"1.8\\\" stroke-linecap=\\\"round\\\" stroke-linejoin=\\\"round\\\"/></svg></a>\\n              </article>\\n\" + html.slice(injectAt);\n        // Comprobación de integridad: solo debe quedar un grupo Gerencia General por año.\n        const auditor = new DOMParser().parseFromString(html, 'text/html');\n        const groups = Array.from(auditor.querySelectorAll('details.unit'));\n        const year2026 = groups.filter(group => group.querySelector('[data-search*=\"00021-2026-al-gg\"]'));\n        if (year2026.length !== 1 ||\n            year2026[0].querySelectorAll('[data-search*=\"00023-2026-al-gg\"]').length !== 1 ||\n            year2026[0].querySelectorAll('[data-search*=\"00022-2026-al-gg\"]').length !== 1) {\n          throw new Error('Error de ubicación o duplicidad de resoluciones 2026');\n        }\n";
   try {
-    const response = await fetch(sourceURL, {cache:"force-cache"});
-    if (!response.ok) throw Error("No se pudo cargar el portal base ("+response.status+")");
+    const response = await fetch(snapshot, {cache: "force-cache"});
+    if (!response.ok) throw new Error("No se pudo cargar la plantilla oficial: " + response.status);
     let original = await response.text();
-    const marker = "const administrationUnit = `";
-    if (!original.includes(marker)) throw Error("No se encontró el punto de integración del registro de resoluciones.");
-    original = original.replace(marker, marker + gerenciaGeneral);
-    document.open(); document.write(original); document.close();
+    const academicPoint = 'const latestAcademicResolutions = `';
+    const injectionPoint = '        document.open();';
+    if (!original.includes(academicPoint) || !original.includes(injectionPoint) || !original.includes('const administrationUnit = `')) {
+      throw new Error('Plantilla institucional no compatible con esta versión');
+    }
+    // La 00007 se coloca antes de las 00006 y 00005 dentro de la MISMA Dirección Académica.
+    original = original.replace(academicPoint, academicPoint + extraAcademic);
+    // La 00023 y 00022 se agregan a la única Gerencia General existente de 2026.
+    original = original.replace(injectionPoint, corporatePatch + '\n' + injectionPoint);
+    document.open();
+    document.write(original);
+    document.close();
   } catch (error) {
-    console.error("ALTUM LUMEN - Portal de Transparencia:", error);
-    document.getElementById("msg").textContent =
-      "No se pudo cargar el índice en este momento. Puede consultar las resoluciones directamente:";
-    document.getElementById("fallback").hidden = false;
+    console.error('ALTUM LUMEN - Transparencia:', error);
+    document.querySelector('#status').textContent = 'No se pudo cargar el índice. Puedes abrir directamente los documentos:';
+    document.querySelector('#fallback').hidden = false;
   }
 })();
 </script>
