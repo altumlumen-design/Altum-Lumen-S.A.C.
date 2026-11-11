@@ -25,6 +25,7 @@
 <h1>Portal de Transparencia</h1><p id="status">Cargando registro oficial de resoluciones...</p>
 <div id="fallback" hidden>
   <a href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00025-2026-AL-GG.pdf">Resolución GG N.° 00025-2026-AL/GG</a>
+  <a href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00024-2026-AL-GG.pdf">Resolución GG N.° 00024-2026-AL/GG</a>
   <a href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00023-2026-AL-GG.pdf">Resolución GG N.° 00023-2026-AL/GG (con anexo)</a>
   <a href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00022-2026-AL-GG.pdf">Resolución GG N.° 00022-2026-AL/GG (con anexo)</a>
   <a href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00007-2026-AL-DA.pdf">Resolución DA N.° 00007-2026-AL/DA</a>
@@ -38,7 +39,7 @@
   const corporatePatch = "\n        // ALTUM: insertar resoluciones NUEVAS dentro de la unidad existente, manteniendo estilo e iconos.\n        const existingRow = html.indexOf('data-search=\"00021-2026-al-gg');\n        if (existingRow < 0) throw new Error('No se localizó el bloque vigente de Gerencia General (2026)');\n        const openingTag = '<div class=\"resolution-list\">';\n        const parentListAt = html.lastIndexOf(openingTag, existingRow);\n        if (parentListAt < 0 || !/Gerencia General\\s*<\\/summary>/.test(html.slice(Math.max(0, parentListAt - 175), parentListAt))) {\n          throw new Error('La inserción no corresponde a Gerencia General 2026');\n        }\n        const injectAt = parentListAt + openingTag.length;\n        html = html.slice(0, injectAt) + \"\\n              <article class=\\\"resolution-row\\\" data-search=\\\"00023-2026-al-gg gerencia general reglamento general gestión procedimientos internos altum lumen 14 octubre 2026 anexo\\\">\\n                <div class=\\\"resolution-id\\\"><strong>Resolución de Gerencia General N.° 00023-2026-AL/GG</strong><small>14 oct 2026 · Gerencia General</small></div>\\n                <p class=\\\"resolution-summary\\\">Aprueba el Reglamento General N.° 001-2026-AL/GG de Gestión y Procedimientos Internos de ALTUM LUMEN S.A.C., código AL-RG-001-2026, versión 1.1. Incluye el reglamento completo como anexo.</p>\\n                <a class=\\\"pdf-link\\\" href=\\\"documentos/actos-resolutivos/2026/gerencia-general/RGG-00023-2026-AL-GG.pdf\\\" target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\" aria-label=\\\"Ver PDF de Resolución de Gerencia General N.° 00023-2026-AL/GG\\\"><svg viewBox=\\\"0 0 24 24\\\" fill=\\\"none\\\" aria-hidden=\\\"true\\\"><path d=\\\"M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4\\\" stroke=\\\"currentColor\\\" stroke-width=\\\"1.8\\\" stroke-linecap=\\\"round\\\" stroke-linejoin=\\\"round\\\"/></svg></a>\\n              </article>\\n              <article class=\\\"resolution-row\\\" data-search=\\\"00022-2026-al-gg gerencia general directiva lineamientos formulación revisión aprobación modificación actualización instrumentos internos altum lumen 4 octubre 2026 anexo\\\">\\n                <div class=\\\"resolution-id\\\"><strong>Resolución de Gerencia General N.° 00022-2026-AL/GG</strong><small>04 oct 2026 · Gerencia General</small></div>\\n                <p class=\\\"resolution-summary\\\">Aprueba la Directiva N.° 001-2026-AL/GG, código AL-DI-001-2026, versión 1.0, sobre formulación, revisión, aprobación, modificación, actualización y gestión de directivas, reglamentos, planes y otros instrumentos internos. Incluye la directiva completa como anexo.</p>\\n                <a class=\\\"pdf-link\\\" href=\\\"documentos/actos-resolutivos/2026/gerencia-general/RGG-00022-2026-AL-GG.pdf\\\" target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\" aria-label=\\\"Ver PDF de Resolución de Gerencia General N.° 00022-2026-AL/GG\\\"><svg viewBox=\\\"0 0 24 24\\\" fill=\\\"none\\\" aria-hidden=\\\"true\\\"><path d=\\\"M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4\\\" stroke=\\\"currentColor\\\" stroke-width=\\\"1.8\\\" stroke-linecap=\\\"round\\\" stroke-linejoin=\\\"round\\\"/></svg></a>\\n              </article>\\n\" + html.slice(injectAt);\n        // Comprobación de integridad: solo debe quedar un grupo Gerencia General por año.\n        const auditor = new DOMParser().parseFromString(html, 'text/html');\n        const groups = Array.from(auditor.querySelectorAll('details.unit'));\n        const year2026 = groups.filter(group => group.querySelector('[data-search*=\"00021-2026-al-gg\"]'));\n        if (year2026.length !== 1 ||\n            year2026[0].querySelectorAll('[data-search*=\"00023-2026-al-gg\"]').length !== 1 ||\n            year2026[0].querySelectorAll('[data-search*=\"00022-2026-al-gg\"]').length !== 1) {\n          throw new Error('Error de ubicación o duplicidad de resoluciones 2026');\n        }\n";
   const resolution25Patch = [
     "",
-    "        // ALTUM: incorporar la Resolución 00025 firmada en la Gerencia General 2026.",
+    "        // ALTUM: incorporar las Resoluciones 00025 y 00024 firmadas en la Gerencia General 2026.",
     "        const marker25 = html.indexOf('data-search=\"00023-2026-al-gg');",
     "        if (marker25 < 0) throw new Error(\"No se localizó la Resolución 00023 para insertar la 00025\");",
     "        const listTag25 = '<div class=\"resolution-list\">';",
@@ -53,12 +54,19 @@
     '                <p class="resolution-summary">Designa temporalmente a Piero Alessandro Vargas Luque como gerente de Servicios Comerciales y Cooperación y secretario general de ALTUM LUMEN S.A.C., en adición a sus funciones, a partir del 5 de noviembre de 2026.</p>',
     '                <a class="pdf-link" href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00025-2026-AL-GG.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF firmado de la Resolución de Gerencia General N.° 00025-2026-AL/GG"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>',
     '              </article>',
+    '              <article class="resolution-row" data-search="00024-2026-al-gg gerencia general acepta renuncia norma elena franshesca moreno mogollón gerente servicios comerciales cooperación secretaria general designación temporal 4 noviembre 2026 firmado">',
+    '                <div class="resolution-id"><strong>Resolución de Gerencia General N.° 00024-2026-AL/GG</strong><small>04 nov 2026 · Gerencia General</small></div>',
+    '                <p class="resolution-summary">Acepta la renuncia de Norma Elena Franshesca Moreno Mogollón al cargo de gerente de Servicios Comerciales y Cooperación y a la designación temporal como secretaria general de ALTUM LUMEN S.A.C., con efectos a partir del 5 de noviembre de 2026.</p>',
+    '                <a class="pdf-link" href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00024-2026-AL-GG.pdf" target="_blank" rel="noopener noreferrer" aria-label="Ver PDF firmado de la Resolución de Gerencia General N.° 00024-2026-AL/GG"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Zm7 0v5h5M10 13h5M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>',
+    '              </article>',
     '        `;',
     '        html = html.slice(0, insert25) + "\\n" + resolution25Row + html.slice(insert25);',
     '        const audit25 = new DOMParser().parseFromString(html, "text/html");',
     '        const rows25 = audit25.querySelectorAll(\'[data-search*="00025-2026-al-gg"]\');',
-    '        if (rows25.length !== 1 || rows25[0].querySelectorAll(".pdf-link").length !== 1) {',
-    '          throw new Error("Error de ubicación, duplicidad o archivo de la Resolución 00025");',
+    '        const rows24 = audit25.querySelectorAll(\'[data-search*="00024-2026-al-gg"]\');',
+    '        if (rows25.length !== 1 || rows25[0].querySelectorAll(".pdf-link").length !== 1 ||',
+    '            rows24.length !== 1 || rows24[0].querySelectorAll(".pdf-link").length !== 1) {',
+    '          throw new Error("Error de ubicación, duplicidad o archivo de las Resoluciones 00025 y 00024");',
     '        }'
   ].join("\n");
   try {
@@ -72,7 +80,7 @@
     }
     // La 00007 se coloca antes de las 00006 y 00005 dentro de la MISMA Dirección Académica.
     original = original.replace(academicPoint, academicPoint + extraAcademic);
-    // La 00025 se agrega antes de la 00023 con un único enlace a la versión firmada.
+    // Las 00025 y 00024 se agregan antes de la 00023, cada una con un único enlace a su versión firmada.
     original = original.replace(injectionPoint, corporatePatch + resolution25Patch + '\n' + injectionPoint);
     document.open();
     document.write(original);
