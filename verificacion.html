@@ -43,7 +43,6 @@
 (() => {
   const ENDPOINT='https://script.google.com/macros/s/AKfycbxmkUxD9CrJQ4WkEPQnCFfu9x32HiJZOAZMKSkEcs9S9lFB3xSdRE8AzSJhbGC3mhVl/exec';
   const input=document.getElementById('codigo'),form=document.getElementById('verifyForm'),result=document.getElementById('result'),button=form.querySelector('button');
-  let sequence=0,cleanup=null;
   function normalizeCode(value){
     const raw=String(value||'').toUpperCase().replace(/[‐‑‒–—―−]/g,'-').replace(/[\s\u00A0\u200B-\u200D\uFEFF]+/g,'');
     const compact=raw.replace(/-/g,''),m=compact.match(/^AL(\d{4})([A-F0-9]{32})$/);
@@ -52,20 +51,49 @@
   const params=new URLSearchParams(location.search);input.value=normalizeCode(params.get('codigo')||params.get('id')||'').slice(0,100);
   function line(label,value){const p=document.createElement('p'),b=document.createElement('b'),s=document.createElement('span');b.textContent=label;s.textContent=value||'—';p.append(b,s);result.append(p);}
   function message(text){result.replaceChildren();result.classList.add('show');line(text,'');}
-  form.addEventListener('submit',e=>{
-    e.preventDefault();const code=normalizeCode(input.value);input.value=code;
+  function verificationUrl(code,format){
+    const url=new URL(ENDPOINT);
+    url.search=new URLSearchParams({action:'verificar',codigo:code,format}).toString();
+    return url;
+  }
+  function showUnavailable(code){
+    result.replaceChildren();
+    line('Consulta no disponible en el portal','Puedes abrir el verificador directamente en el SGD.');
+    const link=document.createElement('a');
+    link.className='link';
+    link.href=verificationUrl(code,'html').href;
+    link.referrerPolicy='no-referrer';
+    link.textContent='Consultar directamente en el SGD';
+    result.append(link);
+  }
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(button.disabled)return;
+    const code=normalizeCode(input.value);
+    input.value=code;
     if(!/^AL-\d{4}-[A-F0-9]{32}$/.test(code)){message('Revise el código completo.');input.focus();return;}
-    if(cleanup)cleanup();const current=++sequence,callback='altum_'+crypto.getRandomValues(new Uint32Array(3)).join('_'),script=document.createElement('script');button.disabled=true;message('Consultando…');
-    let done=false;const timer=setTimeout(()=>finish({error:'No se pudo conectar con el SGD. Intente nuevamente.'}),20000);
-    cleanup=()=>{clearTimeout(timer);script.remove();delete window[callback];button.disabled=false;};
-    function finish(data){if(done||current!==sequence)return;done=true;cleanup();result.replaceChildren();result.classList.add('show');
-      if(!data||data.error){line('Consulta no disponible',data?.error||'Respuesta no válida');return;}
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),20000);
+    button.disabled=true;
+    message('Consultando…');
+    try{
+      const response=await fetch(verificationUrl(code,'json'),{
+        credentials:'omit',cache:'no-store',referrerPolicy:'no-referrer',signal:controller.signal
+      });
+      if(!response.ok)throw new Error('SGD no disponible');
+      const data=await response.json();
+      if(!data||data.error||typeof data.found!=='boolean')throw new Error('Respuesta no válida del SGD');
+      result.replaceChildren();
       if(!data.found){line('Código no encontrado','Revise el código e intente nuevamente.');return;}
       if(normalizeCode(data.code)!==code||data.state!=='EMITIDO'){line('Registro no disponible','Revise el código e intente nuevamente.');return;}
       line('Documento emitido',data.number);
       [['Código','code'],['Emitido por','issuer'],['Cargo al firmar','cargo'],['Fecha y hora de emisión · Lima','issuedAt'],['Dependencia','office'],['Asunto','subject'],['Expediente','expediente']].forEach(([label,key])=>line(label,String(data[key]||'')));
+    }catch(error){
+      showUnavailable(code);
+    }finally{
+      clearTimeout(timer);
+      button.disabled=false;
     }
-    window[callback]=finish;script.onerror=()=>finish({error:'No se pudo conectar con el SGD.'});script.src=ENDPOINT+'?action=verificar&codigo='+encodeURIComponent(code)+'&callback='+callback;document.head.append(script);
   });
 })();
 </script>
