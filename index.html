@@ -67,7 +67,7 @@
     .skip-link:focus { transform:translateY(0); }
     .container { width:min(var(--max),calc(100% - 40px)); margin-inline:auto; }
     .site-header { position:sticky; top:0; z-index:100; border-bottom:1px solid rgba(219,230,235,.92); background:rgba(255,255,255,.94); backdrop-filter:blur(18px); }
-    .header-inner { min-height:88px; display:flex; align-items:center; justify-content:space-between; gap:28px; }
+    .header-inner { min-height:88px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
     .brand { display:inline-flex; align-items:center; flex:0 0 auto; text-decoration:none; }
     .brand img { width:176px; height:68px; object-fit:contain; }
     .site-nav { display:flex; align-items:center; gap:4px; }
@@ -77,6 +77,29 @@
     .site-nav .nav-cta:hover,.site-nav .nav-cta[aria-current="true"] { color:var(--white); background:#0b334b; }
     .menu-toggle { width:46px; height:46px; display:none; place-items:center; padding:0; border:1px solid var(--line); border-radius:12px; color:var(--ink); background:var(--white); cursor:pointer; }
     .menu-toggle svg { width:22px; height:22px; }
+    .sgd-link { display:inline-flex; flex-shrink:0; align-items:center; gap:7px; min-height:44px; padding:0 12px; border:1px solid var(--line); border-radius:10px; color:var(--blue-deep); background:var(--white); font-size:.88rem; font-weight:650; text-decoration:none; white-space:nowrap; }
+    .sgd-link svg { width:17px; height:17px; flex-shrink:0; }
+    .sgd-link:hover,.sgd-link[aria-current="true"] { background:var(--blue-pale); border-color:var(--blue-deep); }
+    .sgd-page { padding-block:28px 44px; }
+    .sgd-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px 24px; margin-bottom:16px; }
+    .sgd-heading h1 { margin:0; font-size:clamp(1.45rem,3vw,2rem); }
+    .sgd-heading a { display:inline-flex; align-items:center; gap:7px; min-height:44px; color:var(--blue-deep); font-size:.9rem; font-weight:650; }
+    .sgd-heading svg { width:16px; height:16px; }
+    .sgd-frame { display:block; width:100%; height:calc(100svh - 172px); min-height:560px; border:1px solid var(--line); border-radius:16px; background:var(--white); }
+    @media (981px <= width <= 1120px) {
+      .header-inner { gap:12px; }
+      .brand img { width:150px; }
+      .site-nav { gap:0; }
+      .site-nav a { padding-inline:8px; }
+    }
+    @media (max-width:980px) {
+      .header-inner { gap:8px; }
+      .menu-toggle { flex:0 0 44px; margin-inline-start:auto; }
+      .sgd-link { padding-inline:9px; }
+    }
+    @media (max-width:360px) {
+      .sgd-link svg { display:none; }
+    }
     main { min-height:calc(100svh - 88px); overflow:clip; background:var(--white); }
     .js .page-view:not(.is-active) { display:none!important; }
     .page-view.is-active { animation:page-enter .34s cubic-bezier(.22,.75,.24,1) both; }
@@ -338,6 +361,12 @@
         <a href="transparencia.html">Transparencia</a>
         <a class="nav-cta" href="#contacto">Contacto</a>
       </nav>
+      <a class="sgd-link" href="#sistema-sgd">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Sistema SGD
+      </a>
     </div>
   </header>
 
@@ -761,6 +790,21 @@
         </div>
       </div>
     </section>
+    <section class="sgd-page section-soft page-view" id="sistema-sgd" data-title="Sistema SGD" aria-labelledby="sgd-title">
+      <div class="container">
+        <div class="sgd-heading">
+          <h1 id="sgd-title">Sistema SGD</h1>
+          <a href="https://script.google.com/macros/s/AKfycbxmkUxD9CrJQ4WkEPQnCFfu9x32HiJZOAZMKSkEcs9S9lFB3xSdRE8AzSJhbGC3mhVl/exec" target="_blank" rel="noopener">
+            Abrir en otra pestaña
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+        <iframe class="sgd-frame" title="Sistema de Gestión Documental de ALTUM LUMEN" loading="lazy"
+          src="https://script.google.com/macros/s/AKfycbxmkUxD9CrJQ4WkEPQnCFfu9x32HiJZOAZMKSkEcs9S9lFB3xSdRE8AzSJhbGC3mhVl/exec"></iframe>
+      </div>
+    </section>
   </main>
 
   <dialog class="official-dialog" id="officialDialog" aria-label="Ficha de nombramiento">
@@ -785,7 +829,7 @@
   <script>
     const menuToggle = document.querySelector("#menuToggle");
     const siteNav = document.querySelector("#siteNav");
-    const navLinks = [...siteNav.querySelectorAll('a[href^="#"]')];
+    const navLinks = [...siteNav.querySelectorAll('a[href^="#"]'), document.querySelector(".sgd-link")];
     const pageViews = [...document.querySelectorAll(".page-view")];
     const viewByHash = new Map(pageViews.map((view) => ["#" + view.id, view]));
     const officialCards = [...document.querySelectorAll(".official-card")];
