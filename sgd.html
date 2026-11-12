@@ -511,6 +511,7 @@ async function applyAiWordStep2Proposal240(){
 }
 
 function renderNew(prefill={}){
+ app.manualReferencePicker={selected:[],linked:new Set(),results:new Map(),query:"",search:0,nextOffset:null,busy:false};
  app.currentDraft=prefill.documentId||null;
  app.flowDraft=Object.assign({},prefill);app.newState.signatureConfirmed=prefill.signatureConfirmed||'NO';app.newState.signatureCircuit=prefill.signatureCircuit||null;app.newState.annexSigning=prefill.annexSigning||[];app.newState.annexSignaturePhase=prefill.annexSignaturePhase||null;app.annexConfigOpen=!!(prefill.annexSignaturePhase&&prefill.annexSignaturePhase.canConfigure);
  if(Object.prototype.hasOwnProperty.call(prefill,'aiDraft'))app.aiDraft=prefill.aiDraft?Object.assign({},prefill.aiDraft,{pending:false,apply:false,edited:false}):null;else if(!prefill.documentId&&!prefill.keepAiDraft)app.aiDraft=null;
@@ -541,8 +542,8 @@ function renderNew(prefill={}){
  <div class="field span3"><label>Expediente</label><input id="fExpediente" class="control" value="${esc(prefill.expedienteId||'')}" placeholder="Automático / existente"></div>
  <div class="field span12"><label>Observación interna</label><textarea id="fInternal" class="control">${esc(prefill.internalObservation||'')}</textarea></div><input id="fReplyTo" type="hidden" value="${esc(prefill.replyToDocumentId||'')}"><input id="fAttentionSource" type="hidden" value="${esc(prefill.attentionSourceDocumentId||'')}"><input id="fVersion" type="hidden" value="${esc(prefill.version||'')}"></div></div>`;
  const dataBlock=app.currentDraft?`<details class="collapsible-data"><summary>Datos registrados del documento</summary>${form}<div class="stage-actionbar"><button id="saveDraftBtn" class="btn btn-outline" onclick="saveDraft()">Guardar cambios</button></div></details>`:`<section class="form-card"><div class="form-title">Paso 1 · Datos del documento</div>${form}</section>`;
- $('main').innerHTML=pageHead(prefill.documentId?'Preparación del documento':'Nuevo documento')+workflowStepsUI(step)+dataBlock+stagePanelUI(step,prefill)+
- (app.currentDraft?`<details class="collapsible-data"><summary>Referencias y anexos</summary><div class="form-body"><div id="refsArea"><div class="inline-load">Cargando información complementaria…</div></div></div></details>`:'');
+ $('main').innerHTML=pageHead(prefill.documentId?'Preparación del documento':'Nuevo documento')+workflowStepsUI(step)+dataBlock+referencePickerMarkup_()+stagePanelUI(step,prefill)+
+ (app.currentDraft?`<details class="collapsible-data"><summary>Antecedentes y anexos</summary><div class="form-body"><div id="refsArea"><div class="inline-load">Cargando información complementaria…</div></div></div></details>`:'');
  renderPrimaryDestinations233();renderCopies();renderExternalDestinations();renderAttendsSelected240();signatureHelp();onDocumentTypeChange233(false);if(app.currentDraft)loadDraftExtras(app.currentDraft);
 }
 function toggleAttendanceChooser240(force){const panel=$('attentionChooser240');if(!panel)return;const shouldOpen=typeof force==='boolean'?force:panel.style.display==='none';panel.style.display=shouldOpen?'block':'none';if(shouldOpen&&!app.attentionSearchResults240)searchAttendanceDocs240();}
@@ -631,17 +632,30 @@ async function saveDraft(){
   const principal=externalOnly?'':($('fPrincipal')?.value||''),primaryDestinations=externalOnly?[]:(multi?[principal,...app.newState.primaryDestinations]:[principal]).filter((x,i,a)=>x&&a.indexOf(x)===i);
   if(!externalOnly&&!principal){toast('Seleccione la oficina destinataria principal.');return}if(!externalOnly&&multi&&primaryDestinations.length<2){toast('Los documentos múltiples o circulares requieren al menos dos destinatarios principales.');return}if(!externalOnly&&multi&&primaryDestinations.length>10){toast('Máximo 10 destinatarios principales por documento.');return}
   const primarySet=new Set(primaryDestinations),copies=app.newState.copies.filter(x=>x?.office&&!primarySet.has(x.office)),destinations=[...primaryDestinations,...copies.map(x=>x.office)].filter((x,i,a)=>x&&a.indexOf(x)===i),aiApply=!!(app.aiDraft&&(app.aiDraft.pending||app.aiDraft.edited||app.aiDraft.apply));
-  const p={documentId:app.currentDraft,clientRequestId:app.newState.requestId,type:selectedType,subject:$('fSubject').value,priority:$('fPriority').value,days:$('fDays').value,destinationPrincipal:principal,primaryDestinations,copies,destinations,resolutionNotifyExternal:resolutionNotifyExternal,externalDestinations:JSON.parse(JSON.stringify(app.newState.externalDestinations)),indication:$('fIndication').value,expedienteId:$('fExpediente').value,internalObservation:$('fInternal').value,replyToDocumentId:$('fReplyTo').value,attentionSourceDocumentId:$('fAttentionSource')?.value||'',attendsDocumentIds:(app.newState.attendsDocumentIds||[]),referenceDocumentIds:app.aiDraft?.referenceDocumentIds||[],signatureMethod:'FIRMA_DIGITAL',expectedVersion:$('fVersion').value,aiDraft:aiApply?{apply:true,body:app.aiDraft.body||'',snapshot:app.aiDraft.snapshot||{},proposalMeta:app.aiDraft.proposalMeta||{},referenceDocumentIds:app.aiDraft.referenceDocumentIds||[]}:null};
+  const p={documentId:app.currentDraft,clientRequestId:app.newState.requestId,type:selectedType,subject:$('fSubject').value,priority:$('fPriority').value,days:$('fDays').value,destinationPrincipal:principal,primaryDestinations,copies,destinations,resolutionNotifyExternal:resolutionNotifyExternal,externalDestinations:JSON.parse(JSON.stringify(app.newState.externalDestinations)),indication:$('fIndication').value,expedienteId:$('fExpediente').value,internalObservation:$('fInternal').value,replyToDocumentId:$('fReplyTo').value,attentionSourceDocumentId:$('fAttentionSource')?.value||'',attendsDocumentIds:(app.newState.attendsDocumentIds||[]),referenceDocumentIds:app.aiDraft?.referenceDocumentIds||[],manualReferenceDocumentIds:creating?app.manualReferencePicker.selected.map(row=>row.document.documentId):[],signatureMethod:'FIRMA_DIGITAL',expectedVersion:$('fVersion').value,aiDraft:aiApply?{apply:true,body:app.aiDraft.body||'',snapshot:app.aiDraft.snapshot||{},proposalMeta:app.aiDraft.proposalMeta||{},referenceDocumentIds:app.aiDraft.referenceDocumentIds||[]}:null};
   const r=await api('saveDraftSGD',app.token,p);app.currentDraft=r.raw.Documento_ID;app.newState.requestId=r.raw.Cliente_Request_ID||app.newState.requestId;if(creating&&app.bootstrap?.counts){app.bootstrap.counts.drafts=Number(app.bootstrap.counts.drafts||0)+1;setCounts(app.bootstrap.counts)}toast('Datos guardados');renderDraftFromResult224(r);refreshCountsQuiet224();
  }catch(e){err(e)}finally{app.savingDraft=false;loading(false);if(btn)btn.disabled=false}
 }
 async function editDraft(id){try{loading(true,'Abriendo documento…','Recuperando la etapa actual');const r=await api('getDraftStateSGD',app.token,id);renderDraftFromResult224(r)}catch(e){err(e)}finally{loading(false)}}
 
-async function loadDraftExtras(id){try{const r=await api('getDocumentDetailSGD',app.token,id),d=r.raw;let html=`<div class="numberbox"><small>Documento en preparación</small><b>${esc(d['Número']||'Sin correlativo reservado')}</b></div>`;
+async function loadDraftExtras(id){
+ const picker=app.manualReferencePicker;
+ const area=$('refsArea');
+ if(!area)return;
+ try{
+ const r=await api('getDocumentDetailSGD',app.token,id),d=r.raw;
+ if(id!==app.currentDraft||picker!==app.manualReferencePicker||area!==$('refsArea'))return;
+ const refs=r.references||[];
+ const manual=ref=>String(ref.type||'').trim().toUpperCase()==='REFERENCIA DOCUMENTAL';
+ picker.selected=refs.filter(manual);
+ picker.linked=new Set(refs.map(ref=>ref.document.documentId));
+ renderManualReferences_();
+ if(picker.results.size)renderReferenceResults_();
+ let html=`<div class="numberbox"><small>Documento en preparación</small><b>${esc(d['Número']||'Sin correlativo reservado')}</b></div>`;
  const links=[];if(r.projectWordFileId)links.push(`<button class="btn" type="button" onclick="downloadSgdFile('${r.projectWordFileId}')">Descargar proyecto Word</button>`);if(r.finalPdfFileId)links.push(`<button class="btn" type="button" onclick="previewSgdFile('${r.finalPdfFileId}')">Ver PDF cargado</button>`);if(r.finalWordFileId)links.push(`<button class="btn" type="button" onclick="downloadSgdFile('${r.finalWordFileId}')">Descargar Word final</button>`);if(links.length)html+=`<div class="file-links">${links.join('')}</div>`;
  if(d['Método_Firma']==='FIRMA_DIGITAL'&&d.PDF_Final_ID)html+=`<div class="${d['Firma_Digital_Detectada']==='SI'?'okbox':'warn'}" style="margin-top:10px"><b>Firma digital:</b> ${d['Firma_Digital_Detectada']==='SI'?'detectada.':'no detectada.'}</div>`;
- html+=`<div class="section-label">Antecedentes / referencias del expediente</div><div class="ref-auto-note">El documento que esta actuación atiende forma parte de los antecedentes y se muestra junto con las demás referencias. Los vínculos de atención se administran desde <b>Documentos que atiende</b>.</div>${(r.references||[]).map(x=>{const attendsRef=String(x.type||'').toUpperCase().split('/').map(y=>y.trim()).includes('ATIENDE');return `<div class="chip" title="${esc(x.document.subject||'')}">${attendsRef?'<span class="ref-kind">Documento que atiende</span> · ':''}${esc(x.document.number||x.document.documentId)} · ${esc(x.document.subject||'Sin asunto')}${attendsRef?'':`<button onclick="removeRef('${x.id}')">×</button>`}</div>`}).join('')||'<div class="helper" style="margin-top:8px">Sin antecedentes ni referencias vinculados.</div>'}<div style="margin-top:9px;display:flex;gap:7px"><input id="refSearch" class="control" placeholder="Buscar por número o asunto…"><button class="btn btn-secondary" onclick="searchRefs()">Buscar</button></div><div id="refResults"></div>`;
- const annexFilesLocked=app.newState?.signatureConfirmed==='SI';html+=`<div class="section-label">Anexos</div>${(r.annexes||[]).map(a=>annexSigningControlsUI_(a,id,false)).join('')||'<div class="helper">Sin anexos.</div>'}${annexFilesLocked?'':`<div style="margin-top:9px;display:flex;gap:7px;flex-wrap:wrap"><label class="btn btn-outline">Cargar anexos<input type="file" multiple style="display:none" onchange="uploadAnnexes240(this)"></label><button type="button" class="btn btn-secondary" onclick="openAnnexInheritance240()">↻ Heredar anexos anteriores</button></div>`}<div class="helper" style="margin-top:7px">${annexFilesLocked?(app.annexConfigOpen?'La revisión final cerró la carga de archivos. Ahora configure, únicamente en esta etapa, las firmas o V°B° que necesiten los anexos PDF.':'La etapa de anexos está cerrada porque ya comenzó el circuito principal.'):'Cargue o herede los anexos antes de confirmar la revisión final.'}</div>`;$('refsArea').innerHTML=html;}catch(e){$('refsArea').innerHTML=`<div class="warn">${esc(e.message)}</div>`}}
+ html+=`<div class="section-label">Antecedentes y vínculos de atención</div><div class="ref-auto-note">El documento que esta actuación atiende forma parte de los antecedentes y se muestra junto con las demás referencias. Los vínculos de atención se administran desde <b>Documentos que atiende</b>.</div>${refs.filter(x=>!manual(x)).map(x=>{const attendsRef=String(x.type||'').toUpperCase().split('/').map(y=>y.trim()).includes('ATIENDE');return `<div class="chip" title="${esc(x.document.subject||'')}">${attendsRef?'<span class="ref-kind">Documento que atiende</span> · ':''}${esc(x.document.number||x.document.documentId)} · ${esc(x.document.subject||'Sin asunto')}${attendsRef?'':`<button onclick="removeRef('${x.id}')">×</button>`}</div>`}).join('')||'<div class="helper" style="margin-top:8px">Sin antecedentes ni referencias vinculados.</div>'}`;
+ const annexFilesLocked=app.newState?.signatureConfirmed==='SI';html+=`<div class="section-label">Anexos</div>${(r.annexes||[]).map(a=>annexSigningControlsUI_(a,id,false)).join('')||'<div class="helper">Sin anexos.</div>'}${annexFilesLocked?'':`<div style="margin-top:9px;display:flex;gap:7px;flex-wrap:wrap"><label class="btn btn-outline">Cargar anexos<input type="file" multiple style="display:none" onchange="uploadAnnexes240(this)"></label><button type="button" class="btn btn-secondary" onclick="openAnnexInheritance240()">↻ Heredar anexos anteriores</button></div>`}<div class="helper" style="margin-top:7px">${annexFilesLocked?(app.annexConfigOpen?'La revisión final cerró la carga de archivos. Ahora configure, únicamente en esta etapa, las firmas o V°B° que necesiten los anexos PDF.':'La etapa de anexos está cerrada porque ya comenzó el circuito principal.'):'Cargue o herede los anexos antes de confirmar la revisión final.'}</div>`;area.innerHTML=html;}catch(e){if(area===$('refsArea'))area.innerHTML=`<div class="warn">${esc(e.message)}</div>`}}
 
 async function generateFormat(){try{loading(true,'Preparando documento…','Aplicando el formato institucional correspondiente');const r=await api('prepareProjectWordSGD',app.token,app.currentDraft);toast('Word preparado. Ya puedes descargarlo desde la fila de archivos.');renderDraftFromResult224(r)}catch(e){err(e)}finally{loading(false)}}
 async function discardProject(){if(!app.currentDraft)return;if(!confirm('¿Descartar únicamente los archivos de este proyecto y volver a prepararlo? El documento, expediente y correlativo se conservarán mientras no haya sido emitido.'))return;try{loading(true,'Descartando proyecto…','Conservando documento, expediente y correlativo');const r=await api('discardProjectSGD',app.token,app.currentDraft);toast('Proyecto descartado. Puedes modificar datos y preparar el Word nuevamente con el mismo correlativo.');renderDraftFromResult224(r)}catch(e){err(e)}finally{loading(false)}}
@@ -825,8 +839,93 @@ async function toggleAnnexSignatureRequirement(annexId,required){return required
 
 async function cancelAnnexSignatureUI(documentId,annexId){const reason=prompt('Motivo de anulación de la última firma del anexo:');if(!reason)return;try{loading(true,'Anulando firma del anexo…','La versión firmada se conservará como antecedente');await api('fd31CancelAnnexSignatureSGD',app.token,documentId,annexId,reason);toast('Firma del anexo anulada. Se restauró la versión anterior.');if(app.currentDraft===documentId){const state=await api('getDraftStateSGD',app.token,documentId);renderDraftFromResult224(state)}}catch(e){err(e)}finally{loading(false)}}
 
-async function searchRefs(){try{const r=await api('searchReferenceCandidatesSGD',app.token,$('refSearch').value);$('refResults').innerHTML=(r.items||[]).map(d=>`<div class="chip" style="margin-top:6px">${esc(d.number)}<button onclick="addRef('${d.documentId}')">＋</button></div>`).join('')||'<div class="helper">Sin coincidencias.</div>'}catch(e){err(e)}}
-async function addRef(id){try{await api('addReferenceSGD',app.token,app.currentDraft,id,'REFERENCIA');await loadDraftExtras(app.currentDraft)}catch(e){err(e)}}
+function referencePickerMarkup_(){
+  return `<details class="collapsible-data"><summary>Referencias del documento (opcional)</summary>
+    <div class="form-body">
+      <div id="manualReferenceList"></div>
+      <label for="refSearch">Buscar documentos recibidos o emitidos por tu oficina</label>
+      <div class="stage-actionbar">
+        <input id="refSearch" type="search" class="control" placeholder="Número o asunto"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();searchRefs()}">
+        <button type="button" class="btn btn-secondary" onclick="searchRefs()">Buscar</button>
+      </div>
+      <div id="refResults" aria-live="polite"></div>
+    </div>
+  </details>`;
+}
+
+function renderManualReferences_(){
+  const list=$('manualReferenceList');
+  if(!list)return;
+  const picker=app.manualReferencePicker;
+  list.innerHTML=picker.selected.map((row,index)=>`<div class="chip" style="margin-bottom:6px">
+    <b>Referencia ${index+1}</b> · ${esc(row.document.number)} · ${esc(row.document.subject)}
+    <button type="button" aria-label="Quitar referencia ${index+1}" data-id="${esc(row.document.documentId)}"
+      onclick="removeManualReference_(this.dataset.id)">×</button>
+  </div>`).join('');
+}
+
+async function searchRefs(offset=0){
+  const picker=app.manualReferencePicker,area=$('refResults');
+  const query=offset?picker.query:$('refSearch').value.trim();
+  if(!offset){picker.query=query;picker.results=new Map();}
+  const search=++picker.search;
+  if(query.length<2){area.textContent='Escribe al menos dos caracteres.';return;}
+  area.textContent='Buscando documentos…';
+  try{
+    const response=await api('searchReferenceCandidatesSGD',app.token,query,offset);
+    if(picker!==app.manualReferencePicker||search!==picker.search||area!==$('refResults'))return;
+    (response.items||[]).forEach(doc=>picker.results.set(doc.documentId,doc));
+    picker.nextOffset=response.nextOffset;
+    renderReferenceResults_();
+  }catch(error){
+    if(picker===app.manualReferencePicker&&search===picker.search&&area===$('refResults'))area.textContent=error.message;
+  }
+}
+
+function renderReferenceResults_(){
+  const picker=app.manualReferencePicker,area=$('refResults');
+  if(!area)return;
+  const items=[...picker.results.values()];
+  area.innerHTML=items.map(doc=>{
+    const selected=picker.linked.has(doc.documentId)||picker.selected.some(row=>row.document.documentId===doc.documentId);
+    return `<div class="chip" style="margin-top:6px"><span>${esc(doc.scope||'Documento')} · <b>${esc(doc.number)}</b> · ${esc(doc.subject)}</span>
+      <button type="button" data-id="${esc(doc.documentId)}" ${selected?'disabled':''}
+        onclick="addRef(this.dataset.id)">${selected?'Agregado':'Agregar'}</button></div>`;
+  }).join('')||(picker.query?'<div class="helper">Sin coincidencias.</div>':'');
+  if(Number.isSafeInteger(picker.nextOffset))area.insertAdjacentHTML('beforeend',
+    `<button type="button" class="btn btn-outline" onclick="searchRefs(${picker.nextOffset})">Ver más resultados</button>`);
+}
+
+async function addRef(id){
+  const picker=app.manualReferencePicker,doc=picker.results.get(id),draftId=app.currentDraft;
+  if(!doc||picker.busy||picker.linked.has(id)||picker.selected.some(row=>row.document.documentId===id))return;
+  if(!draftId){
+    picker.selected.push({document:doc});
+    renderManualReferences_();renderReferenceResults_();return;
+  }
+  picker.busy=true;
+  try{
+    await api('addReferenceSGD',app.token,draftId,id,'REFERENCIA');
+    if(picker===app.manualReferencePicker)await loadDraftExtras(draftId);
+  }catch(error){err(error)}finally{picker.busy=false}
+}
+
+async function removeManualReference_(id){
+  const picker=app.manualReferencePicker,draftId=app.currentDraft;
+  const row=picker.selected.find(ref=>ref.document.documentId===id);
+  if(!row||picker.busy)return;
+  if(!draftId){
+    picker.selected=picker.selected.filter(ref=>ref!==row);
+    renderManualReferences_();renderReferenceResults_();return;
+  }
+  picker.busy=true;
+  try{
+    await api('removeReferenceSGD',app.token,row.id);
+    if(picker===app.manualReferencePicker)await loadDraftExtras(draftId);
+  }catch(error){err(error)}finally{picker.busy=false}
+}
+
 async function removeRef(id){try{await api('removeReferenceSGD',app.token,id);await loadDraftExtras(app.currentDraft)}catch(e){err(e)}}
 function getDraftFinalPdfPayloadClient_(documentId){
   return api('getDraftFinalPdfPayloadSGD',app.token,documentId);
