@@ -255,9 +255,13 @@ async function loadApp(){
   $('adminNav').classList.toggle('hidden',isMaster||b.session.role!=='ADMIN');
   setCounts(b.counts||{});syncClock(b.now);
   go(isMaster?'master':'home');
-  setInterval(()=>resyncClock(),60000);
+  clearInterval(clockSyncTimer_);
+  clockSyncTimer_=setInterval(resyncClock,60000);
 }
 function resetLoginState(msg){
+  clearInterval(clockSyncTimer_);
+  clearTimeout(clockRenderTimer_);
+  app.serverEpoch=0;
   closeDrawer();closeModal();loading(false);
   sessionStorage.removeItem('sgd_portal_token');
   app.token='';app.session=null;app.bootstrap=null;app.page='home';app.currentDraft=null;app.savingDraft=false;app.boxItems={};app.aiDraft=null;app.aiLast=null;
@@ -277,9 +281,31 @@ function logout(){
 }
 function setCounts(c){if($('bPending'))$('bPending').textContent=c?.pending||0;if($('bAttention'))$('bAttention').textContent=c?.attentionWork??((c?.received||0)+(c?.attention||0));if($('bDrafts'))$('bDrafts').textContent=c?.drafts||0;if($('bAnnexPending'))$('bAnnexPending').textContent=c?.annexSignaturePending||0;if($('bResolutionPending'))$('bResolutionPending').textContent=c?.resolutionVbPending||0;}
 
-function syncClock(text){const [d,t]=String(text||'').split(' '),[dd,mm,yy]=(d||'').split('/').map(Number),[hh,mi,ss]=(t||'').split(':').map(Number);app.serverEpoch=new Date(yy,mm-1,dd,hh,mi,ss).getTime();app.serverSync=Date.now();renderClock()}
-function renderClock(){if(!app.serverEpoch)return;const d=new Date(app.serverEpoch+(Date.now()-app.serverSync));$('clockTime').textContent=d.toLocaleTimeString('es-PE',{hour12:false});$('clockDate').textContent=d.toLocaleDateString('es-PE',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});requestAnimationFrame(()=>setTimeout(renderClock,500))}
-async function resyncClock(){try{const r=await api('serverNowSGD',app.token);syncClock(r.text)}catch(e){}}
+let clockSyncTimer_,clockRenderTimer_;
+const clockTimeFormat_=new Intl.DateTimeFormat('es-PE',{timeZone:'America/Lima',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+const clockDateFormat_=new Intl.DateTimeFormat('es-PE',{timeZone:'America/Lima',weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});
+function syncClock(text){
+ const parts=String(text||'').match(/^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})$/);
+ if(!parts)return;
+ const [,day,month,year,hour,minute,second]=parts;
+ app.serverEpoch=Date.parse(year+'-'+month+'-'+day+'T'+hour+':'+minute+':'+second+'-05:00');
+ app.serverSync=Date.now();
+ clearTimeout(clockRenderTimer_);
+ renderClock();
+}
+function renderClock(){
+ if(!app.token||!app.serverEpoch)return;
+ const time=app.serverEpoch+Date.now()-app.serverSync;
+ $('clockTime').textContent=clockTimeFormat_.format(time);
+ $('clockDate').textContent=clockDateFormat_.format(time);
+ clockRenderTimer_=setTimeout(renderClock,1000-time%1000);
+}
+async function resyncClock(){
+ const token=app.token;
+ if(!token||document.hidden)return;
+ try{const r=await api('serverNowSGD',token);if(app.token===token)syncClock(r.text);}
+ catch(e){if(app.token===token&&e.message==='SESSION_EXPIRED')err(e);}
+}
 
 function go(page){
   const isMaster=app.session?.role==='MAESTRO';
@@ -288,8 +314,28 @@ function go(page){
   app.page=page;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
   if(page==='home')renderHome();else if(page==='received')renderBox('POR_RECIBIR','Por recibir');else if(page==='attention')renderBox('ATENCION','En atención');else if(page==='annex-signatures')renderSignatureWorkInbox('ANNEX');else if(page==='resolution-vb')renderSignatureWorkInbox('RESOLUTION');else if(page==='sent')renderBox('EMITIDOS','Históricos y emitidos');else if(page==='drafts')renderBox('BORRADORES','Borradores y documentos en preparación');else if(page==='archive')renderBox('ARCHIVO','Archivo de la oficina');else if(page==='tracking')renderBox('SEGUIMIENTO','Seguimiento documental');else if(page==='new')renderNew();else if(page==='expedientes')renderExpedientes();else if(page==='routes')renderRoutes();else if(page==='profile')renderProfile();else if(page==='firma')renderMySignature();else if(page==='admin')renderAdmin();else if(page==='master')renderMaster();
 }
-async function refreshBootstrap(){try{const r=await api('getDashboardCountsSGD',app.token);setCounts(r.counts);if(app.bootstrap)app.bootstrap.counts=r.counts}catch(e){err(e)}}
-function refreshCountsQuiet224(){refreshBootstrap().catch(()=>{})}
+let dashboardRefresh_;
+function refreshBootstrap(){
+ const token=app.token;
+ if(!token||app.session?.role==='MAESTRO')return Promise.resolve();
+ if(dashboardRefresh_?.token===token){dashboardRefresh_.repeat=true;return dashboardRefresh_.promise;}
+ const request={token,repeat:false};
+ dashboardRefresh_=request;
+ request.promise=(async()=>{
+   try{
+     do{
+       request.repeat=false;
+       const r=await api('getDashboardCountsSGD',token);
+       if(app.token!==token)return;
+       if(app.bootstrap)app.bootstrap.counts=r.counts;
+       setCounts(r.counts);
+     }while(request.repeat);
+   }catch(e){if(app.token===token)err(e);}
+   finally{if(dashboardRefresh_===request)dashboardRefresh_=null;}
+ })();
+ return request.promise;
+}
+function refreshCountsQuiet224(){refreshBootstrap()}
 function applyCountHint224(h){if(!h||!app.bootstrap?.counts)return;const c=app.bootstrap.counts;if(Number.isFinite(h.drafts))c.drafts=Math.max(0,Number(c.drafts||0)+h.drafts);if(Number.isFinite(h.sent))c.sent=Math.max(0,Number(c.sent||0)+h.sent);setCounts(c)}
 function renderDraftFromResult224(r){const d=r.raw||{};let legacy=[];try{legacy=JSON.parse(d.Destinos_JSON||'[]')}catch(e){}let copies=[];try{copies=JSON.parse(d.Copias_JSON||'[]')}catch(e){}let primaries=safeJsonArray(d.Destinos_Principales_JSON);if(!primaries.length&&(d.Destino_Principal||legacy[0]))primaries=[d.Destino_Principal||legacy[0]];renderNew({documentId:d.Documento_ID,clientRequestId:d.Cliente_Request_ID||'',type:d.Tipo,subject:d.Asunto,priority:d.Prioridad,days:d['Días_Atención'],principal:primaries[0]||'',primaryDestinations:primaries,copies:copies.length?copies:legacy.filter(x=>!primaries.includes(x)).map(office=>({office,type:'COPIA'})),destinations:legacy,externalDestinations:safeJsonArray(d.Destinos_Externos_JSON),indication:d.Indicación,expedienteId:d.Expediente_ID,internalObservation:d.Observación_Interna,replyToDocumentId:d.Responde_A_Documento_ID,attendsDocumentIds:r.attentionDocumentIds||[],attendsDocuments:r.attentionDocuments||[],signatureMethod:d['Método_Firma'],number:d['Número'],state:d.Estado,version:d['Versión'],wordProjectId:d.Word_Proyecto_ID||'',wordFinalId:d.Word_Final_ID||'',pdfFinalId:d.PDF_Final_ID||'',signatureConfirmed:d['Firma_Confirmada']||'NO',signatureCircuit:r.signatureCircuit||null,annexSigning:r.annexSigning||[],annexSignaturePhase:r.annexSignaturePhase||null,projectWordDownloadUrl:'',projectWordFileId:r.projectWordFileId||d.Word_Proyecto_ID||'',finalWordFileId:r.finalWordFileId||d.Word_Final_ID||'',finalPdfFileId:r.finalPdfFileId||d.PDF_Final_ID||'',aiDraft:r.aiDraft||null})}
 
@@ -1262,7 +1308,7 @@ async function annulDoc(id){const reason=prompt('Motivo para descartar/anular es
 
 async function restoreDiscardedDraft240(id){const reason=prompt('Motivo para restaurar este borrador:');if(!reason)return;try{loading(true,'Restaurando borrador…','Verificando correlativo y archivos');const r=await api('restoreDiscardedDraftSGD',app.token,id,reason);closeDrawer();toast('Borrador restaurado');renderDraftFromResult224(r);refreshCountsQuiet224()}catch(e){err(e)}finally{loading(false)}}
 async function revertInAttention240(id){const reason=prompt('Motivo para volver este documento a Recibido:');if(!reason)return;try{loading(true,'Retrotrayendo atención…','Conservando la trazabilidad');const r=await api('revertInAttentionSGD',app.token,id,reason);toast('El documento volvió a Recibido');renderDocDrawer224(r);refreshActiveBox240()}catch(e){err(e)}finally{loading(false)}}
-function recipientManagement240(id){const r=app.lastDocDetail;if(!r||r.raw?.Documento_ID!==id){openDoc(id);setTimeout(()=>recipientManagement240(id),250);return}const pending=r.pendingRecipients||[],withdrawn=r.withdrawnRecipients||[];const row=x=>`<div class="attention-result"><div><b>${esc(officeName(x.office))}</b><div class="attention-meta">${esc(x.type||'Destinatario')}</div></div>${x.withdrawn?`<button class="btn btn-outline" onclick="restoreRecipient240('${id}','${esc(x.office)}')">Restituir</button>`:`<button class="btn btn-danger" onclick="withdrawRecipient240('${id}','${esc(x.office)}')">Retirar remisión</button>`}</div>`;showModal('Gestionar remisiones',`${pending.length?'<div class="section-label">Pendientes de recepción</div>'+pending.map(x=>row(x)).join(''):''}${withdrawn.length?'<div class="section-label">Remisiones retiradas</div>'+withdrawn.map(x=>row({...x,withdrawn:true})).join(''):''}${!pending.length&&!withdrawn.length?'<div class="helper">No hay remisiones pendientes que puedan modificarse.</div>':''}`,`<button class="btn btn-outline" onclick="closeModal()">Cerrar</button>`)}
+async function recipientManagement240(id){let r=app.lastDocDetail;if(!r||r.raw?.Documento_ID!==id){await openDoc(id);r=app.lastDocDetail;if(r?.raw?.Documento_ID!==id)return;}const pending=r.pendingRecipients||[],withdrawn=r.withdrawnRecipients||[];const row=x=>`<div class="attention-result"><div><b>${esc(officeName(x.office))}</b><div class="attention-meta">${esc(x.type||'Destinatario')}</div></div>${x.withdrawn?`<button class="btn btn-outline" onclick="restoreRecipient240('${id}','${esc(x.office)}')">Restituir</button>`:`<button class="btn btn-danger" onclick="withdrawRecipient240('${id}','${esc(x.office)}')">Retirar remisión</button>`}</div>`;showModal('Gestionar remisiones',`${pending.length?'<div class="section-label">Pendientes de recepción</div>'+pending.map(x=>row(x)).join(''):''}${withdrawn.length?'<div class="section-label">Remisiones retiradas</div>'+withdrawn.map(x=>row({...x,withdrawn:true})).join(''):''}${!pending.length&&!withdrawn.length?'<div class="helper">No hay remisiones pendientes que puedan modificarse.</div>':''}`,`<button class="btn btn-outline" onclick="closeModal()">Cerrar</button>`)}
 async function withdrawRecipient240(id,office){const reason=prompt('Motivo para retirar esta remisión antes de que sea recibida:');if(!reason)return;try{loading(true,'Retirando remisión…','Solo se modificará este destinatario');const r=await api('withdrawPendingRecipientSGD',app.token,id,office,reason);closeModal();toast('Remisión retirada');renderDocDrawer224(r);refreshActiveBox240()}catch(e){err(e)}finally{loading(false)}}
 async function restoreRecipient240(id,office){const reason=prompt('Motivo para restituir esta remisión:');if(!reason)return;try{loading(true,'Restituyendo remisión…','Reactivando el envío pendiente');const r=await api('restorePendingRecipientSGD',app.token,id,office,reason);closeModal();toast('Remisión restituida');renderDocDrawer224(r);refreshActiveBox240()}catch(e){err(e)}finally{loading(false)}}
 
@@ -1331,7 +1377,23 @@ async function reopenExp(id){const reason=prompt('Motivo de reapertura:');if(!re
 async function renderRoutes(){
  $('main').innerHTML=pageHead('Mapa de rutas','Expedientes en los que tu área ha participado.')+`<section class="panel"><div class="toolbar"><input id="routeSearch" class="search" placeholder="Expediente, asunto, documento u oficina" onkeydown="if(event.key==='Enter')searchRoutes()"><button class="btn btn-primary" onclick="searchRoutes()">Buscar</button></div><div id="routeBody" class="panel-body"><div class="inline-load">Cargando recorridos…</div></div></section>`;await searchRoutes(true);
 }
-async function searchRoutes(initial=false){try{const q=$('routeSearch')?.value.trim()||'';if(q&&q.length<2){toast('Escribe al menos 2 caracteres.');return}if(!initial)loading(true,'Buscando…','Consultando expedientes');const r=await api('searchInstitutionalRoutesSGD',app.token,q),items=Array.isArray(r?.items)?r.items:null;if(!items)throw new Error('No se pudo obtener el mapa de rutas.');$('routeBody').innerHTML=items.map(x=>`<div class="user-row"><div><b>${esc(x.expedienteId)}</b><div class="subject">${esc(x.subject||'Sin asunto')}</div><div class="helper">${esc(x.number||'Sin número visible')} · ${esc(officeName(x.origin)||x.origin||'')} · ${esc(x.branches||0)} recorrido(s)</div></div><div>${pill(x.state||'')}</div><button class="smallbtn" onclick="openRouteTree('${esc(x.expedienteId)}')">Abrir</button></div>`).join('')||'<div class="empty">No hay expedientes con participación de tu área.</div>'}catch(e){$('routeBody').innerHTML=`<div class="empty">${esc(e?.message||'No se pudo cargar el mapa de rutas.')}</div>`}finally{if(!initial)loading(false)}}
+const routeLoads_=new WeakMap();
+async function searchRoutes(initial=false){
+ const body=$('routeBody'),q=$('routeSearch')?.value.trim()||'';
+ if(!body)return;
+ if(q&&q.length<2){toast('Escribe al menos 2 caracteres.');return;}
+ const request={};
+ routeLoads_.set(body,request);
+ const current=()=>$('routeBody')===body&&routeLoads_.get(body)===request;
+ if(!initial)body.innerHTML='<div class="inline-load">Buscando recorridos…</div>';
+ try{
+  const r=await api('searchInstitutionalRoutesSGD',app.token,q);
+  if(!current())return;
+  if(!Array.isArray(r?.items))throw new Error('No se pudo obtener el mapa de rutas.');
+  const items=r.items;
+  body.innerHTML=items.map(x=>`<div class="user-row"><div><b>${esc(x.expedienteId)}</b><div class="subject">${esc(x.subject||'Sin asunto')}</div><div class="helper">${esc(x.number||'Sin número visible')} · ${esc(officeName(x.origin)||x.origin||'')} · ${esc(x.branches||0)} recorrido(s)</div></div><div>${pill(x.state||'')}</div><button class="smallbtn" onclick="openRouteTree('${esc(x.expedienteId)}')">Abrir</button></div>`).join('')||'<div class="empty">No hay expedientes con participación de tu área.</div>';
+ }catch(e){if(current())body.innerHTML=`<div class="empty">${esc(e?.message||'No se pudo cargar el mapa de rutas.')}</div>`;}
+}
 function routeTreeHtml(payload){
  const docs=payload?.documentNodes||[];if(docs.length)return documentTreeHtml(payload);
  const nodes=Array.isArray(payload)?payload:(payload?.nodes||[]),meta=!Array.isArray(payload)&&payload?payload:{};if(!nodes?.length)return'<div class="route-empty">Sin movimientos visibles.</div>';
