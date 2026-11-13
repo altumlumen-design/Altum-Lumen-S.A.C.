@@ -159,7 +159,7 @@
   </div>
 </section>
 
-<div id="drawerBack" class="drawer-back"><aside id="drawer" class="drawer"></aside></div>
+<div id="drawerBack" class="drawer-back"><aside id="drawer" class="drawer" role="dialog" aria-label="Ficha del documento"></aside></div>
 <div id="modalBack" class="modal-back"><div id="modal" class="modal"></div></div>
 <div id="toast" class="toast"></div>
 <div id="loader" class="loader"><div class="loader-box"><div class="loader-scene"><div class="loader-cloud c1"></div><div class="loader-cloud c2"></div><div class="loader-cloud c3"></div><div class="loader-altum-wrap"><div id="loaderTitle" class="loader-title loader-title-game">ALTUM</div><div class="loader-loopword">excelencia que transforma</div></div></div><div id="loaderSub" class="loader-sub">Procesando…</div></div></div>
@@ -1291,17 +1291,67 @@ function renderDocDrawer224(r){
  const traceBody=`<div class="timeline">${moves.map(m=>`<div class="timeline-item"><b>${esc(m.Tipo)}</b><p>${esc(officeName(m.Oficina_Origen))}${m.Oficina_Destino?' → '+esc(officeName(m.Oficina_Destino)):''}${m.Indicación?' · '+esc(m.Indicación):''}</p><time>${esc(m.Fecha_Hora)}</time></div>`).join('')||'<div class="helper">Sin movimientos.</div>'}</div>`;
  $('drawer').innerHTML=`<div class="drawer-head"><div class="row"><div><div class="eyebrow">${esc(d.Expediente_ID||d.Documento_ID)}</div><h2>${esc(d['Número']||('BORRADOR · '+d.Tipo))}${r.history?'<span class="history-tag">HISTÓRICO</span>':''}</h2>${pill(r.document?.status||rec?.Estado||d.Estado)}${r.document?.flowProgress?`<span class="flow-progress">${r.document.flowProgress.attended}/${r.document.flowProgress.total} atendido(s)</span>`:''}</div><div class="drawer-head-actions">${(app.docNavStack||[]).length?'<button class="backbtn" onclick="backDoc()">← Volver</button>':''}<button class="close" type="button" onclick="closeDrawer()" aria-label="Cerrar" title="Cerrar">×</button></div></div></div><div class="drawer-body"><div class="info-grid"><div class="info"><label>Emisor</label><div>${esc(officeName(d.Oficina_Origen))}</div></div><div class="info"><label>Prioridad</label><div>${pri(d.Prioridad)}</div></div><div class="info" style="grid-column:1/-1"><label>Asunto</label><div>${esc(d.Asunto)}</div></div><div class="info"><label>Emisión</label><div>${esc(d['Fecha_Emisión']||'—')}</div></div><div class="info"><label>Última gestión</label><div>${esc(d['Última_Gestión']||'—')}</div></div></div>${fileWarnings.length?`<div class="warn" style="margin:12px 0">${fileWarnings.map(x=>esc(x)).join('<br>')}</div>`:''}${fileLinks}${source}${workflow}${related.length?foldSection('Documentos relacionados',related.length,related.join('')):''}${foldSection('Destinatarios',destRows.length+ext.length,destBody)}${foldSection('Antecedentes / referencias',normalRefs.length,refsBody)}${foldSection('Anexos',ann.length,annexBody)}${foldSection('Trazabilidad',moves.length,traceBody)}</div>`;$('drawerBack').classList.add('show');
 }
-async function openDoc(id,pushCurrent=false){
- try{
-  if(pushCurrent&&app.lastDocDetail?.raw?.Documento_ID){app.docNavStack=app.docNavStack||[];app.docNavStack.push({id:app.lastDocDetail.raw.Documento_ID,scrollTop:$('drawer')?.scrollTop||0})}
-  else if(!$('drawerBack')?.classList.contains('show'))app.docNavStack=[];
-  loading(true,'Abriendo documento…','Un momento');const r=await api('getDocumentDetailSGD',app.token,id);renderDocDrawer224(r);$('drawer').scrollTop=0;
- }catch(e){toast('No se pudo abrir el documento: '+(e?.message||String(e)))}finally{loading(false)}
+let drawerRequest_,drawerOpener_;
+function showDocumentLoading_(title){
+ const drawer=$('drawer');
+ drawer.innerHTML=`<div class="drawer-head"><div class="row"><h2>${esc(title)}</h2><button class="close" type="button" onclick="closeDrawer()" aria-label="Cerrar" title="Cerrar">×</button></div></div><div class="drawer-body"><p class="inline-load" role="status">Consultando los datos y archivos del documento…</p></div>`;
+ $('drawerBack').classList.add('show');
+ drawer.scrollTop=0;
+ drawer.querySelector('.close').focus({preventScroll:true});
 }
-function closeDrawer(){$('drawerBack').classList.remove('show');app.docNavStack=[];app.lastDocDetail=null}
-async function backDoc(){
- const st=(app.docNavStack||[]).pop();if(!st){closeDrawer();return}
- try{loading(true,'Volviendo…','Un momento');const r=await api('getDocumentDetailSGD',app.token,st.id);renderDocDrawer224(r);requestAnimationFrame(()=>$('drawer').scrollTop=Number(st.scrollTop||0))}catch(e){err(e)}finally{loading(false)}
+function loadDocumentDrawer_(id,stack,scrollTop,title){
+ const token=app.token;
+ if(!id||!token)return;
+ if(drawerRequest_?.id===id&&drawerRequest_.token===token)return drawerRequest_.promise;
+ if(!$('drawerBack').classList.contains('show'))drawerOpener_=document.activeElement;
+ const drawer=$('drawer'),previous=app.lastDocDetail,previousScroll=drawer.scrollTop;
+ const request={id,token};
+ drawerRequest_=request;
+ app.lastDocDetail=null;
+ showDocumentLoading_(title);
+ const isCurrent=()=>drawerRequest_===request&&app.token===token;
+ const render=(detail,position)=>{
+   renderDocDrawer224(detail);
+   drawer.scrollTop=position;
+   drawer.querySelector('.close')?.focus({preventScroll:true});
+ };
+ request.promise=(async()=>{
+   try{
+     const detail=await api('getDocumentDetailSGD',token,id);
+     if(!isCurrent())return;
+     app.docNavStack=stack;
+     render(detail,scrollTop);
+     return detail;
+   }catch(error){
+     if(!isCurrent())return;
+     if(error?.message==='SESSION_EXPIRED'){err(error);return;}
+     if(previous)render(previous,previousScroll);
+     else closeDrawer();
+     toast('No se pudo abrir el documento: '+(error?.message||String(error)));
+   }finally{
+     if(drawerRequest_===request)drawerRequest_=null;
+   }
+ })();
+ return request.promise;
+}
+function openDoc(id,pushCurrent=false){
+ const currentId=app.lastDocDetail?.raw?.Documento_ID;
+ const stack=pushCurrent&&currentId
+   ?[...(app.docNavStack||[]),{id:currentId,scrollTop:$('drawer').scrollTop}]
+   :[];
+ return loadDocumentDrawer_(id,stack,0,'Abriendo documento…');
+}
+function closeDrawer(){
+ drawerRequest_=null;
+ $('drawerBack').classList.remove('show');
+ app.docNavStack=[];app.lastDocDetail=null;
+ if(drawerOpener_?.isConnected)drawerOpener_.focus({preventScroll:true});
+ drawerOpener_=null;
+}
+function backDoc(){
+ const stack=app.docNavStack||[],previous=stack[stack.length-1];
+ if(!previous){closeDrawer();return;}
+ return loadDocumentDrawer_(previous.id,stack.slice(0,-1),previous.scrollTop,'Volviendo al documento…');
 }
 function officeName(code){return (app.bootstrap.offices||[]).find(o=>o.code===code)?.name||(code==='MPV'?'Ingreso por portal':code)||'—'}
 async function annulDoc(id){const reason=prompt('Motivo para descartar/anular este borrador:');if(!reason)return;try{await api('annulDocumentSGD',app.token,id,reason);closeDrawer();toast('Borrador retirado con auditoría');refreshBootstrap();go('drafts')}catch(e){err(e)}}
@@ -1328,8 +1378,10 @@ async function fd31EditProveido(id){try{loading(true,'Abriendo proveído…','Re
 async function saveEditedProveido39_(id){if(!proveidoTargets39_.length){toast('Agregue al menos una oficina con su indicación.');return}try{closeModal();loading(true,'Preparando proveído…','Actualizando destinos, indicaciones y PDF para firma');await api('fd31RebuildProveidoSGD',app.token,id,proveidoTargets39_);toast('Proveído actualizado. Continúe con la firma digital.');await fdOpen(id);}catch(e){err(e)}finally{loading(false)}}
 async function issueProveido(id){if(!proveidoTargets39_.length){toast('Agregue al menos una oficina con su indicación.');return}if(proveidoTargets39_.length>10){toast('Un proveído admite como máximo 10 oficinas.');return}if(!confirm('¿Preparar este proveído para '+proveidoTargets39_.length+' oficina(s) y continuar con la firma digital?'))return;try{loading(true,'Preparando proveído…','Generando PDF con indicaciones diferenciadas');const r=await api('issueProveidoSGD',app.token,id,proveidoTargets39_);closeModal();closeDrawer();if(r.pendingSignature){toast('Proveído preparado para firma digital');await fdOpen(r.proveidoId);}else toast((r.number||'Proveído')+' preparado');refreshActiveBox240()}catch(e){err(e)}finally{loading(false)}}
 async function revokeReceipt(id){const reason=prompt('Motivo para anular esta recepción:');if(!reason)return;try{await api('revokeReceiptSGD',app.token,id,reason);closeDrawer();toast('Recepción anulada: el documento volvió a Pendiente');refreshActiveBox240()}catch(e){err(e)}}
-function revokeDerivationModal(id){
- const r=app.lastDocDetail;if(!r||r.raw.Documento_ID!==id){openDoc(id);setTimeout(()=>revokeDerivationModal(id),250);return}
+async function revokeDerivationModal(id){
+ if(app.lastDocDetail?.raw?.Documento_ID!==id)await openDoc(id);
+ const r=app.lastDocDetail;
+ if(r?.raw?.Documento_ID!==id)return;
  const rows=(r.destinations||[]).filter(x=>x.Oficina_Origen===app.session.officeCode&&String(x.Estado||'').toUpperCase()==='PENDIENTE');
  if(!rows.length){toast('No hay una derivación pendiente que pueda anularse. Si la oficina destino ya recibió, debe anular primero su recepción.');return}
  const opts=rows.map(x=>`<option value="${x.Oficina_Destino}">${esc(officeName(x.Oficina_Destino))} · ${esc(x.Estado)}</option>`).join('');
