@@ -27,20 +27,13 @@ ${field('number','Número del documento (si corresponde)','maxlength="80"')}
 <div id="other" hidden>${field('other','Especifica el tipo de documento','maxlength="80"')}</div>
 ${field('addressee','Persona u oficina a quien diriges el documento (opcional)','maxlength="120" aria-describedby="intake-office"')}
 </div><p class="notice" id="intake-office">La Oficina de Trámite Documentario y Atención al Cliente recibe todos los documentos y los deriva a quien corresponda.</p></fieldset>`;
-const claims=`<fieldset><legend>Motivo del registro</legend><div class="grid">
-${select('claimType','Tipo de registro',[['Reclamo','Reclamo'],['Queja','Queja']])}
-${select('productType','Tipo de bien',[['Producto','Producto'],['Servicio','Servicio']])}
-${field('product','Nombre o descripción del producto o servicio','maxlength="250" required')}
-${field('amount','Monto reclamado en soles (si corresponde)','inputmode="decimal" maxlength="18"')}
-${field('representative','Padre, madre o representante (si corresponde)','maxlength="180"')}
-<label class="wide">¿Qué solución solicitas?<textarea name="request" maxlength="4000" required></textarea></label>
-</div></fieldset>`;
 app.innerHTML=page==='consulta'?`<form id="form"><div class="grid">
 ${field('expediente','Número de expediente','placeholder="EXP-2026-000001" maxlength="32" required autocomplete="off"')}
 <div class="password-row">${field('password','Contraseña de consulta','type="password" maxlength="48" required autocomplete="off" autocapitalize="none" spellcheck="false"')}<button type="button" class="secondary" id="toggle-password" aria-label="Mostrar contraseña de consulta" aria-pressed="false">Mostrar</button></div>
 </div><p></p>${captcha}${message}<button id="send">Consultar</button></form><section class="panel" id="result" hidden tabindex="-1"></section>`:
-`<form id="form" autocomplete="off">${person}${page==='mesa'?intake:claims}
-<fieldset><legend>Asunto y detalle</legend>
+`<form id="form" autocomplete="off">${person}${page==='mesa'?intake:''}
+<fieldset><legend>${page==='libro'?'Cuéntanos qué ocurrió':'Asunto y detalle'}</legend>
+${page==='libro'?select('claimType','¿Qué deseas registrar?',[['','Selecciona una opción'],['Reclamo','Reclamo'],['Queja','Queja']]):''}
 ${field('subject','Asunto <small>Hasta 300 caracteres</small>','maxlength="300" required')}
 <label>Detalle<textarea name="detail" maxlength="4000" required></textarea></label></fieldset>
 <fieldset><legend>Documentos adjuntos</legend>
