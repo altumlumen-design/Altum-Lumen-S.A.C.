@@ -71,7 +71,7 @@
     .brand { display:inline-flex; align-items:center; flex:0 0 auto; text-decoration:none; }
     .brand img { width:176px; height:68px; object-fit:contain; }
     .site-nav { display:flex; align-items:center; gap:4px; }
-    .site-nav a { padding:10px 12px; border-radius:10px; color:#334c59; font-size:.91rem; font-weight:560; text-decoration:none; transition:color .2s ease,background .2s ease; }
+    .site-nav a { padding:10px 12px; border-radius:10px; color:#334c59; font-size:.91rem; font-weight:560; white-space:nowrap; text-decoration:none; transition:color .2s ease,background .2s ease; }
     .site-nav a:hover,.site-nav a[aria-current="true"] { color:var(--blue-deep); background:var(--blue-pale); }
     .site-nav .nav-cta { margin-left:6px; padding-inline:16px; color:var(--white); background:var(--blue-deep); }
     .site-nav .nav-cta:hover,.site-nav .nav-cta[aria-current="true"] { color:var(--white); background:#0b334b; }
@@ -107,6 +107,9 @@
     .hero h1 { max-width:12ch; margin:0; color:#112d3d; font-size:clamp(2.5rem,5vw,4.45rem); font-weight:610; letter-spacing:-.052em; line-height:1.02; }
     .hero-copy { max-width:58ch; margin:24px 0 0; color:#36515f; font-size:clamp(1rem,1.6vw,1.12rem); line-height:1.75; }
     .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+    .public-services { display:flex; align-items:center; flex-wrap:wrap; gap:8px 22px; margin-top:22px; }
+    .public-services a { display:inline-flex; align-items:center; min-height:44px; color:var(--blue-deep); font-weight:650; text-underline-offset:4px; }
+    .public-services a:hover { color:var(--blue); }
     .button { min-height:48px; display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:11px 18px; border:1px solid transparent; border-radius:12px; font-size:.94rem; font-weight:680; text-align:center; text-decoration:none; transition:transform .2s ease,box-shadow .2s ease,background .2s ease; }
     .button svg { width:18px; height:18px; flex:0 0 auto; }
     .button:hover { transform:translateY(-2px); }
@@ -324,7 +327,6 @@
   </script>
 </head>
 <body>
-<body>
   <a class="skip-link" href="#contenido">Ir al contenido principal</a>
 
   <header class="site-header">
@@ -349,11 +351,10 @@
       <nav class="site-nav" id="siteNav" data-open="false" aria-label="Navegación principal">
         <a href="#inicio" aria-current="true">Inicio</a>
         <a href="#nosotros">Nosotros</a>
-        <a href="#servicios">Líneas de servicio</a>
+        <a href="#servicios">Servicios</a>
         <a href="#funcionarios">Directorio</a>
         <a href="#documentos">Documentos</a>
         <a href="transparencia.html" target="_blank" rel="noopener noreferrer">Transparencia</a>
-        <a href="mesa-de-partes.html" target="_blank" rel="noopener noreferrer">Mesa de Partes</a>
         <a class="nav-cta" href="#contacto">Contacto</a>
       </nav>
       <a class="sgd-link" href="sgd.html" target="_blank" rel="noopener noreferrer">
@@ -389,6 +390,12 @@
               Documentos institucionales
             </a>
           </div>
+
+          <nav class="public-services" aria-label="Atención al público">
+            <a href="mesa-de-partes.html" target="_blank" rel="noopener noreferrer">Mesa de Partes Virtual</a>
+            <a href="consultar-expediente.html" target="_blank" rel="noopener noreferrer">Consultar expediente</a>
+            <a href="libro-de-reclamaciones.html" target="_blank" rel="noopener noreferrer">Libro de Reclamaciones</a>
+          </nav>
 
           <div class="hero-facts" role="group" aria-label="Datos institucionales">
             <div class="hero-fact">

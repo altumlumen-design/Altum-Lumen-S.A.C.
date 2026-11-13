@@ -9,22 +9,24 @@ const captcha=`<div class="captcha"><label><span id="question">Comprobación de 
 const message='<p id="message" role="status" aria-live="polite"></p>';
 const docs=['Carta','Solicitud','Oficio','Informe','Escrito','Otro'];
 const person=`<fieldset><legend>Datos de la persona que presenta</legend><div class="grid">
-${select('person','Tipo de persona',[['natural','Persona natural'],['juridica','Persona jurídica']])}
-${field('name','Nombres y apellidos','maxlength="160" required autocomplete="name"')}
+${select('person','¿Quién presenta el trámite?',[['','Selecciona una opción'],['natural','Persona natural'],['juridica','Persona jurídica (empresa u organización)']])}
+${field('name','<span id="name-label">Nombres y apellidos</span>','maxlength="160" required autocomplete="name"')}
+<div class="wide grid" id="company" hidden>${field('company','Razón social','maxlength="180" autocomplete="organization"')}${field('ruc','RUC','inputmode="numeric" pattern="[0-9]{11}" maxlength="11"')}</div>
 ${select('idType','Documento de identidad',[['DNI','DNI'],['CE','Carné de extranjería'],['Pasaporte','Pasaporte']])}
 ${field('idNumber','Número de identificación','maxlength="20" required')}
-<div class="wide grid" id="company" hidden>${field('company','Razón social','maxlength="180"')}${field('ruc','RUC','inputmode="numeric" pattern="[0-9]{11}" maxlength="11"')}</div>
 ${field('address','Dirección','maxlength="240" required autocomplete="street-address"')}
 ${field('phone','Teléfono','type="tel" maxlength="30" required autocomplete="tel"')}
-${field('email','Correo electrónico <small>Lo usaremos para enviarte comunicaciones y la respuesta a tu trámite.</small>','type="email" maxlength="180" required autocomplete="email"')}
-${field('alternate','Correo alternativo (opcional)','type="email" maxlength="180"')}
-</div></fieldset>`;
+</div></fieldset>
+<fieldset><legend>Correo para la respuesta</legend><div class="grid">
+${field('email','Correo electrónico','type="email" maxlength="180" required autocomplete="email" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
+${field('alternate','Otro correo (opcional)','type="email" maxlength="180" autocapitalize="none" spellcheck="false"')}
+</div><p class="support" id="email-use">Usaremos el correo principal para enviarte comunicaciones y la respuesta. Revisa que esté bien escrito.</p></fieldset>`;
 const intake=`<fieldset><legend>Documento</legend><div class="grid">
 ${select('docType','Tipo de documento',docs.map(v=>[v,v]))}
 ${field('number','Número del documento (si corresponde)','maxlength="80"')}
 <div id="other" hidden>${field('other','Especifica el tipo de documento','maxlength="80"')}</div>
-${field('addressee','A quién diriges el documento (opcional)','maxlength="120"')}
-</div></fieldset>`;
+${field('addressee','Persona u oficina a quien diriges el documento (opcional)','maxlength="120" aria-describedby="intake-office"')}
+</div><p class="notice" id="intake-office">La Oficina de Trámite Documentario y Atención al Cliente recibe todos los documentos y los deriva a quien corresponda.</p></fieldset>`;
 const claims=`<fieldset><legend>Motivo del registro</legend><div class="grid">
 ${select('claimType','Tipo de registro',[['Reclamo','Reclamo'],['Queja','Queja']])}
 ${select('productType','Tipo de bien',[['Producto','Producto'],['Servicio','Servicio']])}
@@ -35,7 +37,7 @@ ${field('representative','Padre, madre o representante (si corresponde)','maxlen
 </div></fieldset>`;
 app.innerHTML=page==='consulta'?`<form id="form"><div class="grid">
 ${field('expediente','Número de expediente','placeholder="EXP-2026-000001" maxlength="32" required autocomplete="off"')}
-${field('password','Contraseña de consulta','type="password" maxlength="48" required autocomplete="off"')}
+<div class="password-row">${field('password','Contraseña de consulta','type="password" maxlength="48" required autocomplete="off" autocapitalize="none" spellcheck="false"')}<button type="button" class="secondary" id="toggle-password" aria-label="Mostrar contraseña de consulta" aria-pressed="false">Mostrar</button></div>
 </div><p></p>${captcha}${message}<button id="send">Consultar</button></form><section class="panel" id="result" hidden tabindex="-1"></section>`:
 `<form id="form" autocomplete="off">${person}${page==='mesa'?intake:claims}
 <fieldset><legend>Asunto y detalle</legend>
@@ -108,6 +110,11 @@ if(page!=='consulta'){
   const synchronize=()=>{
     const company=form.elements.person.value==='juridica';
     document.querySelector('#company').hidden=!company;
+    document.querySelector('#name-label').textContent=company?'Nombres y apellidos del representante':'Nombres y apellidos';
+    const dni=form.elements.idType.value==='DNI';
+    form.elements.idNumber.inputMode=dni?'numeric':'text';
+    form.elements.idNumber.pattern=dni?'[0-9]{8}':'[A-Za-z0-9\\-]{4,20}';
+    form.elements.idNumber.maxLength=dni?8:20;
     for(const name of ['company','ruc']){form.elements[name].required=company;form.elements[name].disabled=!company;}
     if(page==='mesa'){
       const other=form.elements.docType.value==='Otro';
@@ -116,10 +123,19 @@ if(page!=='consulta'){
     }
   };
   form.elements.person.addEventListener('change',synchronize);
+  form.elements.idType.addEventListener('change',synchronize);
   form.elements.docType?.addEventListener('change',synchronize);
   synchronize();
   document.querySelector('#principal')?.addEventListener('change',filesList);
   document.querySelector('#annex').addEventListener('change',e=>{annexes.push(...e.target.files);e.target.value='';filesList();});
+}else{
+  const toggle=document.querySelector('#toggle-password');
+  toggle.addEventListener('click',()=>{
+    const input=form.elements.password,visible=input.type==='password';
+    input.type=visible?'text':'password';
+    toggle.textContent=visible?'Ocultar':'Mostrar';
+    toggle.setAttribute('aria-pressed',String(visible));
+  });
 }
 function presentTrack(data){
   result.replaceChildren(element('h2',data.expediente),element('p','Estado: '+data.status),element('p','Oficina: '+data.offices.join(' · ')));
