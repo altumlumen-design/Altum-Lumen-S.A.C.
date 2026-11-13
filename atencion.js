@@ -134,6 +134,7 @@ if(page!=='consulta'){
     const input=form.elements.password,visible=input.type==='password';
     input.type=visible?'text':'password';
     toggle.textContent=visible?'Ocultar':'Mostrar';
+    toggle.setAttribute('aria-label',visible?'Ocultar contraseña de consulta':'Mostrar contraseña de consulta');
     toggle.setAttribute('aria-pressed',String(visible));
   });
 }
@@ -227,21 +228,38 @@ async function submit(e){
 }
 form.addEventListener('submit',submit);
 refreshButton.addEventListener('click',()=>{if(!busy&&!operation?.commitPending)refresh().catch(error=>status(error.message,true));});
+function showBookStatus(text,retry=false){
+  form.hidden=true;
+  const panel=element('section',''),heading=element('h2',text);
+  panel.className='panel';
+  panel.append(heading);
+  if(retry){
+    const button=element('button','Volver a comprobar');
+    button.type='button';
+    button.addEventListener('click',()=>{panel.remove();start();});
+    panel.append(button);
+  }else{
+    panel.append(element('p','Si ya tienes un número de expediente, puedes revisar su estado con los datos de tu acuse.'));
+    const link=element('a','Consultar expediente');
+    link.href='consultar-expediente.html';
+    panel.append(link);
+  }
+  app.prepend(panel);
+  heading.tabIndex=-1;
+  heading.focus({preventScroll:true});
+}
 async function start(){
   send.disabled=true;
+  if(page==='libro'){
+    form.hidden=true;
+    let provider;
+    try{({provider}=await rpc('config'));}
+    catch(error){showBookStatus('No pudimos comprobar la disponibilidad del Libro.',true);return;}
+    if(!provider){showBookStatus('El Libro de Reclamaciones aún no recibe registros.');return;}
+    document.querySelector('#provider').append(document.createTextNode(' · '+provider));
+    form.hidden=false;
+  }
   try{
-    if(page==='libro'){
-      const {provider}=await rpc('config');
-      if(!provider){
-        form.hidden=true;
-        const notice=element('p','El Libro de Reclamaciones aún no está habilitado.');
-        notice.className='panel';
-        notice.setAttribute('role','status');
-        app.prepend(notice);
-        return;
-      }
-      document.querySelector('#provider').append(document.createTextNode(' · '+provider));
-    }
     await refresh();
   }catch(error){status(error.message,true);}
   finally{send.disabled=!challenge;}
