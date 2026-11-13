@@ -49,7 +49,10 @@ ${page==='mesa'?'<label>PDF principal <small>Hasta 20 MB</small><input id="princ
 <p></p>${captcha}${message}<button id="send">Registrar expediente</button></form>
 <section class="panel" id="result" hidden tabindex="-1"></section>`;
 const form=document.querySelector('#form'),send=document.querySelector('#send'),result=document.querySelector('#result'),feedback=document.querySelector('#message');
+const refreshButton=document.querySelector('#refresh');
 let challenge,annexes=[],operation;
+let busy=false,challengePending=false;
+const formControls=()=>[...form.querySelectorAll('input, select, textarea, button')].filter(control=>control!==send&&control!==refreshButton);
 function status(text,error=false){feedback.textContent=text;feedback.classList.toggle('error',error);}
 async function rpc(action,payload={}){
   const response=await fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain'},body:JSON.stringify({protocol:'sgd-mpv-v1',action,...payload}),signal:AbortSignal.timeout(120000)});
@@ -58,11 +61,26 @@ async function rpc(action,payload={}){
   return body.data;
 }
 async function refresh(){
+  if(challengePending)return;
+  challengePending=true;
+  refreshButton.disabled=true;
+  send.disabled=true;
   challenge=null;
   form.elements.answer.value='';
-  const check=await rpc('challenge');
-  challenge=check.token;
-  document.querySelector('#question').textContent='¿Cuánto es '+check.question+'?';
+  const question=document.querySelector('#question');
+  question.textContent='Cargando comprobación…';
+  try{
+    const check=await rpc('challenge');
+    challenge=check.token;
+    question.textContent='¿Cuánto es '+check.question+'?';
+  }catch(error){
+    question.textContent='Actualiza la comprobación para continuar';
+    throw error;
+  }finally{
+    challengePending=false;
+    refreshButton.disabled=busy;
+    send.disabled=busy||!challenge;
+  }
 }
 function randomKey(){return [...crypto.getRandomValues(new Uint8Array(16))].map(n=>n.toString(16).padStart(2,'0')).join('').toUpperCase();}
 function fileBase64(file){
@@ -133,7 +151,7 @@ function receipt(data,password){
   const download=element('a','Descargar acuse en PDF');
   download.className='button';download.download='Acuse-'+data.expediente+'.pdf';
   download.href=URL.createObjectURL(receiptPdf(data.expediente,formatted,data.date,url));
-  window.addEventListener('pagehide',()=>URL.revokeObjectURL(download.href),{once:true});
+  window.addEventListener('pagehide',event=>{if(!event.persisted)URL.revokeObjectURL(download.href);});
   const track=element('a','Consultar expediente');track.href=url;track.target='_blank';track.rel='noopener';
   const actions=element('div','');actions.className='actions';actions.append(download,track);
   result.replaceChildren(element('h2','Expediente ingresado'),details,actions);
@@ -141,11 +159,18 @@ function receipt(data,password){
 }
 async function submit(e){
   e.preventDefault();
-  send.disabled=true;result.hidden=true;
+  if(busy||challengePending||(!challenge&&!operation?.commitPending))return;
   const fields=Object.fromEntries(new FormData(form)),proof={challenge,answer:fields.answer};
   delete fields.answer;
+  busy=true;send.disabled=true;refreshButton.disabled=true;result.hidden=true;
+  const enabled=formControls().filter(control=>!control.disabled);
+  enabled.forEach(control=>{control.disabled=true;});
   try{
-    if(page==='consulta'){
+    if(operation?.commitPending){
+      status('Confirmando el registro anterior…');
+      const {id,password}=operation;
+      receipt(await rpc('commit',{id,password}),password);
+    }else if(page==='consulta'){
       status('Consultando expediente…');
       presentTrack(await rpc('track',{...proof,...fields}));
       form.elements.password.value='';
@@ -166,17 +191,26 @@ async function submit(e){
         }
       }
       status('Registrando expediente…');
+      operation.commitPending=true;
       receipt(await rpc('commit',auth),password);
     }
     status('');result.hidden=false;result.focus();
   }catch(error){status(error.message||'Inténtalo de nuevo.',true);}
   finally{
-    if(!form.hidden)await refresh().catch(()=>{});
-    send.disabled=false;
+    if(operation?.commitPending){
+      send.textContent='Confirmar registro';
+      status('No se pudo confirmar el registro. Pulsa «Confirmar registro» para recuperar el mismo expediente.',true);
+    }else{
+      enabled.forEach(control=>{control.disabled=false;});
+      if(!form.hidden)await refresh().catch(error=>{if(!feedback.textContent)status(error.message,true);});
+    }
+    busy=false;
+    refreshButton.disabled=Boolean(operation?.commitPending);
+    send.disabled=!challenge&&!operation?.commitPending;
   }
 }
 form.addEventListener('submit',submit);
-document.querySelector('#refresh').addEventListener('click',()=>refresh().catch(error=>status(error.message,true)));
+refreshButton.addEventListener('click',()=>{if(!busy&&!operation?.commitPending)refresh().catch(error=>status(error.message,true));});
 async function start(){
   send.disabled=true;
   try{
@@ -187,6 +221,6 @@ async function start(){
     }
     await refresh();
   }catch(error){status(error.message,true);}
-  finally{send.disabled=false;}
+  finally{send.disabled=!challenge;}
 }
 start();
