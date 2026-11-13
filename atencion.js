@@ -196,7 +196,35 @@ function receipt(data,password){
   window.addEventListener('pagehide',event=>{if(!event.persisted)URL.revokeObjectURL(download.href);});
   const track=element('a','Consultar expediente');track.href=url;track.target='_blank';track.rel='noopener';
   const actions=element('div','');actions.className='actions';actions.append(download,track);
-  result.replaceChildren(element('h2','Expediente ingresado'),details,actions);
+  if(page==='libro'){
+    const auth={id:operation.id,password},copy=element('button','Descargar Hoja de Reclamación'),message=element('p','');
+    copy.type='button';
+    copy.className='secondary';
+    message.setAttribute('role','status');
+    copy.addEventListener('click',async()=>{
+      copy.disabled=true;
+      message.textContent='Preparando la hoja…';
+      try{
+        const file=await rpc('complaintCopy',auth);
+        const bytes=Uint8Array.from(atob(file.base64),c=>c.charCodeAt(0));
+        const link=element('a','Guardar Hoja de Reclamación');
+        link.href=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
+        link.download=file.name;
+        link.className='button';
+        actions.replaceChild(link,copy);
+        message.textContent='Tu hoja está lista para descargar.';
+        window.addEventListener('pagehide',event=>{if(!event.persisted)URL.revokeObjectURL(link.href);});
+        link.focus();
+      }catch(error){
+        message.textContent='No pudimos preparar la hoja. Puedes volver a intentarlo.';
+        copy.disabled=false;
+      }
+    });
+    actions.insertBefore(copy,track);
+    result.replaceChildren(element('h2','Expediente ingresado'),details,actions,message);
+  }else{
+    result.replaceChildren(element('h2','Expediente ingresado'),details,actions);
+  }
   form.reset();annexes=[];operation=null;form.hidden=true;
 }
 async function submit(e){
@@ -264,9 +292,10 @@ function showBookStatus(text,retry=false){
     button.addEventListener('click',()=>{panel.remove();start();});
     panel.append(button);
   }else{
-    panel.append(element('p','Si ya tienes un número de expediente, puedes revisar su estado con los datos de tu acuse.'));
+    panel.append(element('p','El formulario oficial está pendiente de habilitación. Si ya tienes un acuse, puedes consultar tu expediente desde el portal.'));
     const link=element('a','Consultar expediente');
     link.href='consultar-expediente.html';
+    link.className='button';
     panel.append(link);
   }
   app.prepend(panel);
@@ -280,7 +309,7 @@ async function start(){
     let provider;
     try{({provider}=await rpc('config'));}
     catch(error){showBookStatus('No pudimos comprobar la disponibilidad del Libro.',true);return;}
-    if(!provider){showBookStatus('El Libro de Reclamaciones aún no recibe registros.');return;}
+    if(!provider){showBookStatus('El Libro todavía no está habilitado');return;}
     document.querySelector('#provider').append(document.createTextNode(' · '+provider));
     form.hidden=false;
   }
