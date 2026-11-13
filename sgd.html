@@ -161,6 +161,7 @@
 
 <div id="drawerBack" class="drawer-back"><aside id="drawer" class="drawer" role="dialog" aria-label="Ficha del documento"></aside></div>
 <div id="modalBack" class="modal-back"><div id="modal" class="modal"></div></div>
+<style>.modal-back[inert]{visibility:hidden}</style>
 <div id="toast" class="toast"></div>
 <div id="loader" class="loader"><div class="loader-box"><div class="loader-scene"><div class="loader-cloud c1"></div><div class="loader-cloud c2"></div><div class="loader-cloud c3"></div><div class="loader-altum-wrap"><div id="loaderTitle" class="loader-title loader-title-game">ALTUM</div><div class="loader-loopword">excelencia que transforma</div></div></div><div id="loaderSub" class="loader-sub">Procesando…</div></div></div>
 
@@ -254,7 +255,7 @@ async function loadApp(){
   document.querySelectorAll('.operational-only').forEach(el=>el.classList.toggle('hidden',isMaster));
   $('adminNav').classList.toggle('hidden',isMaster||b.session.role!=='ADMIN');
   setCounts(b.counts||{});syncClock(b.now);
-  go(isMaster?'master':'home');
+  go(isMaster?'master':'home',false);
   clearInterval(clockSyncTimer_);
   clockSyncTimer_=setInterval(resyncClock,60000);
 }
@@ -265,6 +266,7 @@ function resetLoginState(msg){
   closeDrawer();closeModal();loading(false);
   sessionStorage.removeItem('sgd_portal_token');
   app.token='';app.session=null;app.bootstrap=null;app.page='home';app.currentDraft=null;app.savingDraft=false;app.boxItems={};app.aiDraft=null;app.aiLast=null;
+  app.signatureInboxCache=null;app.signatureInboxJustCompleted=false;masterData240=null;masterTab240='users';mySignatureState240=null;
   app.newState={principal:'',primaryDestinations:[],copies:[],destinations:[],externalDestinations:[],references:[],attendsDocumentIds:[],attendsDocuments:[],requestId:''};
   document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
   if($('loginUser'))$('loginUser').value='';
@@ -279,7 +281,13 @@ function logout(){
   resetLoginState('Sesión cerrada correctamente. Ingrese nuevamente.');
   if(oldToken)api('logoutSGD',oldToken).catch(()=>{});
 }
-function setCounts(c){if($('bPending'))$('bPending').textContent=c?.pending||0;if($('bAttention'))$('bAttention').textContent=c?.attentionWork??((c?.received||0)+(c?.attention||0));if($('bDrafts'))$('bDrafts').textContent=c?.drafts||0;if($('bAnnexPending'))$('bAnnexPending').textContent=c?.annexSignaturePending||0;if($('bResolutionPending'))$('bResolutionPending').textContent=c?.resolutionVbPending||0;}
+function setCounts(c={}){
+ c=c||{};
+ const counts={pending:c.pending||0,attentionWork:c.attentionWork??((c.received||0)+(c.attention||0)),drafts:c.drafts||0,sent:c.sent||0,annexSignaturePending:c.annexSignaturePending||0,resolutionVbPending:c.resolutionVbPending||0};
+ const badges={bPending:'pending',bAttention:'attentionWork',bDrafts:'drafts',bAnnexPending:'annexSignaturePending',bResolutionPending:'resolutionVbPending'};
+ Object.entries(badges).forEach(([id,key])=>{const badge=$(id);if(badge)badge.textContent=counts[key];});
+ if(app.page==='home')document.querySelectorAll('[data-home-count]').forEach(el=>{el.textContent=counts[el.dataset.homeCount]||0;});
+}
 
 let clockSyncTimer_,clockRenderTimer_;
 const clockTimeFormat_=new Intl.DateTimeFormat('es-PE',{timeZone:'America/Lima',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
@@ -307,12 +315,12 @@ async function resyncClock(){
  catch(e){if(app.token===token&&e.message==='SESSION_EXPIRED')err(e);}
 }
 
-function go(page){
+function go(page,refreshHome=true){
   const isMaster=app.session?.role==='MAESTRO';
   const operational=['home','received','attention','annex-signatures','resolution-vb','sent','drafts','archive','tracking','new','expedientes','routes','firma','admin'];
   if(isMaster&&operational.includes(page))page='master';
   app.page=page;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
-  if(page==='home')renderHome();else if(page==='received')renderBox('POR_RECIBIR','Por recibir');else if(page==='attention')renderBox('ATENCION','En atención');else if(page==='annex-signatures')renderSignatureWorkInbox('ANNEX');else if(page==='resolution-vb')renderSignatureWorkInbox('RESOLUTION');else if(page==='sent')renderBox('EMITIDOS','Históricos y emitidos');else if(page==='drafts')renderBox('BORRADORES','Borradores y documentos en preparación');else if(page==='archive')renderBox('ARCHIVO','Archivo de la oficina');else if(page==='tracking')renderBox('SEGUIMIENTO','Seguimiento documental');else if(page==='new')renderNew();else if(page==='expedientes')renderExpedientes();else if(page==='routes')renderRoutes();else if(page==='profile')renderProfile();else if(page==='firma')renderMySignature();else if(page==='admin')renderAdmin();else if(page==='master')renderMaster();
+  if(page==='home')renderHome(refreshHome);else if(page==='received')renderBox('POR_RECIBIR','Por recibir');else if(page==='attention')renderBox('ATENCION','En atención');else if(page==='annex-signatures')renderSignatureWorkInbox('ANNEX');else if(page==='resolution-vb')renderSignatureWorkInbox('RESOLUTION');else if(page==='sent')renderBox('EMITIDOS','Históricos y emitidos');else if(page==='drafts')renderBox('BORRADORES','Borradores y documentos en preparación');else if(page==='archive')renderBox('ARCHIVO','Archivo de la oficina');else if(page==='tracking')renderBox('SEGUIMIENTO','Seguimiento documental');else if(page==='new')renderNew();else if(page==='expedientes')renderExpedientes();else if(page==='routes')renderRoutes();else if(page==='profile')renderProfile();else if(page==='firma')renderMySignature();else if(page==='admin')renderAdmin();else if(page==='master')renderMaster();
 }
 let dashboardRefresh_;
 function refreshBootstrap(){
@@ -342,17 +350,18 @@ function renderDraftFromResult224(r){const d=r.raw||{};let legacy=[];try{legacy=
 
 function quickLinkIcon240(k){return {portal:'⌂',centro:'✦',aula:'▣',sira:'◎',verificacion:'✓'}[k]||'↗'}
 function quickLinkDesc240(k){return {portal:'Portal institucional de ALTUM LUMEN S.A.C.',centro:'Centro de Formación y Capacitación Profesional',aula:'Cursos, sesiones y materiales',sira:'Sistema de registros académicos',verificacion:'Consulta de autenticidad y registros'}[k]||'Acceso institucional'}
-function renderHome(){
- const b=app.bootstrap,c=b.counts||{},links=b.quickLinks||[],firma=b.firmaInterna||{},attentionWork=Number(c.attentionWork??((c.received||0)+(c.attention||0)));
+function renderHome(refresh=true){
+ const b=app.bootstrap,links=b.quickLinks||[],firma=b.firmaInterna||{};
  const linkHtml=links.map(x=>`<a class="quick-link" href="${esc(x.url)}" target="_blank" rel="noopener"><span class="quick-icon">${quickLinkIcon240(x.key)}</span><span><b>${esc(x.label)}</b><small>${esc(quickLinkDesc240(x.key))}</small></span></a>`).join('');
  const firmaReady=firma.configured&&!firma.unavailable;
  const firmaNotice=firmaReady&&firma.status==='PENDIENTE_CLAVE'?`<section class="panel" style="margin-bottom:14px"><div class="panel-head"><h3>Firma digital pendiente de activación</h3></div><div class="panel-body"><p class="lead">Configure su clave personal y certificado para poder atender firmas y vistos buenos.</p><button class="btn btn-primary" type="button" onclick="go('firma')">Configurar mi firma digital</button></div></section>`:'';
  $('main').innerHTML=pageHead('Inicio','Trabajo activo de '+esc(b.session.officeName),`<button class="btn btn-primary" onclick="go('new')">＋ Nuevo documento</button>`)+firmaNotice+
- `<div class="home-priority"><button class="home-priority-card urgent" type="button" onclick="go('received')"><div class="hp-top"><span class="hp-icon">▣</span><strong>${Number(c.pending||0)}</strong></div><b>Por recibir</b><small>Documentos que todavía requieren recepción.</small></button><button class="home-priority-card" type="button" onclick="go('attention')"><div class="hp-top"><span class="hp-icon">◫</span><strong>${attentionWork}</strong></div><b>En atención</b><small>Recibidos y actuaciones actualmente abiertas.</small></button><button class="home-priority-card sign" type="button" onclick="go('annex-signatures')"><div class="hp-top"><span class="hp-icon">▧</span><strong>${Number(c.annexSignaturePending||0)}</strong></div><b>Anexos por firmar</b><small>Firmas y V°B° de anexos asignados a usted.</small></button><button class="home-priority-card sign" type="button" onclick="go('resolution-vb')"><div class="hp-top"><span class="hp-icon">✓</span><strong>${Number(c.resolutionVbPending||0)}</strong></div><b>V°B° de resoluciones</b><small>Actos resolutivos que esperan su visto bueno.</small></button></div>`+
- `<div class="home-secondary"><div class="metric"><small>Borradores</small><strong>${c.drafts||0}</strong></div><div class="metric green"><small>Emitidos</small><strong>${c.sent||0}</strong></div></div>`+
+ `<div class="home-priority"><button class="home-priority-card urgent" type="button" onclick="go('received')"><div class="hp-top"><span class="hp-icon">▣</span><strong data-home-count="pending"></strong></div><b>Por recibir</b><small>Documentos que todavía requieren recepción.</small></button><button class="home-priority-card" type="button" onclick="go('attention')"><div class="hp-top"><span class="hp-icon">◫</span><strong data-home-count="attentionWork"></strong></div><b>En atención</b><small>Recibidos y actuaciones actualmente abiertas.</small></button><button class="home-priority-card sign" type="button" onclick="go('annex-signatures')"><div class="hp-top"><span class="hp-icon">▧</span><strong data-home-count="annexSignaturePending"></strong></div><b>Anexos por firmar</b><small>Firmas y V°B° de anexos asignados a usted.</small></button><button class="home-priority-card sign" type="button" onclick="go('resolution-vb')"><div class="hp-top"><span class="hp-icon">✓</span><strong data-home-count="resolutionVbPending"></strong></div><b>V°B° de resoluciones</b><small>Actos resolutivos que esperan su visto bueno.</small></button></div>`+
+ `<div class="home-secondary"><div class="metric"><small>Borradores</small><strong data-home-count="drafts"></strong></div><div class="metric green"><small>Emitidos</small><strong data-home-count="sent"></strong></div></div>`+
  `<div class="grid2"><section class="panel"><div class="panel-head"><h3>Acciones rápidas</h3></div><div class="panel-body"><div class="quick-links"><button class="quick-link" type="button" onclick="go('drafts')"><span class="quick-icon">✎</span><span><b>Continuar borradores</b><small>Documentos en preparación</small></span></button><button class="quick-link" type="button" onclick="go('firma')"><span class="quick-icon">✓</span><span><b>Mi firma digital</b><small>${firma.status==='ACTIVO'?'Certificado y contraseña de firma':'Configurar firma digital'}</small></span></button><button class="quick-link" type="button" onclick="go('expedientes')"><span class="quick-icon">▤</span><span><b>Expedientes</b><small>Consulta documental por expediente</small></span></button><button class="quick-link" type="button" onclick="go('tracking')"><span class="quick-icon">⇄</span><span><b>Seguimiento</b><small>Trazabilidad de documentos</small></span></button></div></div></section><section class="panel"><div class="panel-head"><h3>Accesos institucionales</h3></div><div class="panel-body"><div class="quick-links">${linkHtml||'<div class="helper">No hay accesos adicionales habilitados.</div>'}</div></div></section></div>`+
  `<div class="institutional-note"><b>SGD ALTUM LUMEN</b> · Gestión documental, trazabilidad y firma digital institucional.</div>`;
- api('getDashboardCountsSGD',app.token).then(r=>{if(r.counts){app.bootstrap.counts=r.counts;setCounts(r.counts)}}).catch(()=>{});
+ setCounts(b.counts);
+ if(refresh)refreshBootstrap();
 }
 
 
@@ -377,9 +386,11 @@ function mySigStatusLabel240(s){
 async function renderMySignature(){
   $('main').innerHTML=pageHead('Mi firma digital','Configure y administre su credencial personal de firma.')+
     `<section class="panel"><div class="panel-head"><h3>Estado de mi firma</h3></div><div id="mySigBody" class="panel-body"><div class="inline-load">Consultando identidad, designación y certificado…</div></div></section>`;
+  const body=$('mySigBody'),token=app.token;
   try{
-    const s=await api('fdStatusSGD',app.token);mySignatureState240=s;
-    const body=$('mySigBody');if(!body)return;
+    const s=await api('fdStatusSGD',token);
+    if(app.token!==token||$('mySigBody')!==body)return;
+    mySignatureState240=s;
     if(!s.configured){body.innerHTML='<div class="warn"><b>Módulo pendiente de inicialización.</b><div>La administración todavía no ha habilitado las firmas digitales.</div></div>';return;}
     const summary=`<div class="info-grid"><div class="info"><label>Titular</label><div>${esc(s.name||app.session?.displayName||'—')}</div></div><div class="info"><label>Estado</label><div>${esc(mySigStatusLabel240(s.status))}</div></div><div class="info" style="grid-column:1/-1"><label>Cargo vigente</label><div>${esc(s.cargo||'Sin cargo configurado')}</div></div></div>`;
     if(s.status==='ACTIVO'&&s.enabled){
@@ -395,7 +406,11 @@ async function renderMySignature(){
       return;
     }
     body.innerHTML=summary+`<div class="warn" style="margin-top:14px"><b>Firma no disponible.</b><div>${esc(s.status||'Revise su habilitación con la administración.')}</div></div>`;
-  }catch(e){const body=$('mySigBody');if(body)body.innerHTML=`<div class="warn"><b>No se pudo consultar su firma digital.</b><div>${esc(e?.message||e)}</div></div><div style="margin-top:12px"><button class="btn btn-outline" onclick="renderMySignature()">Reintentar</button></div>`;}
+  }catch(e){
+    if(app.token!==token||$('mySigBody')!==body)return;
+    if(e.message==='SESSION_EXPIRED'){err(e);return;}
+    body.innerHTML=`<div class="warn"><b>No se pudo consultar su firma digital.</b><div>${esc(e?.message||e)}</div></div><div style="margin-top:12px"><button class="btn btn-outline" onclick="renderMySignature()">Reintentar</button></div>`;
+  }
 }
 async function activateMySignature240(){
   if(mySignatureBusy240)return;
@@ -504,15 +519,37 @@ function signatureInboxRowsHtml38_(rows,isAnnex){
  if(!rows.length)return `<div class="empty">${isAnnex?'No tiene anexos pendientes de actuación.':'No tiene actos resolutivos pendientes de visto bueno.'}</div>`;
  return `<div class="signature-inbox">${rows.map(r=>{if(r.kind==='ANNEX'){const act=r.requestedAction==='VISTO_BUENO'?'V°B°':'Firma',actLabel=Number(r.totalSequence||1)>1?`${act} ${Number(r.sequence||1)} de ${Number(r.totalSequence||1)}`:act;return `<article class="signature-task-card"><div><span class="task-chip pending">Pendiente · ${actLabel}</span><h4>${esc(r.title)}</h4><p>${esc(r.documentNumber||'')} · ${esc(r.subject||'')}</p><div class="signature-task-meta"><span class="task-chip">Solicitado por ${esc(officeName(r.originOffice)||r.originOffice||'oficina emisora')}</span>${r.requestedAt?`<span class="task-chip">${esc(r.requestedAt)}</span>`:''}</div></div><button class="btn btn-primary" type="button" onclick="fdOpenAnnex('${esc(r.documentId)}','${esc(r.annexId)}','${esc(r.requestId||'')}')">${act==='V°B°'?'Revisar y dar V°B°':'Revisar y firmar'}</button></article>`;}const office=r.requestedOfficeName||officeName(r.requestedOffice)||'';return `<article class="signature-task-card"><div><span class="task-chip vb">V°B° pendiente</span><h4>${esc(r.title)}</h4><p>${esc(r.subject||'')}</p><div class="signature-task-meta"><span class="task-chip">${esc(r.type||'Acto resolutivo')}</span><span class="task-chip">Emite: ${esc(officeName(r.originOffice)||r.originOffice||'')}</span>${office?`<span class="task-chip">V°B°: ${esc(office)}</span>`:''}</div></div><button class="btn btn-primary" type="button" onclick="fdOpenResolutionVbTask38_('${esc(r.documentId)}')">Revisar y dar V°B°</button></article>`;}).join('')}</div>`;
 }
+const signatureInboxLoads_=new WeakMap();
+function paintSignatureInbox38_(body,rows,mode,confirmed){
+ body.className='';
+ body.innerHTML=(confirmed&&mode==='RESOLUTION'?'<div class="signature-inbox-confirm38">✓ V°B° registrado. La tarea completada ya fue retirada de su bandeja.</div>':'')+signatureInboxRowsHtml38_(rows,mode==='ANNEX');
+}
 async function renderSignatureWorkInbox(mode,useCache=false){
  const isAnnex=mode==='ANNEX',title=isAnnex?'Anexos pendientes de firma':'Actos resolutivos pendientes de V°B°',sub=isAnnex?'PDF asignados a usted para firma digital o visto bueno.':'Resoluciones y actos resolutivos que esperan su visto bueno.';
  $('main').innerHTML=pageHead(title,sub)+`<section class="panel"><div id="signatureInboxBody" class="inline-load">Cargando pendientes…</div></section>`;
- const body=$('signatureInboxBody'),cache=app.signatureInboxCache;
- if(useCache&&cache&&cache.mode===mode){body.className='';body.innerHTML=(app.signatureInboxJustCompleted&&mode==='RESOLUTION'?'<div class="signature-inbox-confirm38">✓ V°B° registrado. La tarea completada ya fue retirada de su bandeja.</div>':'')+signatureInboxRowsHtml38_(cache.rows||[],isAnnex);app.signatureInboxJustCompleted=false;setTimeout(()=>refreshSignatureInbox38_(mode),0);return;}
- try{const all=await api('fdPendingSGD',app.token),rows=(all||[]).filter(r=>isAnnex?r.kind==='ANNEX':(r.kind==='DOCUMENT'&&r.parafirma&&r.requestedAction==='VISTO_BUENO'));app.signatureInboxCache={mode:mode,rows:rows};body.className='';body.innerHTML=signatureInboxRowsHtml38_(rows,isAnnex);}catch(e){body.innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
+ const body=$('signatureInboxBody'),cache=app.signatureInboxCache,cached=useCache&&cache?.mode===mode;
+ const confirmed=app.signatureInboxJustCompleted&&mode==='RESOLUTION';
+ if(cached)paintSignatureInbox38_(body,cache.rows||[],mode,confirmed);
+ app.signatureInboxJustCompleted=false;
+ return refreshSignatureInbox38_(body,mode,cached,confirmed);
 }
-async function refreshSignatureInbox38_(mode){
- try{const isAnnex=mode==='ANNEX',all=await api('fdPendingSGD',app.token),rows=(all||[]).filter(r=>isAnnex?r.kind==='ANNEX':(r.kind==='DOCUMENT'&&r.parafirma&&r.requestedAction==='VISTO_BUENO'));app.signatureInboxCache={mode:mode,rows:rows};if(app.page===(isAnnex?'annex-signatures':'resolution-vb')&&$('signatureInboxBody'))$('signatureInboxBody').innerHTML=signatureInboxRowsHtml38_(rows,isAnnex);}catch(e){}
+async function refreshSignatureInbox38_(body,mode,cached,confirmed){
+ const token=app.token,request={};
+ signatureInboxLoads_.set(body,request);
+ const current=()=>app.token===token&&$('signatureInboxBody')===body&&signatureInboxLoads_.get(body)===request;
+ try{
+   const all=await api('fdPendingSGD',token);
+   if(!current())return;
+   const rows=(all||[]).filter(r=>mode==='ANNEX'?r.kind==='ANNEX':r.kind==='DOCUMENT'&&r.parafirma&&r.requestedAction==='VISTO_BUENO');
+   app.signatureInboxCache={mode,rows};
+   paintSignatureInbox38_(body,rows,mode,confirmed);
+ }catch(e){
+   if(!current())return;
+   if(e.message==='SESSION_EXPIRED'){err(e);return;}
+   const warning=`<div class="warn" role="status">No se pudieron actualizar las tareas. <button class="smallbtn" type="button" onclick="renderSignatureWorkInbox('${mode}',true)">Reintentar</button></div>`;
+   if(cached)body.insertAdjacentHTML('afterbegin',warning);
+   else body.innerHTML=warning;
+ }
 }
 function fdOpenResolutionVbTask38_(documentId){fdUI.returnPage='resolution-vb';fdUI.returnDocumentId=documentId;return fdOpen(documentId);}
 function fdApplyResolutionVbLocalSuccess38_(documentId){
@@ -1295,6 +1332,8 @@ let drawerRequest_,drawerOpener_;
 function showDocumentLoading_(title){
  const drawer=$('drawer');
  drawer.innerHTML=`<div class="drawer-head"><div class="row"><h2>${esc(title)}</h2><button class="close" type="button" onclick="closeDrawer()" aria-label="Cerrar" title="Cerrar">×</button></div></div><div class="drawer-body"><p class="inline-load" role="status">Consultando los datos y archivos del documento…</p></div>`;
+ const modalBack=$('modalBack');
+ if(modalBack.classList.contains('show'))modalBack.inert=true;
  $('drawerBack').classList.add('show');
  drawer.scrollTop=0;
  drawer.querySelector('.close').focus({preventScroll:true});
@@ -1344,6 +1383,7 @@ function openDoc(id,pushCurrent=false){
 function closeDrawer(){
  drawerRequest_=null;
  $('drawerBack').classList.remove('show');
+ $('modalBack').inert=false;
  app.docNavStack=[];app.lastDocDetail=null;
  if(drawerOpener_?.isConnected)drawerOpener_.focus({preventScroll:true});
  drawerOpener_=null;
@@ -1420,7 +1460,24 @@ async function loadExpedientes(){
    body.innerHTML=items.length?`<div class="table-wrap"><table class="table"><thead><tr><th>Expediente</th><th>Asunto</th><th>Responsable</th><th>Última gestión</th><th>Estado</th><th></th></tr></thead><tbody>${items.map(e=>`<tr><td><span class="doclink" onclick="openExp('${esc(e.Expediente_ID)}')">${esc(e.Expediente_ID)}</span></td><td class="subject">${esc(e.Asunto)}</td><td>${esc(officeName(e.Oficina_Responsable))}</td><td>${esc(e.Fecha_Última_Gestión)}</td><td>${pill(e.Estado)}</td><td><button class="smallbtn" onclick="openExp('${esc(e.Expediente_ID)}')">Abrir</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No hay expedientes de tu área con esos criterios.</div>';
  }catch(e){if(current())body.innerHTML=`<div class="empty">${esc(e?.message||'No se pudo cargar el listado.')}</div>`}
 }
-async function openExp(id){try{const r=await api('getExpedienteSGD',app.token,id);if(!r?.expediente)throw new Error('No se pudo obtener el expediente.');const e=r.expediente,documents=Array.isArray(r.documents)?r.documents:[],movements=Array.isArray(r.movements)?r.movements:[];const moveHtml=`<div class="timeline">${movements.map(m=>`<div class="timeline-item"><b>${esc(m.Tipo)}</b><p>${esc(m.Indicación||'')}</p><time>${esc(m.Fecha_Hora)}</time></div>`).join('')||'<div class="helper">Sin movimientos.</div>'}</div>`;showModal(id,`<div class="info-grid"><div class="info" style="grid-column:1/-1"><label>Asunto</label><div>${esc(e.Asunto)}</div></div><div class="info"><label>Estado</label><div>${pill(e.Estado)}</div></div><div class="info"><label>Última gestión</label><div>${esc(e.Fecha_Última_Gestión)}</div></div></div><div class="doc-actions"><button class="btn btn-outline" onclick="openRouteTree('${esc(id)}',true)">Árbol del expediente →</button></div>${foldSection('Documentos',documents.length,docTable(documents),true)}${foldSection('Movimientos',movements.length,moveHtml)}`,expActions(e))}catch(e){err(e)}}
+async function openExp(id){
+ const token=app.token,title=esc(id);
+ showModal(title,'<p class="inline-load" role="status">Consultando el expediente…</p>');
+ const loadingBody=$('modal').querySelector('[role="status"]');
+ const current=()=>app.token===token&&$('modalBack').classList.contains('show')&&loadingBody.isConnected;
+ try{
+   const r=await api('getExpedienteSGD',token,id);
+   if(!current())return;
+   if(!r?.expediente)throw new Error('No se pudo obtener el expediente.');
+   const e=r.expediente,documents=Array.isArray(r.documents)?r.documents:[],movements=Array.isArray(r.movements)?r.movements:[];
+   const moveHtml=`<div class="timeline">${movements.map(m=>`<div class="timeline-item"><b>${esc(m.Tipo)}</b><p>${esc(m.Indicación||'')}</p><time>${esc(m.Fecha_Hora)}</time></div>`).join('')||'<div class="helper">Sin movimientos.</div>'}</div>`;
+   showModal(title,`<div class="info-grid"><div class="info" style="grid-column:1/-1"><label>Asunto</label><div>${esc(e.Asunto)}</div></div><div class="info"><label>Estado</label><div>${pill(e.Estado)}</div></div><div class="info"><label>Última gestión</label><div>${esc(e.Fecha_Última_Gestión)}</div></div></div><div class="doc-actions"><button class="btn btn-outline" onclick="openRouteTree('${title}',true)">Árbol del expediente →</button></div>${foldSection('Documentos',documents.length,docTable(documents),true)}${foldSection('Movimientos',movements.length,moveHtml)}`,expActions(e));
+ }catch(e){
+   if(!current())return;
+   closeModal();
+   err(e);
+ }
+}
 function expActions(e){const close=`<button class="btn btn-outline" type="button" onclick="closeModal()">Cerrar</button>`;if(e.Estado==='EN_TRÁMITE')return close+`<button class="btn btn-green" onclick="finalizeExp('${e.Expediente_ID}')">Finalizar expediente</button>`;if(e.Estado==='FINALIZADO')return close+`<button class="btn btn-outline" onclick="reopenExp('${e.Expediente_ID}')">Reabrir</button><button class="btn btn-primary" onclick="archiveExp('${e.Expediente_ID}')">Archivar</button>`;if(e.Estado==='ARCHIVADO')return close+`<button class="btn btn-outline" onclick="reopenExp('${e.Expediente_ID}')">Reabrir</button>`;return close}
 async function finalizeExp(id){const reason=prompt('Motivo/constancia de cierre:','Atención concluida');if(reason===null)return;try{await api('finalizeExpedienteSGD',app.token,id,reason);closeModal();toast('Expediente finalizado');loadExpedientes()}catch(e){err(e)}}
 async function archiveExp(id){try{await api('archiveExpedienteSGD',app.token,id,'Archivo definitivo');closeModal();toast('Expediente archivado');loadExpedientes()}catch(e){err(e)}}
@@ -1472,11 +1529,20 @@ async function testDrive(){try{const r=await api('testDriveAccessSGD',app.token)
 async function renderAdmin(){
  if(app.session.role!=='ADMIN'){go('home');return}
  $('main').innerHTML=pageHead('Configuración','Directorio, inventario histórico, correlativos y modelos Word.')+`<div id="adminBody" class="inline-load">Cargando configuración…</div>`;
+ const body=$('adminBody'),token=app.token;
+ const current=()=>$('adminBody')===body&&app.token===token;
  try{
-  const r=await api('getAdminConfigSGD',app.token),off=Object.fromEntries(r.offices.map(o=>[o['Código'],o.Nombre]));if(r.ai)app.bootstrap.ai=r.ai;
-  $('adminBody').innerHTML=`<div class="indexbox"><b>Inventario histórico:</b> ${esc(r.index?.status||'PENDIENTE')} · Última conciliación: ${esc(r.index?.last||'—')} <button class="smallbtn" style="margin-left:10px" onclick="reindexHistory()">Reconciliar inventario</button>${r.index?.conflicts?`<div class="warn" style="margin-top:10px"><b>Conflicto de correlativos:</b> ${esc(r.index.conflicts)}</div>`:''}</div>
+  const r=await api('getAdminConfigSGD',token);
+  if(!current())return;
+  const off=Object.fromEntries(r.offices.map(o=>[o['Código'],o.Nombre]));if(r.ai)app.bootstrap.ai=r.ai;
+  body.className='';
+  body.innerHTML=`<div class="indexbox"><b>Inventario histórico:</b> ${esc(r.index?.status||'PENDIENTE')} · Última conciliación: ${esc(r.index?.last||'—')} <button class="smallbtn" style="margin-left:10px" onclick="reindexHistory()">Reconciliar inventario</button>${r.index?.conflicts?`<div class="warn" style="margin-top:10px"><b>Conflicto de correlativos:</b> ${esc(r.index.conflicts)}</div>`:''}</div>
   <div class="admin-grid" style="margin-top:14px"><section class="panel"><div class="panel-head"><h3>Directorio de oficinas</h3></div><div class="panel-body">${r.users.map(u=>`<div class="user-row" style="grid-template-columns:1.2fr 1.1fr 1.4fr auto"><div><b>${esc(off[u['Oficina_Código']]||u['Oficina_Código'])}</b><div class="helper">${esc(u.Usuario)}</div></div><input id="resp_${u.Usuario_ID}" class="control" value="${esc(u.Responsable||u.Nombre_Mostrado||'')}" title="Solo el Usuario Maestro modifica responsables y cargos" readonly><input id="email_${u.Usuario_ID}" class="control" value="${esc(u.Correo_Institucional||'')}" placeholder="correo institucional"><div><button class="smallbtn" onclick="saveUser('${u.Usuario_ID}')">Guardar</button> <button class="smallbtn" onclick="resetPass('${u.Usuario_ID}')">Clave SGD</button></div></div>`).join('')}</div></section><section><div class="panel"><div class="panel-head"><h3>Formatos Word detectados</h3></div><div class="panel-body"><p class="lead">El sistema selecciona automáticamente el formato institucional por familia documental, tipo, referencias y modalidad de firma.</p>${(r.templates||[]).slice(0,30).map(t=>`<div class="status-row ok"><span>${esc(off[t['Oficina_Código']]||t['Oficina_Código'])} · ${esc(t.Tipo)}</span><b>${esc(t.Archivo_Modelo||t.Nombre)}</b></div>`).join('')||'<div class="helper">La detección se completa con la conciliación histórica.</div>'}<div class="field"><label>Registrar o reemplazar formato Word</label><select id="tplOffice" class="control">${r.offices.map(o=>`<option value="${o['Código']}">${esc(o.Nombre)}</option>`).join('')}</select></div><div class="field"><select id="tplType" class="control">${['INFORME','INFORME MÚLTIPLE','INFORME CIRCULAR','MEMORANDO','MEMORANDO MÚLTIPLE','MEMORANDO CIRCULAR','OFICIO','OFICIO MÚLTIPLE','OFICIO CIRCULAR','CARTA','CARTA MÚLTIPLE','CARTA CIRCULAR','RESOLUCIÓN','ACTA'].map(x=>`<option>${x}</option>`).join('')}</select></div><div class="field"><input id="tplId" class="control" placeholder="Identificador del archivo Word"></div><button class="btn btn-primary" onclick="registerTpl()">Registrar formato</button></div></div></section></div>`;
- }catch(e){$('adminBody').innerHTML=`<div class="warn">${esc(e.message)}</div>`}
+ }catch(e){
+   if(!current())return;
+   if(e.message==='SESSION_EXPIRED'){err(e);return;}
+   body.innerHTML=`<div class="warn">${esc(e.message)} <button class="smallbtn" type="button" onclick="renderAdmin()">Reintentar</button></div>`;
+ }
 }
 async function saveUser(id){try{const em=$('email_'+id).value.trim();await api('adminUpdateUserSGD',app.token,id,{Correo_Institucional:em,Correo_Confirmado:em?'SI':'NO'});toast('Directorio actualizado');await renderAdmin()}catch(e){err(e)}}
 async function syncDrive(id){try{loading(true);const r=await api('adminSyncUserDrivePermissionSGD',app.token,id);toast('Acceso documental: '+r.permission);await renderAdmin()}catch(e){err(e)}finally{loading(false)}}
@@ -1499,10 +1565,21 @@ let masterData240=null,masterTab240='users';
 async function renderMaster(tab){
  if(app.session?.role!=='MAESTRO'){go('home');return}if(tab)masterTab240=tab;
  $('main').innerHTML=pageHead('Panel Maestro','Administración del SGD sin acceso al contenido documental.')+`<div id="masterBody" class="inline-load">Cargando tablero…</div>`;
- try{masterData240=await api('getMasterControlSGD',app.token);paintMaster240()}catch(e){$('masterBody').innerHTML=`<div class="warn">${esc(e.message)}</div>`}
+ const body=$('masterBody'),token=app.token;
+ const current=()=>$('masterBody')===body&&app.token===token;
+ try{
+   const data=await api('getMasterControlSGD',token);
+   if(!current())return;
+   masterData240=data;paintMaster240();
+ }catch(e){
+   if(!current())return;
+   if(e.message==='SESSION_EXPIRED'){err(e);return;}
+   body.innerHTML=`<div class="warn">${esc(e.message)} <button class="smallbtn" type="button" onclick="renderMaster()">Reintentar</button></div>`;
+ }
 }
 function paintMaster240(){
- const r=masterData240;if(!r)return;const s=r.summary||{};
+ const r=masterData240,body=$('masterBody');if(!r||!body||app.session?.role!=='MAESTRO')return;const s=r.summary||{};
+ body.className='';
  const tabs=[['users','Usuarios'],['offices','Dependencias'],['access','Accesos'],['recovery','Recuperaciones'],['activity','Actividad']];
  $('masterBody').innerHTML=`<div class="master-hero"><h2>Administración maestra</h2><p>Usuarios, responsables, cargos, denominaciones institucionales y accesos.</p></div><div class="cards" style="grid-template-columns:repeat(4,minmax(0,1fr))"><div class="metric"><small>Usuarios activos</small><strong>${s.activeUsers||0}</strong></div><div class="metric"><small>Dependencias activas</small><strong>${s.activeOffices||0}</strong></div><div class="metric red"><small>Recuperaciones pendientes</small><strong>${s.pendingRecoveries||0}</strong></div><div class="metric green"><small>Interacciones recientes</small><strong>${s.recentInteractions||0}</strong></div></div><div class="master-tabs">${tabs.map(t=>`<button class="${masterTab240===t[0]?'active':''}" onclick="masterTab240='${t[0]}';paintMaster240()">${t[1]}</button>`).join('')}<button type="button" onclick="fdHome()">Designaciones y firmas</button></div><div id="masterPanel"></div>`;
  const p=$('masterPanel');if(masterTab240==='users')p.innerHTML=masterUsersHtml240(r);else if(masterTab240==='offices')p.innerHTML=masterOfficesHtml240(r);else if(masterTab240==='access')p.innerHTML=masterAccessHtml240(r);else if(masterTab240==='recovery')p.innerHTML=masterRecoveryHtml240(r);else p.innerHTML=masterActivityHtml240(r);
@@ -1521,10 +1598,26 @@ async function saveMasterAccess240(id){try{await api('masterUpdateUserSGD',app.t
 async function saveMasterLink240(key){try{await api('masterSetGlobalLinkSGD',app.token,key,$('ml_'+key).value);toast('Ruta institucional actualizada');masterData240=await api('getMasterControlSGD',app.token);paintMaster240()}catch(e){err(e)}}
 async function resolveRecovery240(id,reset){if(reset&&!confirm('¿Restablecer la contraseña institucional y marcar la solicitud como atendida?'))return;try{const r=await api('masterResolveRecoverySGD',app.token,id,reset);toast('Solicitud atendida');masterData240=await api('getMasterControlSGD',app.token);paintMaster240();if(r.password)showModal('Acceso restablecido',`<div class="numberbox"><small>Contraseña institucional</small><b style="user-select:all">${esc(r.password)}</b></div>`)}catch(e){err(e)}}
 
-function showModal(title,body,foot=''){ $('modal').classList.remove('wide');$('modal').innerHTML=`<button class="modal-close" type="button" onclick="closeModal()" aria-label="Cerrar" title="Cerrar">×</button><h3>${title}</h3><div class="body">${body}</div><div class="foot">${foot||'<button class="btn btn-outline" onclick="closeModal()">Cerrar</button>'}</div>`;$('modalBack').classList.add('show')}
-function showWideModal(title,body,foot=''){ $('modal').classList.add('wide');$('modal').innerHTML=`<button class="modal-close" type="button" onclick="closeModal()" aria-label="Cerrar" title="Cerrar">×</button><h3>${title}</h3><div class="body">${body}</div><div class="foot">${foot||'<button class="btn btn-outline" onclick="closeModal()">Cerrar</button>'}</div>`;$('modalBack').classList.add('show')}
-function closeModal(){releaseFinalReview_();$('modalBack').classList.remove('show');$('modal').classList.remove('wide');app.modalStack=[]}
-document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('modalBack')?.classList.contains('show')){closeModal();return}if($('drawerBack')?.classList.contains('show'))closeDrawer()});
+function showModal(title,body,foot='',wide=false){
+ const modal=$('modal'),back=$('modalBack');
+ modal.classList.toggle('wide',wide);
+ modal.innerHTML=`<button class="modal-close" type="button" onclick="closeModal()" aria-label="Cerrar" title="Cerrar">×</button><h3>${title}</h3><div class="body">${body}</div><div class="foot">${foot||'<button class="btn btn-outline" onclick="closeModal()">Cerrar</button>'}</div>`;
+ back.inert=false;
+ back.classList.add('show');
+}
+function showWideModal(title,body,foot=''){showModal(title,body,foot,true);}
+function closeModal(){
+ releaseFinalReview_();
+ const back=$('modalBack'),modal=$('modal');
+ back.classList.remove('show');back.inert=false;
+ modal.classList.remove('wide');modal.replaceChildren();app.modalStack=[];
+}
+document.addEventListener('keydown',e=>{
+ if(e.key!=='Escape')return;
+ const modal=$('modalBack');
+ if(modal.classList.contains('show')&&!modal.inert){closeModal();return;}
+ if($('drawerBack').classList.contains('show'))closeDrawer();
+});
 init();
 </script>
 <style>
