@@ -473,6 +473,7 @@ function stagePanelUI(step,d={}){
   else if(waitingVb)primaryActions=`<button class="btn btn-outline" type="button" onclick="fdOpen(app.currentDraft,true)">Comprobar y abrir firma</button><button class="btn btn-primary" type="button" onclick="openSignatureCenter()">Ver V°B° pendientes</button>`;
   else if(c.prepared)primaryActions=`<button class="btn btn-outline" type="button" onclick="refreshSignatureStageAndEmit_()">Actualizar estado</button><button class="btn btn-primary" type="button" onclick="openSignatureCenter()">Ver circuito de firma</button>`;
   else if(pending.length)primaryActions=`<button class="btn btn-primary" type="button" onclick="openSignatureCenter()">Revisar anexos pendientes</button>`;
+  else if(!ann.length&&!resolution)primaryActions='<button class="btn btn-primary" type="button" onclick="openDirectInitialSignature_()">Previsualizar y firmar</button>';
   else primaryActions=`<button class="btn btn-primary" type="button" onclick="openSignatureCenter()">${resolution?'Configurar V°B° y firma final':'Continuar a firma principal'}</button>`;
   return `<section class="stage-card signature-stage-card"><div class="stage-head"><div class="stage-num">5</div><div><h3>Anexos y firma digital</h3><div class="helper">Primero se completan anexos; en actos resolutivos, después los V°B° institucionales; finalmente se habilita la firma del titular.</div></div></div><div class="stage-body"><div class="signature-stage-lead"><b>${canEmit?'Todo firmado.':waitingVb?'Firma final en espera de V°B°.':pending.length?'Documento principal en espera.':c.prepared?'Circuito principal iniciado.':'Etapa previa a la firma principal.'}</b> ${canEmit?'Puede continuar directamente a la emisión.':waitingVb?`Hay ${vbPending.length} V°B° pendiente${vbPending.length===1?'':'s'}. Todas las oficinas requeridas pueden actuar en cualquier orden; la firma final se habilitará automáticamente cuando todos estén completos.`:pending.length?'La firma principal se habilitará automáticamente cuando terminen los anexos pendientes.':annexOpen?'Este es el único momento para configurar qué anexos requieren firma de otras áreas.':'Continúe con el circuito vigente.'}</div><div class="easy-flow"><div class="easy-step done"><div class="easy-icon">✓</div><div class="easy-copy"><b>1. Revisión</b><span>PDF principal verificado.</span></div></div><div class="easy-step ${pending.length?'current':'done'}"><div class="easy-icon">${pending.length?'2':'✓'}</div><div class="easy-copy"><b>2. Anexos</b><span>${esc(annexStatus)}</span></div></div><div class="easy-step ${c.complete?'done':(!pending.length?'current':'wait')}"><div class="easy-icon">${c.complete?'✓':'3'}</div><div class="easy-copy"><b>3. ${resolution?'V°B° y firma final':'Firma principal'}</b><span>${esc(mainStatus)}</span></div></div><div class="easy-step ${canEmit?'current':'wait'}"><div class="easy-icon">4</div><div class="easy-copy"><b>4. Emisión</b><span>${canEmit?'Lista para continuar.':'Se habilita al terminar el circuito.'}</span></div></div></div>${resolutionVbProgressUI38_(c)}<div class="signature-simple-summary"><div class="signature-simple-item"><b>${esc(annexStatus)}</b><span>${annexOpen?'Configure aquí las solicitudes necesarias. Una vez iniciada la firma principal, esta etapa queda cerrada.':pending.length?'Las oficinas asignadas verán cada anexo en su bandeja de firmas pendientes.':'La etapa de anexos está cerrada o completada.'}</span></div><div class="signature-simple-item"><b>${esc(mainStatus)}</b><span>${esc(mainText)}</span></div></div></div><div class="stage-actionbar"><button class="backbtn" onclick="leaveDocumentFlow()">← Volver</button><div class="signature-stage-actions">${primaryActions}</div><details class="more-actions"><summary>Más opciones</summary><div class="danger-zone">${!c.prepared?`<button class="btn btn-outline" type="button" onclick="reopenFinalReviewUI()">Necesito corregir el documento</button>`:`<button class="btn btn-danger" type="button" onclick="rollbackEmission('${esc(app.currentDraft||'')}')">Anular circuito / volver a proyecto</button>`}</div></details></div></section>`;
  }
@@ -970,35 +971,50 @@ async function downloadDraftFinalPdf_(documentId){
  try{loading(true,'Preparando PDF…','Un momento');const p=await getDraftFinalPdfPayloadClient_(documentId),blob=sgdPayloadToBlob_(p);downloadBlobDirect_(blob,p.name||'documento.pdf');toast('Descarga iniciada')}catch(e){err(e)}finally{loading(false)}
 }
 
+let finalReviewUrl_=null;
+function releaseFinalReview_(){
+  if(finalReviewUrl_)URL.revokeObjectURL(finalReviewUrl_);
+  finalReviewUrl_=null;
+}
 async function reviewFinal(){
- if(!app.currentDraft){toast('No se pudo identificar el documento en revisión. Vuelva a abrir el borrador.');return}
- loading(true,'Abriendo revisión…','Cargando el PDF final');
- try{
-  const r=await api('getDocumentDetailSGD',app.token,app.currentDraft),d=r.raw;
-  if(!d.PDF_Final_ID||!d.Word_Final_ID){toast('Primero carga el Word final y el PDF que será sometido a firma');return}
-  const docId=app.currentDraft;
-  showModal('Revisión final',`
-   <div class="review-compact">
-    <div class="review-file"><small>Documento</small><b>${esc(d['Número']||'')}</b></div>
-    <div class="review-file"><small>PDF cargado</small><b>${esc(d.PDF_Final_Nombre||'PDF final')}</b></div>
-    <div class="review-file"><small>Etapa siguiente</small><b>Firma digital / parafirma</b></div>
-   </div>
-   <div class="action-primary" style="margin-top:13px"><button class="btn btn-primary" type="button" onclick="previewDraftFinalPdf_('${esc(docId)}')">Visualizar documento ↗</button><button class="btn btn-outline" type="button" onclick="downloadDraftFinalPdf_('${esc(docId)}')">Descargar PDF</button></div>
-   <label class="checkline" style="margin-top:13px"><input type="checkbox" id="confirmSignature"><span>He verificado el PDF y confirmo que esta es la versión correcta que debe pasar al circuito de firma.</span></label>
-  `,`<button class="backbtn" type="button" onclick="closeModal()">← Volver</button><button class="btn btn-primary" type="button" onclick="confirmReviewAndEmit()">Confirmar revisión y continuar a firma</button>`);
- }catch(e){err(e)}finally{loading(false)}
+  const id=app.currentDraft;
+  if(!id)return;
+  releaseFinalReview_();
+  showWideModal('Revisión final',
+    '<div id="finalReviewBody" role="status">Cargando el PDF que pasará a firma…</div>',
+    '<button class="backbtn" type="button" onclick="closeModal()">Volver</button>'+
+    '<button id="finalReviewConfirm" class="btn btn-primary" type="button" disabled>Confirmar revisión y continuar</button>');
+  const body=$('finalReviewBody'),button=$('finalReviewConfirm');
+  try{
+    const pdf=await getDraftFinalPdfPayloadClient_(id);
+    if(body!==$('finalReviewBody')||!$('modalBack').classList.contains('show')||id!==app.currentDraft)return;
+    if(!pdf.pdfHash)throw Error('No se pudo verificar la versión del PDF. Vuelve a cargar el archivo.');
+    finalReviewUrl_=URL.createObjectURL(sgdPayloadToBlob_(pdf));
+    const url=finalReviewUrl_;
+    body.innerHTML='<div class="action-primary"><a class="btn btn-outline" target="_blank" rel="noopener" href="'+esc(url)+'">Abrir PDF en otra pestaña</a>'+
+      '<a class="btn btn-outline" download="'+esc(pdf.name||'Documento.pdf')+'" href="'+esc(url)+'">Descargar PDF</a></div>'+
+      '<iframe title="PDF para revisión final" src="'+esc(url)+'" style="width:100%;height:60vh;border:1px solid #d2dde7;border-radius:10px;margin:10px 0"></iframe>'+
+      '<p class="helper">Al confirmar, declaras que revisaste este PDF y autorizas que esta versión pase al circuito de firma.</p>';
+    body.removeAttribute('role');
+    button.onclick=()=>confirmReviewAndEmit(id,pdf.pdfHash,button);
+    button.disabled=false;
+  }catch(error){
+    if(body===$('finalReviewBody'))body.textContent=error.message;
+  }
 }
 
-async function confirmReviewAndEmit(){
- if(!$('confirmSignature')?.checked){toast('Marque la conformidad del PDF para continuar');return}
- try{
-  loading(true,'Listo, guardando revisión…','Abriendo la etapa de anexos previa a la firma principal');
-  await api('confirmFinalReviewSGD',app.token,app.currentDraft,'SI');
-  closeModal();
-  const r=await api('getDraftStateSGD',app.token,app.currentDraft);
-  renderDraftFromResult224(r);
-  toast((r.signatureCircuit&&r.signatureCircuit.prepared)?'La revisión ya estaba completa. Continúa con el circuito vigente.':'Revisión completa. Revisa ahora si algún anexo requiere firma o V°B°; después se habilitará la firma principal.');
- }catch(e){err(e)}finally{loading(false)}
+async function confirmReviewAndEmit(id,pdfHash,button){
+  if(button.disabled||id!==app.currentDraft)return;
+  button.disabled=true;
+  try{
+    loading(true,'Guardando revisión…','Validando el Word y la versión del PDF');
+    let result=await api('confirmFinalReviewSGD',app.token,id,'SI',pdfHash);
+    if(!result?.raw)result=await api('getDraftStateSGD',app.token,id);
+    if(id!==app.currentDraft)return;
+    closeModal();
+    renderDraftFromResult224(result);
+  }catch(error){err(error)}
+  finally{loading(false);if(button.isConnected)button.disabled=false;}
 }
 
 async function reopenFinalReviewUI(){if(!app.currentDraft)return;if(!confirm('¿Volver a la revisión final? Podrá corregir y reemplazar el Word/PDF del documento principal. Los anexos que ya tengan firma digital se conservarán intactos y no podrán reemplazarse ni eliminarse.'))return;try{loading(true,'Reabriendo revisión…','Conservando los anexos que ya tienen firma digital');const back=await api('fd31ReopenReviewSGD',app.token,app.currentDraft);const r=await api('getDraftStateSGD',app.token,app.currentDraft);renderDraftFromResult224(r);if(Number(back?.preservedSignedAnnexes||0)>0)toast('Revisión reabierta. Se conservaron '+back.preservedSignedAnnexes+' anexo(s) con firma digital.')}catch(e){err(e)}finally{loading(false)}}
@@ -1031,6 +1047,18 @@ async function openSignatureCenter(){
   <section class="signature-center-section signature-primary"><div class="signature-center-head"><div><h3>${c.complete?'Firma completada':resolution?'V°B° y firma final':'Documento principal'}</h3><p>${pendingAnn.length?'La firma principal permanece bloqueada hasta que terminen los anexos pendientes.':waitingVb?`La firma final está bloqueada hasta completar los ${vbPending.length} V°B° pendiente${vbPending.length===1?'':'s'}. Las oficinas pueden actuar en cualquier orden.`:c.complete?'El documento principal ya cuenta con la firma requerida.':resolution?'Complete los V°B° institucionales y luego la firma final.':'Los anexos están listos. Previsualice el documento y confirme su firma.'}</p></div>${mainAction}</div>${c.prepared&&!c.complete?`<div class="signature-turn ${c.next===app.session?.userId?'mine':'wait'}">${c.next===app.session?.userId?'Su turno · puede firmar ahora':waitingVb?`${vbPending.length} V°B° pendientes · oficinas habilitadas en paralelo`:'En espera de la firma final'} · ${Number(c.signedCount||0)}/${Number(c.total||1)} completado(s)</div>`:''}</section>`;
   showWideModal('Firmar documento',body,`<button class="backbtn" onclick="closeModal()">Cerrar</button>${c.prepared?`<button class="btn btn-danger" onclick="closeModal();rollbackEmission('${esc(app.currentDraft)}')">Anular circuito / retrotraer</button>`:''}${c.complete&&!pendingAnn.length?`<button class="btn btn-green" onclick="closeModal();refreshSignatureStageAndEmit_()">Continuar a emisión</button>`:''}`);
  }catch(e){err(e)}finally{loading(false)}
+}
+
+function openDirectInitialSignature_(){
+  const id=app.currentDraft;
+  if(!id)return;
+  return fdRun(async()=>{
+    fdPanel('Firma digital','<p role="status">Preparando el PDF para la firma principal…</p>');
+    const result=await api('fdPrepareSGD',app.token,id,[]);
+    if(id!==app.currentDraft)return;
+    app.annexConfigOpen=false;
+    await fdShow(result);
+  });
 }
 
 let fdPreparePreviewBusy_=false;
@@ -1335,7 +1363,7 @@ async function resolveRecovery240(id,reset){if(reset&&!confirm('¿Restablecer la
 
 function showModal(title,body,foot=''){ $('modal').classList.remove('wide');$('modal').innerHTML=`<button class="modal-close" type="button" onclick="closeModal()" aria-label="Cerrar" title="Cerrar">×</button><h3>${title}</h3><div class="body">${body}</div><div class="foot">${foot||'<button class="btn btn-outline" onclick="closeModal()">Cerrar</button>'}</div>`;$('modalBack').classList.add('show')}
 function showWideModal(title,body,foot=''){ $('modal').classList.add('wide');$('modal').innerHTML=`<button class="modal-close" type="button" onclick="closeModal()" aria-label="Cerrar" title="Cerrar">×</button><h3>${title}</h3><div class="body">${body}</div><div class="foot">${foot||'<button class="btn btn-outline" onclick="closeModal()">Cerrar</button>'}</div>`;$('modalBack').classList.add('show')}
-function closeModal(){$('modalBack').classList.remove('show');$('modal').classList.remove('wide');app.modalStack=[]}
+function closeModal(){releaseFinalReview_();$('modalBack').classList.remove('show');$('modal').classList.remove('wide');app.modalStack=[]}
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('modalBack')?.classList.contains('show')){closeModal();return}if($('drawerBack')?.classList.contains('show'))closeDrawer()});
 init();
 </script>
