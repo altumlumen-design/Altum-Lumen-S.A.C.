@@ -397,22 +397,53 @@ async function saveMySignaturePassword240(){
 
 async function renderBox(box,title){
  app.boxItems[box]=[];if(box==='POR_RECIBIR'){app.bulkReceiveSelection40=new Set();app.bulkReceiveFeedback40='';}
- const types=[...new Set((app.bootstrap?.series||[]).map(x=>x.type).filter(Boolean))].sort(),received=box==='RECIBIDOS',toReceive=box==='POR_RECIBIR',attention=box==='ATENCION',sent=box==='EMITIDOS';
+ const types=boxDocumentTypes_(box),received=box==='RECIBIDOS',toReceive=box==='POR_RECIBIR',attention=box==='ATENCION',sent=box==='EMITIDOS';
  const statusOptions=toReceive?`<option value="">Pendiente de recepción</option>`:attention?`<option value="">Todos en atención</option><option value="RECIBIDO">Recibido</option><option value="EN_ATENCIÓN">Atención iniciada</option>`:received?`<option value="">Trabajo pendiente</option><option value="TODOS">Todos</option><option value="PENDIENTE">Pendiente de recepción</option><option value="RECIBIDO">Recibido</option><option value="EN_ATENCIÓN">En atención</option><option value="ATENDIDO">Atendido</option>`:sent?`<option value="">Todos los estados</option><option value="PENDIENTE">Pendiente de recepción</option><option value="RECIBIDO">Recibido</option><option value="EN ATENCIÓN">En atención</option><option value="ATENCIÓN PARCIAL">Atención parcial</option><option value="ATENDIDO">Atendido</option><option value="HISTÓRICO">Histórico</option>`:`<option value="">Todos los estados</option><option>PENDIENTE</option><option>RECIBIDO</option><option>EN_ATENCIÓN</option><option>ATENDIDO</option><option>EMITIDO</option><option>HISTÓRICO</option><option>ANULADO</option>`;
  const sub=toReceive?'Documentos remitidos a su oficina que todavía requieren recepción.':attention?'Documentos ya recibidos. Permanecen aquí mientras estén recibidos o con atención iniciada.':received?'Aquí ves el trabajo pendiente de tu oficina. Los documentos atendidos permanecen disponibles mediante el filtro “Atendido”.':sent?'Controla cómo avanzan los documentos que emitió tu oficina, incluso cuando tienen varios destinatarios.':'';
  $('main').innerHTML=pageHead(title,sub)+`<section class="panel"><div class="toolbar"><input id="boxSearch" class="search" placeholder="Buscar número, asunto, expediente, oficina o tipo…" onkeydown="if(event.key==='Enter')loadBox('${box}',false)"><select id="boxType" class="filter"><option value="">Todos los tipos</option>${types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}</select><select id="boxStatus" class="filter">${statusOptions}</select><input id="boxDateFrom" class="filter" type="date" title="Fecha de emisión desde"><input id="boxDateTo" class="filter" type="date" title="Fecha de emisión hasta"><button class="btn btn-secondary" onclick="loadBox('${box}',false)">Buscar</button><button class="btn btn-outline" onclick="clearBoxFilters('${box}')">Limpiar</button></div>${toReceive?`<div id="bulkReceiveBar40" class="bulk-receive40"><div class="bulk-receive40-info"><span id="bulkReceiveCount40" class="bulk-receive40-count">0</span><span><b>Recepción múltiple</b><small>Seleccione uno o más documentos. Al recibirlos pasarán automáticamente a En atención.</small></span></div><button id="bulkReceiveBtn40" class="btn btn-primary" type="button" onclick="receiveSelected40_()" disabled>Recibir seleccionados</button></div><div id="bulkReceiveFeedback40"></div>`:''}<div id="boxBody" class="inline-load">Cargando…</div></section>`;
  await loadBox(box,false);
 }
+function boxDocumentTypes_(box){
+ const types=new Set((app.bootstrap?.series||[]).map(x=>x.type).filter(Boolean));
+ if(['RECIBIDOS','POR_RECIBIR','ATENCION','ARCHIVO','SEGUIMIENTO'].includes(box)){
+   types.add('Reclamo');
+   types.add('Queja');
+ }
+ return [...types].sort((a,b)=>a.localeCompare(b,'es'));
+}
+const boxLoads_=new WeakMap();
 async function loadBox(box,append=false){
+ const body=$('boxBody');
+ if(!body)return;
+ const q=$('boxSearch')?.value||'',status=$('boxStatus')?.value||'',type=$('boxType')?.value||'',dateFrom=$('boxDateFrom')?.value||'',dateTo=$('boxDateTo')?.value||'';
+ const filters=JSON.stringify([box,q,status,type,dateFrom,dateTo]),previous=boxLoads_.get(body);
+ if(append&&previous?.pending)return;
+ if(append&&previous?.filters!==filters)append=false;
+ const offset=append?(app.boxItems[box]||[]).length:0;
+ const request={filters,pending:true};
+ boxLoads_.set(body,request);
+ const more=append?body.querySelector('[data-box-more]'):null;
+ if(more)more.disabled=true;
+ if(box==='POR_RECIBIR'&&!append){
+   receiveSelection40_().clear();
+   updateBulkReceiveBar40_();
+ }
+ const current=()=>$('boxBody')===body&&boxLoads_.get(body)===request;
  try{
-   if(box==='POR_RECIBIR'&&!append)receiveSelection40_().clear();
-   const q=$('boxSearch')?.value||'',status=$('boxStatus')?.value||'',type=$('boxType')?.value||'',dateFrom=$('boxDateFrom')?.value||'',dateTo=$('boxDateTo')?.value||'',offset=append?(app.boxItems[box]||[]).length:0;
    const r=await api('listDocumentsSGD',app.token,box,{q,status,type,dateFrom,dateTo,limit:75,offset});
+   if(!current())return;
    app.boxItems[box]=append?(app.boxItems[box]||[]).concat(r.items||[]):(r.items||[]);
    const total=(r.total!==undefined&&r.total!==null)?`<div class="helper" style="padding:10px 2px">${r.total} resultado(s)</div>`:'';
-   $('boxBody').innerHTML=total+docTable(app.boxItems[box],box)+(r.hasMore?`<div style="padding:14px;text-align:center"><button class="btn btn-outline" onclick="loadBox('${box}',true)">Mostrar más</button></div>`:'');
+   body.innerHTML=total+docTable(app.boxItems[box],box)+(r.hasMore?`<div style="padding:14px;text-align:center"><button class="btn btn-outline" data-box-more onclick="loadBox('${box}',true)">Mostrar más</button></div>`:'');
    if(box==='POR_RECIBIR')updateBulkReceiveBar40_();
- }catch(e){$('boxBody').innerHTML=`<div class="empty">${esc(e.message)}</div>`}
+ }catch(e){
+   if(!current())return;
+   if(append)toast(e.message);
+   else body.innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+ }finally{
+   request.pending=false;
+   if(current()&&more)more.disabled=false;
+ }
 }
 function clearBoxFilters(box){if($('boxSearch'))$('boxSearch').value='';if($('boxType'))$('boxType').value='';if($('boxStatus'))$('boxStatus').value='';if($('boxDateFrom'))$('boxDateFrom').value='';if($('boxDateTo'))$('boxDateTo').value='';loadBox(box,false)}
 function receiveSelection40_(){if(!(app.bulkReceiveSelection40 instanceof Set))app.bulkReceiveSelection40=new Set();return app.bulkReceiveSelection40;}
@@ -1226,7 +1257,7 @@ async function backDoc(){
  const st=(app.docNavStack||[]).pop();if(!st){closeDrawer();return}
  try{loading(true,'Volviendo…','Un momento');const r=await api('getDocumentDetailSGD',app.token,st.id);renderDocDrawer224(r);requestAnimationFrame(()=>$('drawer').scrollTop=Number(st.scrollTop||0))}catch(e){err(e)}finally{loading(false)}
 }
-function officeName(code){return (app.bootstrap.offices||[]).find(o=>o.code===code)?.name||code||'—'}
+function officeName(code){return (app.bootstrap.offices||[]).find(o=>o.code===code)?.name||(code==='MPV'?'Ingreso por portal':code)||'—'}
 async function annulDoc(id){const reason=prompt('Motivo para descartar/anular este borrador:');if(!reason)return;try{await api('annulDocumentSGD',app.token,id,reason);closeDrawer();toast('Borrador retirado con auditoría');refreshBootstrap();go('drafts')}catch(e){err(e)}}
 
 async function restoreDiscardedDraft240(id){const reason=prompt('Motivo para restaurar este borrador:');if(!reason)return;try{loading(true,'Restaurando borrador…','Verificando correlativo y archivos');const r=await api('restoreDiscardedDraftSGD',app.token,id,reason);closeDrawer();toast('Borrador restaurado');renderDraftFromResult224(r);refreshCountsQuiet224()}catch(e){err(e)}finally{loading(false)}}
@@ -1276,7 +1307,21 @@ async function renderExpedientes(){
  $('main').innerHTML=pageHead('Expedientes','Solo se muestran expedientes en los que participa tu área.')+`<section class="panel"><div class="toolbar"><input id="expSearch" class="search" placeholder="Buscar por expediente o asunto" oninput="debounceExpedientes240()"><select id="expStatus" class="filter" onchange="loadExpedientes()"><option value="">Todos los estados</option><option>EN_TRÁMITE</option><option>FINALIZADO</option><option>ARCHIVADO</option></select></div><div id="expBody" class="inline-load">Cargando…</div></section>`;await loadExpedientes();
 }
 function debounceExpedientes240(){clearTimeout(window._expSearchTimer240);window._expSearchTimer240=setTimeout(()=>loadExpedientes(),220)}
-async function loadExpedientes(){try{const r=await api('listExpedientesSGD',app.token,$('expStatus')?.value||'',$('expSearch')?.value.trim()||''),items=Array.isArray(r?.items)?r.items:null;if(!items)throw new Error('No se pudo obtener el listado de expedientes. Actualice la página e inténtelo nuevamente.');$('expBody').innerHTML=items.length?`<div class="table-wrap"><table class="table"><thead><tr><th>Expediente</th><th>Asunto</th><th>Responsable</th><th>Última gestión</th><th>Estado</th><th></th></tr></thead><tbody>${items.map(e=>`<tr><td><span class="doclink" onclick="openExp('${esc(e.Expediente_ID)}')">${esc(e.Expediente_ID)}</span></td><td class="subject">${esc(e.Asunto)}</td><td>${esc(officeName(e.Oficina_Responsable))}</td><td>${esc(e.Fecha_Última_Gestión)}</td><td>${pill(e.Estado)}</td><td><button class="smallbtn" onclick="openExp('${esc(e.Expediente_ID)}')">Abrir</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No hay expedientes de tu área con esos criterios.</div>'}catch(e){$('expBody').innerHTML=`<div class="empty">${esc(e?.message||'No se pudo cargar el listado.')}</div>`}}
+const expedienteLoads_=new WeakMap();
+async function loadExpedientes(){
+ const body=$('expBody');
+ if(!body)return;
+ const request={};
+ expedienteLoads_.set(body,request);
+ const current=()=>$('expBody')===body&&expedienteLoads_.get(body)===request;
+ try{
+   const r=await api('listExpedientesSGD',app.token,$('expStatus')?.value||'',$('expSearch')?.value.trim()||'');
+   if(!current())return;
+   if(!Array.isArray(r?.items))throw new Error('No se pudo obtener el listado de expedientes. Actualice la página e inténtelo nuevamente.');
+   const items=r.items;
+   body.innerHTML=items.length?`<div class="table-wrap"><table class="table"><thead><tr><th>Expediente</th><th>Asunto</th><th>Responsable</th><th>Última gestión</th><th>Estado</th><th></th></tr></thead><tbody>${items.map(e=>`<tr><td><span class="doclink" onclick="openExp('${esc(e.Expediente_ID)}')">${esc(e.Expediente_ID)}</span></td><td class="subject">${esc(e.Asunto)}</td><td>${esc(officeName(e.Oficina_Responsable))}</td><td>${esc(e.Fecha_Última_Gestión)}</td><td>${pill(e.Estado)}</td><td><button class="smallbtn" onclick="openExp('${esc(e.Expediente_ID)}')">Abrir</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No hay expedientes de tu área con esos criterios.</div>';
+ }catch(e){if(current())body.innerHTML=`<div class="empty">${esc(e?.message||'No se pudo cargar el listado.')}</div>`}
+}
 async function openExp(id){try{const r=await api('getExpedienteSGD',app.token,id);if(!r?.expediente)throw new Error('No se pudo obtener el expediente.');const e=r.expediente,documents=Array.isArray(r.documents)?r.documents:[],movements=Array.isArray(r.movements)?r.movements:[];const moveHtml=`<div class="timeline">${movements.map(m=>`<div class="timeline-item"><b>${esc(m.Tipo)}</b><p>${esc(m.Indicación||'')}</p><time>${esc(m.Fecha_Hora)}</time></div>`).join('')||'<div class="helper">Sin movimientos.</div>'}</div>`;showModal(id,`<div class="info-grid"><div class="info" style="grid-column:1/-1"><label>Asunto</label><div>${esc(e.Asunto)}</div></div><div class="info"><label>Estado</label><div>${pill(e.Estado)}</div></div><div class="info"><label>Última gestión</label><div>${esc(e.Fecha_Última_Gestión)}</div></div></div><div class="doc-actions"><button class="btn btn-outline" onclick="openRouteTree('${esc(id)}',true)">Árbol del expediente →</button></div>${foldSection('Documentos',documents.length,docTable(documents),true)}${foldSection('Movimientos',movements.length,moveHtml)}`,expActions(e))}catch(e){err(e)}}
 function expActions(e){const close=`<button class="btn btn-outline" type="button" onclick="closeModal()">Cerrar</button>`;if(e.Estado==='EN_TRÁMITE')return close+`<button class="btn btn-green" onclick="finalizeExp('${e.Expediente_ID}')">Finalizar expediente</button>`;if(e.Estado==='FINALIZADO')return close+`<button class="btn btn-outline" onclick="reopenExp('${e.Expediente_ID}')">Reabrir</button><button class="btn btn-primary" onclick="archiveExp('${e.Expediente_ID}')">Archivar</button>`;if(e.Estado==='ARCHIVADO')return close+`<button class="btn btn-outline" onclick="reopenExp('${e.Expediente_ID}')">Reabrir</button>`;return close}
 async function finalizeExp(id){const reason=prompt('Motivo/constancia de cierre:','Atención concluida');if(reason===null)return;try{await api('finalizeExpedienteSGD',app.token,id,reason);closeModal();toast('Expediente finalizado');loadExpedientes()}catch(e){err(e)}}
