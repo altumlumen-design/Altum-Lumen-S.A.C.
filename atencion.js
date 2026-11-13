@@ -45,7 +45,7 @@ ${field('subject','Asunto <small>Hasta 300 caracteres</small>','maxlength="300" 
 ${page==='mesa'?'<label>PDF principal <small>Hasta 20 MB</small><input id="principal" type="file" accept=".pdf,application/pdf" required></label>':''}
 <label>Anexos PDF (opcional) <small>Hasta 20 MB en conjunto. Puedes agregarlos uno por uno.</small><input id="annex" type="file" accept=".pdf,application/pdf" multiple></label>
 <ol id="files" aria-label="Documentos que se enviarán"></ol></fieldset>
-<details><summary>Uso de tus datos</summary><p>ALTUM LUMEN S.A.C. usa tus datos y archivos para registrar, atender y responder este trámite. Para consultas sobre tus datos, escribe a tramiteyatencion.altumlumen@gmail.com.</p></details>
+<details><summary>Uso de tus datos</summary><p>ALTUM LUMEN S.A.C. usa tus datos y archivos para registrar, atender y responder este trámite. Para consultas sobre tus datos, escribe a tramiteyatencion.altumlumen@gmail.com. <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a></p></details>
 <p></p>${captcha}${message}<button id="send">Registrar expediente</button></form>
 <section class="panel" id="result" hidden tabindex="-1"></section>`;
 const form=document.querySelector('#form'),send=document.querySelector('#send'),result=document.querySelector('#result'),feedback=document.querySelector('#message');
