@@ -788,7 +788,7 @@ async function searchAnnexInheritance240(){
 }
 function renderAnnexInheritance240(){
  const el=$('annexInheritanceList240');if(!el)return;const selected=app.annexInheritanceSelection240||{},items=app.annexInheritanceResults240||[];
- el.innerHTML=items.length?items.map(x=>{const d=x.document||{},annexes=x.annexes||[];return `<div class="attention-result" style="display:block;margin-bottom:10px"><div><b>${esc(x.position)}. ${esc(d.number||d.documentId)}</b><div class="subject" style="margin-top:3px">${esc(d.subject||'Sin asunto')}</div><div class="attention-meta">${esc(d.type||'Documento')} · ${esc(officeName(d.origin)||d.origin||'—')} · ${esc(d.expediente||'Sin expediente')} · ${annexes.length} anexo(s)</div></div><div style="margin-top:9px">${annexes.length?`<div class="doc-actions" style="margin-bottom:7px"><button class="btn btn-outline" type="button" data-source="${esc(d.documentId)}" onclick="selectSourceAnnexes_(this.dataset.source)">Seleccionar anexos de este documento</button><button class="btn btn-subtle" type="button" onclick="downloadDocumentAnnexesZip('${esc(d.documentId)}')">↓ Descargar todos (.zip)</button></div>${annexes.map(a=>`<div class="attention-result" style="margin:5px 0;padding:8px 10px"><label class="checkline" style="margin:0;flex:1"><input type="checkbox" ${selected[a.annexId]?'checked':''} onchange="toggleInheritedAnnex240('${esc(a.annexId)}','${esc(d.documentId)}',this.checked)"><span><b>${esc(a.name)}</b><small style="display:block;color:var(--muted)">${esc(a.mime||'Archivo')} · ${Math.max(1,Math.round(Number(a.size||0)/1024))} KB</small></span></label><button class="btn btn-subtle" type="button" onclick="downloadSgdFile('${esc(a.fileId)}')">Descargar</button></div>`).join('')}`:'<div class="helper">Este documento no tiene anexos disponibles para heredar.</div>'}</div></div>`}).join(''):'<div class="helper">No hay documentos vinculados disponibles para heredar anexos.</div>';
+ el.innerHTML=items.length?items.map(x=>{const d=x.document||{},annexes=x.annexes||[];return `<div class="attention-result" data-annex-group style="display:block;margin-bottom:10px"><div><b>${esc(x.position)}. ${esc(d.number||d.documentId)}</b><div class="subject" style="margin-top:3px">${esc(d.subject||'Sin asunto')}</div><div class="attention-meta">${esc(d.type||'Documento')} · ${esc(officeName(d.origin)||d.origin||'—')} · ${esc(d.expediente||'Sin expediente')} · ${annexes.length} anexo(s)</div></div><div style="margin-top:9px">${annexes.length?`<div class="doc-actions" style="margin-bottom:7px"><button class="btn btn-outline" type="button" data-source="${esc(d.documentId)}" onclick="selectSourceAnnexes_(this)">Seleccionar anexos de este documento</button><button class="btn btn-subtle" type="button" onclick="downloadDocumentAnnexesZip('${esc(d.documentId)}')">↓ Descargar todos (.zip)</button></div>${annexes.map(a=>`<div class="attention-result" style="margin:5px 0;padding:8px 10px"><label class="checkline" style="margin:0;flex:1"><input type="checkbox" ${selected[a.annexId]?'checked':''} onchange="toggleInheritedAnnex240('${esc(a.annexId)}','${esc(d.documentId)}',this.checked)"><span><b>${esc(a.name)}</b><small style="display:block;color:var(--muted)">${esc(a.mime||'Archivo')} · ${a.size>0?Math.max(1,Math.round(a.size/1024))+' KB':'Tamaño por verificar'}</small></span></label><button class="btn btn-subtle" type="button" onclick="downloadSgdFile('${esc(a.fileId)}')">Descargar</button></div>`).join('')}`:'<div class="helper">Este documento no tiene anexos disponibles para heredar.</div>'}</div></div>`}).join(''):'<div class="helper">No hay documentos vinculados disponibles para heredar anexos.</div>';
  updateAnnexInheritanceSummary240_();
 }
 function toggleInheritedAnnex240(annexId,sourceDocumentId,checked){
@@ -796,14 +796,16 @@ function toggleInheritedAnnex240(annexId,sourceDocumentId,checked){
  if(checked){const found=annexInheritanceFind240_(annexId);if(found&&found.sourceDocumentId===sourceDocumentId)selected[annexId]=found;}
  else delete selected[annexId];updateAnnexInheritanceSummary240_();
 }
-function selectSourceAnnexes_(documentId){
+function selectSourceAnnexes_(button){
+  const documentId=button.dataset.source;
   const source=app.annexInheritanceResults240.find(item=>item.document.documentId===documentId);
   if(!source)return;
   const selected=app.annexInheritanceSelection240;
   source.annexes.forEach(annex=>{
     selected[annex.annexId]={sourceDocumentId:documentId,annex,document:source.document};
   });
-  renderAnnexInheritance240();
+  button.closest('[data-annex-group]').querySelectorAll('input[type="checkbox"]').forEach(input=>{input.checked=true});
+  updateAnnexInheritanceSummary240_();
 }
 function updateAnnexInheritanceSummary240_(){
  const selected=Object.values(app.annexInheritanceSelection240||{}),sources=new Set(selected.map(x=>x.sourceDocumentId)),summary=$('annexInheritanceSummary240'),btn=$('inheritAnnexApply240');
@@ -811,9 +813,30 @@ function updateAnnexInheritanceSummary240_(){
  if(btn){btn.disabled=!selected.length;btn.textContent=selected.length?'Heredar '+selected.length+' anexo(s)':'Heredar seleccionados'}
 }
 async function applyInheritedAnnexes240(){
- const selected=Object.values(app.annexInheritanceSelection240||{});if(!selected.length)return;
- const grouped={};selected.forEach(x=>{(grouped[x.sourceDocumentId]||(grouped[x.sourceDocumentId]=[])).push(x.annex.annexId)});const payload=Object.keys(grouped).map(sourceDocumentId=>({sourceDocumentId,annexIds:grouped[sourceDocumentId]}));
- try{closeModal();loading(true,'Heredando anexos…','Creando copias independientes para el borrador actual');const r=await api('inheritAnnexesSGD',app.token,app.currentDraft,payload);if(r.failure)toast((r.added||[]).length+' anexo(s) heredado(s). '+r.failure);else toast((r.added||[]).length+' anexo(s) heredado(s)'+(r.skipped?' · '+r.skipped+' ya incorporado(s)':''));await loadDraftExtras(app.currentDraft)}catch(e){err(e)}finally{loading(false)}
+  const selected=Object.values(app.annexInheritanceSelection240||{});
+  const draftId=app.currentDraft,button=$('inheritAnnexApply240'),list=$('annexInheritanceList240');
+  if(!selected.length||!button||button.disabled)return;
+  const grouped=new Map();
+  selected.forEach(row=>{
+    if(!grouped.has(row.sourceDocumentId))grouped.set(row.sourceDocumentId,[]);
+    grouped.get(row.sourceDocumentId).push(row.annex.annexId);
+  });
+  const payload=[...grouped].map(([sourceDocumentId,annexIds])=>({sourceDocumentId,annexIds}));
+  button.disabled=true;
+  button.textContent='Copiando anexos…';
+  loading(true,'Heredando anexos…','Copiando los archivos seleccionados');
+  try{
+    const result=await api('inheritAnnexesSGD',app.token,draftId,payload);
+    if(draftId!==app.currentDraft||list!==$('annexInheritanceList240'))return;
+    closeModal();
+    const count=(result.added||[]).length;
+    toast(count+' anexo(s) heredado(s)'+(result.failure?'. '+result.failure:result.skipped?' · '+result.skipped+' ya incorporado(s)':''));
+    await loadDraftExtras(draftId);
+  }catch(error){err(error)}
+  finally{
+    loading(false);
+    if(button===$('inheritAnnexApply240'))updateAnnexInheritanceSummary240_();
+  }
 }
 async function removeAnnex(id){if(!confirm('¿Retirar este anexo?'))return;try{await api('removeAnnexSGD',app.token,id);await loadDraftExtras(app.currentDraft)}catch(e){err(e)}}
 function annexActionLabel_(a){return String(a?.requestedAction||a?.action||'FIRMA').toUpperCase()==='VISTO_BUENO'?'V°B°':'Firma';}
