@@ -232,7 +232,14 @@ async function start(){
   try{
     if(page==='libro'){
       const {provider}=await rpc('config');
-      if(!provider){form.hidden=true;app.prepend(element('p','El Libro de Reclamaciones aún no está habilitado.'));return;}
+      if(!provider){
+        form.hidden=true;
+        const notice=element('p','El Libro de Reclamaciones aún no está habilitado.');
+        notice.className='panel';
+        notice.setAttribute('role','status');
+        app.prepend(notice);
+        return;
+      }
       document.querySelector('#provider').append(document.createTextNode(' · '+provider));
     }
     await refresh();

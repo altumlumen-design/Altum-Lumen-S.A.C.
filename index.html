@@ -77,9 +77,27 @@
     .site-nav .nav-cta:hover,.site-nav .nav-cta[aria-current="true"] { color:var(--white); background:#0b334b; }
     .menu-toggle { width:46px; height:46px; display:none; place-items:center; padding:0; border:1px solid var(--line); border-radius:12px; color:var(--ink); background:var(--white); cursor:pointer; }
     .menu-toggle svg { width:22px; height:22px; }
-    .sgd-link { display:inline-flex; flex-shrink:0; align-items:center; gap:7px; min-height:44px; padding:0 12px; border:1px solid var(--line); border-radius:10px; color:var(--blue-deep); background:var(--white); font-size:.88rem; font-weight:650; text-decoration:none; white-space:nowrap; }
-    .sgd-link svg { width:17px; height:17px; flex-shrink:0; }
-    .sgd-link:hover,.sgd-link[aria-current="true"] { background:var(--blue-pale); border-color:var(--blue-deep); }
+    .service-bar { background:#eef5f8; border-bottom:1px solid var(--line); }
+    .service-bar .container { display:grid; grid-template-columns:1.2fr 1.2fr 1fr auto; gap:12px; padding-block:14px; }
+    .service-access { display:flex; align-items:center; gap:12px; min-height:72px; padding:10px 14px; border:1px solid #c9dce7; border-radius:14px; background:white; color:var(--blue-deep); text-decoration:none; }
+    .service-access img { flex:0 0 auto; width:38px; height:38px; border-radius:50%; background:white; }
+    .service-access span { display:block; }
+    .service-access strong { display:block; font-size:.97rem; line-height:1.25; }
+    .service-access small { display:block; margin-top:4px; color:#37586b; font-size:.79rem; line-height:1.35; }
+    .service-access:hover { border-color:var(--blue); background:#f9fcff; }
+    .service-access:focus-visible { outline:3px solid #1975a0; outline-offset:3px; }
+    .service-access.is-primary { background:#123f59; color:white; border-color:#123f59; }
+    .service-access.is-primary small { color:#e3f0f7; }
+    .service-access.is-primary img { padding:5px; }
+    .service-access.is-primary:hover { background:#0b3149; }
+    .service-access.is-staff { min-height:44px; align-self:center; background:transparent; border-color:transparent; text-decoration:underline; text-underline-offset:4px; }
+    @media(max-width:760px){
+      .service-bar .container { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding-block:10px; }
+      .service-access { gap:8px; padding:9px 10px; min-height:48px; }
+      .service-access img { width:29px; height:29px; }
+      .service-access.is-staff { justify-content:flex-end; }
+    }
+    @media(max-width:380px){.service-access img{display:none}.service-access small{font-size:.75rem}}
     @media (981px <= width <= 1120px) {
       .header-inner { gap:12px; }
       .brand img { width:150px; }
@@ -89,10 +107,6 @@
     @media (max-width:980px) {
       .header-inner { gap:8px; }
       .menu-toggle { flex:0 0 44px; margin-inline-start:auto; }
-      .sgd-link { padding-inline:9px; }
-    }
-    @media (max-width:360px) {
-      .sgd-link svg { display:none; }
     }
     main { min-height:calc(100svh - 88px); overflow:clip; background:var(--white); }
     .js .page-view:not(.is-active) { display:none!important; }
@@ -100,6 +114,7 @@
     .page-view.section { min-height:calc(100svh - 88px); }
     @keyframes page-enter { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
     .hero { position:relative; min-height:630px; display:grid; align-items:center; isolation:isolate; background:linear-gradient(90deg,rgba(246,251,253,.92) 0%,rgba(246,251,253,.7) 46%,rgba(23,77,106,.14) 100%),url("cielo.jpg?v=20260808") center/cover no-repeat; }
+    .hero.page-view.is-active { animation:none; }
     .hero::before { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(18,63,90,.06)); }
     .hero-inner { display:grid; grid-template-columns:minmax(0,690px) 1fr; align-items:center; padding-block:72px 84px; }
     .hero-panel { padding:clamp(28px,4vw,52px); border:1px solid rgba(255,255,255,.78); border-radius:var(--radius-lg); background:rgba(255,255,255,.84); box-shadow:var(--shadow-lg); backdrop-filter:blur(16px); }
@@ -107,9 +122,6 @@
     .hero h1 { max-width:12ch; margin:0; color:#112d3d; font-size:clamp(2.5rem,5vw,4.45rem); font-weight:610; letter-spacing:-.052em; line-height:1.02; }
     .hero-copy { max-width:58ch; margin:24px 0 0; color:#36515f; font-size:clamp(1rem,1.6vw,1.12rem); line-height:1.75; }
     .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
-    .public-services { display:flex; align-items:center; flex-wrap:wrap; gap:8px 22px; margin-top:22px; }
-    .public-services a { display:inline-flex; align-items:center; min-height:44px; color:var(--blue-deep); font-weight:650; text-underline-offset:4px; }
-    .public-services a:hover { color:var(--blue); }
     .button { min-height:48px; display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:11px 18px; border:1px solid transparent; border-radius:12px; font-size:.94rem; font-weight:680; text-align:center; text-decoration:none; transition:transform .2s ease,box-shadow .2s ease,background .2s ease; }
     .button svg { width:18px; height:18px; flex:0 0 auto; }
     .button:hover { transform:translateY(-2px); }
@@ -357,19 +369,29 @@
         <a href="transparencia.html" target="_blank" rel="noopener noreferrer">Transparencia</a>
         <a class="nav-cta" href="#contacto">Contacto</a>
       </nav>
-      <a class="sgd-link" href="sgd.html" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Sistema SGD
-      </a>
     </div>
   </header>
+
+  <nav class="service-bar" aria-label="Atención al público y Sistema SGD">
+    <div class="container">
+      <a class="service-access is-primary" href="mesa-de-partes.html" target="_blank" rel="noopener noreferrer">
+        <img src="assets/google-apps-script.png" alt="" width="38" height="38">
+        <span><strong>Mesa de Partes Virtual</strong><small>Presenta tus documentos</small></span>
+      </a>
+      <a class="service-access" href="libro-de-reclamaciones.html" target="_blank" rel="noopener noreferrer">
+        <span><strong>Libro de Reclamaciones</strong><small>Reclamos y quejas</small></span>
+      </a>
+      <a class="service-access" href="consultar-expediente.html" target="_blank" rel="noopener noreferrer">
+        <span><strong>Consultar expediente</strong><small>Revisa el estado de tu trámite</small></span>
+      </a>
+      <a class="service-access is-staff" href="sgd.html" target="_blank" rel="noopener noreferrer"><strong>Sistema SGD</strong></a>
+    </div>
+  </nav>
 
   <main id="contenido">
     <section class="hero page-view is-active" id="inicio" data-title="Inicio" aria-labelledby="hero-title">
       <div class="container hero-inner">
-        <div class="hero-panel reveal">
+        <div class="hero-panel">
           <p class="eyebrow">Portal corporativo</p>
           <h1 id="hero-title">Excelencia que transforma.</h1>
           <p class="hero-copy">
@@ -390,12 +412,6 @@
               Documentos institucionales
             </a>
           </div>
-
-          <nav class="public-services" aria-label="Atención al público">
-            <a href="mesa-de-partes.html" target="_blank" rel="noopener noreferrer">Mesa de Partes Virtual</a>
-            <a href="consultar-expediente.html" target="_blank" rel="noopener noreferrer">Consultar expediente</a>
-            <a href="libro-de-reclamaciones.html" target="_blank" rel="noopener noreferrer">Libro de Reclamaciones</a>
-          </nav>
 
           <div class="hero-facts" role="group" aria-label="Datos institucionales">
             <div class="hero-fact">

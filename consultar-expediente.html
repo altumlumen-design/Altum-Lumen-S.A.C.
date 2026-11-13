@@ -1,6 +1,49 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>Consultar expediente | ALTUM LUMEN</title><link rel="stylesheet" href="atencion.css?v=2"><script defer src="atencion.js?v=2"></script></head>
-<body data-page="consulta"><header><a class="brand" href="./"><img src="logo-1.png" alt="ALTUM LUMEN S.A.C." width="158" height="60"></a><a href="mesa-de-partes.html">Mesa de Partes Virtual</a></header><main><div class="heading">
-<h1>Consultar expediente</h1><p class="intro">Usa el número de expediente y la contraseña que figuran en el acuse de ingreso.</p>
-</div><div id="app"></div><noscript>Activa JavaScript para consultar tu expediente.</noscript>
-<p><a href="./">Regresar al portal institucional</a></p>
-</main></body></html>
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Consultar expediente | ALTUM LUMEN</title>
+  <link rel="icon" href="assets/google-apps-script.png" type="image/png">
+  <link rel="stylesheet" href="atencion.css?v=3">
+  <script defer src="atencion.js?v=3"></script>
+</head>
+<body data-page="consulta">
+  <a class="skip" href="#contenido">Ir al contenido</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="./"><img src="logo-1.png" alt="ALTUM LUMEN S.A.C." width="170" height="64"></a>
+      <a class="return" href="./">‹ Regresar al portal institucional</a>
+    </div>
+  </header>
+  <main class="shell" id="contenido">
+    <div class="heading">
+      <img class="app-mark" src="assets/google-apps-script.png" alt="Google Apps Script" width="72" height="72">
+      <div>
+        <h1>Consultar expediente</h1>
+        <p class="intro">Usa el número de expediente y la contraseña que aparecen en tu acuse de ingreso.</p>
+      </div>
+    </div>
+    <nav class="service-links" aria-label="Servicios de atención">
+      <a href="mesa-de-partes.html">Mesa de Partes Virtual</a>
+      <a href="libro-de-reclamaciones.html">Libro de Reclamaciones</a>
+      <a href="consultar-expediente.html" aria-current="page">Consultar expediente</a>
+    </nav>
+    <div class="workspace">
+      <div id="app"><p class="panel" role="status">Cargando el servicio…</p></div>
+      <noscript><p class="panel">Activa JavaScript para consultar tu expediente.</p></noscript>
+      <aside class="guide" aria-labelledby="guide-title">
+        <h2 id="guide-title">Qué puedes consultar</h2>
+        <p>Revisa el estado de tu trámite, la oficina que lo atiende y las fechas de sus movimientos.</p><p>Conserva el acuse para poder consultar el expediente desde cualquier dispositivo.</p>
+      </aside>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <span>ALTUM LUMEN S.A.C. · RUC 20614458918</span>
+      <a href="privacidad.html">Política de privacidad</a>
+    </div>
+  </footer>
+</body>
+</html>
