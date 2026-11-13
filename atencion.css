@@ -1,0 +1,22 @@
+:root{color-scheme:light;font:16px/1.5 system-ui,sans-serif;color:#162d43;background:#eef4f8;--blue:#165d87;--line:#ccdae4}
+*{box-sizing:border-box}
+body{margin:0}
+header{background:#10334d;color:white;padding:1rem max(1rem,calc((100% - 900px)/2));display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+header a{color:inherit} a{color:#105e87;text-underline-offset:.2em}
+main{max-width:940px;margin:0 auto;padding:2.5rem 1rem}
+h1{font-size:clamp(2rem,5vw,3.1rem);line-height:1.12;margin:.25rem 0 .75rem} h2{font-size:1.35rem;margin:0 0 .75rem}
+.intro{max-width:68ch;margin-bottom:1.7rem;color:#334c61}
+form,.panel{padding:clamp(1rem,3vw,2rem);border:1px solid var(--line);background:white;border-radius:1rem;box-shadow:0 10px 28px #1230470b;margin-bottom:1rem}
+fieldset{border:0;padding:0;margin:0 0 1.7rem;min-width:0} legend{font-weight:700;font-size:1.25rem;margin-bottom:.8rem;padding:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem} .wide{grid-column:1/-1}
+label{display:block;font-weight:650} label small,.hint{font-weight:400;color:#40586b;display:block;margin:.25rem 0}
+input,select,textarea,button{font:inherit} input:not([type=checkbox]),select,textarea{display:block;width:100%;padding:.55rem .7rem;border:1px solid #91a9bb;border-radius:.45rem;margin:.3rem 0 0;color:#142d41;background:white} textarea{min-height:6rem;resize:vertical}
+:focus-visible{outline:3px solid #167ab1;outline-offset:3px}
+button,.button{display:inline-block;background:var(--blue);color:white;font-weight:700;border:1px solid transparent;border-radius:.45rem;padding:.58rem .95rem;cursor:pointer;text-decoration:none}
+button.secondary{background:white;color:#174a6b;border-color:#9bb1c0} button:disabled{opacity:.65;cursor:default}
+.actions,.captcha{display:flex;align-items:end;flex-wrap:wrap;gap:.75rem}.captcha label{max-width:18rem}
+#message:not(:empty){padding:.6rem .8rem;background:#eaf3fa;border-radius:.35rem;margin:.7rem 0} #message.error{background:#fff0ed;color:#822b1c}
+li{margin-bottom:.4rem} #files li{overflow-wrap:anywhere} #files button{margin-left:.6rem;padding:.2rem .45rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:.5rem 1rem} dd{margin:0;overflow-wrap:anywhere} dt{font-weight:700}
+[hidden]{display:none!important}
+@media(max-width:620px){main{padding-top:1.5rem}.grid{grid-template-columns:1fr}dl{grid-template-columns:1fr}}

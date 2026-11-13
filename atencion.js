@@ -1,0 +1,192 @@
+'use strict';
+const endpoint='https://script.google.com/macros/s/AKfycbxmkUxD9CrJQ4WkEPQnCFfu9x32HiJZOAZMKSkEcs9S9lFB3xSdRE8AzSJhbGC3mhVl/exec';
+const limit=20*1024*1024;
+const page=document.body.dataset.page;
+const app=document.querySelector('#app');
+const field=(name,label,attributes='required')=>`<label>${label}<input name="${name}" ${attributes}></label>`;
+const select=(name,label,options)=>`<label>${label}<select name="${name}" required>${options.map(([value,text])=>`<option value="${value}">${text}</option>`).join('')}</select></label>`;
+const captcha=`<div class="captcha"><label><span id="question">Comprobación de seguridad</span><input name="answer" inputmode="numeric" pattern="[0-9]{1,2}" required autocomplete="off"></label><button type="button" id="refresh" class="secondary">Actualizar comprobación</button></div>`;
+const message='<p id="message" role="status" aria-live="polite"></p>';
+const docs=['Carta','Solicitud','Oficio','Informe','Escrito','Otro'];
+const person=`<fieldset><legend>Datos de la persona que presenta</legend><div class="grid">
+${select('person','Tipo de persona',[['natural','Persona natural'],['juridica','Persona jurídica']])}
+${field('name','Nombres y apellidos','maxlength="160" required autocomplete="name"')}
+${select('idType','Documento de identidad',[['DNI','DNI'],['CE','Carné de extranjería'],['Pasaporte','Pasaporte']])}
+${field('idNumber','Número de identificación','maxlength="20" required')}
+<div class="wide grid" id="company" hidden>${field('company','Razón social','maxlength="180"')}${field('ruc','RUC','inputmode="numeric" pattern="[0-9]{11}" maxlength="11"')}</div>
+${field('address','Dirección','maxlength="240" required autocomplete="street-address"')}
+${field('phone','Teléfono','type="tel" maxlength="30" required autocomplete="tel"')}
+${field('email','Correo electrónico <small>Lo usaremos para enviarte comunicaciones y la respuesta a tu trámite.</small>','type="email" maxlength="180" required autocomplete="email"')}
+${field('alternate','Correo alternativo (opcional)','type="email" maxlength="180"')}
+</div></fieldset>`;
+const intake=`<fieldset><legend>Documento</legend><div class="grid">
+${select('docType','Tipo de documento',docs.map(v=>[v,v]))}
+${field('number','Número del documento (si corresponde)','maxlength="80"')}
+<div id="other" hidden>${field('other','Especifica el tipo de documento','maxlength="80"')}</div>
+${field('addressee','A quién diriges el documento (opcional)','maxlength="120"')}
+</div></fieldset>`;
+const claims=`<fieldset><legend>Motivo del registro</legend><div class="grid">
+${select('claimType','Tipo de registro',[['Reclamo','Reclamo'],['Queja','Queja']])}
+${select('productType','Tipo de bien',[['Producto','Producto'],['Servicio','Servicio']])}
+${field('product','Nombre o descripción del producto o servicio','maxlength="250" required')}
+${field('amount','Monto reclamado en soles (si corresponde)','inputmode="decimal" maxlength="18"')}
+${field('representative','Padre, madre o representante (si corresponde)','maxlength="180"')}
+<label class="wide">¿Qué solución solicitas?<textarea name="request" maxlength="4000" required></textarea></label>
+</div></fieldset>`;
+app.innerHTML=page==='consulta'?`<form id="form"><div class="grid">
+${field('expediente','Número de expediente','placeholder="EXP-2026-000001" maxlength="32" required autocomplete="off"')}
+${field('password','Contraseña de consulta','type="password" maxlength="48" required autocomplete="off"')}
+</div><p></p>${captcha}${message}<button id="send">Consultar</button></form><section class="panel" id="result" hidden tabindex="-1"></section>`:
+`<form id="form" autocomplete="off">${person}${page==='mesa'?intake:claims}
+<fieldset><legend>Asunto y detalle</legend>
+${field('subject','Asunto <small>Hasta 300 caracteres</small>','maxlength="300" required')}
+<label>Detalle<textarea name="detail" maxlength="4000" required></textarea></label></fieldset>
+<fieldset><legend>Documentos adjuntos</legend>
+${page==='mesa'?'<label>PDF principal <small>Hasta 20 MB</small><input id="principal" type="file" accept=".pdf,application/pdf" required></label>':''}
+<label>Anexos PDF (opcional) <small>Hasta 20 MB en conjunto. Puedes agregarlos uno por uno.</small><input id="annex" type="file" accept=".pdf,application/pdf" multiple></label>
+<ol id="files" aria-label="Documentos que se enviarán"></ol></fieldset>
+<details><summary>Uso de tus datos</summary><p>ALTUM LUMEN S.A.C. usa tus datos y archivos para registrar, atender y responder este trámite. Para consultas sobre tus datos, escribe a tramiteyatencion.altumlumen@gmail.com.</p></details>
+<p></p>${captcha}${message}<button id="send">Registrar expediente</button></form>
+<section class="panel" id="result" hidden tabindex="-1"></section>`;
+const form=document.querySelector('#form'),send=document.querySelector('#send'),result=document.querySelector('#result'),feedback=document.querySelector('#message');
+let challenge,annexes=[],operation;
+function status(text,error=false){feedback.textContent=text;feedback.classList.toggle('error',error);}
+async function rpc(action,payload={}){
+  const response=await fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain'},body:JSON.stringify({protocol:'sgd-mpv-v1',action,...payload}),signal:AbortSignal.timeout(120000)});
+  const body=await response.json().catch(()=>null);
+  if(!body?.ok)throw Error(body?.error||'El servicio está temporalmente indisponible.');
+  return body.data;
+}
+async function refresh(){
+  challenge=null;
+  form.elements.answer.value='';
+  const check=await rpc('challenge');
+  challenge=check.token;
+  document.querySelector('#question').textContent='¿Cuánto es '+check.question+'?';
+}
+function randomKey(){return [...crypto.getRandomValues(new Uint8Array(16))].map(n=>n.toString(16).padStart(2,'0')).join('').toUpperCase();}
+function fileBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result.split(',')[1]);
+    reader.onerror=()=>reject(Error('No se pudo leer '+file.name));
+    reader.readAsDataURL(file);
+  });
+}
+function element(tag,text){const el=document.createElement(tag);el.textContent=text;return el;}
+function filesList(){
+  const list=document.querySelector('#files');
+  const primary=document.querySelector('#principal')?.files[0];
+  list.replaceChildren();
+  if(primary)list.append(element('li','Principal · '+primary.name));
+  annexes.forEach((file,i)=>{
+    const li=element('li','Anexo '+(i+1)+' · '+file.name),button=element('button','Quitar');
+    button.type='button';button.className='secondary';button.setAttribute('aria-label','Quitar '+file.name);
+    button.addEventListener('click',()=>{annexes.splice(i,1);filesList();});
+    li.append(button);list.append(li);
+  });
+}
+if(page!=='consulta'){
+  const synchronize=()=>{
+    const company=form.elements.person.value==='juridica';
+    document.querySelector('#company').hidden=!company;
+    for(const name of ['company','ruc']){form.elements[name].required=company;form.elements[name].disabled=!company;}
+    if(page==='mesa'){
+      const other=form.elements.docType.value==='Otro';
+      document.querySelector('#other').hidden=!other;
+      form.elements.other.required=other;form.elements.other.disabled=!other;
+    }
+  };
+  form.elements.person.addEventListener('change',synchronize);
+  form.elements.docType?.addEventListener('change',synchronize);
+  synchronize();
+  document.querySelector('#principal')?.addEventListener('change',filesList);
+  document.querySelector('#annex').addEventListener('change',e=>{annexes.push(...e.target.files);e.target.value='';filesList();});
+}
+function presentTrack(data){
+  result.replaceChildren(element('h2',data.expediente),element('p','Estado: '+data.status),element('p','Oficina: '+data.offices.join(' · ')));
+  const list=element('ol','');
+  for(const movement of data.events)list.append(element('li',[movement.status,movement.office,movement.date].filter(Boolean).join(' · ')));
+  result.append(element('h3','Movimientos'),list);
+}
+function receiptPdf(exp,password,date,url){
+  const literal=s=>'('+String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\x20-\x7e]/g,' ').replace(/[\\()]/g,c=>'\\'+c)+')';
+  const lines=['ALTUM LUMEN S.A.C.','ACUSE DE INGRESO','Expediente: '+exp,'Fecha de ingreso: '+date+' (Lima)','Contrasena de consulta: '+password,'Consultar expediente en el portal institucional'];
+  const content=lines.map((s,i)=>'BT /F1 '+(i===1?22:12)+' Tf 48 '+(782-i*33)+' Td '+literal(s)+' Tj ET').join('\n')+'\n';
+  const entries=[
+    '<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R /Annots [6 0 R] >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+    '<< /Length '+content.length+' >>\nstream\n'+content+'endstream',
+    '<< /Type /Annot /Subtype /Link /Rect [46 611 370 633] /Border [0 0 0] /A << /S /URI /URI '+literal(url)+' >> >>'
+  ];
+  let pdf='%PDF-1.4\n';
+  const offsets=entries.map((entry,i)=>{const offset=pdf.length;pdf+=(i+1)+' 0 obj\n'+entry+'\nendobj\n';return offset;});
+  const xref=pdf.length;
+  pdf+='xref\n0 7\n0000000000 65535 f \n'+offsets.map(n=>String(n).padStart(10,'0')+' 00000 n \n').join('')+'trailer\n<< /Size 7 /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF\n';
+  return new Blob([pdf],{type:'application/pdf'});
+}
+function receipt(data,password){
+  const url=new URL('consultar-expediente.html',location.href).href;
+  const formatted=password.match(/.{4}/g).join('-'),details=element('dl','');
+  for(const [label,value] of [['Expediente',data.expediente],['Fecha de ingreso',data.date],['Contraseña de consulta',formatted]])details.append(element('dt',label),element('dd',value));
+  const download=element('a','Descargar acuse en PDF');
+  download.className='button';download.download='Acuse-'+data.expediente+'.pdf';
+  download.href=URL.createObjectURL(receiptPdf(data.expediente,formatted,data.date,url));
+  window.addEventListener('pagehide',()=>URL.revokeObjectURL(download.href),{once:true});
+  const track=element('a','Consultar expediente');track.href=url;track.target='_blank';track.rel='noopener';
+  const actions=element('div','');actions.className='actions';actions.append(download,track);
+  result.replaceChildren(element('h2','Expediente ingresado'),details,actions);
+  form.reset();annexes=[];operation=null;form.hidden=true;
+}
+async function submit(e){
+  e.preventDefault();
+  send.disabled=true;result.hidden=true;
+  const fields=Object.fromEntries(new FormData(form)),proof={challenge,answer:fields.answer};
+  delete fields.answer;
+  try{
+    if(page==='consulta'){
+      status('Consultando expediente…');
+      presentTrack(await rpc('track',{...proof,...fields}));
+      form.elements.password.value='';
+    }else{
+      const main=document.querySelector('#principal')?.files[0],files=main?[main,...annexes]:[...annexes];
+      if(files.length>30||files.some(f=>f.size<8||f.size>limit||f.name.length>180||!/\.pdf$/i.test(f.name)))throw Error('Revisa que los adjuntos sean archivos PDF de hasta 20 MB.');
+      if(annexes.reduce((sum,f)=>sum+f.size,0)>limit)throw Error('Los anexos juntos pueden pesar hasta 20 MB.');
+      const manifest=files.map(f=>({name:f.name,size:f.size})),snapshot=JSON.stringify([fields,manifest,files.map(f=>f.lastModified)]);
+      if(!operation||operation.snapshot!==snapshot)operation={snapshot,id:randomKey(),password:randomKey()};
+      const {id,password}=operation,auth={id,password};
+      status('Preparando ingreso…');
+      const start=await rpc('begin',{...proof,...auth,data:{...fields,kind:page},files:manifest});
+      if(start.state!=='REGISTRADO'){
+        for(const [index,file] of files.entries()){
+          if(start.files.includes(String(index)))continue;
+          status('Cargando documento '+(index+1)+' de '+files.length+'…');
+          await rpc('upload',{...auth,index,base64:await fileBase64(file)});
+        }
+      }
+      status('Registrando expediente…');
+      receipt(await rpc('commit',auth),password);
+    }
+    status('');result.hidden=false;result.focus();
+  }catch(error){status(error.message||'Inténtalo de nuevo.',true);}
+  finally{
+    if(!form.hidden)await refresh().catch(()=>{});
+    send.disabled=false;
+  }
+}
+form.addEventListener('submit',submit);
+document.querySelector('#refresh').addEventListener('click',()=>refresh().catch(error=>status(error.message,true)));
+async function start(){
+  send.disabled=true;
+  try{
+    if(page==='libro'){
+      const {provider}=await rpc('config');
+      if(!provider){form.hidden=true;app.prepend(element('p','El Libro de Reclamaciones aún no está habilitado.'));return;}
+      document.querySelector('#provider').append(document.createTextNode(' · '+provider));
+    }
+    await refresh();
+  }catch(error){status(error.message,true);}
+  finally{send.disabled=false;}
+}
+start();
