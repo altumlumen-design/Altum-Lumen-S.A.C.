@@ -18,7 +18,7 @@ ${field('address','Dirección','maxlength="240" required autocomplete="street-ad
 ${field('phone','Teléfono','type="tel" maxlength="30" required autocomplete="tel"')}
 </div></fieldset>
 <fieldset><legend>Correo para la respuesta</legend><div class="grid">
-${field('email',page==='mesa'?'Correo electrónico (opcional)':'Correo electrónico','type="email" maxlength="180" '+(page==='libro'?'required ':'')+'autocomplete="email" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
+${field('email','Correo electrónico (opcional)','type="email" maxlength="180" autocomplete="email" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
 ${field('alternate','Otro correo (opcional)','type="email" maxlength="180" autocapitalize="none" spellcheck="false"')}
 </div><p class="support" id="email-use">Si indicas un correo, lo usaremos para comunicaciones y para responder tu trámite.</p></fieldset>`;
 const intake=`<fieldset><legend>Documento</legend><div class="grid">
@@ -196,35 +196,7 @@ function receipt(data,password){
   window.addEventListener('pagehide',event=>{if(!event.persisted)URL.revokeObjectURL(download.href);});
   const track=element('a','Consultar expediente');track.href=url;track.target='_blank';track.rel='noopener';
   const actions=element('div','');actions.className='actions';actions.append(download,track);
-  if(page==='libro'){
-    const auth={id:operation.id,password},copy=element('button','Descargar Hoja de Reclamación'),message=element('p','');
-    copy.type='button';
-    copy.className='secondary';
-    message.setAttribute('role','status');
-    copy.addEventListener('click',async()=>{
-      copy.disabled=true;
-      message.textContent='Preparando la hoja…';
-      try{
-        const file=await rpc('complaintCopy',auth);
-        const bytes=Uint8Array.from(atob(file.base64),c=>c.charCodeAt(0));
-        const link=element('a','Guardar Hoja de Reclamación');
-        link.href=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
-        link.download=file.name;
-        link.className='button';
-        actions.replaceChild(link,copy);
-        message.textContent='Tu hoja está lista para descargar.';
-        window.addEventListener('pagehide',event=>{if(!event.persisted)URL.revokeObjectURL(link.href);});
-        link.focus();
-      }catch(error){
-        message.textContent='No pudimos preparar la hoja. Puedes volver a intentarlo.';
-        copy.disabled=false;
-      }
-    });
-    actions.insertBefore(copy,track);
-    result.replaceChildren(element('h2','Expediente ingresado'),details,actions,message);
-  }else{
-    result.replaceChildren(element('h2','Expediente ingresado'),details,actions);
-  }
+  result.replaceChildren(element('h2','Expediente ingresado'),details,actions);
   form.reset();annexes=[];operation=null;form.hidden=true;
 }
 async function submit(e){
@@ -252,7 +224,8 @@ async function submit(e){
       if(!operation||operation.snapshot!==snapshot)operation={snapshot,id:randomKey(),password:randomKey()};
       const {id,password}=operation,auth={id,password};
       status('Preparando ingreso…');
-      const start=await rpc('begin',{...proof,...auth,data:{...fields,kind:page},files:manifest});
+      const data={...fields,kind:page,channel:page==='libro'?'interno':''};
+      const start=await rpc('begin',{...proof,...auth,data,files:manifest});
       if(start.state!=='REGISTRADO'){
         for(const [index,file] of files.entries()){
           if(start.files.includes(String(index)))continue;
@@ -281,38 +254,8 @@ async function submit(e){
 }
 form.addEventListener('submit',submit);
 refreshButton.addEventListener('click',()=>{if(!busy&&!operation?.commitPending)refresh().catch(error=>status(error.message,true));});
-function showBookStatus(text,retry=false){
-  form.hidden=true;
-  const panel=element('section',''),heading=element('h2',text);
-  panel.className='panel';
-  panel.append(heading);
-  if(retry){
-    const button=element('button','Volver a comprobar');
-    button.type='button';
-    button.addEventListener('click',()=>{panel.remove();start();});
-    panel.append(button);
-  }else{
-    panel.append(element('p','El formulario oficial está pendiente de habilitación. Si ya tienes un acuse, puedes consultar tu expediente desde el portal.'));
-    const link=element('a','Consultar expediente');
-    link.href='consultar-expediente.html';
-    link.className='button';
-    panel.append(link);
-  }
-  app.prepend(panel);
-  heading.tabIndex=-1;
-  heading.focus({preventScroll:true});
-}
 async function start(){
   send.disabled=true;
-  if(page==='libro'){
-    form.hidden=true;
-    let provider;
-    try{({provider}=await rpc('config'));}
-    catch(error){showBookStatus('No pudimos comprobar la disponibilidad del Libro.',true);return;}
-    if(!provider){showBookStatus('El Libro todavía no está habilitado');return;}
-    document.querySelector('#provider').append(document.createTextNode(' · '+provider));
-    form.hidden=false;
-  }
   try{
     await refresh();
   }catch(error){status(error.message,true);}
