@@ -164,19 +164,34 @@ function presentTrack(data){
 }
 function receiptPdf(exp,password,date,url){
   const literal=s=>'('+String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\x20-\x7e]/g,' ').replace(/[\\()]/g,c=>'\\'+c)+')';
-  const lines=['ALTUM LUMEN S.A.C.','ACUSE DE INGRESO','Expediente: '+exp,'Fecha de ingreso: '+date+' (Lima)','Contrasena de consulta: '+password,'Consultar expediente en el portal institucional'];
-  const content=lines.map((s,i)=>'BT /F1 '+(i===1?22:12)+' Tf 48 '+(782-i*33)+' Td '+literal(s)+' Tj ET').join('\n')+'\n';
+  const text=(value,x,y,size=12,style='F1',color='0.08 0.22 0.32')=>
+    color+' rg BT /'+style+' '+size+' Tf '+x+' '+y+' Td '+literal(value)+' Tj ET';
+  const content=[
+    '0.93 0.96 0.98 rg 36 412 523 394 re f',
+    '0.07 0.25 0.35 rg 36 686 523 120 re f',
+    text('ALTUM LUMEN S.A.C.',62,773,11,'F2','1 1 1'),
+    text('Acuse de ingreso',62,728,29,'F2','1 1 1'),
+    text('EXPEDIENTE',62,653,10,'F2'),text(exp,62,628,20,'F2'),
+    text('FECHA DE INGRESO',62,590,10,'F2'),text(date+' (Lima)',62,568,13),
+    '0.86 0.92 0.96 rg 58 484 479 62 re f',
+    text('CONTRASENA DE CONSULTA',72,524,10,'F2'),text(password,72,501,15,'F2'),
+    text('Consultar expediente en el portal institucional',62,452,13,'F2','0.06 0.31 0.47'),
+    '0.06 0.31 0.47 RG 62 449 m 353 449 l S',
+    text('Conserva este acuse para revisar el estado de tu tramite.',62,431,10)
+  ].join('\n')+'\n';
   const entries=[
     '<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
-    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R /Annots [6 0 R] >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 7 0 R >> >> /Contents 5 0 R /Annots [6 0 R] >>',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
     '<< /Length '+content.length+' >>\nstream\n'+content+'endstream',
-    '<< /Type /Annot /Subtype /Link /Rect [46 611 370 633] /Border [0 0 0] /A << /S /URI /URI '+literal(url)+' >> >>'
+    '<< /Type /Annot /Subtype /Link /Rect [60 443 360 468] /Border [0 0 0] /A << /S /URI /URI '+literal(url)+' >> >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>'
   ];
   let pdf='%PDF-1.4\n';
   const offsets=entries.map((entry,i)=>{const offset=pdf.length;pdf+=(i+1)+' 0 obj\n'+entry+'\nendobj\n';return offset;});
   const xref=pdf.length;
-  pdf+='xref\n0 7\n0000000000 65535 f \n'+offsets.map(n=>String(n).padStart(10,'0')+' 00000 n \n').join('')+'trailer\n<< /Size 7 /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF\n';
+  const count=entries.length+1;
+  pdf+='xref\n0 '+count+'\n0000000000 65535 f \n'+offsets.map(n=>String(n).padStart(10,'0')+' 00000 n \n').join('')+'trailer\n<< /Size '+count+' /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF\n';
   return new Blob([pdf],{type:'application/pdf'});
 }
 function receipt(data,password){
