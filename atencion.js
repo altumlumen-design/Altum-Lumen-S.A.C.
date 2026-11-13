@@ -18,9 +18,9 @@ ${field('address','Dirección','maxlength="240" required autocomplete="street-ad
 ${field('phone','Teléfono','type="tel" maxlength="30" required autocomplete="tel"')}
 </div></fieldset>
 <fieldset><legend>Correo para la respuesta</legend><div class="grid">
-${field('email','Correo electrónico','type="email" maxlength="180" required autocomplete="email" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
+${field('email',page==='mesa'?'Correo electrónico (opcional)':'Correo electrónico','type="email" maxlength="180" '+(page==='libro'?'required ':'')+'autocomplete="email" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
 ${field('alternate','Otro correo (opcional)','type="email" maxlength="180" autocapitalize="none" spellcheck="false"')}
-</div><p class="support" id="email-use">Usaremos el correo principal para enviarte comunicaciones y la respuesta. Revisa que esté bien escrito.</p></fieldset>`;
+</div><p class="support" id="email-use">Si indicas un correo, lo usaremos para comunicaciones y para responder tu trámite.</p></fieldset>`;
 const intake=`<fieldset><legend>Documento</legend><div class="grid">
 ${select('docType','Tipo de documento',docs.map(v=>[v,v]))}
 ${field('number','Número del documento (si corresponde)','maxlength="80"')}
@@ -44,8 +44,9 @@ ${field('expediente','Número de expediente','placeholder="EXP-2026-000001" maxl
 ${field('subject','Asunto <small>Hasta 300 caracteres</small>','maxlength="300" required')}
 <label>Detalle<textarea name="detail" maxlength="4000" required></textarea></label></fieldset>
 <fieldset><legend>Documentos adjuntos</legend>
-${page==='mesa'?'<label>PDF principal <small>Hasta 20 MB</small><input id="principal" type="file" accept=".pdf,application/pdf" required></label>':''}
-<label>Anexos PDF (opcional) <small>Hasta 20 MB en conjunto. Puedes agregarlos uno por uno.</small><input id="annex" type="file" accept=".pdf,application/pdf" multiple></label>
+${page==='mesa'?'<label>Documento principal (PDF obligatorio) <small>Un archivo de hasta 20 MB.</small><input id="principal" type="file" accept=".pdf,application/pdf" required></label>':''}
+<label>Copias y anexos (PDF opcionales) <small>Hasta 20 MB en conjunto. Puedes agregarlos uno por uno.</small><input id="annex" type="file" accept=".pdf,application/pdf" multiple></label>
+<p id="attachment-feedback" role="status"></p>
 <ol id="files" aria-label="Documentos que se enviarán"></ol></fieldset>
 <details><summary>Uso de tus datos</summary><p>ALTUM LUMEN S.A.C. usa tus datos y archivos para registrar, atender y responder este trámite. Para consultas sobre tus datos, escribe a tramiteyatencion.altumlumen@gmail.com. <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a></p></details>
 <p></p>${captcha}${message}<button id="send">Registrar expediente</button></form>
@@ -57,10 +58,13 @@ let busy=false,challengePending=false;
 const formControls=()=>[...form.querySelectorAll('input, select, textarea, button')].filter(control=>control!==send&&control!==refreshButton);
 function status(text,error=false){feedback.textContent=text;feedback.classList.toggle('error',error);}
 async function rpc(action,payload={}){
-  const response=await fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain'},body:JSON.stringify({protocol:'sgd-mpv-v1',action,...payload}),signal:AbortSignal.timeout(120000)});
-  const body=await response.json().catch(()=>null);
-  if(!body?.ok)throw Error(body?.error||'El servicio está temporalmente indisponible.');
-  return body.data;
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),120000);
+  try{
+    const response=await fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain'},body:JSON.stringify({protocol:'sgd-mpv-v1',action,...payload}),signal:controller.signal});
+    const body=await response.json().catch(()=>null);
+    if(!body?.ok)throw Error(body?.error||'El servicio está temporalmente indisponible.');
+    return body.data;
+  }finally{clearTimeout(timeout);}
 }
 async function refresh(){
   if(challengePending)return;
@@ -94,6 +98,15 @@ function fileBase64(file){
   });
 }
 function element(tag,text){const el=document.createElement(tag);el.textContent=text;return el;}
+function attachmentError(files,max){
+  if(files.some(f=>f.size<8||f.size>limit||f.name.length>180||!/\.pdf$/i.test(f.name)))return 'Selecciona archivos PDF de hasta 20 MB con nombres de hasta 180 caracteres.';
+  if(files.length>max)return 'Puedes agregar hasta '+max+' archivos en este campo.';
+  if(files.reduce((sum,file)=>sum+file.size,0)>limit)return 'Las copias y los anexos juntos pueden pesar hasta 20 MB.';
+  return '';
+}
+function attachmentStatus(text){
+  document.querySelector('#attachment-feedback').textContent=text;
+}
 function filesList(){
   const list=document.querySelector('#files');
   const primary=document.querySelector('#principal')?.files[0];
@@ -126,8 +139,20 @@ if(page!=='consulta'){
   form.elements.idType.addEventListener('change',synchronize);
   form.elements.docType?.addEventListener('change',synchronize);
   synchronize();
-  document.querySelector('#principal')?.addEventListener('change',filesList);
-  document.querySelector('#annex').addEventListener('change',e=>{annexes.push(...e.target.files);e.target.value='';filesList();});
+  document.querySelector('#principal')?.addEventListener('change',e=>{
+    const file=e.target.files[0],error=file?attachmentError([file],1):'';
+    if(error)e.target.value='';
+    filesList();
+    attachmentStatus(error);
+  });
+  document.querySelector('#annex').addEventListener('change',e=>{
+    const next=[...annexes,...e.target.files],error=attachmentError(next,page==='mesa'?29:30);
+    e.target.value='';
+    attachmentStatus(error);
+    if(error)return;
+    annexes=next;
+    filesList();
+  });
 }else{
   const toggle=document.querySelector('#toggle-password');
   toggle.addEventListener('click',()=>{

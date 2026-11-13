@@ -14,7 +14,6 @@ main{padding-block:1.7rem 3rem;min-height:75vh}
 .skip{position:absolute;left:1rem;top:.5rem;transform:translateY(-200%);z-index:2;background:white;padding:.6rem}
 .skip:focus{transform:none}
 .heading{display:flex;gap:clamp(.85rem,3vw,1.6rem);align-items:center;padding:clamp(1.2rem,4vw,2.6rem);background:radial-gradient(ellipse at top right,#287295 0%,transparent 56%),linear-gradient(105deg,#10374f,#185373);color:white;border-radius:1.15rem;box-shadow:0 12px 32px #12304718}
-.app-mark{width:clamp(46px,8vw,72px);height:auto;aspect-ratio:1;flex:0 0 auto;border-radius:50%;background:white;box-shadow:0 0 0 4px #ffffff36}
 h1{font-size:clamp(1.65rem,4.5vw,2.85rem);letter-spacing:-.025em;line-height:1.12;margin:0 0 .5rem}
 h2{font-size:1.35rem;margin:0 0 .75rem}
 .intro{max-width:64ch;margin:0;color:#edf6fb}
@@ -58,7 +57,7 @@ dl{display:grid;grid-template-columns:max-content 1fr;gap:.5rem 1rem} dd{margin:
 @media(max-width:480px){
   .header-inner{gap:.3rem;padding-block:.5rem}
   .return{font-size:.8rem;padding-inline:.55rem}
-  .heading{align-items:flex-start}
+
   .service-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem}
   .service-links a{justify-content:center;text-align:center;font-size:.88rem;line-height:1.25;padding:.45rem}
   .service-links a[aria-current=page]{display:none}
