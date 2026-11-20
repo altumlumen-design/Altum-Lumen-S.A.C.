@@ -78,7 +78,7 @@
 .signature-center-details{border:1px solid #dfe8ee;border-radius:10px;background:#fff;margin:10px 0;overflow:hidden}.signature-center-details>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;font-size:10px;font-weight:850;color:#183f59}.signature-center-details>summary::-webkit-details-marker{display:none}.signature-center-details>summary:after{content:"⌄";font-size:14px;color:#6d8291}.signature-center-details[open]>summary:after{content:"⌃"}.signature-center-details>summary b{margin-left:auto;color:#708390;font-size:9px;font-weight:750}.signature-center-details-body{border-top:1px solid #edf2f5;padding:6px 14px 12px}.fdPrepareWrap{display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:210px}.fdPrepareInlineStatus{max-width:330px;font-size:9px;line-height:1.35;color:#607786;text-align:right}.fdPrepareInlineStatus b{display:block;color:#234d67}.fdPrepareInlineStatus span{display:block;margin-top:2px}.fdPrepareInlineStatus.error{color:#a33b3b}.fdPrepareInlineStatus.error b{color:#8d2727}.signature-center-section.signature-primary{padding:13px}.signature-turn{margin-top:10px;padding:9px 11px;border-radius:9px;font-size:10px;font-weight:750}.signature-turn.mine{background:#eef8f2;border:1px solid #cee5d6;color:#2f6844}.signature-turn.wait{background:#f7f9fb;border:1px solid #e2e8ed;color:#61727e}.fdSignAction{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}.fdSignAction>label:first-child{margin:0;flex:0 1 auto}.fdConsentLine{display:flex!important;align-items:center;gap:6px;margin:0!important;min-height:38px}.fdConsentLine input{width:auto!important}.fdPrimarySign{background:#176ca8!important;color:#fff!important;border-color:#176ca8!important;font-weight:800}.fdSignConfig{padding:11px!important}.fdSignConfig label{margin:7px 0!important}.fdSignConfig .helper{margin-top:5px}.signature-center-friendly,.signature-center-note{display:none!important}
 .fdSignFooter{padding:12px!important}.fdMinorActions{margin-top:8px;border-top:1px solid #edf2f5;padding-top:7px}.fdMinorActions>summary{cursor:pointer;list-style:none;color:#607786;font-size:10px;font-weight:750;width:max-content}.fdMinorActions>summary::-webkit-details-marker{display:none}.fdMinorActions>summary:before{content:"▸ ";color:#7c8d99}.fdMinorActions[open]>summary:before{content:"▾ "}.fdMinorActions>div{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 /* R29 · firma con progreso visible y continuidad de emisión */
-#fdPanel{overflow:hidden}.fdSigningOverlay{position:absolute;inset:0;z-index:80;background:rgba(242,247,250,.97);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:22px}.fdSigningOverlayCard{width:min(520px,94vw);background:#fff;border:1px solid #d8e5ed;border-radius:18px;box-shadow:0 24px 70px rgba(15,54,78,.18);padding:25px;text-align:center}.fdSigningSpinner{width:54px;height:54px;margin:0 auto 15px;border-radius:50%;border:5px solid #e5eef4;border-top-color:#176ca8;animation:fdSignSpin .85s linear infinite}.fdSigningOverlay.done .fdSigningSpinner{border:0;background:#e9f7ef;color:#28714a;animation:none;display:grid;place-items:center;font-size:28px;font-weight:900}.fdSigningOverlay.error .fdSigningSpinner{border:0;background:#fff0f1;color:#aa3343;animation:none;display:grid;place-items:center;font-size:25px;font-weight:900}.fdSigningOverlay h3{margin:0;color:#173e58;font-size:19px}.fdSigningOverlay p{margin:7px auto 0;max-width:420px;color:#5d7180;font-size:11px;line-height:1.5}.fdSigningElapsed{margin-top:11px;font-size:9px;color:#83919c;font-weight:750}.fdSigningActions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:19px}.fdSigningActions .btn{min-width:155px}.fdSignVisibleActions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px solid #edf2f5}.fdSignVisibleActions .btn-green{font-weight:850}.signature-stage-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}@keyframes fdSignSpin{to{transform:rotate(360deg)}}
+#fdPanel{overflow:hidden}.fdSigningOverlay{flex:none;margin:12px 16px 0}.fdSigningOverlayCard{display:flex;flex-wrap:wrap;align-items:center;gap:9px 12px;background:#fff;border:1px solid #d8e5ed;border-radius:10px;padding:12px 14px}.fdSigningCopy{flex:1 1 225px;min-width:0}.fdSigningSpinner{width:27px;height:27px;flex:none;border-radius:50%;border:3px solid #e5eef4;border-top-color:#176ca8;animation:fdSignSpin .85s linear infinite}.fdSigningOverlay.done .fdSigningSpinner,.fdSigningOverlay.error .fdSigningSpinner{border:0;animation:none;display:grid;place-items:center;font-size:17px;font-weight:900}.fdSigningOverlay.done .fdSigningSpinner{background:#e9f7ef;color:#28714a}.fdSigningOverlay.error .fdSigningSpinner{background:#fff0f1;color:#aa3343}.fdSigningOverlay h3{margin:0;color:#173e58;font-size:15px}.fdSigningOverlay p{margin:2px 0 0;color:#425b6c;font-size:12px;line-height:1.4}.fdSigningElapsed{color:#5d7180;font-size:11px}.fdSigningElapsed:empty{display:none}.fdSigningActions{display:flex;gap:8px;flex-wrap:wrap}.fdSigningActions:empty{display:none}.fdSignVisibleActions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px solid #edf2f5}.fdSignVisibleActions .btn-green{font-weight:850}.signature-stage-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}@keyframes fdSignSpin{to{transform:rotate(360deg)}}
 .sgd-fold{border:1px solid #e1e8ed;border-radius:12px;background:#fff;margin:10px 0;overflow:hidden}.sgd-fold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:11px 13px;font-size:10px;font-weight:850;color:#2f4c60;background:#fbfcfd}.sgd-fold>summary::-webkit-details-marker{display:none}.sgd-fold>summary:after{content:"⌄";margin-left:4px;color:#788a97;font-size:13px}.sgd-fold[open]>summary:after{content:"⌃"}.sgd-fold-count{margin-left:auto;min-width:22px;text-align:center;padding:2px 7px;border-radius:999px;background:#edf3f7;color:#607482;font-size:9px;font-weight:800}.sgd-fold-body{border-top:1px solid #edf1f4;padding:10px 12px}.sgd-fold-body>.info:first-child,.sgd-fold-body>.chip:first-child{margin-top:0}.drawer-body>.sgd-fold{margin-top:9px}.drawer-body>.sgd-fold:first-of-type{margin-top:14px}
 
 .external-recipient-section{border:1px solid #dbe7ee;border-radius:14px;padding:13px;background:#fbfdfe}.external-recipient-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}.external-recipient-head label{margin-bottom:3px}.external-count{min-width:30px;text-align:center;border-radius:999px;background:#eaf3f8;color:#23536d;padding:4px 9px;font-size:10px;font-weight:850}.external-recipient-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.external-recipient-form .field{min-width:0}.external-recipient-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:9px}.external-recipient-list{display:grid;gap:7px;margin-top:10px}.external-recipient-card{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:9px;border:1px solid #e1e9ee;border-radius:11px;background:#fff;padding:9px 10px}.external-recipient-index{width:26px;height:26px;border-radius:8px;background:#eef5f8;color:#24617e;display:grid;place-items:center;font-size:10px;font-weight:850}.external-recipient-copy{display:flex;flex-direction:column;min-width:0}.external-recipient-copy b{font-size:11px;color:#173e58;white-space:normal}.external-recipient-copy span{font-size:9px;color:#687d8a;white-space:normal;overflow-wrap:anywhere}.external-empty{padding:10px;border:1px dashed #d8e3e9;border-radius:10px;color:#7a8a94;font-size:10px;background:#fff}@media(max-width:760px){.external-recipient-form{grid-template-columns:1fr}.external-recipient-card{grid-template-columns:28px minmax(0,1fr)}.external-recipient-card>.smallbtn{grid-column:2;justify-self:start}}
@@ -592,7 +592,7 @@ function stagePanelUI(step,d={}){
   else primaryActions=`<button class="btn btn-primary" type="button" onclick="openSignatureCenter()">${resolution?'Configurar V°B° y firma final':'Continuar a firma principal'}</button>`;
   return `<section class="stage-card signature-stage-card"><div class="stage-head"><div class="stage-num">5</div><div><h3>Anexos y firma digital</h3><div class="helper">Primero se completan anexos; en actos resolutivos, después los V°B° institucionales; finalmente se habilita la firma del titular.</div></div></div><div class="stage-body"><div class="signature-stage-lead"><b>${canEmit?'Todo firmado.':waitingVb?'Firma final en espera de V°B°.':pending.length?'Documento principal en espera.':c.prepared?'Circuito principal iniciado.':'Etapa previa a la firma principal.'}</b> ${canEmit?'Puede continuar directamente a la emisión.':waitingVb?`Hay ${vbPending.length} V°B° pendiente${vbPending.length===1?'':'s'}. Todas las oficinas requeridas pueden actuar en cualquier orden; la firma final se habilitará automáticamente cuando todos estén completos.`:pending.length?'La firma principal se habilitará automáticamente cuando terminen los anexos pendientes.':annexOpen?'Este es el único momento para configurar qué anexos requieren firma de otras áreas.':'Continúe con el circuito vigente.'}</div><div class="easy-flow"><div class="easy-step done"><div class="easy-icon">✓</div><div class="easy-copy"><b>1. Revisión</b><span>PDF principal verificado.</span></div></div><div class="easy-step ${pending.length?'current':'done'}"><div class="easy-icon">${pending.length?'2':'✓'}</div><div class="easy-copy"><b>2. Anexos</b><span>${esc(annexStatus)}</span></div></div><div class="easy-step ${c.complete?'done':(!pending.length?'current':'wait')}"><div class="easy-icon">${c.complete?'✓':'3'}</div><div class="easy-copy"><b>3. ${resolution?'V°B° y firma final':'Firma principal'}</b><span>${esc(mainStatus)}</span></div></div><div class="easy-step ${canEmit?'current':'wait'}"><div class="easy-icon">4</div><div class="easy-copy"><b>4. Emisión</b><span>${canEmit?'Lista para continuar.':'Se habilita al terminar el circuito.'}</span></div></div></div>${resolutionVbProgressUI38_(c)}<div class="signature-simple-summary"><div class="signature-simple-item"><b>${esc(annexStatus)}</b><span>${annexOpen?'Configure aquí las solicitudes necesarias. Una vez iniciada la firma principal, esta etapa queda cerrada.':pending.length?'Las oficinas asignadas verán cada anexo en su bandeja de firmas pendientes.':'La etapa de anexos está cerrada o completada.'}</span></div><div class="signature-simple-item"><b>${esc(mainStatus)}</b><span>${esc(mainText)}</span></div></div></div><div class="stage-actionbar"><button class="backbtn" onclick="leaveDocumentFlow()">← Volver</button><div class="signature-stage-actions">${primaryActions}</div><details class="more-actions"><summary>Más opciones</summary><div class="danger-zone">${!c.prepared?`<button class="btn btn-outline" type="button" onclick="reopenFinalReviewUI()">Necesito corregir el documento</button>`:`<button class="btn btn-danger" type="button" onclick="rollbackEmission('${esc(app.currentDraft||'')}')">Anular circuito / volver a proyecto</button>`}</div></details></div></section>`;
  }
- return `<section class="stage-card"><div class="stage-head"><div class="stage-num">6</div><div><h3>Listo para emitir</h3><div class="helper">El documento principal y los anexos obligatorios han completado su circuito de firma.</div></div></div><div class="stage-body"><div class="numberbox"><small>Documento</small><b>${esc(d.number||'')}</b></div></div><div class="stage-actionbar"><button class="backbtn" onclick="leaveDocumentFlow()">← Volver</button><button class="btn btn-green" onclick="emitCurrent()">Emitir documento</button></div></section>`;
+ return `<section class="stage-card"><div class="stage-head"><div class="stage-num">6</div><div><h3>Listo para emitir</h3><div class="helper">El documento principal y los anexos obligatorios han completado su circuito de firma.</div></div></div><div class="stage-body"><div class="numberbox"><small>Documento</small><b>${esc(d.number||'')}</b></div><p id="sgdEmissionStatus" class="helper" role="status"></p></div><div class="stage-actionbar"><button class="backbtn" onclick="leaveDocumentFlow()">← Volver</button><button class="btn btn-green" type="button" onclick="emitCurrent(this)">Emitir documento</button></div></section>`;
 }
 
 function leaveDocumentFlow(){go(app.currentDraft?'drafts':'home')}
@@ -791,6 +791,37 @@ async function getSgdFilePayload_(fileId){
 function safeDownloadName_(name,fallback='archivo'){
  return String(name||fallback).replace(/[\/:*?"<>|#%]/g,'-').replace(/\s+/g,' ').trim()||fallback;
 }
+function sgdPdfPreviewTitle_(pdf){
+ const number=String(pdf.number||'').trim();
+ return number||String(pdf.name||'').replace(/\.pdf$/i,'').trim()||'Documento PDF';
+}
+function sgdPdfPreviewMarkup_(pdf,url,expand=false){
+ const title=esc(sgdPdfPreviewTitle_(pdf)),file=esc(pdf.name||'Documento.pdf'),src=esc(url);
+ return `<style>
+  .sgd-pdf-preview{display:flex;min-width:0;flex-direction:column;border:1px solid #d2dde7;border-radius:10px;overflow:hidden;color:#153e57;background:#fff;font:14px/1.4 system-ui,sans-serif}
+  .sgd-pdf-preview-header{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding:10px 14px;background:#f1f6fa}
+  .sgd-pdf-preview-title{flex:1 1 240px;overflow-wrap:anywhere}
+  .sgd-pdf-preview-action{color:#135780;font:inherit;font-weight:600;text-decoration:underline;background:none;border:0;padding:4px 0;cursor:pointer}
+  .sgd-pdf-preview iframe{display:block;width:100%;height:60vh;border:0;background:#eee}
+  .sgd-pdf-preview-full{height:100dvh;border:0;border-radius:0}
+  .sgd-pdf-preview-full iframe{height:auto;flex:1;min-height:0}
+ </style><section class="sgd-pdf-preview${expand?'':' sgd-pdf-preview-full'}" aria-label="Vista previa del PDF">
+  <header class="sgd-pdf-preview-header"><strong class="sgd-pdf-preview-title">${title}</strong>
+   ${expand?'<button type="button" class="sgd-pdf-preview-action" data-open-pdf-preview>Abrir en otra pestaña</button>':''}
+   <a class="sgd-pdf-preview-action" href="${src}" download="${file}">Descargar PDF</a>
+  </header>
+  <iframe title="${title}" src="${src}#toolbar=0&amp;navpanes=0"></iframe>
+ </section>`;
+}
+function showSgdPdfPreviewTab_(tab,pdf,blob){
+ if(!tab){toast('El navegador bloqueó la nueva pestaña. Habilita las ventanas emergentes del SGD.');return;}
+ const doc=tab.document,url=tab.URL.createObjectURL(blob);
+ doc.title=sgdPdfPreviewTitle_(pdf);
+ doc.documentElement.lang='es';
+ doc.body.style.margin='0';
+ doc.body.innerHTML=sgdPdfPreviewMarkup_(pdf,url);
+ tab.addEventListener('pagehide',event=>{if(!event.persisted)tab.URL.revokeObjectURL(url);},{once:true});
+}
 function downloadBlobDirect_(blob,name){
  const fileName=safeDownloadName_(name,'archivo'),url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download=fileName;a.rel='noopener';a.style.display='none';document.body.appendChild(a);
@@ -809,8 +840,11 @@ async function previewSgdFile(fileId){
  const w=window.open('about:blank','_blank');
  try{
    loading(true,'Abriendo archivo…','Un momento');
-   const p=await getSgdFilePayload_(fileId),blob=sgdPayloadToBlob_(p),url=URL.createObjectURL(blob);
-   if(/^application\/pdf$/i.test(p.mime||'')||/^image\//i.test(p.mime||'')){
+   const p=await getSgdFilePayload_(fileId),blob=sgdPayloadToBlob_(p);
+   if(/^application\/pdf$/i.test(p.mime||'')){
+     showSgdPdfPreviewTab_(w,p,blob);
+   }else if(/^image\//i.test(p.mime||'')){
+     const url=URL.createObjectURL(blob);
      if(w)w.location.href=url;else window.open(url,'_blank');
      setTimeout(()=>URL.revokeObjectURL(url),10*60*1000);
    }else{
@@ -826,7 +860,7 @@ async function downloadDocumentPdf(documentId){
 }
 async function previewDocumentPdf(documentId){
  const w=window.open('about:blank','_blank');
- try{loading(true,'Abriendo PDF…','Un momento');const p=await getDocumentPdfPayloadClient_(documentId),blob=sgdPayloadToBlob_(p),url=URL.createObjectURL(blob);if(w)w.location.href=url;else window.open(url,'_blank');setTimeout(()=>URL.revokeObjectURL(url),10*60*1000)}catch(e){if(w)w.close();err(e)}finally{loading(false)}
+ try{loading(true,'Abriendo PDF…','Un momento');const p=await getDocumentPdfPayloadClient_(documentId);showSgdPdfPreviewTab_(w,p,sgdPayloadToBlob_(p))}catch(e){if(w)w.close();err(e)}finally{loading(false)}
 }
 async function downloadDocumentAnnexesZip(documentId){
  try{loading(true,'Preparando anexos…','Creando archivo ZIP');const p=await api('getDocumentAnnexesZipSGD',app.token,documentId),blob=sgdPayloadToBlob_(p);downloadBlobDirect_(blob,p.name||'Anexos.zip');toast('ZIP de anexos preparado')}catch(e){err(e)}finally{loading(false)}
@@ -849,9 +883,8 @@ async function openExpDocumentExternal(expId,documentId){
  if(!w){toast('El navegador bloqueó la nueva pestaña. Habilita ventanas emergentes para el SGD e inténtalo nuevamente.');return;}
  try{
   try{w.document.title='Visualizar documento';w.document.body.innerHTML='<div style="font-family:Arial,sans-serif;padding:28px;color:#27445c">Preparando PDF…</div>'}catch(_e){}
-  const p=await getExpedientePdfPayloadClient_(expId,documentId),url=URL.createObjectURL(sgdPayloadToBlob_(p));
-  w.location.replace(url);
-  setTimeout(()=>{try{URL.revokeObjectURL(url)}catch(_e){}},30*60*1000);
+  const p=await getExpedientePdfPayloadClient_(expId,documentId);
+  showSgdPdfPreviewTab_(w,p,sgdPayloadToBlob_(p));
  }catch(e){try{w.close()}catch(_e){}err(e)}
 }
 
@@ -1080,7 +1113,7 @@ function getDraftFinalPdfPayloadClient_(documentId){
 }
 async function previewDraftFinalPdf_(documentId){
  const w=window.open('about:blank','_blank');if(!w){toast('Chrome bloqueó la nueva pestaña. Habilita ventanas emergentes para el SGD.');return}
- try{try{w.document.title='Visualizar documento';w.document.body.innerHTML='<div style="font-family:Arial,sans-serif;padding:28px;color:#27445c">Preparando PDF…</div>'}catch(_e){}const p=await getDraftFinalPdfPayloadClient_(documentId),url=URL.createObjectURL(sgdPayloadToBlob_(p));w.location.replace(url);setTimeout(()=>{try{URL.revokeObjectURL(url)}catch(_e){}},30*60*1000)}catch(e){try{w.close()}catch(_e){}err(e)}
+ try{w.document.title='Visualizar documento';w.document.body.textContent='Preparando PDF…';const p=await getDraftFinalPdfPayloadClient_(documentId);showSgdPdfPreviewTab_(w,p,sgdPayloadToBlob_(p));}catch(e){try{w.close()}catch(_e){}err(e)}
 }
 async function downloadDraftFinalPdf_(documentId){
  try{loading(true,'Preparando PDF…','Un momento');const p=await getDraftFinalPdfPayloadClient_(documentId),blob=sgdPayloadToBlob_(p);downloadBlobDirect_(blob,p.name||'documento.pdf');toast('Descarga iniciada')}catch(e){err(e)}finally{loading(false)}
@@ -1104,12 +1137,11 @@ async function reviewFinal(){
     const pdf=await getDraftFinalPdfPayloadClient_(id);
     if(body!==$('finalReviewBody')||!$('modalBack').classList.contains('show')||id!==app.currentDraft)return;
     if(!pdf.pdfHash)throw Error('No se pudo verificar la versión del PDF. Vuelve a cargar el archivo.');
-    finalReviewUrl_=URL.createObjectURL(sgdPayloadToBlob_(pdf));
-    const url=finalReviewUrl_;
-    body.innerHTML='<div class="action-primary"><a class="btn btn-outline" target="_blank" rel="noopener" href="'+esc(url)+'">Abrir PDF en otra pestaña</a>'+
-      '<a class="btn btn-outline" download="'+esc(pdf.name||'Documento.pdf')+'" href="'+esc(url)+'">Descargar PDF</a></div>'+
-      '<iframe title="PDF para revisión final" src="'+esc(url)+'" style="width:100%;height:60vh;border:1px solid #d2dde7;border-radius:10px;margin:10px 0"></iframe>'+
+    const blob=sgdPayloadToBlob_(pdf);
+    finalReviewUrl_=URL.createObjectURL(blob);
+    body.innerHTML=sgdPdfPreviewMarkup_(pdf,finalReviewUrl_,true)+
       '<p class="helper">Al confirmar, declaras que revisaste este PDF y autorizas que esta versión pase al circuito de firma.</p>';
+    body.querySelector('[data-open-pdf-preview]').onclick=()=>showSgdPdfPreviewTab_(window.open('about:blank','_blank'),pdf,blob);
     body.removeAttribute('role');
     button.onclick=()=>confirmReviewAndEmit(id,pdf.pdfHash,button);
     button.disabled=false;
@@ -1404,8 +1436,35 @@ async function withdrawRecipient240(id,office){const reason=prompt('Motivo para 
 async function restoreRecipient240(id,office){const reason=prompt('Motivo para restituir esta remisión:');if(!reason)return;try{loading(true,'Restituyendo remisión…','Reactivando el envío pendiente');const r=await api('restorePendingRecipientSGD',app.token,id,office,reason);closeModal();toast('Remisión restituida');renderDocDrawer224(r);refreshActiveBox240()}catch(e){err(e)}finally{loading(false)}}
 
 function refreshActiveBox240(){const map={received:'POR_RECIBIR',attention:'ATENCION',sent:'EMITIDOS',drafts:'BORRADORES',archive:'ARCHIVO',tracking:'SEGUIMIENTO'},box=map[app.page];if(box&&$('boxBody'))loadBox(box,false);refreshCountsQuiet224()}
-async function rollbackEmission(id){try{const r=await api('fd31CancelContextSGD',app.token,id);if(!r.native){const reason=prompt('Motivo de retroacción:');if(!reason)return;await api('rollbackEmissionSGD',app.token,id,reason);closeDrawer();go('drafts');return;}window.fd31Cancel={id,expected:r.expected};showModal('Anular firma y volver a proyecto','<p>Primero deben estar anuladas todas las recepciones y actuaciones posteriores. La versión firmada se conservará como anulada; el certificado personal seguirá vigente.</p><label>Motivo<textarea id="fd31Reason" class="control"></textarea></label><label>Contraseña personal de firma<input id="fd31Password" class="control" type="password" autocomplete="off"></label>','<button class="btn btn-danger" onclick="fd31ConfirmCancel()">Anular firma y devolver a proyecto</button>');}catch(e){err(e)}}
-async function fd31ConfirmCancel(){try{const password=$('fd31Password').value,reason=$('fd31Reason').value;$('fd31Password').value='';loading(true,'Anulando firma y retrotrayendo…');await api('fd31CancelAndReturnSGD',app.token,fd31Cancel.id,{password,reason,expected:fd31Cancel.expected});closeModal();closeDrawer();toast('Firma anulada. Proyecto editable; requiere nuevas firmas.');go('drafts');refreshCountsQuiet224();}catch(e){err(e)}finally{loading(false)}}
+async function rollbackEmission(id){
+ try{
+  const r=await api('fd31CancelContextSGD',app.token,id);
+  if(!r.native){
+   const reason=prompt('Motivo de retroacción:');if(!reason)return;
+   await api('rollbackEmissionSGD',app.token,id,reason);closeDrawer();go('drafts');return;
+  }
+  const preserveVerificationCode=r.preservesReservedCode===true;
+  window.fd31Cancel={id,expected:r.expected,preserveVerificationCode};
+  const codeNote=preserveVerificationCode?'<p><strong>Se conservará el código de verificación reservado.</strong></p>':'';
+  const detail=r.hasSavedSignature===false?'El circuito preparado se retirará y el documento volverá a proyecto.':'La versión firmada se conservará en el historial como anulada. Tu certificado personal seguirá vigente.';
+  showModal('Devolver documento a proyecto','<p>'+esc(detail)+'</p>'+codeNote+'<label>Motivo<textarea id="fd31Reason" class="control"></textarea></label><label>Clave personal de firma<input id="fd31Password" class="control" type="password" autocomplete="off"></label><p id="fd31ReturnStatus" role="status"></p>','<button class="btn btn-danger" type="button" onclick="fd31ConfirmCancel(this)">Confirmar devolución</button>');
+ }catch(e){err(e);}
+}
+async function fd31ConfirmCancel(button){
+ const action=window.fd31Cancel,status=$('fd31ReturnStatus'),key=$('fd31Password');
+ if(!action||!button||button.disabled||!key)return;
+ const reason=$('fd31Reason').value.trim(),password=key.value;
+ if(!reason||!password){status.textContent='Completa el motivo y la clave personal de firma.';return;}
+ const token=app.token;
+ button.disabled=true;key.value='';status.textContent='Guardando la devolución a proyecto…';
+ try{
+  const result=await api('fd31CancelAndReturnSGD',token,action.id,{password,reason,expected:action.expected,preserveVerificationCode:action.preserveVerificationCode});
+  if(app.token!==token||!button.isConnected)return;
+  closeModal();closeDrawer();toast(result?.preservedVerificationCode?'Proyecto editable. El código de verificación se conservó.':'Documento devuelto a proyecto.');go('drafts');refreshCountsQuiet224();
+ }catch(e){
+  if(app.token===token&&button.isConnected){status.textContent=e.message||String(e);err(e);}
+ }finally{if(button.isConnected)button.disabled=false;}
+}
 let proveidoTargets39_=[];
 let proveidoContext39_={sourceId:'',editId:''};
 function proveidoOfficeOptions39_(selected=''){return (app.bootstrap.offices||[]).filter(o=>o.code!==app.session.officeCode).map(o=>`<option value="${esc(o.code)}" ${o.code===selected?'selected':''}>${esc(o.name)}</option>`).join('');}
@@ -1660,7 +1719,14 @@ window.fdPdfjs=pdfjs;
 <script>
 const fdUI={status:null,doc:null,pdf:null,bytes:null,page:0,rect:null,viewport:null,busy:false,postSignView:null,postSignState:null,brandAssetsCache:null,brandAssetsAppointment:''};
 function fdPanel(title,html){document.getElementById('fdPanel')?.remove();const el=document.createElement('section');el.id='fdPanel';el.innerHTML='<header><strong style="flex:1">'+esc(title)+'</strong><button onclick="fdClose()">Cerrar</button></header><main><div id="fdError" role="alert"></div>'+html+'</main>';document.body.append(el);}
-function fdClose(){if(fdUI.busy)return;document.getElementById('fdPanel')?.remove();if(fdUI.pdf){fdUI.pdf.destroy();fdUI.pdf=null;}fdUI.bytes=null;}
+function fdClose(){
+ if(fdUI.busy)return;
+ const signing=fdUI.signing&&fdUI.signing===fdUI.doc;
+ fdSigningClose_();$('fdPanel')?.remove();
+ if(fdUI.pdf){fdUI.pdf.destroy();fdUI.pdf=null;}
+ fdUI.bytes=null;fdUI.doc=null;fdUI.postSignState=null;fdUI.postSignView=null;fdUI.emissionLookup=null;fdUI.loadingSignedView=null;
+ if(signing)toast('La firma sigue en curso. Puedes comprobar su estado desde el documento.');
+}
 function fdToggleSecret(id,btn){const el=$(id);if(!el)return;const show=el.type==='password';el.type=show?'text':'password';if(btn){btn.innerHTML=eyeIconSvg_(show);btn.setAttribute('aria-label',show?'Ocultar clave':'Mostrar clave');btn.title=show?'Ocultar clave':'Mostrar clave';}}
 function fdToggleSecret_(id,btn){return fdToggleSecret(id,btn);}
 function fdSecretInput_(id,autocomplete){return '<span class="fdSecretWrap"><input data-eye-ready="1" type="password" id="'+id+'" autocomplete="'+(autocomplete||'off')+'"><button type="button" class="fdEyeBtn" onclick="fdToggleSecret(\''+id+'\',this)" aria-label="Mostrar clave" title="Mostrar clave">'+eyeIconSvg_(false)+'</button></span>';}
@@ -1720,7 +1786,8 @@ function fdOpen(id,onlyReady=false){
   if(!id)return;
   return fdRun(async()=>{
     fdPanel('Firma digital','<p role="status" id="fdOpenStatus">Comprobando el estado de la firma…</p>');
-    const view=await api('fdViewSGD',app.token,id,onlyReady===true);
+    const token=app.token,view=await fd47Bounded_(api('fdViewSGD',token,id,onlyReady===true));
+    fd47Session_(token);
     if(view.signatureWaiting){
       const status=$('fdOpenStatus');
       status.textContent=view.complete?'La firma principal ya está completada.':
@@ -1751,7 +1818,7 @@ if(assetsPromise){
   button.textContent=main&&!r.annexId?'Aplicar firma final':'Firmar PDF';
   fd46StampVisibility_();
 }}
-async function fdOpenAnnex(documentId,annexId,requestId=''){return fdRun(async()=>{const r=await api('fd31AnnexViewSGD',app.token,documentId,annexId,requestId),isVb=String(r.requestedAction||'FIRMA').toUpperCase()==='VISTO_BUENO';r.plan={main:isVb?'__ANNEX_VB__':app.session?.userId,vbs:[]};r.signed=(r.history||[]).map(x=>({page:Number(x.page||0),box:x.box||null,type:x.type||'TITULAR'}));r.complete=false;r.myTurn=true;r.type='ANEXO';r.state='BORRADOR';r.resolutionMode=false;await fdShow(r);const n=$('fdNotice');if(n){const seq=r.sequence&&r.totalSequence?`Actuación ${r.sequence} de ${r.totalSequence}. `:'';n.textContent=seq+(isVb?'Anexo pendiente de V°B°: revise el PDF ya actuado y confirme el visto bueno solicitado.':(r.targetScope==='OTRA_OFICINA'?'Firma de anexo solicitada por otra oficina: revise esta versión del PDF y ubique la firma correspondiente.':'Firma del autor del anexo: revise esta versión del PDF y confirme su firma.'));}});}
+async function fdOpenAnnex(documentId,annexId,requestId=''){return fdRun(async()=>{const r=await fd47Bounded_(api('fd31AnnexViewSGD',app.token,documentId,annexId,requestId)),isVb=String(r.requestedAction||'FIRMA').toUpperCase()==='VISTO_BUENO';r.plan={main:isVb?'__ANNEX_VB__':app.session?.userId,vbs:[]};r.signed=(r.history||[]).map(x=>({page:Number(x.page||0),box:x.box||null,type:x.type||'TITULAR'}));r.complete=false;r.myTurn=true;r.type='ANEXO';r.state='BORRADOR';r.resolutionMode=false;await fdShow(r);const n=$('fdNotice');if(n){const seq=r.sequence&&r.totalSequence?`Actuación ${r.sequence} de ${r.totalSequence}. `:'';n.textContent=seq+(isVb?'Anexo pendiente de V°B°: revise el PDF ya actuado y confirme el visto bueno solicitado.':(r.targetScope==='OTRA_OFICINA'?'Firma de anexo solicitada por otra oficina: revise esta versión del PDF y ubique la firma correspondiente.':'Firma del autor del anexo: revise esta versión del PDF y confirme su firma.'));}});}
 /* R46 · Vistos buenos: lateral izquierdo, desde abajo y por páginas. */
 function fd46VbPlacement_(sizes,history){
   const margin=14,width=74,height=94,gap=3,entries=Array.isArray(history)?history:[];
@@ -1794,7 +1861,7 @@ async function fd46PreviewPage_(){
 function fd46StampVisibility_(){
   const type=$('fd3SignType')?.value||'',fixed=type&&!['AVANZADA','AVANZADA_CORTA','VB_AVANZADA'].includes(type),target=type==='VISTO_BUENO'?fdUI.vbPlacement?.page:0,visible=!!fdUI.doc.myTurn&&(!fixed||fdUI.page===target);
   $('fdRect').style.display=visible?'flex':'none';
-  const button=$('fdSignButton');if(button&&type)button.disabled=!visible;
+  const button=$('fdSignButton');if(button&&type)button.disabled=!visible||fdUI.signing===fdUI.doc;
 }
 
 async function fdRender(){
@@ -1813,10 +1880,10 @@ function fdPage(delta){return fdRun(async()=>{const next=fdUI.page+delta,total=f
 
 function fdSigningScreen_(title,detail,state='busy',actions=''){
  const panel=$('fdPanel');if(!panel)return;
- let el=$('fdSigningOverlay');if(!el){el=document.createElement('div');el.id='fdSigningOverlay';panel.appendChild(el);}
+ let el=$('fdSigningOverlay');if(!el){el=document.createElement('div');el.id='fdSigningOverlay';panel.insertBefore(el,panel.querySelector('main'));}
  el.className='fdSigningOverlay '+state;
  const icon=state==='done'?'✓':state==='error'?'!':'';
- el.innerHTML=`<div class="fdSigningOverlayCard"><div class="fdSigningSpinner">${icon}</div><h3 id="fdSigningTitle">${esc(title||'Procesando firma…')}</h3><p id="fdSigningDetail">${esc(detail||'')}</p><div id="fdSigningElapsed" class="fdSigningElapsed"></div><div id="fdSigningActions" class="fdSigningActions">${actions||''}</div></div>`;
+ el.innerHTML=`<div class="fdSigningOverlayCard"><div class="fdSigningSpinner" aria-hidden="true">${icon}</div><div class="fdSigningCopy" role="status"><h3 id="fdSigningTitle">${esc(title||'Procesando firma…')}</h3><p id="fdSigningDetail">${esc(detail||'')}</p><div id="fdSigningElapsed" class="fdSigningElapsed" aria-hidden="true"></div></div><div id="fdSigningActions" class="fdSigningActions">${actions||''}</div></div>`;
  if(fdSigningElapsedTimer_){clearInterval(fdSigningElapsedTimer_);fdSigningElapsedTimer_=null;}
  if(state==='busy'){
   fdSigningStartedAt_=Date.now();const tick=()=>{const x=$('fdSigningElapsed');if(x)x.textContent='Procesando · '+Math.max(0,Math.floor((Date.now()-fdSigningStartedAt_)/1000))+' s';};tick();fdSigningElapsedTimer_=setInterval(tick,1000);
@@ -1824,12 +1891,24 @@ function fdSigningScreen_(title,detail,state='busy',actions=''){
 }
 function fdSigningStep_(title,detail){const t=$('fdSigningTitle'),d=$('fdSigningDetail');if(t)t.textContent=title||'Procesando firma…';if(d)d.textContent=detail||'';}
 function fdSigningClose_(){if(fdSigningElapsedTimer_){clearInterval(fdSigningElapsedTimer_);fdSigningElapsedTimer_=null;}$('fdSigningOverlay')?.remove();}
-function fdSigningToEmission_(){const snap=fdUI.postSignState||null,isProveido=normalizedTypeUI233_(fdUI.doc?.type||'')==='PROVEIDO';if(!isProveido)fdSigningClose_();fdContinueEmission(snap);}
+function fdSigningToEmission_(){return fdContinueEmission(fdUI.postSignState);}
 function fdSigningBackToCenter_(){fdSigningClose_();fdClose();openSignatureCenter();}
 async function fdSigningViewSigned_(){
- const id=fdUI.doc?.documentId||app.currentDraft;if(!id)return fdSigningBackToCenter_();
+ const doc=fdUI.doc,id=doc?.documentId||app.currentDraft,token=app.token,panel=$('fdPanel');
+ if(!id||fdUI.loadingSignedView)return;
+ const request={};fdUI.loadingSignedView=request;
+ const isCurrent=()=>app.token===token&&$('fdPanel')===panel&&fdUI.doc===doc;
  fdSigningScreen_('Abriendo documento firmado','Cargando la versión firmada únicamente porque solicitó visualizarla…','busy');
- try{const view=fdUI.postSignView||await api('fdViewSGD',app.token,id);fdUI.postSignView=null;fdSigningClose_();await fdShow(view)}catch(e){fdSigningClose_();err(e);fdClose();openSignatureCenter();}
+ try{
+  const view=fdUI.postSignView||await fd47Bounded_(api('fdViewSGD',token,id));
+  if(!isCurrent())return;
+  fdUI.postSignView=null;fdSigningClose_();await fdShow(view);
+ }catch(e){
+  if(isCurrent()){
+   const ready=fd47EmissionReady_(fdUI.postSignState,id);
+   fdSigningScreen_('No se pudo abrir el PDF firmado',e.message||String(e),'error','<button type="button" onclick="fdSigningViewSigned_()">Reintentar vista</button>'+(ready?'<button type="button" onclick="fdSigningToEmission_()">Continuar con emisión</button>':''));
+  }
+ }finally{if(fdUI.loadingSignedView===request)fdUI.loadingSignedView=null;}
 }
 function fdApplyAnnexActionLocal42_(st){
  const cache=app.signatureInboxCache,doc=fdUI.doc||{};if(!cache||cache.mode!=='ANNEX'||!Array.isArray(cache.rows))return;
@@ -1839,7 +1918,8 @@ function fdApplyAnnexActionLocal42_(st){
 function fdOpenNextAnnex42_(){const n=fdUI.postAnnexNext;if(!n)return fdSigningFinishExternal_();fdSigningClose_();fdClose();fdUI.postAnnexNext=null;return fdOpenAnnex(n.documentId,n.annexId,n.requestId);}
 function fdSigningFinishExternal_(){fdSigningClose_();fdClose();refreshCountsQuiet224();if(app.signatureInboxCache?.mode==='ANNEX'){app.page='annex-signatures';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page==='annex-signatures'));renderSignatureWorkInbox('ANNEX',true);return;}go('annex-signatures');}
 function fdSigningDone_(st,mode){
- const isAnnex=mode==='annex',isResolutionVb=!isAnnex&&!!fdUI.doc?.resolutionMode&&fdUI.doc?.plan?.main!==app.session?.userId,isProveido=!isAnnex&&normalizedTypeUI233_(fdUI.doc?.type||'')==='PROVEIDO',c=isAnnex?{}:(st?.signatureCircuit||{}),pending=isAnnex?Number(st?.pendingAnnexes||0):(st?.annexSigning||[]).filter(x=>x.required&&!x.signed).length,canEmit=isAnnex?!!st?.canContinueEmission:(!!c.complete&&!pending);
+ if(mode==='annex'&&fdUI.doc?.documentId)fdUI.postSignState={...st,documentId:fdUI.doc.documentId};
+ const isAnnex=mode==='annex',isResolutionVb=!isAnnex&&!!fdUI.doc?.resolutionMode&&fdUI.doc?.plan?.main!==app.session?.userId,isProveido=!isAnnex&&normalizedTypeUI233_(fdUI.doc?.type||'')==='PROVEIDO',c=isAnnex?{}:(st?.signatureCircuit||{}),pending=isAnnex?Number(st?.pendingAnnexes||0):(st?.annexSigning||[]).filter(x=>x.required&&!x.signed).length,canEmit=st?.canContinueEmission??(!isAnnex&&!!c.complete&&!pending);
  if(isResolutionVb){const id=fdUI.doc?.documentId||'';fdApplyResolutionVbLocalSuccess38_(id);fdSigningScreen_('V°B° registrado','El visto bueno quedó guardado correctamente. Esta tarea ya fue retirada de su bandeja. Las demás oficinas requeridas pueden otorgar su V°B° en cualquier orden; la firma final se habilitará cuando todos estén completos.','done','<button class="btn btn-primary" type="button" onclick="fdReturnResolutionInbox38_()">Volver a V°B° pendientes</button>');if(fdUI.returnPage==='resolution-vb')setTimeout(()=>{if($('fdSigningOverlay'))fdReturnResolutionInbox38_();},1100);return;}
  if(isAnnex){
   fdApplyAnnexActionLocal42_(st);const completed=String(st?.completedRequest?.action||fdUI.doc?.requestedAction||'FIRMA').toUpperCase(),next=st?.nextRequest||null;fdUI.postAnnexNext=next;
@@ -1857,6 +1937,7 @@ async function fdSignUI(){
  const consent=$('fdConsent'),pwEl=$('fdSignPassword'),btn=$('fdSignButton'),brand=$('fd3SignBrand'),type=$('fd3SignType');
  const signingDoc=fdUI.doc,signingToken=app.token,mode=fdUI.mode;
  if(fdUI.busy||!signingDoc?.myTurn||!btn||btn.disabled||!brand||!type)return;
+ if(fdUI.signing){fd47SignProgress_('Hay una firma en curso. Espera su confirmación antes de firmar de nuevo.');return;}
  const error=$('fdError');
  if(!consent?.checked){if(error)error.textContent='Revise el documento y confirme su autorización.';return;}
  const password=pwEl?.value||'';
@@ -1868,7 +1949,7 @@ async function fdSignUI(){
  const box=[Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.max(a[0],b[0]),Math.max(a[1],b[1])];
  const documentId=signingDoc.documentId,operationKey=fd47OperationKey_(signingToken,mode,signingDoc);
  const idleLabel=btn.textContent;
- fdUI.busy=true;btn.disabled=true;btn.textContent='Firmando…';
+ fdUI.signing=signingDoc;btn.disabled=true;btn.textContent='Firmando…';
  if(error)error.textContent='';
  fd47SignProgress_('Guardando firma digital…');
  try{
@@ -1877,7 +1958,7 @@ async function fdSignUI(){
   const result=mode==='annex'
     ?await fdReliableSignCall_('fd31SignAnnexSGD',[signingToken,documentId,signingDoc.annexId,payload],null)
     :await fdReliableSignCall_('fdSignSGD',[signingToken,documentId,payload],()=>fd3ApiBase('fdSignRecoverySGD',signingToken,documentId,payload.clientOpId));
-  fd47Session_(signingToken);if(fdUI.doc!==signingDoc)return;
+   fd47Session_(signingToken);if(fdUI.doc!==signingDoc){fd47Operations_.delete(operationKey);refreshCountsQuiet224();return;}
   fd47Operations_.delete(operationKey);signingDoc.myTurn=false;
   if(mode!=='annex'){
    fd47ApplySigned_(result);
@@ -1893,8 +1974,9 @@ async function fdSignUI(){
   if(error)error.textContent=msg;
   toast(msg);
  }finally{
+  if(fdUI.signing===signingDoc)fdUI.signing=null;
   if(app.token===signingToken&&fdUI.doc===signingDoc){
-   fdUI.busy=false;btn.textContent=idleLabel;fd47SignProgress_('');fd46StampVisibility_();
+   btn.textContent=idleLabel;fd47SignProgress_('');fd46StampVisibility_();
   }
  }
 }
@@ -1971,8 +2053,29 @@ function fdPlaceInstitutional_(type){
 
 function fd3PreviewBrand(){const brand=fdUI.brands.find(a=>a.id===$('fd3SignBrand').value);if(brand)$('fdRect').querySelector('img').src='data:image/jpeg;base64,'+brand.image;}
 const fd3OriginalContinue=fdContinueEmission;
-async function fdEmitProveidoAfterSign39_(id){try{loading(true,'Emitiendo proveído firmado…','La firma digital ya está completa. Registrando destinos e indicaciones sin volver al visor de firma.');const r=await api('fd3EmitProveidoSGD',app.token,id,true);loading(false);setTimeout(refreshCountsQuiet224,700);fdPanel('Proveído emitido',`<div class="okbox"><b>Emisión completada</b><div>La firma digital se conserva como versión vigente y el proveído fue remitido a ${Number(r?.targets||1)} oficina(s).</div></div><div class="doc-actions" style="margin-top:12px"><button type="button" class="btn btn-primary" onclick="fdClose();go('attention')">Volver a En atención</button></div>`);}catch(e){loading(false);const msg=e?.message||String(e);fdPanel('Emisión pendiente',`<div class="warn"><b>La firma digital ya está registrada.</b><div>No vuelva a firmar. Solo falta confirmar la emisión del proveído.</div><p>${esc(msg)}</p></div><button type="button" class="btn btn-primary" onclick="fdEmitProveidoAfterSign39_('${esc(id)}')">Reintentar emisión</button>`);}}
-fdContinueEmission=function(snapshot){if(normalizedTypeUI233_(fdUI.doc?.type||'')==='PROVEIDO'){const id=fdUI.doc?.documentId||app.currentDraft;if(!id)return;if(!confirm('¿Emitir ahora el proveído ya firmado digitalmente?'))return;fdSigningClose_();document.getElementById('fdPanel')?.remove();try{if(fdUI.pdf)fdUI.pdf.destroy();}catch(e){}fdUI.pdf=null;fdUI.bytes=null;fdEmitProveidoAfterSign39_(id);return;}return fd3OriginalContinue(snapshot);};
+async function fdEmitProveidoAfterSign39_(id){
+ const token=app.token,panel=$('fdPanel');
+ if(!id||fdUI.emittingProveido)return;
+ const request={};fdUI.emittingProveido=request;
+ const isCurrent=()=>app.token===token&&$('fdPanel')===panel;
+ fdSigningScreen_('Emitiendo proveído','La firma está guardada. Estamos registrando los destinos e indicaciones.','busy');
+ try{
+  const r=await fd47Bounded_(api('fd3EmitProveidoSGD',token,id,true),90000);
+  fd47Session_(token);setTimeout(refreshCountsQuiet224,700);
+  if(!isCurrent())return;
+  fdSigningClose_();fdClose();
+  fdPanel('Proveído emitido',`<div class="okbox"><b>Emisión completada</b><div>La firma digital se conserva como versión vigente y el proveído fue remitido a ${Number(r?.targets||1)} oficina(s).</div></div><div class="doc-actions" style="margin-top:12px"><button type="button" class="btn btn-primary" onclick="fdClose();go('attention')">Volver a En atención</button></div>`);
+ }catch(e){
+  if(!isCurrent())return;
+  fdSigningScreen_('Emisión de proveído pendiente',e.message||String(e),'error','<button type="button" class="btn btn-primary" data-document-id="'+esc(id)+'" onclick="fdEmitProveidoAfterSign39_(this.dataset.documentId)">Reintentar emisión</button>');
+ }finally{if(fdUI.emittingProveido===request)fdUI.emittingProveido=null;}
+}
+fdContinueEmission=function(snapshot){
+ if(normalizedTypeUI233_(fdUI.doc?.type||'')!=='PROVEIDO')return fd3OriginalContinue(snapshot);
+ const id=fdUI.doc?.documentId||app.currentDraft;
+ if(!id||fdUI.emittingProveido||!confirm('¿Emitir ahora el proveído ya firmado digitalmente?'))return;
+ return fdEmitProveidoAfterSign39_(id);
+};
 function fd3B64(a){let s='';for(let i=0;i<a.length;i+=8192)s+=String.fromCharCode(...a.slice(i,i+8192));return btoa(s);}
 let fdActivationBusy_=false;
 async function fd3GenerateCredential(name,password,onStep){if(password.length<12||password.length>128)throw Error('Use una clave de firma de 12 a 128 caracteres');if(!window.crypto||!crypto.subtle)throw Error('Este navegador no permite generar la credencial criptográfica. Use la versión actual de Chrome o Edge desde el acceso oficial del SGD.');if(!window.forge)throw Error('El componente criptográfico todavía no terminó de cargar. Cierre esta ventana y vuelva a abrir Mi firma digital.');const step=typeof onStep==='function'?onStep:()=>{};step('Generando claves criptográficas…','Creando el par RSA de 3072 bits. No cierre esta ventana.');await fdYieldUI_();const pair=await crypto.subtle.generateKey({name:'RSASSA-PKCS1-v1_5',modulusLength:3072,publicExponent:new Uint8Array([1,0,1]),hash:'SHA-256'},true,['sign','verify']);step('Preparando el certificado…','Vinculando la credencial con su identidad registrada en el SGD.');await fdYieldUI_();const pk=await crypto.subtle.exportKey('pkcs8',pair.privateKey),pub=await crypto.subtle.exportKey('spki',pair.publicKey),f=window.forge,key=f.pki.privateKeyFromAsn1(f.asn1.fromDer(atob(fd3B64(new Uint8Array(pk))))),cert=f.pki.createCertificate();cert.publicKey=f.pki.publicKeyFromAsn1(f.asn1.fromDer(atob(fd3B64(new Uint8Array(pub)))));cert.serialNumber='01'+Array.from(crypto.getRandomValues(new Uint8Array(19)),x=>x.toString(16).padStart(2,'0')).join('');cert.validity.notBefore=new Date(Date.now()-5*60000);cert.validity.notAfter=new Date(Date.now()+365*86400000);const attrs=[{name:'countryName',value:'PE'},{name:'organizationName',value:'ALTUM LUMEN S.A.C.'},{name:'serialNumber',value:'RUC 20614458918'},{name:'commonName',value:name+' FAU 20614458918',valueTagClass:f.asn1.Type.UTF8}];cert.setSubject(attrs);cert.setIssuer(attrs);cert.setExtensions([{name:'basicConstraints',cA:false,critical:true},{name:'keyUsage',digitalSignature:true,nonRepudiation:true,critical:true}]);cert.sign(key,f.md.sha256.create());step('Protegiendo la credencial…','Cifrando la clave privada con su contraseña personal. Esta etapa puede tardar algunos segundos.');await fdYieldUI_();return f.util.encode64(f.asn1.toDer(f.pkcs12.toPkcs12Asn1(key,[cert],password,{algorithm:'aes256',count:210000})).getBytes());}
@@ -2180,6 +2283,7 @@ function fd3RetireUI(revoke){if(!confirm(revoke?'¿Revocar exclusivamente el cer
 <script>
 /* Firma y emisión entre dispositivos. */
 const fd47Operations_=new Map();
+const fd47Emissions_=new Set();
 function fd47OperationKey_(token,mode,doc){return JSON.stringify([token,mode,doc.documentId||'',doc.annexId||'',doc.requestId||'',doc.current_hash||'']);}
 function fd47OperationId_(key,mode){
   if(!fd47Operations_.has(key))fd47Operations_.set(key,fdOperationId_(mode==='annex'?'ANX':'DOC'));
@@ -2236,11 +2340,13 @@ api=async function(name,...args){
   return fd3PollCall_(result.fd3Job,token);
 };
 async function fdReliableSignCall_(name,args,recover){
+  const doc=fdUI.doc;
   try{return await fd47Bounded_(api(name,...args),190000);}
   catch(error){
     const stale=/ya no admite|no es su turno|ya fue registrado|cambi[oó] el documento|borrador propio|ya no est[aá] pendiente|ya se (?:firm[oó]|complet[oó])|ya est[aá] firmad/i.test(error?.message||'');
     if(!stale&&!fdTransientNetworkError_(error))throw error;
-    fd47Session_(args[0]);fd47SignProgress_('Confirmando si la firma quedó guardada…');
+    fd47Session_(args[0]);
+    if(fdUI.doc===doc)fd47SignProgress_('Confirmando si la firma quedó guardada…');
     if(typeof recover==='function'){
       try{const saved=await fd47Bounded_(recover(),15000);fd47Session_(args[0]);if(saved?.found)return saved;}catch(_){}
     }
@@ -2256,6 +2362,8 @@ async function fdReliableSignCall_(name,args,recover){
   }
 }
 function fdSyncUI(){
+  if(!fdUI.doc)return;
+  if(fdUI.signing?.documentId===fdUI.doc.documentId){fd47SignProgress_('El SGD está guardando la firma. Puedes seguir revisando el PDF.');return;}
   if(fdUI.mode==='annex')return fdOpenAnnex(fdUI.doc.documentId,fdUI.doc.annexId,fdUI.doc.requestId||'');
   return fdRun(async()=>{
     const id=fdUI.doc?.documentId,token=app.token;if(!id)return;
@@ -2265,19 +2373,46 @@ function fdSyncUI(){
     await fdShow(view);
   });
 }
-function fd47ContinueEmission_(snapshot){
-  const id=fdUI.doc?.documentId||app.currentDraft,token=app.token;if(!id)return;
-  if(snapshot?.documentId===id&&snapshot.signatureCircuit?.complete&&app.flowDraft?.documentId===id)return fd47PriorContinue_(snapshot);
-  return(async()=>{
-    try{
-      fd47SignProgress_('Cargando opciones de emisión…');
-      const state=await fd47Status_(id,token);
-      if(state.raw.Estado==='EMITIDO'){fd47Emitted_(id,state);return;}
-      fdSigningClose_();fdClose();app.currentDraft=id;renderDraftFromResult224(state);
-      if(state.signatureCircuit?.complete)toast('Firma guardada. Falta confirmar la emisión.');
-      else toast('El circuito sigue pendiente. Se muestra el estado actual.');
-    }catch(e){if(app.token===token)err(e);}finally{if(app.token===token)fd47SignProgress_('');}
-  })();
+function fd47EmissionReady_(state,id){
+  if(!state||(state.documentId||state.raw?.Documento_ID)!==id)return false;
+  if(typeof state.canContinueEmission==='boolean')return state.canContinueEmission;
+  return !!state.signatureCircuit?.complete&&Array.isArray(state.annexSigning)&&state.annexSigning.every(x=>!x.required||x.signed);
+}
+function fd47ShowEmission_(id,title){
+  fdSigningScreen_('Listo para emitir','La firma está guardada. Confirma el envío de '+(title||'este documento')+'.','done',
+    '<button class="btn btn-green" type="button" data-document-id="'+esc(id)+'" onclick="emitCurrent(this,this.dataset.documentId)">Emitir documento</button>'+
+    '<button class="btn btn-outline" type="button" onclick="fdSigningClose_();fdClose()">Volver</button>');
+}
+async function fd47ContinueEmission_(snapshot){
+  const doc=fdUI.doc,id=doc?.documentId||app.currentDraft,token=app.token,panel=$('fdPanel');
+  if(!id||fdUI.signing?.documentId===id||fdUI.emissionLookup)return;
+  const receipt=snapshot?.documentId===id?snapshot:doc;
+  if(receipt?.alreadyEmitted||receipt?.state==='EMITIDO'){fd47Emitted_(id,{raw:receipt.rawState||{Fecha_Emisión:receipt.emittedAt}});return;}
+  if(fd47EmissionReady_(receipt,id)){
+    const draftNumber=app.flowDraft?.documentId===id?app.flowDraft.number:'';
+    fd47ShowEmission_(id,receipt.documentNumber||draftNumber||(fdUI.mode==='main'?doc?.title:''));
+    return;
+  }
+  const lookup={};fdUI.emissionLookup=lookup;
+  const isCurrent=()=>app.token===token&&$('fdPanel')===panel&&fdUI.doc===doc;
+  fdSigningScreen_('Consultando el circuito','Comprobando las firmas requeridas para la emisión.','busy');
+  try{
+    const state=await fd47Status_(id,token);
+    if(!isCurrent())return;
+    if(state.raw.Estado==='EMITIDO'){fd47Emitted_(id,state);return;}
+    if(fd47EmissionReady_(state,id)){
+      fd47ShowEmission_(id,state.raw['Número']||doc?.title);
+      return;
+    }
+    fdSigningClose_();fdClose();app.currentDraft=id;renderDraftFromResult224(state);
+    toast('El circuito sigue pendiente. Se muestra el estado actual.');
+  }catch(e){
+    if(isCurrent()){
+      if(e.message?.includes('SESSION_EXPIRED')){fdClose();err(e);return;}
+      fdSigningScreen_('Consulta pendiente',e.message||String(e),'error',
+        '<button class="btn btn-outline" type="button" onclick="fdSigningToEmission_()">Volver a consultar</button>');
+    }
+  }finally{if(fdUI.emissionLookup===lookup)fdUI.emissionLookup=null;}
 }
 const fd47PriorContinue_=fdContinueEmission;
 fdContinueEmission=function(snapshot){
@@ -2291,29 +2426,46 @@ renderDraftFromResult224=function(result){
 };
 const fd47PriorReset_=resetLoginState;
 resetLoginState=function(message){
-  fdSigningClose_();fd47Operations_.clear();fdUI.busy=false;fdUI.doc=null;
-  fdUI.postSignState=null;fdUI.postSignView=null;fdUI.postAnnexNext=null;
+  fdSigningClose_();fd47Operations_.clear();fd47Emissions_.clear();fdUI.busy=false;fdUI.signing=null;fdUI.emissionLookup=null;fdUI.doc=null;
+  fdUI.postSignState=null;fdUI.postSignView=null;fdUI.postAnnexNext=null;fdUI.loadingSignedView=null;fdUI.emittingProveido=null;
   return fd47PriorReset_(message);
 };
-async function emitCurrent(){
-  const id=app.currentDraft,token=app.token;if(!id||!confirm('¿Emitir este documento?'))return;
+async function emitCurrent(button,id=app.currentDraft){
+  const token=app.token,key=JSON.stringify([token,id]);
+  if(!id||fd47Emissions_.has(key)||!confirm('¿Emitir este documento?'))return;
+  const panel=button?.closest('#fdPanel'),detail=panel?$('fdSigningDetail'):$('sgdEmissionStatus');
+  const label=button?.textContent;
+  const isCurrent=()=>app.token===token&&(panel?$('fdPanel')===panel:app.currentDraft===id&&(!button||button.isConnected));
+  fd47Emissions_.add(key);
+  if(button){button.disabled=true;button.textContent='Emitiendo…';}
+  if(detail)detail.textContent='Registrando el envío…';
   let receipt;
   try{
-    loading(true,'Emitiendo documento…','Registrando el envío');
     try{receipt=await fd47Bounded_(api('sendDocumentSGD',token,id),90000);}
     catch(error){
       if(!fdTransientNetworkError_(error))throw error;
+      if(isCurrent()&&detail)detail.textContent='Verificando si se registró el envío…';
       const after=await fd47Status_(id,token).catch(()=>null);
       if(after?.raw?.Estado!=='EMITIDO')throw error;
       receipt={ok:true,alreadyEmitted:true};
     }
     fd47Session_(token);
-    if(app.currentDraft!==id)return;
+    if(!isCurrent()){refreshCountsQuiet224();return;}
     if(receipt?.countsHint)applyCountHint224(receipt.countsHint);
-    closeModal();toast(receipt?.alreadyEmitted?'La emisión ya estaba guardada.':'Documento emitido.');app.currentDraft=null;go('sent');refreshCountsQuiet224();
-  }catch(e){if(app.token===token)err(e);}finally{if(app.token===token)loading(false);}
+    fdSigningClose_();if(panel)fdClose();closeModal();
+    toast(receipt?.alreadyEmitted?'La emisión ya estaba guardada.':'Documento emitido.');
+    if(app.currentDraft===id)app.currentDraft=null;
+    go('sent');refreshCountsQuiet224();
+  }catch(e){
+    if(isCurrent()){
+      if(detail)detail.textContent=e.message||String(e);
+      err(e);
+    }
+  }finally{
+    fd47Emissions_.delete(key);
+    if(isCurrent()&&button){button.disabled=false;button.textContent=label;}
+  }
 }
-
 </script>
 </body>
 </html>

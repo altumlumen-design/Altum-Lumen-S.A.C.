@@ -1,5 +1,6 @@
 /* Firma y emisión entre dispositivos. */
 const fd47Operations_=new Map();
+const fd47Emissions_=new Set();
 function fd47OperationKey_(token,mode,doc){return JSON.stringify([token,mode,doc.documentId||'',doc.annexId||'',doc.requestId||'',doc.current_hash||'']);}
 function fd47OperationId_(key,mode){
   if(!fd47Operations_.has(key))fd47Operations_.set(key,fdOperationId_(mode==='annex'?'ANX':'DOC'));
@@ -56,11 +57,13 @@ api=async function(name,...args){
   return fd3PollCall_(result.fd3Job,token);
 };
 async function fdReliableSignCall_(name,args,recover){
+  const doc=fdUI.doc;
   try{return await fd47Bounded_(api(name,...args),190000);}
   catch(error){
     const stale=/ya no admite|no es su turno|ya fue registrado|cambi[oó] el documento|borrador propio|ya no est[aá] pendiente|ya se (?:firm[oó]|complet[oó])|ya est[aá] firmad/i.test(error?.message||'');
     if(!stale&&!fdTransientNetworkError_(error))throw error;
-    fd47Session_(args[0]);fd47SignProgress_('Confirmando si la firma quedó guardada…');
+    fd47Session_(args[0]);
+    if(fdUI.doc===doc)fd47SignProgress_('Confirmando si la firma quedó guardada…');
     if(typeof recover==='function'){
       try{const saved=await fd47Bounded_(recover(),15000);fd47Session_(args[0]);if(saved?.found)return saved;}catch(_){}
     }
@@ -76,6 +79,8 @@ async function fdReliableSignCall_(name,args,recover){
   }
 }
 function fdSyncUI(){
+  if(!fdUI.doc)return;
+  if(fdUI.signing?.documentId===fdUI.doc.documentId){fd47SignProgress_('El SGD está guardando la firma. Puedes seguir revisando el PDF.');return;}
   if(fdUI.mode==='annex')return fdOpenAnnex(fdUI.doc.documentId,fdUI.doc.annexId,fdUI.doc.requestId||'');
   return fdRun(async()=>{
     const id=fdUI.doc?.documentId,token=app.token;if(!id)return;
@@ -85,19 +90,46 @@ function fdSyncUI(){
     await fdShow(view);
   });
 }
-function fd47ContinueEmission_(snapshot){
-  const id=fdUI.doc?.documentId||app.currentDraft,token=app.token;if(!id)return;
-  if(snapshot?.documentId===id&&snapshot.signatureCircuit?.complete&&app.flowDraft?.documentId===id)return fd47PriorContinue_(snapshot);
-  return(async()=>{
-    try{
-      fd47SignProgress_('Cargando opciones de emisión…');
-      const state=await fd47Status_(id,token);
-      if(state.raw.Estado==='EMITIDO'){fd47Emitted_(id,state);return;}
-      fdSigningClose_();fdClose();app.currentDraft=id;renderDraftFromResult224(state);
-      if(state.signatureCircuit?.complete)toast('Firma guardada. Falta confirmar la emisión.');
-      else toast('El circuito sigue pendiente. Se muestra el estado actual.');
-    }catch(e){if(app.token===token)err(e);}finally{if(app.token===token)fd47SignProgress_('');}
-  })();
+function fd47EmissionReady_(state,id){
+  if(!state||(state.documentId||state.raw?.Documento_ID)!==id)return false;
+  if(typeof state.canContinueEmission==='boolean')return state.canContinueEmission;
+  return !!state.signatureCircuit?.complete&&Array.isArray(state.annexSigning)&&state.annexSigning.every(x=>!x.required||x.signed);
+}
+function fd47ShowEmission_(id,title){
+  fdSigningScreen_('Listo para emitir','La firma está guardada. Confirma el envío de '+(title||'este documento')+'.','done',
+    '<button class="btn btn-green" type="button" data-document-id="'+esc(id)+'" onclick="emitCurrent(this,this.dataset.documentId)">Emitir documento</button>'+
+    '<button class="btn btn-outline" type="button" onclick="fdSigningClose_();fdClose()">Volver</button>');
+}
+async function fd47ContinueEmission_(snapshot){
+  const doc=fdUI.doc,id=doc?.documentId||app.currentDraft,token=app.token,panel=$('fdPanel');
+  if(!id||fdUI.signing?.documentId===id||fdUI.emissionLookup)return;
+  const receipt=snapshot?.documentId===id?snapshot:doc;
+  if(receipt?.alreadyEmitted||receipt?.state==='EMITIDO'){fd47Emitted_(id,{raw:receipt.rawState||{Fecha_Emisión:receipt.emittedAt}});return;}
+  if(fd47EmissionReady_(receipt,id)){
+    const draftNumber=app.flowDraft?.documentId===id?app.flowDraft.number:'';
+    fd47ShowEmission_(id,receipt.documentNumber||draftNumber||(fdUI.mode==='main'?doc?.title:''));
+    return;
+  }
+  const lookup={};fdUI.emissionLookup=lookup;
+  const isCurrent=()=>app.token===token&&$('fdPanel')===panel&&fdUI.doc===doc;
+  fdSigningScreen_('Consultando el circuito','Comprobando las firmas requeridas para la emisión.','busy');
+  try{
+    const state=await fd47Status_(id,token);
+    if(!isCurrent())return;
+    if(state.raw.Estado==='EMITIDO'){fd47Emitted_(id,state);return;}
+    if(fd47EmissionReady_(state,id)){
+      fd47ShowEmission_(id,state.raw['Número']||doc?.title);
+      return;
+    }
+    fdSigningClose_();fdClose();app.currentDraft=id;renderDraftFromResult224(state);
+    toast('El circuito sigue pendiente. Se muestra el estado actual.');
+  }catch(e){
+    if(isCurrent()){
+      if(e.message?.includes('SESSION_EXPIRED')){fdClose();err(e);return;}
+      fdSigningScreen_('Consulta pendiente',e.message||String(e),'error',
+        '<button class="btn btn-outline" type="button" onclick="fdSigningToEmission_()">Volver a consultar</button>');
+    }
+  }finally{if(fdUI.emissionLookup===lookup)fdUI.emissionLookup=null;}
 }
 const fd47PriorContinue_=fdContinueEmission;
 fdContinueEmission=function(snapshot){
@@ -111,25 +143,43 @@ renderDraftFromResult224=function(result){
 };
 const fd47PriorReset_=resetLoginState;
 resetLoginState=function(message){
-  fdSigningClose_();fd47Operations_.clear();fdUI.busy=false;fdUI.doc=null;
-  fdUI.postSignState=null;fdUI.postSignView=null;fdUI.postAnnexNext=null;
+  fdSigningClose_();fd47Operations_.clear();fd47Emissions_.clear();fdUI.busy=false;fdUI.signing=null;fdUI.emissionLookup=null;fdUI.doc=null;
+  fdUI.postSignState=null;fdUI.postSignView=null;fdUI.postAnnexNext=null;fdUI.loadingSignedView=null;fdUI.emittingProveido=null;
   return fd47PriorReset_(message);
 };
-async function emitCurrent(){
-  const id=app.currentDraft,token=app.token;if(!id||!confirm('¿Emitir este documento?'))return;
+async function emitCurrent(button,id=app.currentDraft){
+  const token=app.token,key=JSON.stringify([token,id]);
+  if(!id||fd47Emissions_.has(key)||!confirm('¿Emitir este documento?'))return;
+  const panel=button?.closest('#fdPanel'),detail=panel?$('fdSigningDetail'):$('sgdEmissionStatus');
+  const label=button?.textContent;
+  const isCurrent=()=>app.token===token&&(panel?$('fdPanel')===panel:app.currentDraft===id&&(!button||button.isConnected));
+  fd47Emissions_.add(key);
+  if(button){button.disabled=true;button.textContent='Emitiendo…';}
+  if(detail)detail.textContent='Registrando el envío…';
   let receipt;
   try{
-    loading(true,'Emitiendo documento…','Registrando el envío');
     try{receipt=await fd47Bounded_(api('sendDocumentSGD',token,id),90000);}
     catch(error){
       if(!fdTransientNetworkError_(error))throw error;
+      if(isCurrent()&&detail)detail.textContent='Verificando si se registró el envío…';
       const after=await fd47Status_(id,token).catch(()=>null);
       if(after?.raw?.Estado!=='EMITIDO')throw error;
       receipt={ok:true,alreadyEmitted:true};
     }
     fd47Session_(token);
-    if(app.currentDraft!==id)return;
+    if(!isCurrent()){refreshCountsQuiet224();return;}
     if(receipt?.countsHint)applyCountHint224(receipt.countsHint);
-    closeModal();toast(receipt?.alreadyEmitted?'La emisión ya estaba guardada.':'Documento emitido.');app.currentDraft=null;go('sent');refreshCountsQuiet224();
-  }catch(e){if(app.token===token)err(e);}finally{if(app.token===token)loading(false);}
+    fdSigningClose_();if(panel)fdClose();closeModal();
+    toast(receipt?.alreadyEmitted?'La emisión ya estaba guardada.':'Documento emitido.');
+    if(app.currentDraft===id)app.currentDraft=null;
+    go('sent');refreshCountsQuiet224();
+  }catch(e){
+    if(isCurrent()){
+      if(detail)detail.textContent=e.message||String(e);
+      err(e);
+    }
+  }finally{
+    fd47Emissions_.delete(key);
+    if(isCurrent()&&button){button.disabled=false;button.textContent=label;}
+  }
 }
