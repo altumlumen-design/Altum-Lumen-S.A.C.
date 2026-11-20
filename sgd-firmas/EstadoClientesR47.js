@@ -1,4 +1,4 @@
-/* R47 · Consultar el estado guardado antes de reintentar una firma o emisión. */
+/* Firma y emisión entre dispositivos. */
 const fd47Operations_=new Map();
 function fd47OperationKey_(token,mode,doc){return JSON.stringify([token,mode,doc.documentId||'',doc.annexId||'',doc.requestId||'',doc.current_hash||'']);}
 function fd47OperationId_(key,mode){
@@ -30,27 +30,15 @@ function fd47ApplySigned_(outcome){
   fdUI.postSignState=outcome;fdUI.postSignView=null;
   const button=$('fdSignButton');if(button)button.disabled=true;
 }
-async function fd47BeforeSign_(doc,token){
-  if(doc.annexId)return false;
-  const state=await fd47Status_(doc.documentId,token),c=state.signatureCircuit||{},raw=state.raw;
-  if(raw.Estado==='EMITIDO'){fd47Emitted_(doc.documentId,state);return true;}
-  if(['ANULADO','DESCARTADO','HISTÓRICO'].includes(raw.Estado))throw Error('Este documento ya no admite firma. Abra su estado actual.');
-  if(c.complete){
-    const outcome={ok:true,documentId:doc.documentId,complete:true,signatureCircuit:c,annexSigning:state.annexSigning||[]};
-    fd47ApplySigned_(outcome);fdSigningDone_(outcome,'main');return true;
-  }
-  if(!c.prepared)throw Error('El circuito cambió. Vuelva a abrir el documento para continuar desde su etapa actual.');
-  if(doc.resolutionMode&&doc.plan?.main!==app.session?.userId){
-    const mine=(c.resolutionVbs||[]).find(x=>x.actor===app.session?.userId);
-    if(mine?.done){doc.myTurn=false;const button=$('fdSignButton');if(button)button.disabled=true;fdSigningScreen_('V°B° ya registrado','Su oficina ya completó este visto bueno desde otro dispositivo. No debe repetirlo.','done','<button type="button" onclick="fdSigningClose_();fdClose()">Cerrar</button>');return true;}
-  }else if(c.next!==app.session?.userId)throw Error('La actuación pendiente corresponde a otro firmante. Actualice el documento.');
-  return false;
+function fd47SignProgress_(message){
+  const status=$('fdSignProgress');
+  if(status)status.textContent=message;
 }
 async function fd47OpenExisting_(id,token){
-  const state=await fd47Status_(id,token);
-  if(state.raw.Estado==='EMITIDO'){closeModal();fd47Emitted_(id,state);return true;}
-  if(!state.signatureCircuit?.prepared)return false;
-  const view=await fd47Bounded_(api('fdViewSGD',token,id));fd47Session_(token);await fdShow(view);closeModal();return true;
+  const view=await fd47Bounded_(api('fdViewSGD',token,id,false,true));fd47Session_(token);
+  if(!view)return false;
+  if(view.state==='EMITIDO'){fd47Emitted_(id,{raw:{Fecha_Emisión:view.emittedAt}});return true;}
+  await fdShow(view);closeModal();return true;
 }
 async function fd3PollCall_(jobId,token=app.token){
   let delay=650,lastTransient=null;const deadline=Date.now()+180000;
@@ -70,20 +58,18 @@ api=async function(name,...args){
 async function fdReliableSignCall_(name,args,recover){
   try{return await fd47Bounded_(api(name,...args),190000);}
   catch(error){
+    const stale=/ya no admite|no es su turno|ya fue registrado|cambi[oó] el documento|borrador propio|ya no est[aá] pendiente|ya se (?:firm[oó]|complet[oó])|ya est[aá] firmad/i.test(error?.message||'');
+    if(!stale&&!fdTransientNetworkError_(error))throw error;
+    fd47Session_(args[0]);fd47SignProgress_('Confirmando si la firma quedó guardada…');
     if(typeof recover==='function'){
-      fdSigningStep_('Comprobando el estado guardado','Verificando si la firma se registró aunque la respuesta no haya llegado.');
-      try{const found=await fd47Bounded_(recover(),20000);if(found?.found)return found;}catch(_){}
+      try{const saved=await fd47Bounded_(recover(),15000);fd47Session_(args[0]);if(saved?.found)return saved;}catch(_){}
     }
-    // Otro dispositivo puede haber confirmado la misma actuación con otro recibo.
-    if(name==='fdSignSGD'||name==='fd31SignAnnexSGD'){
+    fd47Session_(args[0]);
+    if(name==='fd31SignAnnexSGD'){
       try{
         const state=await fd47Status_(args[1],args[0]),c=state.signatureCircuit||{};
-        if(name==='fdSignSGD'&&(state.raw.Estado==='EMITIDO'||c.complete))return{ok:true,documentId:args[1],complete:!!c.complete,signatureCircuit:c,annexSigning:state.annexSigning||[],alreadyEmitted:state.raw.Estado==='EMITIDO',rawState:state.raw};
-        if(name==='fdSignSGD'&&(c.resolutionVbs||[]).some(x=>x.actor===app.session?.userId&&x.done))return{ok:true,documentId:args[1],complete:false,signatureCircuit:c,annexSigning:state.annexSigning||[]};
-        if(name==='fd31SignAnnexSGD'){
-          const annex=(state.annexSigning||[]).find(x=>x.id===args[2]),request=(annex?.requests||[]).find(x=>x.id===args[3]?.requestId);
-          if(request?.signed)return{ok:true,documentId:args[1],completedRequest:{id:request.id,action:request.action||'FIRMA'},pendingAnnexes:(state.annexSigning||[]).filter(x=>x.required&&!x.signed).length,canContinueEmission:!!c.complete&&(state.annexSigning||[]).every(x=>!x.required||x.signed)};
-        }
+        const annex=(state.annexSigning||[]).find(x=>x.id===args[2]),request=(annex?.requests||[]).find(x=>x.id===args[3]?.requestId);
+        if(request?.signed)return{ok:true,documentId:args[1],completedRequest:{id:request.id,action:request.action||'FIRMA'},pendingAnnexes:(state.annexSigning||[]).filter(x=>x.required&&!x.signed).length,canContinueEmission:!!c.complete&&(state.annexSigning||[]).every(x=>!x.required||x.signed)};
       }catch(_){}
     }
     throw error;
@@ -93,27 +79,30 @@ function fdSyncUI(){
   if(fdUI.mode==='annex')return fdOpenAnnex(fdUI.doc.documentId,fdUI.doc.annexId,fdUI.doc.requestId||'');
   return fdRun(async()=>{
     const id=fdUI.doc?.documentId,token=app.token;if(!id)return;
-    const state=await fd47Status_(id,token);if(state.raw.Estado==='EMITIDO'){fd47Emitted_(id,state);return;}
-    const view=await fd47Bounded_(api('fdViewSGD',token,id));fd47Session_(token);await fdShow(view);
+    const view=await fd47Bounded_(api('fdViewSGD',token,id,false,true));fd47Session_(token);
+    if(view?.state==='EMITIDO'){fd47Emitted_(id,{raw:{Fecha_Emisión:view.emittedAt}});return;}
+    if(!view)throw Error('El circuito se retiró. Vuelva a abrir la ficha del documento.');
+    await fdShow(view);
   });
 }
-function fd47ContinueEmission_(){
+function fd47ContinueEmission_(snapshot){
   const id=fdUI.doc?.documentId||app.currentDraft,token=app.token;if(!id)return;
+  if(snapshot?.documentId===id&&snapshot.signatureCircuit?.complete&&app.flowDraft?.documentId===id)return fd47PriorContinue_(snapshot);
   return(async()=>{
     try{
-      loading(true,'Comprobando estado guardado…','Recuperando la firma y emisión vigentes');
+      fd47SignProgress_('Cargando opciones de emisión…');
       const state=await fd47Status_(id,token);
       if(state.raw.Estado==='EMITIDO'){fd47Emitted_(id,state);return;}
       fdSigningClose_();fdClose();app.currentDraft=id;renderDraftFromResult224(state);
       if(state.signatureCircuit?.complete)toast('Firma guardada. Falta confirmar la emisión.');
       else toast('El circuito sigue pendiente. Se muestra el estado actual.');
-    }catch(e){err(e);}finally{if(app.token===token)loading(false);}
+    }catch(e){if(app.token===token)err(e);}finally{if(app.token===token)fd47SignProgress_('');}
   })();
 }
 const fd47PriorContinue_=fdContinueEmission;
 fdContinueEmission=function(snapshot){
   if(normalizedTypeUI233_(fdUI.doc?.type||'')==='PROVEIDO')return fd47PriorContinue_(snapshot);
-  return fd47ContinueEmission_();
+  return fd47ContinueEmission_(snapshot||fdUI.postSignState);
 };
 const fd47RenderDraft_=renderDraftFromResult224;
 renderDraftFromResult224=function(result){
@@ -128,18 +117,19 @@ resetLoginState=function(message){
 };
 async function emitCurrent(){
   const id=app.currentDraft,token=app.token;if(!id||!confirm('¿Emitir este documento?'))return;
-  let receipt=null;
+  let receipt;
   try{
-    loading(true,'Comprobando la emisión…','Verificando el estado guardado antes de continuar');
-    const before=await fd47Status_(id,token);
-    if(before.raw.Estado!=='EMITIDO'){
-      if(!before.signatureCircuit?.complete)throw Error('La firma principal todavía no está guardada. Continúe el circuito antes de emitir.');
-      try{receipt=await fd47Bounded_(api('sendDocumentSGD',token,id),90000);}
-      catch(error){const after=await fd47Status_(id,token).catch(()=>null);if(after?.raw?.Estado!=='EMITIDO')throw error;}
+    loading(true,'Emitiendo documento…','Registrando el envío');
+    try{receipt=await fd47Bounded_(api('sendDocumentSGD',token,id),90000);}
+    catch(error){
+      if(!fdTransientNetworkError_(error))throw error;
+      const after=await fd47Status_(id,token).catch(()=>null);
+      if(after?.raw?.Estado!=='EMITIDO')throw error;
+      receipt={ok:true,alreadyEmitted:true};
     }
     fd47Session_(token);
     if(app.currentDraft!==id)return;
     if(receipt?.countsHint)applyCountHint224(receipt.countsHint);
-    closeModal();toast(before.raw.Estado==='EMITIDO'?'La emisión ya estaba guardada.':'Documento emitido.');app.currentDraft=null;go('sent');refreshCountsQuiet224();
+    closeModal();toast(receipt?.alreadyEmitted?'La emisión ya estaba guardada.':'Documento emitido.');app.currentDraft=null;go('sent');refreshCountsQuiet224();
   }catch(e){if(app.token===token)err(e);}finally{if(app.token===token)loading(false);}
 }
