@@ -1859,7 +1859,7 @@ async function fdSignUI(){
  if(!btn||btn.disabled||!$('fd3SignBrand')||!$('fd3SignType'))return;
  if(!consent?.checked){const el=$('fdError');if(el)el.textContent='Revise el documento y confirme su autorización.';return;}
  const fixedType=$('fd3SignType').value;if(!['AVANZADA','AVANZADA_CORTA','VB_AVANZADA'].includes(fixedType)&&fdUI.page!==(fixedType==='VISTO_BUENO'?fdUI.vbPlacement?.page:0))return;
- const password=pwEl?.value||'';if(!password){const el=$('fdError');if(el)el.textContent='Ingrese su clave personal de firma.';return;}
+ const password=pwEl?.value||'';
  const r=fdUI.rect,v=fdUI.viewport;if(!r||!v){const el=$('fdError');if(el)el.textContent='La previsualización de firma no está lista.';return;}
  const a=v.convertToPdfPoint(r.x,r.y),b=v.convertToPdfPoint(r.x+r.w,r.y+r.h),box=[Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.max(a[0],b[0]),Math.max(a[1],b[1])];
  const signingDoc=fdUI.doc,signingToken=app.token,operationKey=fd47OperationKey_(signingToken,fdUI.mode,signingDoc);
@@ -1867,6 +1867,7 @@ async function fdSignUI(){
  try{
   if(await fd47BeforeSign_(signingDoc,signingToken))return;
   fd47Session_(signingToken);if(fdUI.doc!==signingDoc)return;
+  if(!password){fdSigningClose_();const error=$('fdError');if(error)error.textContent='Ingrese su clave personal de firma.';return;}
   fdSigningStep_('Firmando documento','Validando su clave y aplicando la firma digital…');
   const payload={password,entropy:fd3Entropy(),appointment:fdUI.doc.appointment,brand:$('fd3SignBrand').value,type:$('fd3SignType').value,expected:fdUI.doc.current_hash,expectedCargo:fdUI.doc.cargo,page:fdUI.page,box,requestId:fdUI.doc.requestId||'',clientOpId:fd47OperationId_(operationKey,fdUI.mode)};
   const documentId=fdUI.doc.documentId,mode=fdUI.mode;
