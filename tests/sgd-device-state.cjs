@@ -3,7 +3,7 @@ const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'sgd.ht
 assert(html.includes(fix),'The deployed portal must include the tested recovery code');
 function source(name){const start=html.search(new RegExp('(?:async )?function '+name+'\\('));assert(start>=0,name);const rest=html.slice(start),end=rest.slice(1).search(/\r?\n(?:async )?function /)+1;return rest.slice(0,end);}
 function device(server,options={}){
- const calls=[],screens=[],messages=[],routes=[],rendered=[],nodes={fdPanel:{},fdConsent:{checked:true},fdSignPassword:{value:'test-only-password',focus(){}},fdSignButton:{disabled:false,textContent:'Aplicar firma final'},fd3SignBrand:{value:'TEST'},fd3SignType:{value:'TITULAR'},fdSignProgress:{},fdSigningDetail:{},fdError:{}};
+ const calls=[],screens=[],messages=[],routes=[],rendered=[],nodes={fdPanel:{},fdConsent:{checked:true},fdSignPassword:{value:'test-only-password',focus(){}},fdSignButton:{disabled:false,textContent:'Aplicar firma final'},fd3SignBrand:{value:'TEST'},fd3SignType:{value:'TITULAR'},fdSignProgress:{},fdSigningDetail:{},fdDownloadPdfBtn:{disabled:false},fdNotice:{},fdError:{}};
  const doc={documentId:'DOC-test',current_hash:'original-hash',appointment:'A',cargo:'Cargo',plan:{main:'USR-GSCC',vbs:[]},myTurn:true,complete:false,type:'MEMORANDO'},ui={doc,mode:'main',rect:{x:0,y:0,w:240,h:90},viewport:{convertToPdfPoint:(x,y)=>[x,y]},page:0,busy:false};
  const app={token:'TOKEN-A',session:{userId:'USR-GSCC'},currentDraft:'DOC-test',newState:{}};
  function state(){return{raw:{Documento_ID:'DOC-test',Estado:server.emitted?'EMITIDO':'LISTO_PARA_EMITIR',Fecha_Emisión:server.emitted?'19/11/2026 23:08:19':''},signatureCircuit:{prepared:true,complete:!!server.complete,next:server.complete?'':'USR-GSCC'},annexSigning:[]};}
@@ -66,12 +66,32 @@ function device(server,options={}){
  assert.equal(a.app.currentDraft,'OTHER-draft');
  const reopen=device({complete:true});Object.assign(reopen.ui.doc,{complete:true,canContinueEmission:true});
  await reopen.c.fdContinueEmission();assert.deepEqual(reopen.calls,[]);assert.equal(reopen.screens.at(-1)[0],'Listo para emitir');
+ // A new saved principal signature reveals the final action without fetching its signed PDF.
+ const ready=device({});
+ vm.runInContext(source('fdSigningDone_'),ready.c);
+ vm.runInContext(source('fdDownloadCurrent'),ready.c);
+ let signingControlsRemoved=false;
+ ready.nodes.fdPanel.querySelectorAll=selector=>{
+  assert.match(selector,/\.fdSignAction/);
+  return[{remove(){signingControlsRemoved=true;}}];
+ };
+ await ready.c.fdSignUI();
+ assert.deepEqual(ready.calls.map(x=>x.name),['fdSignSGD']);
+ assert.equal(ready.screens.at(-1)[0],'Listo para emitir');
+ assert.match(ready.screens.at(-1)[3],/emitCurrent/);
+ assert.match(ready.screens.at(-1)[3],/Ver documento firmado/);
+ assert(signingControlsRemoved);
+ assert(ready.nodes.fdDownloadPdfBtn.disabled);
+ assert.match(ready.nodes.fdNotice.textContent,/anterior/);
+ ready.c.fdDownloadCurrent();
+ assert.match(ready.messages.at(-1),/versión firmada/);
+
  const annex=device({complete:true});annex.ui.mode='annex';
  annex.c.fdApplyAnnexActionLocal42_=()=>{};
  vm.runInContext(source('fdSigningDone_'),annex.c);
  annex.c.fdSigningDone_({canContinueEmission:true},'annex');
  assert.equal(annex.ui.postSignState.documentId,'DOC-test');
- await annex.c.fdSigningToEmission_();assert.deepEqual(annex.calls,[]);assert.equal(annex.screens.at(-1)[0],'Listo para emitir');
+ assert.deepEqual(annex.calls,[]);assert.equal(annex.screens.at(-1)[0],'Listo para emitir');
  const proveido=device({complete:true});proveido.ui.doc.type='PROVEIDO';await proveido.c.fdContinueEmission();
  assert.deepEqual(proveido.calls.map(x=>x.name),['PROVEIDO_CONTINUE']);
 

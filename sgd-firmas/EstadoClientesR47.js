@@ -35,6 +35,15 @@ function fd47SignProgress_(message){
   const status=$('fdSignProgress');
   if(status)status.textContent=message;
 }
+function fd47MarkSavedPreview_(){
+  const doc=fdUI.doc;
+  if(!doc)return;
+  doc.previewOutdated=true;
+  $('fdPanel')?.querySelectorAll?.('.fdSignAction,.fdSignConfig,.fdPlaceBtn,#fdSignProgress').forEach(el=>el.remove());
+  const download=$('fdDownloadPdfBtn'),notice=$('fdNotice');
+  if(download)download.disabled=true;
+  if(notice)notice.textContent='La previsualización corresponde a la versión anterior a esta firma.';
+}
 async function fd47OpenExisting_(id,token){
   const view=await fd47Bounded_(api('fdViewSGD',token,id,false,true));fd47Session_(token);
   if(!view)return false;
@@ -95,21 +104,27 @@ function fd47EmissionReady_(state,id){
   if(typeof state.canContinueEmission==='boolean')return state.canContinueEmission;
   return !!state.signatureCircuit?.complete&&Array.isArray(state.annexSigning)&&state.annexSigning.every(x=>!x.required||x.signed);
 }
-function fd47ShowEmission_(id,title){
+function fd47ShowEmission_(id,title,otherActions=''){
   fdSigningScreen_('Listo para emitir','La firma está guardada. Confirma el envío de '+(title||'este documento')+'.','done',
     '<button class="btn btn-green" type="button" data-document-id="'+esc(id)+'" onclick="emitCurrent(this,this.dataset.documentId)">Emitir documento</button>'+
-    '<button class="btn btn-outline" type="button" onclick="fdSigningClose_();fdClose()">Volver</button>');
+    otherActions);
+}
+function fd47PresentReadyEmission_(receipt,otherActions){
+  const doc=fdUI.doc,id=doc?.documentId;
+  if(!id||receipt?.alreadyEmitted||['EMITIDO','ANULADO','DESCARTADO','HISTÓRICO'].includes(doc.state)||!fd47EmissionReady_(receipt,id))return false;
+  const draftNumber=app.flowDraft?.documentId===id?app.flowDraft.number:'';
+  const fallbackActions=fdUI.mode==='annex'
+    ?'<button class="btn btn-outline" type="button" onclick="fdSigningBackToCenter_()">Ver firmas</button>'
+    :'<button class="btn btn-outline" type="button" onclick="fdSigningViewSigned_()">Ver documento firmado</button>';
+  fd47ShowEmission_(id,receipt.documentNumber||draftNumber||(fdUI.mode==='main'?doc.title:''),otherActions??fallbackActions);
+  return true;
 }
 async function fd47ContinueEmission_(snapshot){
   const doc=fdUI.doc,id=doc?.documentId||app.currentDraft,token=app.token,panel=$('fdPanel');
   if(!id||fdUI.signing?.documentId===id||fdUI.emissionLookup)return;
   const receipt=snapshot?.documentId===id?snapshot:doc;
   if(receipt?.alreadyEmitted||receipt?.state==='EMITIDO'){fd47Emitted_(id,{raw:receipt.rawState||{Fecha_Emisión:receipt.emittedAt}});return;}
-  if(fd47EmissionReady_(receipt,id)){
-    const draftNumber=app.flowDraft?.documentId===id?app.flowDraft.number:'';
-    fd47ShowEmission_(id,receipt.documentNumber||draftNumber||(fdUI.mode==='main'?doc?.title:''));
-    return;
-  }
+  if(fd47PresentReadyEmission_(receipt))return;
   const lookup={};fdUI.emissionLookup=lookup;
   const isCurrent=()=>app.token===token&&$('fdPanel')===panel&&fdUI.doc===doc;
   fdSigningScreen_('Consultando el circuito','Comprobando las firmas requeridas para la emisión.','busy');
@@ -143,9 +158,10 @@ renderDraftFromResult224=function(result){
 };
 const fd47PriorReset_=resetLoginState;
 resetLoginState=function(message){
-  fdSigningClose_();fd47Operations_.clear();fd47Emissions_.clear();fdUI.busy=false;fdUI.signing=null;fdUI.emissionLookup=null;fdUI.doc=null;
-  fdUI.postSignState=null;fdUI.postSignView=null;fdUI.postAnnexNext=null;fdUI.loadingSignedView=null;fdUI.emittingProveido=null;
-  return fd47PriorReset_(message);
+  fd47PriorReset_(message);
+  fd47Operations_.clear();fd47Emissions_.clear();fdUI.busy=false;fdUI.signing=null;
+  fdClose();
+  fdUI.postAnnexNext=null;fdUI.emittingProveido=null;
 };
 async function emitCurrent(button,id=app.currentDraft){
   const token=app.token,key=JSON.stringify([token,id]);
