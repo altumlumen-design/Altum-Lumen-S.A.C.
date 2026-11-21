@@ -102,6 +102,81 @@ function device(server,options={}){
  assert.equal(pendingCircuit.rendered.length,1);assert.equal(pendingCircuit.rendered[0].signatureCircuit.complete,false);
  const canceled=device({complete:true},{confirm:false});await canceled.c.emitCurrent();assert.deepEqual(canceled.calls,[]);
 
+ // Explicit signing and emission uses one RPC and opens the emitted folder only after confirmation.
+ function enableSignAndEmit(d){
+  d.ui.doc.canSignAndEmit=true;
+  d.nodes.fdSignButton.dataset={signAndEmit:'true'};
+  d.nodes.fdSignButton.textContent='Firmar y emitir';
+ }
+ const combined=device({}, {confirm:false,handler:(name,args,{server,outcome})=>{
+  if(name!=='fdSignSGD')throw Error('Unexpected combined request: '+name);
+  assert.equal(args[2].emitAfterSign,true);
+  server.complete=true;server.emitted=true;
+  return{...outcome(),emission:{ok:true}};
+ }});
+ enableSignAndEmit(combined);
+ await combined.c.fdSignUI();
+ assert.deepEqual(combined.calls.map(x=>x.name),['fdSignSGD']);
+ assert.deepEqual(combined.routes,['sent']);
+ assert.equal(combined.app.currentDraft,null);
+ assert.equal(combined.ui.doc,null);
+
+ const unsignedConsent=device({});enableSignAndEmit(unsignedConsent);unsignedConsent.nodes.fdConsent.checked=false;
+ await unsignedConsent.c.fdSignUI();assert.deepEqual(unsignedConsent.calls,[]);
+ for(const unavailable of [
+  {canSignAndEmit:false},
+  {type:'PROVEIDO'},
+  {resolutionMode:true,plan:{main:'OTHER',vbs:['USR-GSCC']}},
+  {state:'ANULADO'},
+ ]){
+  const signOnly=device({});enableSignAndEmit(signOnly);Object.assign(signOnly.ui.doc,unavailable);
+  await signOnly.c.fdSignUI();
+  assert.deepEqual(signOnly.calls,[]);
+  assert.match(signOnly.nodes.fdError.textContent,/ya no está disponible/);
+  signOnly.nodes.fdSignButton.dataset.signAndEmit='false';
+  await signOnly.c.fdSignUI();
+  assert.equal(signOnly.calls[0].args[2].emitAfterSign,undefined);
+  assert.deepEqual(signOnly.routes,[]);
+ }
+ const unauthorizedControl=device({});unauthorizedControl.ui.doc.canSignAndEmit=true;
+ await unauthorizedControl.c.fdSignUI();assert.equal(unauthorizedControl.calls[0].args[2].emitAfterSign,undefined);
+
+ // A signed receipt with an emission failure is retried explicitly against the exact signed hash.
+ const partial=device({}, {handler:(name,args,{server,outcome})=>{
+  if(name==='fdSignSGD'){
+   server.complete=true;
+   return{...outcome(),canContinueEmission:true,emissionError:'No se pudo registrar el envío.'};
+  }
+ }});
+ enableSignAndEmit(partial);await partial.c.fdSignUI();
+ assert.deepEqual(partial.calls.map(x=>x.name),['fdSignSGD']);
+ assert.deepEqual(partial.routes,[]);
+ assert.equal(partial.screens.at(-1)[0],'Emisión pendiente');
+ assert.match(partial.screens.at(-1)[1],/La firma quedó guardada/);
+ assert.match(partial.screens.at(-1)[3],/Reintentar emisión/);
+ const retryEmissionButton={textContent:'Reintentar emisión',disabled:false,closest:()=>partial.nodes.fdPanel};
+ await partial.c.emitCurrent(retryEmissionButton,'DOC-test');
+ assert.deepEqual(partial.calls.at(-1).args,['TOKEN-A','DOC-test','signed-hash']);
+ assert.deepEqual(partial.routes,['sent']);
+
+ const unresolved=device({}, {handler:(name,args,{server,outcome})=>{
+  if(name==='fdSignSGD'){server.complete=true;throw Error('Network error');}
+  if(name==='fdSignRecoverySGD')return{...outcome(),found:true};
+ }});
+ enableSignAndEmit(unresolved);await unresolved.c.fdSignUI();
+ assert.deepEqual(unresolved.calls.map(x=>x.name),['fdSignSGD','fdSignRecoverySGD']);
+ assert.equal(unresolved.screens.at(-1)[0],'Confirmación de envío pendiente');
+ assert.deepEqual(unresolved.routes,[]);
+
+ const emittedReplay=device({complete:true,emitted:true});
+ enableSignAndEmit(emittedReplay);await emittedReplay.c.fdSignUI();
+ assert.deepEqual(emittedReplay.calls.map(x=>x.name),['fdSignSGD']);
+ assert.deepEqual(emittedReplay.routes,['sent']);
+ const wrongReceipt=device({}, {handler:(name,args,{outcome})=>({...outcome(),documentId:'WRONG',emission:{ok:true}})});
+ enableSignAndEmit(wrongReceipt);await wrongReceipt.c.fdSignUI();
+ assert.deepEqual(wrongReceipt.routes,[]);
+ assert.match(wrongReceipt.nodes.fdError.textContent,/comprobante no coincide/);
+
  let finishEmission;const timed=device({complete:true},{handler:name=>name==='sendDocumentSGD'?new Promise(r=>{finishEmission=r;}):undefined});
  const submitButton={textContent:'Emitir documento',disabled:false,closest:()=>timed.nodes.fdPanel};
  const runEmission=timed.c.emitCurrent(submitButton,'DOC-test');
