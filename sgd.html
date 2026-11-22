@@ -92,6 +92,38 @@
 .resolution-progress38{display:grid;gap:9px;border:1px solid #d7e3eb;border-radius:13px;padding:12px;background:#fbfdff;margin-top:10px}.resolution-progress38.waiting{border-color:#ead7a9;background:#fffaf0}.resolution-progress38.done{border-color:#cfe5d7;background:#f4fbf6}.resolution-progress38.direct{border-color:#cfe0ea;background:#f5f9fc}.resolution-progress38-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.resolution-progress38-head b{display:block;font-size:11px;color:#24465d}.resolution-progress38-head span{display:block;font-size:9px;line-height:1.4;color:#647b89;margin-top:2px}.resolution-progress38-count{white-space:nowrap;padding:4px 7px;border-radius:999px;background:#fff;border:1px solid #dce6ec;color:#466275;font-size:8px;font-weight:850}.resolution-progress38-list{display:grid;gap:6px}.resolution-progress38-row{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px 9px;border-radius:10px;border:1px solid #e0e8ee;background:#fff}.resolution-progress38-icon{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:900;background:#eef3f6;color:#69808e}.resolution-progress38-row.current .resolution-progress38-icon{background:#fff0cc;color:#936510}.resolution-progress38-row.done .resolution-progress38-icon{background:#e8f6ed;color:#197c4a}.resolution-progress38-row b{display:block;font-size:9.5px;color:#29495e}.resolution-progress38-row small{display:block;font-size:8.5px;color:#72838f;margin-top:2px;line-height:1.35}.resolution-progress38-badge{padding:4px 7px;border-radius:999px;font-size:8px;font-weight:850;background:#f1f4f6;color:#617682}.resolution-progress38-row.current .resolution-progress38-badge{background:#fff3d9;color:#8a5d0e}.resolution-progress38-row.done .resolution-progress38-badge{background:#e9f7ef;color:#197c4a}.signature-wait38{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.signature-wait38 strong{font-size:10px;color:#805c12}.signature-wait38 small{font-size:8.5px;color:#72828d;max-width:260px;text-align:right}.signature-inbox-confirm38{padding:10px 12px;border-radius:11px;background:#eaf7ef;border:1px solid #cce5d5;color:#226540;font-size:10px;font-weight:750;margin-bottom:10px}@media(max-width:680px){.resolution-progress38-head{display:block}.resolution-progress38-count{display:inline-flex;margin-top:7px}.resolution-progress38-row{grid-template-columns:24px minmax(0,1fr)}.resolution-progress38-badge{grid-column:2;justify-self:start}.signature-wait38{align-items:flex-start}.signature-wait38 small{text-align:left}}
 .annex-editor-grid43{grid-template-columns:minmax(150px,1.6fr) minmax(120px,.9fr) 72px auto}.annex-editor-grid43 select:nth-of-type(3){min-width:68px}@media(max-width:760px){.annex-editor-grid43{grid-template-columns:1fr 1fr}.annex-editor-grid43 .btn{grid-column:1/-1}}</style>
 <style>.portal-return{display:inline-flex;align-items:center;justify-content:center;min-height:40px;margin-top:12px;text-decoration:none}</style>
+<style>
+.work-nav{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:0 0 8px;margin:0 0 16px}
+.work-nav button{font:inherit;font-weight:700;color:var(--ink);background:transparent;border:1px solid transparent;border-radius:8px;padding:8px 12px;cursor:pointer}
+.work-nav button[aria-current=page]{background:#e8f2f8;color:#16577d;border-color:#cbdfea}
+.work-nav button:hover{background:#f3f8fb}
+.box-toolbar{padding:14px;border-bottom:1px solid var(--line)}
+.box-search-form,.box-filters,.box-results-bar,.drawer-shortcuts{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.box-search-form label,.box-filters label{display:grid;gap:4px;font-size:12px;font-weight:700}
+.box-search-form label{flex:1 1 255px}
+.box-search-form .search{width:100%;max-width:none;box-sizing:border-box}
+.box-filters{margin-top:10px}
+.box-filters label{flex:1 1 115px;min-width:0}
+.box-filters .filter{width:100%;min-width:0}
+.box-results-bar{min-height:38px;align-items:center;justify-content:space-between;padding:6px 14px}
+.box-doc-actions{display:flex;gap:6px;flex-wrap:wrap;min-width:190px}
+.box-doc-actions .smallbtn{white-space:nowrap}
+.box-office{min-width:140px;max-width:220px}
+.box-subject{min-width:170px}
+.drawer-shortcuts{margin:12px 0;align-items:center}
+.drawer-body .sgd-fold:focus{outline:2px solid #2476a4;outline-offset:2px}
+.drawer-inline-file{margin:12px 0}
+.upload-files-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.upload-file-card{display:grid;gap:8px;align-content:start;padding:14px;border:1px solid var(--line);border-radius:10px;background:#f8fbfd}
+.upload-file-card.drag-over{border-color:#1c76a6;background:#e9f4fb}
+.upload-file-card input{width:100%;font:inherit;color:inherit}
+.upload-file-card input::file-selector-button{font:inherit;margin-right:8px;cursor:pointer}
+.upload-file-status{min-height:1.4em}
+.home-secondary{grid-template-columns:repeat(3,minmax(0,1fr))}
+.home-secondary button{font:inherit;color:inherit;text-align:left;cursor:pointer}
+.destination-group-offices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;max-height:42vh;overflow:auto;padding:8px 1px}
+.destination-group-offices label{display:flex;align-items:baseline;gap:6px;font-size:13px}
+</style>
 </head>
 <body>
 <section id="loginView" class="login">
@@ -123,25 +155,32 @@
   </header>
   <div class="shell">
     <aside class="sidebar">
-      <div class="nav-title operational-only">Gestión</div>
-      <nav class="nav operational-only">
+      <nav class="nav operational-only" aria-label="Inicio">
         <button data-page="home" onclick="go('home')">⌂ Inicio</button>
+      </nav>
+      <div class="nav-title operational-only">Recepción</div>
+      <nav class="nav operational-only" aria-label="Recepción">
         <button data-page="received" onclick="go('received')">▣ Por recibir <span class="badge" id="bPending">0</span></button>
         <button data-page="attention" onclick="go('attention')">◫ En atención <span class="badge" id="bAttention">0</span></button>
-        <button data-page="sent" onclick="go('sent')">↗ Emitidos</button>
-        <button data-page="drafts" onclick="go('drafts')">✎ Borradores <span class="badge" id="bDrafts">0</span></button>
+      </nav>
+      <div class="nav-title operational-only">Emisión</div>
+      <nav class="nav operational-only" aria-label="Emisión">
         <button data-page="new" onclick="go('new')">＋ Nuevo documento</button>
+        <button data-page="drafts" onclick="go('drafts')">✎ En proyecto <span class="badge" id="bDrafts">0</span></button>
+        <button data-page="sent" onclick="go('sent')">↗ Emitidos</button>
       </nav>
       <div class="nav-title operational-only">Firmas y vistos buenos</div>
-      <nav class="nav operational-only">
+      <nav class="nav operational-only" aria-label="Firmas y vistos buenos">
+        <button data-page="principal-signatures" onclick="go('principal-signatures')">✍ Para firma <span class="badge" id="bPrincipalPending">0</span></button>
         <button data-page="annex-signatures" onclick="go('annex-signatures')">▧ Anexos por firmar <span class="badge" id="bAnnexPending">0</span></button>
         <button data-page="resolution-vb" onclick="go('resolution-vb')">✓ V°B° resoluciones <span class="badge" id="bResolutionPending">0</span></button>
       </nav>
-      <div class="nav-title operational-only">Control</div>
-      <nav class="nav operational-only">
+      <div class="nav-title operational-only">Consultas</div>
+      <nav class="nav operational-only" aria-label="Consultas">
+        <button data-page="received-history" onclick="go('received-history')">▣ Recibidos</button>
         <button data-page="expedientes" onclick="go('expedientes')">▤ Expedientes</button>
-        <button data-page="routes" onclick="go('routes')">⌘ Mapa de rutas</button>
         <button data-page="tracking" onclick="go('tracking')">⇄ Seguimiento</button>
+        <button data-page="routes" onclick="go('routes')">⌘ Mapa de rutas</button>
         <button data-page="archive" onclick="go('archive')">▰ Archivo</button>
       </nav>
       <div class="nav-title">Sistema</div>
@@ -151,6 +190,7 @@
         <button type="button" onclick="openDirectory()">▦ Directorio institucional</button>
         <button id="fdPersonalNav" class="operational-only" type="button" data-page="firma" onclick="go('firma')">✎ Mi firma digital</button>
         <button data-page="profile" onclick="go('profile')">⚙ Mi acceso</button>
+        <button class="operational-only" type="button" onclick="openDestinationGroups_()">▦ Grupos de destino</button>
         <button type="button" onclick="openManualSGD()">▧ Manual</button>
         <button id="adminNav" class="hidden operational-only" data-page="admin" onclick="go('admin')">⚒ Configuración</button>
       </nav>
@@ -211,7 +251,7 @@ function pill(s){const x=String(s||'').toUpperCase();let c='p-gray';if(/EMITIDO|
 
 function pri(p){p=p||'NORMAL';return `<span class="priority ${esc(p)}"><b></b>${esc(p)}</span>`}
 function pageHead(title,sub='',actions=''){return `<div class="pagehead"><div><h1>${title}</h1>${sub?`<p>${sub}</p>`:''}</div><div class="actions">${actions}</div></div>`}
-function foldSection(label,count,body,open=false){const badge=(count===undefined||count===null)?'':`<span class="sgd-fold-count">${esc(String(count))}</span>`;return `<details class="sgd-fold"${open?' open':''}><summary><span>${esc(label)}</span>${badge}</summary><div class="sgd-fold-body">${body}</div></details>`;}
+function foldSection(label,count,body,open=false,id=''){const badge=(count===undefined||count===null)?'':`<span class="sgd-fold-count">${esc(String(count))}</span>`;return `<details class="sgd-fold"${id?` id="${esc(id)}" tabindex="-1"`:''}${open?' open':''}><summary><span>${esc(label)}</span>${badge}</summary><div class="sgd-fold-body">${body}</div></details>`;}
 
 async function openManualSGD(){
   const w=window.open('about:blank','_blank');
@@ -286,8 +326,8 @@ function logout(){
 }
 function setCounts(c={}){
  c=c||{};
- const counts={pending:c.pending||0,attentionWork:c.attentionWork??((c.received||0)+(c.attention||0)),drafts:c.drafts||0,sent:c.sent||0,annexSignaturePending:c.annexSignaturePending||0,resolutionVbPending:c.resolutionVbPending||0};
- const badges={bPending:'pending',bAttention:'attentionWork',bDrafts:'drafts',bAnnexPending:'annexSignaturePending',bResolutionPending:'resolutionVbPending'};
+ const counts={pending:c.pending||0,attentionWork:c.attentionWork??((c.received||0)+(c.attention||0)),drafts:c.drafts||0,sent:c.sent||0,annexSignaturePending:c.annexSignaturePending||0,resolutionVbPending:c.resolutionVbPending||0,documentSignaturePending:c.documentSignaturePending||0};
+ const badges={bPending:'pending',bAttention:'attentionWork',bDrafts:'drafts',bAnnexPending:'annexSignaturePending',bResolutionPending:'resolutionVbPending',bPrincipalPending:'documentSignaturePending'};
  Object.entries(badges).forEach(([id,key])=>{const badge=$(id);if(badge)badge.textContent=counts[key];});
  if(app.page==='home')document.querySelectorAll('[data-home-count]').forEach(el=>{el.textContent=counts[el.dataset.homeCount]||0;});
 }
@@ -320,10 +360,15 @@ async function resyncClock(){
 
 function go(page,refreshHome=true){
   const isMaster=app.session?.role==='MAESTRO';
-  const operational=['home','received','attention','annex-signatures','resolution-vb','sent','drafts','archive','tracking','new','expedientes','routes','firma','admin'];
+  const operational=['home','received','attention','received-history','principal-signatures','annex-signatures','resolution-vb','sent','drafts','archive','tracking','new','expedientes','routes','firma','admin'];
   if(isMaster&&operational.includes(page))page='master';
-  app.page=page;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
-  if(page==='home')renderHome(refreshHome);else if(page==='received')renderBox('POR_RECIBIR','Por recibir');else if(page==='attention')renderBox('ATENCION','En atención');else if(page==='annex-signatures')renderSignatureWorkInbox('ANNEX');else if(page==='resolution-vb')renderSignatureWorkInbox('RESOLUTION');else if(page==='sent')renderBox('EMITIDOS','Históricos y emitidos');else if(page==='drafts')renderBox('BORRADORES','Borradores y documentos en preparación');else if(page==='archive')renderBox('ARCHIVO','Archivo de la oficina');else if(page==='tracking')renderBox('SEGUIMIENTO','Seguimiento documental');else if(page==='new')renderNew();else if(page==='expedientes')renderExpedientes();else if(page==='routes')renderRoutes();else if(page==='profile')renderProfile();else if(page==='firma')renderMySignature();else if(page==='admin')renderAdmin();else if(page==='master')renderMaster();
+  app.page=page;document.querySelectorAll('.nav button').forEach(b=>{
+    const active=b.dataset.page===page;
+    b.classList.toggle('active',active);
+    if(active)b.setAttribute('aria-current','page');
+    else b.removeAttribute('aria-current');
+  });
+  if(page==='home')renderHome(refreshHome);else if(page==='received')renderBox('POR_RECIBIR','Por recibir');else if(page==='attention')renderBox('ATENCION','En atención');else if(page==='received-history')renderBox('RECIBIDOS','Documentos recibidos');else if(page==='principal-signatures')renderPrincipalSignatures_();else if(page==='annex-signatures')renderSignatureWorkInbox('ANNEX');else if(page==='resolution-vb')renderSignatureWorkInbox('RESOLUTION');else if(page==='sent')renderBox('EMITIDOS','Documentos emitidos');else if(page==='drafts')renderBox('BORRADORES','Documentos en proyecto');else if(page==='archive')renderBox('ARCHIVO','Archivo de la oficina');else if(page==='tracking')renderBox('SEGUIMIENTO','Seguimiento documental');else if(page==='new')renderNew();else if(page==='expedientes')renderExpedientes();else if(page==='routes')renderRoutes();else if(page==='profile')renderProfile();else if(page==='firma')renderMySignature();else if(page==='admin')renderAdmin();else if(page==='master')renderMaster();
 }
 let dashboardRefresh_;
 function refreshBootstrap(){
@@ -362,7 +407,7 @@ function renderHome(refresh=true){
  const firmaNotice=firmaReady&&firma.status==='PENDIENTE_CLAVE'?`<section class="panel" style="margin-bottom:14px"><div class="panel-head"><h3>Firma digital pendiente de activación</h3></div><div class="panel-body"><p class="lead">Configure su clave personal y certificado para poder atender firmas y vistos buenos.</p><button class="btn btn-primary" type="button" onclick="go('firma')">Configurar mi firma digital</button></div></section>`:'';
  $('main').innerHTML=pageHead('Inicio','Trabajo activo de '+esc(b.session.officeName),`<button class="btn btn-primary" onclick="go('new')">＋ Nuevo documento</button>`)+firmaNotice+
  `<div class="home-priority"><button class="home-priority-card urgent" type="button" onclick="go('received')"><div class="hp-top"><span class="hp-icon">▣</span><strong data-home-count="pending"></strong></div><b>Por recibir</b><small>Documentos que todavía requieren recepción.</small></button><button class="home-priority-card" type="button" onclick="go('attention')"><div class="hp-top"><span class="hp-icon">◫</span><strong data-home-count="attentionWork"></strong></div><b>En atención</b><small>Recibidos y actuaciones actualmente abiertas.</small></button><button class="home-priority-card sign" type="button" onclick="go('annex-signatures')"><div class="hp-top"><span class="hp-icon">▧</span><strong data-home-count="annexSignaturePending"></strong></div><b>Anexos por firmar</b><small>Firmas y V°B° de anexos asignados a usted.</small></button><button class="home-priority-card sign" type="button" onclick="go('resolution-vb')"><div class="hp-top"><span class="hp-icon">✓</span><strong data-home-count="resolutionVbPending"></strong></div><b>V°B° de resoluciones</b><small>Actos resolutivos que esperan su visto bueno.</small></button></div>`+
- `<div class="home-secondary"><div class="metric"><small>Borradores</small><strong data-home-count="drafts"></strong></div><div class="metric green"><small>Emitidos</small><strong data-home-count="sent"></strong></div></div>`+
+ `<div class="home-secondary"><button class="metric" type="button" onclick="go('drafts')"><small>En proyecto</small><strong data-home-count="drafts"></strong></button><button class="metric" type="button" onclick="go('principal-signatures')"><small>Para firma</small><strong data-home-count="documentSignaturePending"></strong></button><button class="metric green" type="button" onclick="go('sent')"><small>Emitidos</small><strong data-home-count="sent"></strong></button></div>`+
  `<div class="grid2"><section class="panel"><div class="panel-head"><h3>Acciones rápidas</h3></div><div class="panel-body"><div class="quick-links"><button class="quick-link" type="button" onclick="go('drafts')"><span class="quick-icon">✎</span><span><b>Continuar borradores</b><small>Documentos en preparación</small></span></button><button class="quick-link" type="button" onclick="go('firma')"><span class="quick-icon">✓</span><span><b>Mi firma digital</b><small>${firma.status==='ACTIVO'?'Certificado y contraseña de firma':'Configurar firma digital'}</small></span></button><button class="quick-link" type="button" onclick="go('expedientes')"><span class="quick-icon">▤</span><span><b>Expedientes</b><small>Consulta documental por expediente</small></span></button><button class="quick-link" type="button" onclick="go('tracking')"><span class="quick-icon">⇄</span><span><b>Seguimiento</b><small>Trazabilidad de documentos</small></span></button></div></div></section><section class="panel"><div class="panel-head"><h3>Accesos institucionales</h3></div><div class="panel-body"><div class="quick-links">${linkHtml||'<div class="helper">No hay accesos adicionales habilitados.</div>'}</div></div></section></div>`+
  `<div class="institutional-note"><b>SGD ALTUM LUMEN</b> · Gestión documental, trazabilidad y firma digital institucional.</div>`;
  setCounts(b.counts);
@@ -461,13 +506,52 @@ async function saveMySignaturePassword240(){
   finally{mySignatureBusy240=false;const live=$('mySigChangeBtn');if(live){live.disabled=false;live.textContent='Guardar nueva contraseña';}}
 }
 
+function workBoxNavigation_(box){
+ const reception=[['POR_RECIBIR','received','Por recibir'],['ATENCION','attention','En atención'],['RECIBIDOS','received-history','Recibidos']];
+ const emission=[['BORRADORES','drafts','En proyecto'],['EMITIDOS','sent','Emitidos']];
+ const records=[['SEGUIMIENTO','tracking','Seguimiento general'],['EMITIDOS','sent','Emitidos'],['RECIBIDOS','received-history','Recibidos'],['ARCHIVO','archive','Archivo']];
+ const items=reception.some(([key])=>key===box)?reception:emission.some(([key])=>key===box)?emission:records;
+ return `<nav class="work-nav" aria-label="Bandejas relacionadas">${items.map(([key,page,label])=>`<button type="button" onclick="go('${page}')" ${key===box?'aria-current="page"':''}>${label}</button>`).join('')}</nav>`;
+}
 async function renderBox(box,title){
- app.boxItems[box]=[];if(box==='POR_RECIBIR'){app.bulkReceiveSelection40=new Set();app.bulkReceiveFeedback40='';}
- const types=boxDocumentTypes_(box),received=box==='RECIBIDOS',toReceive=box==='POR_RECIBIR',attention=box==='ATENCION',sent=box==='EMITIDOS';
- const statusOptions=toReceive?`<option value="">Pendiente de recepción</option>`:attention?`<option value="">Todos en atención</option><option value="RECIBIDO">Recibido</option><option value="EN_ATENCIÓN">Atención iniciada</option>`:received?`<option value="">Trabajo pendiente</option><option value="TODOS">Todos</option><option value="PENDIENTE">Pendiente de recepción</option><option value="RECIBIDO">Recibido</option><option value="EN_ATENCIÓN">En atención</option><option value="ATENDIDO">Atendido</option>`:sent?`<option value="">Todos los estados</option><option value="PENDIENTE">Pendiente de recepción</option><option value="RECIBIDO">Recibido</option><option value="EN ATENCIÓN">En atención</option><option value="ATENCIÓN PARCIAL">Atención parcial</option><option value="ATENDIDO">Atendido</option><option value="HISTÓRICO">Histórico</option>`:`<option value="">Todos los estados</option><option>PENDIENTE</option><option>RECIBIDO</option><option>EN_ATENCIÓN</option><option>ATENDIDO</option><option>EMITIDO</option><option>HISTÓRICO</option><option>ANULADO</option>`;
- const sub=toReceive?'Documentos remitidos a su oficina que todavía requieren recepción.':attention?'Documentos ya recibidos. Permanecen aquí mientras estén recibidos o con atención iniciada.':received?'Aquí ves el trabajo pendiente de tu oficina. Los documentos atendidos permanecen disponibles mediante el filtro “Atendido”.':sent?'Controla cómo avanzan los documentos que emitió tu oficina, incluso cuando tienen varios destinatarios.':'';
- $('main').innerHTML=pageHead(title,sub)+`<section class="panel"><div class="toolbar"><input id="boxSearch" class="search" placeholder="Buscar número, asunto, expediente, oficina o tipo…" onkeydown="if(event.key==='Enter')loadBox('${box}',false)"><select id="boxType" class="filter"><option value="">Todos los tipos</option>${types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}</select><select id="boxStatus" class="filter">${statusOptions}</select><input id="boxDateFrom" class="filter" type="date" title="Fecha de emisión desde"><input id="boxDateTo" class="filter" type="date" title="Fecha de emisión hasta"><button class="btn btn-secondary" onclick="loadBox('${box}',false)">Buscar</button><button class="btn btn-outline" onclick="clearBoxFilters('${box}')">Limpiar</button></div>${toReceive?`<div id="bulkReceiveBar40" class="bulk-receive40"><div class="bulk-receive40-info"><span id="bulkReceiveCount40" class="bulk-receive40-count">0</span><span><b>Recepción múltiple</b><small>Seleccione uno o más documentos. Al recibirlos pasarán automáticamente a En atención.</small></span></div><button id="bulkReceiveBtn40" class="btn btn-primary" type="button" onclick="receiveSelected40_()" disabled>Recibir seleccionados</button></div><div id="bulkReceiveFeedback40"></div>`:''}<div id="boxBody" class="inline-load">Cargando…</div></section>`;
- await loadBox(box,false);
+ app.boxItems[box]=[];
+ if(box==='POR_RECIBIR'){app.bulkReceiveSelection40=new Set();app.bulkReceiveFeedback40='';}
+ const types=boxDocumentTypes_(box),received=box==='RECIBIDOS',toReceive=box==='POR_RECIBIR',attention=box==='ATENCION',sent=box==='EMITIDOS',drafts=box==='BORRADORES',archive=box==='ARCHIVO';
+ const statuses=received?[['TODOS','Todos los estados'],['PENDIENTE','Pendiente de recepción'],['RECIBIDO','Recibido'],['EN_ATENCIÓN','En atención'],['ATENDIDO','Atendido']]:
+   attention?[['','Todos en atención'],['RECIBIDO','Recibido'],['EN_ATENCIÓN','Atención iniciada']]:
+   sent?[['','Todos los estados'],['PENDIENTE','Pendiente de recepción'],['RECIBIDO','Recibido'],['EN ATENCIÓN','En atención'],['ATENCIÓN PARCIAL','Atención parcial'],['ATENDIDO','Atendido'],['EMITIDO','Emitido'],['HISTÓRICO','Histórico']]:
+   drafts?[['','Todos los estados'],['BORRADOR','Borrador'],['BORRADOR_NUMERADO','Borrador numerado'],['REQUIERE_REGENERAR','Requiere regeneración'],['LISTO_PARA_EMITIR','Listo para emitir']]:
+   archive?[['','Todos los estados'],['ARCHIVADO','Archivado'],['ANULADO','Anulado'],['DESCARTADO','Descartado']]:
+   [['','Todos los estados'],['PENDIENTE','Pendiente de recepción'],['RECIBIDO','Recibido'],['ATENDIDO','Atendido'],['EMITIDO','Emitido'],['HISTÓRICO','Histórico'],['ARCHIVADO','Archivado'],['ANULADO','Anulado'],['DESCARTADO','Descartado']];
+ const statusOptions=statuses.map(([value,label])=>`<option value="${value}">${label}</option>`).join('');
+ const sources=received||toReceive||attention||box==='SEGUIMIENTO';
+ const sourceOptions=(app.bootstrap?.offices||[]).map(o=>`<option value="${esc(o.code)}">${esc(o.name)}</option>`).join('');
+ const newAction=drafts||sent?'<button class="btn btn-primary" type="button" onclick="go(\'new\')">＋ Nuevo documento</button>':'';
+ $('main').innerHTML=pageHead(title,'',newAction)+workBoxNavigation_(box)+`
+ <section class="panel">
+  <div class="box-toolbar">
+   <form class="box-search-form" onsubmit="event.preventDefault();loadBox('${box}')">
+    <label>Búsqueda<input id="boxSearch" class="search" type="search" placeholder="Número, asunto o expediente"></label>
+    <button class="btn btn-secondary" type="submit">Buscar</button>
+    <button class="btn btn-outline" type="button" onclick="clearBoxFilters('${box}')">Limpiar</button>
+   </form>
+   <div class="box-filters">
+    <label>Tipo documental<select id="boxType" class="filter"><option value="">Todos los tipos</option>${types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}</select></label>
+    ${toReceive?'':`<label>Estado<select id="boxStatus" class="filter">${statusOptions}</select></label>`}
+    <label>Prioridad<select id="boxPriority" class="filter"><option value="">Todas</option><option value="NORMAL">Normal</option><option value="URGENTE">Urgente</option><option value="MUY URGENTE">Muy urgente</option></select></label>
+    ${sources?`<label>Oficina de origen<select id="boxOrigin" class="filter"><option value="">Todas las oficinas</option>${sourceOptions}</select></label>`:''}
+    <label>Emisión desde<input id="boxDateFrom" class="filter" type="date"></label>
+    <label>Emisión hasta<input id="boxDateTo" class="filter" type="date"></label>
+   </div>
+  </div>
+  ${toReceive?`<div id="bulkReceiveBar40" class="bulk-receive40"><div class="bulk-receive40-info"><span id="bulkReceiveCount40" class="bulk-receive40-count">0</span><span><b>Recepción múltiple</b><small>Seleccione los documentos que pasarán a En atención.</small></span></div><button id="bulkReceiveBtn40" class="btn btn-primary" type="button" onclick="receiveSelected40_()" disabled>Recibir seleccionados</button></div><div id="bulkReceiveFeedback40"></div>`:''}
+  <div class="box-results-bar"><div id="boxStatusLine" class="helper" role="status"></div>${!toReceive&&!drafts?`<button id="boxExport" class="smallbtn" type="button" onclick="exportBoxResults_('${box}')" disabled>Exportar resultados cargados</button>`:''}</div>
+  <div id="boxBody" data-box="${box}"></div>
+ </section>`;
+ document.querySelectorAll('.box-filters input,.box-filters select').forEach(control=>{
+  control.addEventListener('change',()=>loadBox(box));
+ });
+ await loadBox(box);
 }
 function boxDocumentTypes_(box){
  const types=new Set((app.bootstrap?.series||[]).map(x=>x.type).filter(Boolean));
@@ -479,46 +563,134 @@ function boxDocumentTypes_(box){
 }
 const boxLoads_=new WeakMap();
 async function loadBox(box,append=false){
- const body=$('boxBody');
- if(!body)return;
- const q=$('boxSearch')?.value||'',status=$('boxStatus')?.value||'',type=$('boxType')?.value||'',dateFrom=$('boxDateFrom')?.value||'',dateTo=$('boxDateTo')?.value||'';
- const filters=JSON.stringify([box,q,status,type,dateFrom,dateTo]),previous=boxLoads_.get(body);
- if(append&&previous?.pending)return;
- if(append&&previous?.filters!==filters)append=false;
- const offset=append?(app.boxItems[box]||[]).length:0;
- const request={filters,pending:true};
+ const body=$('boxBody'),notice=$('boxStatusLine'),exportButton=$('boxExport'),token=app.token;
+ if(!token||body?.dataset.box!==box||!notice)return;
+ const read=id=>$(id)?.value.trim()||'';
+ const filters={q:read('boxSearch'),status:read('boxStatus'),type:read('boxType'),priority:read('boxPriority'),origin:read('boxOrigin'),dateFrom:read('boxDateFrom'),dateTo:read('boxDateTo')};
+ const key=JSON.stringify(filters),previous=boxLoads_.get(body),same=previous?.key===key;
+ if(same&&previous.pending)return;
+ if(filters.dateFrom&&filters.dateTo&&filters.dateFrom>filters.dateTo){
+   boxLoads_.delete(body);
+   body.removeAttribute('aria-busy');
+   notice.textContent='La fecha inicial debe ser anterior o igual a la fecha final.';
+   body.innerHTML='';
+   app.boxItems[box]=[];
+   if(exportButton)exportButton.disabled=true;
+   if(box==='POR_RECIBIR'){receiveSelection40_().clear();updateBulkReceiveBar40_();}
+   return;
+ }
+ append=append&&same;
+ const currentRows=app.boxItems[box]||[];
+ const offset=append?(previous.nextOffset??currentRows.length):0;
+ const request={key,pending:true,nextOffset:offset};
  boxLoads_.set(body,request);
- const more=append?body.querySelector('[data-box-more]'):null;
+ const more=body.querySelector('[data-box-more]');
  if(more)more.disabled=true;
+ if(!same){
+   app.boxItems[box]=[];
+   body.innerHTML='';
+ }
+ if(exportButton)exportButton.disabled=true;
  if(box==='POR_RECIBIR'&&!append){
    receiveSelection40_().clear();
+   body.querySelectorAll('input[type="checkbox"]').forEach(input=>{input.checked=false;});
+   body.querySelectorAll('.bulk-receive-row40.selected').forEach(row=>row.classList.remove('selected'));
    updateBulkReceiveBar40_();
  }
- const current=()=>$('boxBody')===body&&boxLoads_.get(body)===request;
+ notice.textContent=append?'Cargando más resultados…':same&&currentRows.length?'Actualizando resultados…':'Buscando documentos…';
+ body.setAttribute('aria-busy','true');
+ const current=()=>app.token===token&&$('boxBody')===body&&boxLoads_.get(body)===request;
  try{
-   const r=await api('listDocumentsSGD',app.token,box,{q,status,type,dateFrom,dateTo,limit:75,offset});
+   const r=await api('listDocumentsSGD',token,box,{...filters,limit:75,offset});
    if(!current())return;
-   app.boxItems[box]=append?(app.boxItems[box]||[]).concat(r.items||[]):(r.items||[]);
-   const total=(r.total!==undefined&&r.total!==null)?`<div class="helper" style="padding:10px 2px">${r.total} resultado(s)</div>`:'';
-   body.innerHTML=total+docTable(app.boxItems[box],box)+(r.hasMore?`<div style="padding:14px;text-align:center"><button class="btn btn-outline" data-box-more onclick="loadBox('${box}',true)">Mostrar más</button></div>`:'');
+   const incoming=Array.isArray(r.items)?r.items:[];
+   const rows=append?[...currentRows,...incoming]:incoming,seen=new Set();
+   app.boxItems[box]=rows.filter(row=>{
+     if(seen.has(row.documentId))return false;
+     seen.add(row.documentId);
+     return true;
+   });
+   request.nextOffset=offset+incoming.length;
+   notice.textContent=Number.isFinite(r.total)?`${r.total} resultado(s) · ${app.boxItems[box].length} cargado(s)`:`${app.boxItems[box].length} resultado(s) cargado(s)`;
+   body.innerHTML=docTable(app.boxItems[box],box)+(r.hasMore&&incoming.length?`<div style="padding:14px;text-align:center"><button class="btn btn-outline" type="button" data-box-more onclick="loadBox('${box}',true)">Cargar más</button></div>`:'');
    if(box==='POR_RECIBIR')updateBulkReceiveBar40_();
+   if(exportButton)exportButton.disabled=!app.boxItems[box].length;
  }catch(e){
    if(!current())return;
-   if(append)toast(e.message);
-   else body.innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+   if(e?.message==='SESSION_EXPIRED'){err(e);return;}
+   notice.textContent=e?.message||'No se pudo consultar la bandeja.';
+   if(!app.boxItems[box].length)body.innerHTML=`<div class="empty"><button class="btn btn-outline" type="button" onclick="loadBox('${box}')">Volver a intentar</button></div>`;
  }finally{
    request.pending=false;
-   if(current()&&more)more.disabled=false;
+   if(current()){
+     body.removeAttribute('aria-busy');
+     if(more)more.disabled=false;
+   }
  }
 }
-function clearBoxFilters(box){if($('boxSearch'))$('boxSearch').value='';if($('boxType'))$('boxType').value='';if($('boxStatus'))$('boxStatus').value='';if($('boxDateFrom'))$('boxDateFrom').value='';if($('boxDateTo'))$('boxDateTo').value='';loadBox(box,false)}
+function clearBoxFilters(box){
+ ['boxSearch','boxType','boxStatus','boxPriority','boxOrigin','boxDateFrom','boxDateTo'].forEach(id=>{
+   const control=$(id);
+   if(!control)return;
+   if(control.tagName==='SELECT')control.selectedIndex=0;
+   else control.value='';
+ });
+ loadBox(box);
+}
+function exportBoxResults_(box){
+ if(!app.token||$('boxBody')?.dataset.box!==box||$('boxExport')?.disabled)return;
+ const rows=app.boxItems[box]||[];
+ if(!rows.length)return;
+ const csvCell=value=>{
+   const cell=String(value??'');
+   const safe=/^[\s\u0000-\u001f\u007f\uFEFF]*[=+\-@]|^[\n\r\t]/.test(cell)?"'"+cell:cell;
+   return '"'+safe.replace(/"/g,'""')+'"';
+ };
+ const data=[['Documento','Tipo','Expediente','Asunto','Oficina de origen','Prioridad','Fecha de emisión','Última gestión','Estado'],
+   ...rows.map(d=>[d.number,d.type,d.expediente,d.subject,officeName(d.origin)||d.origin,d.priority,d.emissionDate||d.date,d.lastActivity,d.status])];
+ const csv=data.map(row=>row.map(csvCell).join(';')).join('\r\n');
+ downloadBlobDirect_(new Blob(['\ufeff',csv],{type:'text/csv;charset=utf-8'}),'SGD-'+box.toLowerCase()+'.csv');
+}
 function receiveSelection40_(){if(!(app.bulkReceiveSelection40 instanceof Set))app.bulkReceiveSelection40=new Set();return app.bulkReceiveSelection40;}
 function toggleReceiveSelection40_(id,checked){const set=receiveSelection40_();checked?set.add(id):set.delete(id);const row=[...document.querySelectorAll('[data-receive-row]')].find(x=>x.dataset.receiveRow===id);if(row)row.classList.toggle('selected',checked);updateBulkReceiveBar40_();}
 function toggleReceiveAllVisible40_(checked){const set=receiveSelection40_(),items=app.boxItems.POR_RECIBIR||[];items.forEach(d=>checked?set.add(d.documentId):set.delete(d.documentId));document.querySelectorAll('input[data-receive-check]').forEach(x=>x.checked=checked);document.querySelectorAll('[data-receive-row]').forEach(x=>x.classList.toggle('selected',checked));updateBulkReceiveBar40_();}
 function updateBulkReceiveBar40_(){const set=receiveSelection40_(),count=$('bulkReceiveCount40'),btn=$('bulkReceiveBtn40'),all=$('receiveAll40'),visible=app.boxItems.POR_RECIBIR||[];if(count)count.textContent=String(set.size);if(btn){btn.disabled=!set.size;btn.textContent=set.size?`Recibir ${set.size} seleccionado${set.size===1?'':'s'}`:'Recibir seleccionados';}if(all){const n=visible.filter(d=>set.has(d.documentId)).length;all.checked=!!visible.length&&n===visible.length;all.indeterminate=n>0&&n<visible.length;}const fb=$('bulkReceiveFeedback40');if(fb)fb.innerHTML=app.bulkReceiveFeedback40?`<div class="bulk-receive40-success">${esc(app.bulkReceiveFeedback40)}</div>`:'';}
 async function receiveSelected40_(){const ids=[...receiveSelection40_()];if(!ids.length){toast('Seleccione al menos un documento.');return;}if(!confirm(`¿Recibir ${ids.length} documento${ids.length===1?'':'s'} y pasarlo${ids.length===1?'':'s'} a En atención?`))return;try{loading(true,'Recibiendo documentos…',`Registrando ${ids.length} recepción${ids.length===1?'':'es'} en una sola operación`);const r=await api('receiveDocumentsBulkSGD',app.token,ids),done=new Set(r.receivedIds||[]);app.boxItems.POR_RECIBIR=(app.boxItems.POR_RECIBIR||[]).filter(d=>!done.has(d.documentId));receiveSelection40_().clear();app.bulkReceiveFeedback40=done.size?`${done.size} documento${done.size===1?'':'s'} recibido${done.size===1?'':'s'} y enviado${done.size===1?'':'s'} a En atención.`:'';$('boxBody').innerHTML=docTable(app.boxItems.POR_RECIBIR,'POR_RECIBIR');const c=app.bootstrap?.counts;if(c&&done.size){c.pending=Math.max(0,Number(c.pending||0)-done.size);c.attention=Number(c.attention||0)+done.size;c.attentionWork=Number(c.attentionWork||0)+done.size;setCounts(c);}updateBulkReceiveBar40_();toast(done.size?`${done.size} documento${done.size===1?'':'s'} recibido${done.size===1?'':'s'}`:'No hubo documentos nuevos por recibir');if((r.skipped||[]).length)toast(`${r.skipped.length} selección${r.skipped.length===1?'':'es'} no pudo procesarse porque cambió de estado.`);setTimeout(()=>{if(app.page==='received')loadBox('POR_RECIBIR',false);refreshCountsQuiet224();},650);}catch(e){err(e)}finally{loading(false)}}
-function docTable(items,box=''){if(!items?.length)return'<div class="empty">No hay documentos en esta vista.</div>';const showPdf=box==='EMITIDOS',receiveMode=box==='POR_RECIBIR',set=receiveSelection40_();return `<div class="table-wrap"><table class="table"><thead><tr>${receiveMode?`<th class="bulk-check-col"><input id="receiveAll40" type="checkbox" onchange="toggleReceiveAllVisible40_(this.checked)" title="Seleccionar todos los visibles"></th><th>Origen</th>`:''}<th>Documento</th><th>Tipo</th><th>Expediente</th><th>Asunto</th><th>Fecha de emisión</th><th>Última gestión</th><th>Estado</th><th></th></tr></thead><tbody>${items.map(d=>`<tr ${receiveMode?`data-receive-row="${esc(d.documentId)}" class="bulk-receive-row40 ${set.has(d.documentId)?'selected':''}"`:''}>${receiveMode?`<td class="bulk-check-col"><input data-receive-check type="checkbox" ${set.has(d.documentId)?'checked':''} onchange="toggleReceiveSelection40_('${esc(d.documentId)}',this.checked)" aria-label="Seleccionar ${esc(d.number)}"></td><td class="bulk-receive-origin40">${esc(officeName(d.origin)||d.origin||'—')}</td>`:''}<td><button class="doclink" type="button" data-document-id="${esc(d.documentId)}" onclick="openDoc(this.dataset.documentId)">${esc(d.number)}</button>${d.historical?'<span class="history-tag">HISTÓRICO</span>':''}</td><td>${esc(d.type||'—')}</td><td>${esc(d.expediente||'—')}</td><td class="subject">${esc(d.subject)}</td><td>${esc(d.emissionDate||d.date||'—')}</td><td>${esc(d.lastActivity||'—')}</td><td>${pill(d.status)}${d.flowProgress?`<span class="flow-progress">${d.flowProgress.attended}/${d.flowProgress.total} atendido(s)</span>`:''}</td><td>${showPdf&&!d.historical?'<div class="doc-actions"><button class="smallbtn" type="button" data-document-id="'+esc(d.documentId)+'" onclick="previewDocumentPdf(this.dataset.documentId)">Ver PDF</button><button class="smallbtn" type="button" data-document-id="'+esc(d.documentId)+'" onclick="downloadDocumentPdf(this.dataset.documentId)">Descargar</button></div>':'<button class="smallbtn" type="button" data-document-id="'+esc(d.documentId)+'" onclick="openDoc(this.dataset.documentId)">Abrir</button>'}</td></tr>`).join('')}</tbody></table></div>`;}
-
+function docTable(items,box=''){
+ if(!items?.length)return'<div class="empty">No hay documentos en esta vista.</div>';
+ const sent=box==='EMITIDOS',receiveMode=box==='POR_RECIBIR',drafts=box==='BORRADORES';
+ const showOrigin=receiveMode||['ATENCION','RECIBIDOS','SEGUIMIENTO','ARCHIVO'].includes(box),set=receiveSelection40_();
+ const body=items.map(d=>{
+   const id=esc(d.documentId);
+   const pickup=receiveMode?`<td class="bulk-check-col"><input data-receive-check type="checkbox" ${set.has(d.documentId)?'checked':''} data-document-id="${id}" onchange="toggleReceiveSelection40_(this.dataset.documentId,this.checked)" aria-label="Seleccionar ${esc(d.number)}"></td>`:'';
+   const action=(section,label)=>`<button class="smallbtn" type="button" data-document-id="${id}" data-section="${section}" onclick="openBoxDocumentSection_(this)">${label}</button>`;
+   const pdf=d.hasPdf===true||(sent&&!d.historical&&d.hasPdf!==false);
+   return `<tr ${receiveMode?`data-receive-row="${id}" class="bulk-receive-row40 ${set.has(d.documentId)?'selected':''}"`:''}>
+    ${pickup}<td><button class="doclink" type="button" data-document-id="${id}" onclick="openDoc(this.dataset.documentId)">${esc(d.number||d.documentId)}</button>${d.historical?'<span class="history-tag">HISTÓRICO</span>':''}<div class="helper">${esc(d.type||'')}</div></td>
+    <td class="box-subject">${esc(d.subject||'—')}</td>
+    <td>${esc(d.expediente||'—')}</td>
+    ${showOrigin?`<td class="box-office">${esc(officeName(d.origin)||d.origin||'—')}</td>`:''}
+    <td>${esc(d.emissionDate||d.date||'—')}</td>
+    <td>${esc(d.lastActivity||'—')}</td>
+    <td>${pill(d.status)}${d.flowProgress?`<span class="flow-progress">${d.flowProgress.attended}/${d.flowProgress.total} atendido(s)</span>`:''}</td>
+    <td>${pri(d.priority)}</td>
+    <td><div class="box-doc-actions">${drafts?`<button class="smallbtn" type="button" data-document-id="${id}" onclick="editDraft(this.dataset.documentId)">Editar</button>`:''}
+      ${pdf?action('pdf','Ver PDF'):''}
+      ${sent&&pdf?`<button class="smallbtn" type="button" data-document-id="${id}" onclick="downloadDocumentPdf(this.dataset.documentId)">Descargar</button>`:''}
+      ${action('annexes','Anexos')}${action('movements','Movimientos')}</div></td>
+    </tr>`;
+ }).join('');
+ return `<div class="table-wrap"><table class="table"><thead><tr>
+ ${receiveMode?'<th scope="col" class="bulk-check-col"><input id="receiveAll40" type="checkbox" onchange="toggleReceiveAllVisible40_(this.checked)" aria-label="Seleccionar todos los visibles"></th>':''}
+ <th scope="col">Documento</th><th scope="col">Asunto</th><th scope="col">Expediente</th>${showOrigin?'<th scope="col">Oficina de origen</th>':''}<th scope="col">Emisión</th><th scope="col">Última gestión</th><th scope="col">Estado</th><th scope="col">Prioridad</th><th scope="col">Acciones</th></tr></thead><tbody>${body}</tbody></table></div>`;
+}
+function openBoxDocumentSection_(button){
+ const {documentId,section}=button.dataset;
+ if(section==='pdf')return openPdfFromBox_(documentId);
+ return Promise.resolve(openDoc(documentId)).then(detail=>{
+   if(detail&&app.lastDocDetail===detail)showDrawerDocumentSection_(section);
+ });
+}
 
 function signatureInboxRowsHtml38_(rows,isAnnex){
  if(!rows.length)return `<div class="empty">${isAnnex?'No tiene anexos pendientes de actuación.':'No tiene actos resolutivos pendientes de visto bueno.'}</div>`;
@@ -595,6 +767,27 @@ async function refreshSignatureInbox38_(body,mode,cached,confirmed){
    else body.innerHTML=warning;
  }
 }
+async function renderPrincipalSignatures_(){
+ $('main').innerHTML=pageHead('Documentos para firma')+'<section class="panel"><div id="principalSignaturesBody" class="inline-load" role="status">Consultando documentos pendientes…</div></section>';
+ const body=$('principalSignaturesBody'),token=app.token;
+ const current=()=>app.token===token&&$('principalSignaturesBody')===body;
+ try{
+   const pending=await api('fdPendingSGD',token);
+   if(!current())return;
+   const rows=pending.filter(row=>row.kind==='DOCUMENT'&&!(row.parafirma&&row.requestedAction==='VISTO_BUENO'));
+   body.className='';
+   body.removeAttribute('role');
+   body.innerHTML=rows.length?`<div class="signature-inbox">${rows.map(row=>`
+    <article class="signature-task-card"><div><h4>${esc(row.documentNumber||row.title||row.documentId)}</h4><p>${esc(row.subject||'')}</p></div>
+      <button type="button" class="btn btn-primary" data-document-id="${esc(row.documentId)}" onclick="fdOpen(this.dataset.documentId)">Abrir para firmar</button></article>`).join('')}</div>`:'<div class="empty">No hay documentos pendientes de tu firma.</div>';
+   const counts=app.bootstrap?.counts;
+   if(counts){counts.documentSignaturePending=rows.length;setCounts(counts);}
+ }catch(error){
+   if(!current())return;
+   if(error?.message==='SESSION_EXPIRED'){err(error);return;}
+   body.innerHTML='<p>No se pudieron consultar las firmas.</p><button type="button" class="smallbtn" onclick="renderPrincipalSignatures_()">Reintentar</button>';
+ }
+}
 function fdOpenResolutionVbTask38_(documentId){fdUI.returnPage='resolution-vb';fdUI.returnDocumentId=documentId;return fdOpen(documentId);}
 function fdApplyResolutionVbLocalSuccess38_(documentId){
  const cache=app.signatureInboxCache;if(cache&&cache.mode==='RESOLUTION')cache.rows=(cache.rows||[]).filter(r=>r.documentId!==documentId);
@@ -619,7 +812,19 @@ function resolutionVbProgressUI38_(c,compact=false){
 function stagePanelUI(step,d={}){
  if(step===1)return `<section class="stage-card"><div class="stage-head"><div class="stage-num">1</div><div><h3>Datos del documento</h3></div></div><div class="stage-actionbar"><button class="backbtn" onclick="leaveDocumentFlow()">← Volver</button><button id="saveDraftBtn" class="btn btn-primary" onclick="saveDraft()">Guardar y continuar</button></div></section>`;
  if(step===2){const aiBtn=`<button class="btn btn-ai" onclick="aiWordStep2Confirm240()">✦ Preparar Word con inteligencia artificial</button>`;return `<section class="stage-card"><div class="stage-head"><div class="stage-num">2</div><div><h3>Preparar Word</h3><div class="helper">Elige preparación normal o asistencia IA. La IA solo redacta el cuerpo del documento.</div></div></div><div class="stage-body">${d.number?`<div class="numberbox"><small>Correlativo</small><b>${esc(d.number)}</b></div>`:''}</div><div class="stage-actionbar"><button class="backbtn" onclick="leaveDocumentFlow()">← Volver</button><div class="action-primary"><button class="btn btn-primary" onclick="generateFormat()">Preparar Word</button>${aiBtn}</div></div></section>`;}
- if(step===3){const signedAnnexes=(d.annexSigning||[]).filter(x=>x.signed);const preserved=signedAnnexes.length?`<div class="okbox" style="margin-top:12px"><b>Anexos firmados conservados</b><div>${signedAnnexes.length} anexo(s) mantienen íntegramente sus firmas digitales. Puede reemplazar el Word y PDF del documento principal sin modificar esos anexos.</div></div>`:'';return `<section class="stage-card"><div class="stage-head"><div class="stage-num">3</div><div><h3>Archivos finales</h3></div></div><div class="stage-body"><div class="stage-checks"><div class="stage-check ${d.wordFinalId?'ready':''}"><b>${d.wordFinalId?'✓ Word final':'Word final pendiente'}</b></div><div class="stage-check ${d.pdfFinalId?'ready':''}"><b>${d.pdfFinalId?'✓ PDF cargado':'PDF pendiente'}</b></div></div>${preserved}</div><div class="stage-actionbar"><button class="backbtn" onclick="leaveDocumentFlow()">← Volver</button><div class="action-primary"><label class="btn btn-outline">Cargar Word<input type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none" onchange="uploadFinalWord(this)"></label>${d.wordProjectId?`<button class="btn word-download-main" type="button" onclick="downloadSgdFile('${d.wordProjectId}')">↓ Descargar Word</button>`:''}<label class="btn btn-primary">Cargar PDF<input type="file" accept="application/pdf,.pdf" style="display:none" onchange="uploadFinal(this)"></label></div><details class="more-actions"><summary>Más opciones</summary><div class="danger-zone"><button class="btn btn-danger" type="button" onclick="discardProject()">Descartar archivos del proyecto</button></div></details></div></section>`;}
+ if(step===3){
+  const signedAnnexes=(d.annexSigning||[]).filter(x=>x.signed);
+  const preserved=signedAnnexes.length?`<p class="okbox">${signedAnnexes.length} anexo(s) conservan sus firmas digitales.</p>`:'';
+  return `<section class="stage-card">
+   <div class="stage-head"><div class="stage-num">3</div><h3>Archivos finales</h3></div>
+   <div class="stage-body"><div class="upload-files-grid">${finalFileCard_('word',d.wordFinalId)}${finalFileCard_('pdf',d.pdfFinalId)}</div>${preserved}</div>
+   <div class="stage-actionbar">
+    <button class="backbtn" type="button" onclick="leaveDocumentFlow()">← Volver</button>
+    ${d.wordProjectId?`<button class="btn word-download-main" type="button" onclick="downloadSgdFile('${esc(d.wordProjectId)}')">Descargar plantilla Word</button>`:''}
+    <details class="more-actions"><summary>Más opciones</summary><div class="danger-zone"><button class="btn btn-danger" type="button" onclick="discardProject()">Descartar archivos del proyecto</button></div></details>
+   </div>
+  </section>`;
+ }
  if(step===4)return `<section class="stage-card"><div class="stage-head"><div class="stage-num">4</div><div><h3>Revisión final</h3><div class="helper">Revise el PDF que será sometido al circuito de firma. Después de confirmar, esta versión queda cerrada para firma.</div></div></div><div class="stage-actionbar"><button class="backbtn" type="button" onclick="leaveDocumentFlow()">← Volver</button><div class="action-primary"><button class="btn btn-primary" type="button" onclick="reviewFinal()">Revisar documento</button></div><details class="more-actions"><summary>Más opciones</summary><div class="danger-zone"><button class="btn btn-danger" type="button" onclick="discardProject()">Descartar archivos del proyecto</button></div></details></div></section>`;
  if(step===5){
   const c=d.signatureCircuit||{},ann=d.annexSigning||[],req=ann.filter(x=>x.required),pending=req.filter(x=>!x.signed),resolution=!!c.resolutionMode,canEmit=!!c.complete&&!pending.length,annexOpen=!c.prepared&&d.signatureConfirmed==='SI'&&(!d.annexSignaturePhase||d.annexSignaturePhase.canConfigure!==false),vbRows=Array.isArray(c.resolutionVbs)?c.resolutionVbs:[],vbPending=vbRows.filter(x=>!x.done),waitingVb=resolution&&c.prepared&&vbPending.length>0;
@@ -695,7 +900,7 @@ function renderNew(prefill={}){
  <div class="field span12"><div id="attentionBox240" class="attention-box ${app.newState.attendsDocumentIds.length?'active':''}"><div class="attention-head"><div><b>Documentos que atiende</b><span class="helper">Al emitir, estos documentos quedarán atendidos y se incorporarán automáticamente como referencia.</span></div><button id="attendsAddBtn240" type="button" class="btn btn-outline" onclick="toggleAttendanceChooser240()">＋ Agregar documento</button></div><div id="attendsSelected240" class="attention-selected"></div><div id="attentionChooser240" class="attention-chooser" style="display:none"><div class="attention-searchbar"><input id="attendsSearch240" class="control" placeholder="Buscar por número, asunto, oficina o expediente…" onkeydown="if(event.key==='Enter'){event.preventDefault();searchAttendanceDocs240()}"><button type="button" class="btn btn-secondary" onclick="searchAttendanceDocs240()">Buscar</button></div><div id="attendsResults240" class="attention-results"></div><div class="attention-chooser-foot"><button type="button" class="smallbtn" onclick="toggleAttendanceChooser240(false)">Cerrar selector</button></div></div></div></div>
  <div id="internalPrincipalBox" class="field span6"><label>Destino principal interno</label><select id="fPrincipal" class="control" onchange="onPrincipalChange233()"><option value="">Seleccione oficina…</option>${offices.filter(o=>o.code!==app.session.officeCode).map(o=>`<option value="${o.code}" ${o.code===app.newState.principal?'selected':''}>${esc(o.name)}</option>`).join('')}</select><div class="helper">Para comunicaciones internas. En cartas y oficios el destinatario principal es externo.</div></div>
  <div id="multiPrimaryBox" class="field span6" style="display:none"><label>Otros destinatarios principales</label><select id="fPrimarySelect" class="control"><option value="">Seleccione oficina…</option>${offices.filter(o=>o.code!==app.session.officeCode).map(o=>`<option value="${o.code}">${esc(o.name)}</option>`).join('')}</select><button type="button" class="btn btn-secondary" style="margin-top:7px" onclick="addPrimaryDestination233()">＋ Agregar destinatario</button><div id="primaryList" class="dest-list"></div></div>
- <div id="copiesBox" class="field span6"><label>Copias / conocimiento interno</label><div style="display:grid;grid-template-columns:1fr 155px;gap:7px"><select id="fCopySelect" class="control"><option value="">Seleccione oficina…</option>${offices.filter(o=>o.code!==app.session.officeCode).map(o=>`<option value="${o.code}">${esc(o.name)}</option>`).join('')}</select><select id="fCopyType" class="control"><option value="COPIA">Copia</option><option value="CONOCIMIENTO">Conocimiento</option></select></div><button class="btn btn-secondary" style="margin-top:7px" onclick="addCopy()">＋ Agregar copia</button><div id="copyList" class="dest-list"></div><div id="copyHelp233" class="helper"></div></div>
+ <div id="copiesBox" class="field span6"><label>Copias / conocimiento interno</label><div class="doc-actions"><button class="smallbtn" type="button" onclick="openDestinationGroups_(true)">Usar grupo de destino</button></div><div style="display:grid;grid-template-columns:1fr 155px;gap:7px"><select id="fCopySelect" class="control"><option value="">Seleccione oficina…</option>${offices.filter(o=>o.code!==app.session.officeCode).map(o=>`<option value="${o.code}">${esc(o.name)}</option>`).join('')}</select><select id="fCopyType" class="control"><option value="COPIA">Copia</option><option value="CONOCIMIENTO">Conocimiento</option></select></div><button class="btn btn-secondary" style="margin-top:7px" onclick="addCopy()">＋ Agregar copia</button><div id="copyList" class="dest-list"></div><div id="copyHelp233" class="helper"></div></div>
  <div id="resolutionExternalNoticeBox" class="field span12 resolution-external-choice" style="display:none"><label class="resolution-notify-toggle"><input id="fResolutionNotifyExternal" type="checkbox" ${app.newState.resolutionNotifyExternal?'checked':''} onchange="toggleResolutionExternalNotification233()"><span><b>Notificar esta resolución a destinatario(s) externo(s)</b><small>Active esta opción solo cuando el acto resolutivo deba notificarse fuera de ALTUM LUMEN.</small></span></label></div><div id="externalRecipientsBox" class="field span12 external-recipient-section"><div class="external-recipient-head"><div><label>Destinatarios externos</label><div id="externalRecipientHelp233" class="helper">Agregue los datos que aparecerán en la carta u oficio.</div></div><span id="externalRecipientCount233" class="external-count">0</span></div><div class="external-recipient-form"><div class="field"><label>Nombre / razón social *</label><input id="fExtName" class="control" maxlength="180" placeholder="Nombre completo de la persona o razón social"></div><div class="field"><label>Cargo / área</label><input id="fExtCargo" class="control" maxlength="180" placeholder="Cargo u oficina, si corresponde"></div><div class="field"><label>Entidad / empresa</label><input id="fExtEntity" class="control" maxlength="220" placeholder="Entidad, empresa o institución, si corresponde"></div><div class="field"><label>Dirección o correo electrónico *</label><input id="fExtAddress" class="control" maxlength="240" placeholder="Dirección, domicilio o correo electrónico"></div></div><div class="external-recipient-toolbar"><button type="button" class="btn btn-secondary" onclick="addExternalDestination()">＋ Agregar destinatario externo</button><span class="helper">* Campos obligatorios.</span></div><div id="extList" class="external-recipient-list"></div></div>
  <div class="field span6"><label>Indicación / trámite principal</label><textarea id="fIndication" class="control" placeholder="PARA ATENCIÓN, PARA OPINIÓN, PARA CONOCIMIENTO…">${esc(prefill.indication||'')}</textarea></div>
  <div class="field span3"><label>Plazo de atención</label><input id="fDays" type="number" min="0" class="control" value="${esc(prefill.days||0)}"></div>
@@ -705,6 +910,83 @@ function renderNew(prefill={}){
  $('main').innerHTML=pageHead(prefill.documentId?'Preparación del documento':'Nuevo documento')+workflowStepsUI(step)+dataBlock+referencePickerMarkup_()+stagePanelUI(step,prefill)+
  (app.currentDraft?`<details class="collapsible-data"><summary>Antecedentes y anexos</summary><div class="form-body"><div id="refsArea"><div class="inline-load">Cargando información complementaria…</div></div></div></details>`:'');
  renderPrimaryDestinations233();renderCopies();renderExternalDestinations();renderAttendsSelected240();signatureHelp();onDocumentTypeChange233(false);if(app.currentDraft)loadDraftExtras(app.currentDraft);
+}
+async function openDestinationGroups_(apply=false){
+ const token=app.token,copyBox=apply?$('copiesBox'):null;
+ showModal(apply?'Usar grupo de destino':'Grupos de destino','<div id="destinationGroupsBody" class="inline-load" role="status">Consultando grupos…</div>');
+ const body=$('destinationGroupsBody');
+ try{
+   const groups=await api('getDestinationGroupsSGD',token);
+   if(app.token!==token||!body.isConnected||!$('modalBack').classList.contains('show'))return;
+   renderDestinationGroups_(body,groups,copyBox);
+ }catch(error){
+   if(app.token!==token||!body.isConnected)return;
+   if(error?.message==='SESSION_EXPIRED'){err(error);return;}
+   body.textContent=error?.message||'No se pudieron abrir los grupos.';
+ }
+}
+function renderDestinationGroups_(body,groups,copyBox){
+ body.className='';
+ body.innerHTML=groups.map(group=>`<div class="attention-result"><div><b>${esc(group.name)}</b><div class="helper">${group.offices.map(code=>esc(officeName(code)||code)).join(', ')}</div></div><button class="smallbtn" type="button" data-group="${esc(group.id)}">${copyBox?'Aplicar':'Editar'}</button></div>`).join('')||
+   '<p class="helper">Aún no tienes grupos de destino.</p>';
+ body.querySelectorAll('[data-group]').forEach(button=>{
+   const group=groups.find(item=>item.id===button.dataset.group);
+   button.onclick=()=>copyBox?applyDestinationGroup_(group,copyBox):editDestinationGroup_(body,groups,group);
+ });
+ if(!copyBox){
+   const button=document.createElement('button');
+   button.type='button';button.className='btn btn-primary';button.textContent='Nuevo grupo';
+   button.onclick=()=>editDestinationGroup_(body,groups);
+   body.appendChild(button);
+ }
+}
+function applyDestinationGroup_(group,copyBox){
+ if($('copiesBox')!==copyBox||copyBox.getClientRects().length===0)return;
+ const offices=new Set((app.bootstrap?.offices||[]).map(o=>o.code));
+ const occupied=new Set([...app.newState.primaryDestinations,...app.newState.copies.map(row=>row.office),app.session.officeCode]);
+ const additions=group.offices.filter(code=>offices.has(code)&&!occupied.has(code));
+ const type=$('fCopyType')?.value||'COPIA';
+ additions.forEach(office=>app.newState.copies.push({office,type}));
+ renderCopies();closeModal();
+ toast(additions.length?`${additions.length} oficina(s) añadida(s) a copias.`:'Las oficinas activas del grupo ya están incluidas.');
+}
+function editDestinationGroup_(body,groups,group=null){
+ const active=(app.bootstrap?.offices||[]).filter(o=>o.code!==app.session.officeCode);
+ const selected=new Set(group?.offices||[]);
+ body.innerHTML=`<form id="destinationGroupEditor">
+   <div class="field"><label for="destinationGroupName">Nombre del grupo</label><input id="destinationGroupName" class="control" required maxlength="80" value="${esc(group?.name||'')}"></div>
+   <fieldset class="destination-group-offices"><legend>Oficinas del grupo</legend>${active.map(o=>`<label><input type="checkbox" name="office" value="${esc(o.code)}" ${selected.has(o.code)?'checked':''}>${esc(o.name)}</label>`).join('')}</fieldset>
+   <p id="destinationGroupStatus" class="helper" role="status"></p>
+   <div class="doc-actions"><button class="btn btn-outline" type="button" data-groups-back>Volver</button><button class="btn btn-primary" type="submit">Guardar grupo</button>${group?'<button class="btn btn-danger" type="button" data-group-delete>Eliminar grupo</button>':''}</div>
+ </form>`;
+ body.querySelector('[data-groups-back]').onclick=()=>renderDestinationGroups_(body,groups);
+ const form=body.querySelector('form');
+ form.onsubmit=event=>{event.preventDefault();saveDestinationGroup_(body,form,group);};
+ if(group)body.querySelector('[data-group-delete]').onclick=()=>{
+   if(confirm('¿Eliminar este grupo de destino?'))saveDestinationGroup_(body,form,group,true);
+ };
+}
+async function saveDestinationGroup_(body,form,group,remove=false){
+ if(form.getAttribute('aria-busy')==='true')return;
+ const token=app.token,status=$('destinationGroupStatus');
+ const data={id:group?.id||'',revision:group?.revision||'',name:$('destinationGroupName').value.trim(),offices:new FormData(form).getAll('office')};
+ if(!remove&&(!data.name||!data.offices.length||data.offices.length>15)){status.textContent='Indica un nombre y selecciona de 1 a 15 oficinas.';return;}
+ form.setAttribute('aria-busy','true');
+ const buttons=[...form.querySelectorAll('button')];
+ buttons.forEach(button=>{button.disabled=true;});
+ status.textContent=remove?'Eliminando grupo…':'Guardando grupo…';
+ const current=()=>app.token===token&&form.isConnected&&$('modalBack').classList.contains('show');
+ try{
+   const groups=remove?await api('deleteDestinationGroupSGD',token,group.id,group.revision):await api('saveDestinationGroupSGD',token,data);
+   if(current()){renderDestinationGroups_(body,groups);toast(remove?'Grupo eliminado.':'Grupo guardado.');}
+ }catch(error){
+   if(!current())return;
+   if(error?.message==='SESSION_EXPIRED'){err(error);return;}
+   status.textContent=error?.message||'No se pudo completar la operación.';
+ }finally{
+   form.removeAttribute('aria-busy');
+   buttons.forEach(button=>{button.disabled=false;});
+ }
 }
 function toggleAttendanceChooser240(force){const panel=$('attentionChooser240');if(!panel)return;const shouldOpen=typeof force==='boolean'?force:panel.style.display==='none';panel.style.display=shouldOpen?'block':'none';if(shouldOpen&&!app.attentionSearchResults240)searchAttendanceDocs240();}
 function attentionDocCard240(d,removable=true){const origin=officeName(d.origin)||d.origin||'—',meta=[d.type,d.expediente,d.status].filter(Boolean).join(' · ');return `<div class="attention-card"><div><b>${esc(d.number||d.documentId)}</b><p>${esc(d.subject||'Sin asunto')}</p><div class="attention-meta">${esc(origin)}${meta?' · '+esc(meta):''}</div><span class="attention-auto">Referencia automática</span></div>${removable?`<button type="button" class="smallbtn" onclick="removeAttendanceDoc240('${esc(d.documentId)}')">Quitar</button>`:''}</div>`}
@@ -932,9 +1214,64 @@ async function openExpDocumentExternal(expId,documentId){
  }catch(e){try{w.close()}catch(_e){}err(e)}
 }
 
-async function uploadFinal(input){try{loading(true,'Cargando PDF firmado…','Subiendo y verificando el archivo');const f=await fileData(input,25*1024*1024,'PDF');const r=await api('uploadFinalPdfSGD',app.token,app.currentDraft,f);toast('PDF cargado y renombrado automáticamente');renderDraftFromResult224(r)}catch(e){err(e)}finally{loading(false);input.value=''}}
-
-async function uploadFinalWord(input){try{loading(true,'Cargando Word final…','Subiendo el editable institucional');const f=await fileData(input,35*1024*1024,'proyecto Word');const r=await api('uploadFinalWordSGD',app.token,app.currentDraft,f);toast('Proyecto Word cargado y renombrado automáticamente');renderDraftFromResult224(r)}catch(e){err(e)}finally{loading(false);input.value=''}}
+const finalFileTypes_={
+ word:{title:'Word final',extension:'.docx',maxMB:35,method:'uploadFinalWordSGD'},
+ pdf:{title:'PDF principal',extension:'.pdf',maxMB:25,method:'uploadFinalPdfSGD'}
+};
+function finalFileCard_(kind,saved){
+ const type=finalFileTypes_[kind];
+ return `<div class="upload-file-card" data-final-upload="${kind}" ondragover="finalFileDrag_(event,true)" ondragleave="finalFileDrag_(event,false)" ondrop="dropFinalFile_(event)">
+  <label for="uploadFinal-${kind}"><b>${type.title}</b></label>
+  <input id="uploadFinal-${kind}" type="file" accept="${type.extension}" onchange="uploadFinalFile_('${kind}',this.files[0])" aria-describedby="uploadHelp-${kind} uploadStatus-${kind}">
+  <small id="uploadHelp-${kind}" class="helper">Seleccione o arrastre un ${type.extension} de hasta ${type.maxMB} MB.</small>
+  <span id="uploadStatus-${kind}" class="upload-file-status helper" role="status">${saved?'✓ Guardado':'Pendiente de carga'}</span>
+ </div>`;
+}
+function finalFileDrag_(event,over){
+ event.preventDefault();
+ event.currentTarget.classList.toggle('drag-over',over);
+}
+function dropFinalFile_(event){
+ finalFileDrag_(event,false);
+ const files=event.dataTransfer.files,kind=event.currentTarget.dataset.finalUpload;
+ if(files.length>1){toast('Selecciona un solo archivo por carga.');return;}
+ if(files.length===1)uploadFinalFile_(kind,files[0]);
+}
+const finalFileUploads_=new Map();
+async function uploadFinalFile_(kind,file){
+ const type=finalFileTypes_[kind],id=app.currentDraft,token=app.token,input=$('uploadFinal-'+kind),status=$('uploadStatus-'+kind);
+ if(!type||!id||!token||!file||!input||!status)return;
+ const key=JSON.stringify([token,id]);
+ if(finalFileUploads_.has(key)){input.value='';toast('Ya hay un archivo en proceso de carga.');return;}
+ const extension=type.extension;
+ if(!file.size||!file.name.toLowerCase().endsWith(extension)||file.size>type.maxMB*1024*1024){
+   status.textContent=`Selecciona un archivo ${extension} de hasta ${type.maxMB} MB que no esté vacío.`;
+   input.value='';
+   return;
+ }
+ finalFileUploads_.set(key,true);
+ const controls=[...input.closest('.stage-card').querySelectorAll('input[type="file"],.danger-zone button')];
+ const unlocked=controls.filter(control=>!control.disabled);
+ unlocked.forEach(control=>{control.disabled=true;});
+ status.textContent='Cargando '+file.name+'…';
+ const stillOpen=()=>app.token===token&&app.currentDraft===id&&input.isConnected;
+ try{
+   const data=await fileObjectData240_(file,type.maxMB*1024*1024,type.title);
+   const result=await api(type.method,token,id,data);
+   if(app.token!==token)return;
+   toast(type.title+' guardado');
+   if(stillOpen())renderDraftFromResult224(result);
+ }catch(error){
+   if(app.token!==token)return;
+   if(error?.message==='SESSION_EXPIRED'){err(error);return;}
+   if(stillOpen())status.textContent=error?.message||'No se pudo cargar el archivo.';
+   else err(error);
+ }finally{
+   finalFileUploads_.delete(key);
+   input.value='';
+   unlocked.forEach(control=>{control.disabled=false;});
+ }
+}
 function blobBase64Data240_(blob){return blob.arrayBuffer().then(buf=>{const bytes=new Uint8Array(buf);let binary='';const step=0x8000;for(let i=0;i<bytes.length;i+=step)binary+=String.fromCharCode.apply(null,bytes.subarray(i,Math.min(i+step,bytes.length)));return btoa(binary)})}
 async function uploadAnnexResumable240_(f,fileIndex,totalFiles){
  let session=null;
@@ -1406,9 +1743,10 @@ function workflowActionHtml(d,r,rec,id,own){
 }
 
 function renderDocDrawer224(r){
+ releaseDrawerDocumentPreview_();
  app.lastDocDetail=r;const d=r.raw||{},id=d.Documento_ID,own=d.Oficina_Origen===app.session.officeCode,rec=(r.destinations||[]).filter(x=>x.Oficina_Destino===app.session.officeCode&&!['REMISIÓN_REVOCADA','ANULADO'].includes(x.Estado)).slice(-1)[0];
  const fileWarnings=[];if(r.files?.pdf?.id&&!r.files.pdf.available)fileWarnings.push(r.history?'PDF histórico no disponible.':'El PDF oficial no está disponible.');if(!r.files?.pdf?.id&&['EMITIDO','HISTÓRICO'].includes(String(d.Estado||'').toUpperCase()))fileWarnings.push(r.history?'Este documento histórico no tiene un PDF registrado.':'Este documento emitido no tiene un PDF registrado.');if(r.history&&own&&r.files?.word?.id&&!r.files.word.available)fileWarnings.push('Word histórico no disponible.');
- const fileLinks=`<div class="file-links">${r.finalPdfFileId?`<button type="button" onclick="previewDocumentPdf('${id}')" class="btn">Visualizar PDF ↗</button><button type="button" onclick="downloadDocumentPdf('${id}')" class="btn">Descargar PDF</button>`:''}${own&&r.finalWordFileId?`<button type="button" onclick="downloadSgdFile('${r.finalWordFileId}')" class="btn">Descargar Word</button>`:''}${(own||(r.history&&!r.finalPdfFileId))&&r.sourceFileId?`<button type="button" onclick="previewSgdFile('${r.sourceFileId}')" class="btn">Abrir archivo fuente ↗</button>`:''}</div>${!own&&r.finalPdfFileId?'<span class="chip">PDF disponible</span>':''}`;
+ const fileLinks=`<div class="file-links">${r.finalPdfFileId?`<button type="button" onclick="showDrawerDocumentSection_('pdf')" class="btn">Ver PDF</button><button type="button" onclick="downloadDocumentPdf('${id}')" class="btn">Descargar PDF</button>`:''}${own&&r.finalWordFileId?`<button type="button" onclick="downloadSgdFile('${r.finalWordFileId}')" class="btn">Descargar Word</button>`:''}${(own||(r.history&&!r.finalPdfFileId))&&r.sourceFileId?`<button type="button" onclick="previewSgdFile('${r.sourceFileId}')" class="btn">Abrir archivo fuente ↗</button>`:''}</div>${!own&&r.finalPdfFileId?'<span class="chip">PDF disponible</span>':''}`;
  const source=r.transferSource?`<div class="proveido-card"><label>Documento trasladado</label><b>${esc(r.transferSource.number||r.transferSource.documentId)}</b><div class="doc-actions"><button class="btn btn-outline" onclick="openDoc('${esc(r.transferSource.documentId)}',true)">Abrir documento</button></div></div>`:'';
  const workflow=workflowActionHtml(d,r,rec,id,own),attends=(r.attends||[]),normalRefs=(r.references||[]);
  const ext=normalizeExternalRecipientsUI233(safeJsonArray(d.Destinos_Externos_JSON)),destRows=r.destinations||[],ann=r.annexes||[],moves=r.movements||[];
@@ -1419,11 +1757,62 @@ function renderDocDrawer224(r){
  const refsBody=normalRefs.map(x=>{const attendsRef=String(x.type||'').toUpperCase().split('/').map(y=>y.trim()).includes('ATIENDE');return `<div class="chip" title="${esc(x.document.subject||'')}">${attendsRef?'<span class="ref-kind">Documento que atiende</span> · ':''}<span class="doclink" onclick="openDoc('${x.document.documentId}',true)">${esc(x.document.number||x.document.documentId)} · ${esc(x.document.subject||'Sin asunto')}</span></div>`}).join('')||'<div class="helper">Sin antecedentes ni referencias.</div>';
  const annexDownloadMode=!r.canEditDraft;const annexBody=ann.length?`${annexDownloadMode?`<div class="doc-actions" style="margin:0 0 10px"><button class="btn btn-outline" type="button" onclick="downloadDocumentAnnexesZip('${id}')">↓ Descargar todos (.zip)</button></div>`:''}${ann.map(a=>`<div class="attention-result" style="align-items:flex-start"><div style="min-width:0;flex:1"><b>${esc(a.name)}</b><div class="helper">${esc(a.mime||'Archivo')}</div>${Array.isArray(a.requests)&&a.requests.length?`<div class="annex-request-list">${a.requests.map(annexRequestStatusUI_).join('')}</div>`:''}</div><div class="doc-actions"><button class="btn btn-subtle" type="button" onclick="previewSgdFile('${a.fileId}')">Ver</button>${annexDownloadMode?`<button class="btn btn-outline" type="button" onclick="downloadSgdFile('${a.fileId}')">Descargar</button>`:''}</div></div>`).join('')}`:'<div class="helper">Sin anexos.</div>';
  const traceBody=`<div class="timeline">${moves.map(m=>`<div class="timeline-item"><b>${esc(m.Tipo)}</b><p>${esc(officeName(m.Oficina_Origen))}${m.Oficina_Destino?' → '+esc(officeName(m.Oficina_Destino)):''}${m.Indicación?' · '+esc(m.Indicación):''}</p><time>${esc(m.Fecha_Hora)}</time></div>`).join('')||'<div class="helper">Sin movimientos.</div>'}</div>`;
- $('drawer').innerHTML=`<div class="drawer-head"><div class="row"><div><div class="eyebrow">${esc(d.Expediente_ID||d.Documento_ID)}</div><h2>${esc(d['Número']||('BORRADOR · '+d.Tipo))}${r.history?'<span class="history-tag">HISTÓRICO</span>':''}</h2>${pill(r.document?.status||rec?.Estado||d.Estado)}${r.document?.flowProgress?`<span class="flow-progress">${r.document.flowProgress.attended}/${r.document.flowProgress.total} atendido(s)</span>`:''}</div><div class="drawer-head-actions">${(app.docNavStack||[]).length?'<button class="backbtn" onclick="backDoc()">← Volver</button>':''}<button class="close" type="button" onclick="closeDrawer()" aria-label="Cerrar" title="Cerrar">×</button></div></div></div><div class="drawer-body"><div class="info-grid"><div class="info"><label>Emisor</label><div>${esc(officeName(d.Oficina_Origen))}</div></div><div class="info"><label>Prioridad</label><div>${pri(d.Prioridad)}</div></div><div class="info" style="grid-column:1/-1"><label>Asunto</label><div>${esc(d.Asunto)}</div></div><div class="info"><label>Emisión</label><div>${esc(d['Fecha_Emisión']||'—')}</div></div><div class="info"><label>Última gestión</label><div>${esc(d['Última_Gestión']||'—')}</div></div></div>${fileWarnings.length?`<div class="warn" style="margin:12px 0">${fileWarnings.map(x=>esc(x)).join('<br>')}</div>`:''}${fileLinks}${source}${workflow}${related.length?foldSection('Documentos relacionados',related.length,related.join('')):''}${foldSection('Destinatarios',destRows.length+ext.length,destBody)}${foldSection('Antecedentes / referencias',normalRefs.length,refsBody)}${foldSection('Anexos',ann.length,annexBody)}${foldSection('Trazabilidad',moves.length,traceBody)}</div>`;$('drawerBack').classList.add('show');
+ $('drawer').innerHTML=`<div class="drawer-head"><div class="row"><div><div class="eyebrow">${esc(d.Expediente_ID||d.Documento_ID)}</div><h2>${esc(d['Número']||('BORRADOR · '+d.Tipo))}${r.history?'<span class="history-tag">HISTÓRICO</span>':''}</h2>${pill(r.document?.status||rec?.Estado||d.Estado)}${r.document?.flowProgress?`<span class="flow-progress">${r.document.flowProgress.attended}/${r.document.flowProgress.total} atendido(s)</span>`:''}</div><div class="drawer-head-actions">${(app.docNavStack||[]).length?'<button class="backbtn" onclick="backDoc()">← Volver</button>':''}<button class="close" type="button" onclick="closeDrawer()" aria-label="Cerrar" title="Cerrar">×</button></div></div></div><div class="drawer-body"><div class="info-grid"><div class="info"><label>Emisor</label><div>${esc(officeName(d.Oficina_Origen))}</div></div><div class="info"><label>Prioridad</label><div>${pri(d.Prioridad)}</div></div><div class="info" style="grid-column:1/-1"><label>Asunto</label><div>${esc(d.Asunto)}</div></div><div class="info"><label>Emisión</label><div>${esc(d['Fecha_Emisión']||'—')}</div></div><div class="info"><label>Última gestión</label><div>${esc(d['Última_Gestión']||'—')}</div></div></div>${fileWarnings.length?`<div class="warn" style="margin:12px 0">${fileWarnings.map(x=>esc(x)).join('<br>')}</div>`:''}${fileLinks}<div class="drawer-shortcuts"><button class="smallbtn" type="button" onclick="showDrawerDocumentSection_('annexes')">Anexos (${ann.length})</button><button class="smallbtn" type="button" onclick="showDrawerDocumentSection_('movements')">Movimientos (${moves.length})</button></div><div id="drawerInlineFile" class="drawer-inline-file" hidden></div>${source}${workflow}${related.length?foldSection('Documentos relacionados',related.length,related.join('')):''}${foldSection('Destinatarios',destRows.length+ext.length,destBody)}${foldSection('Antecedentes / referencias',normalRefs.length,refsBody)}${foldSection('Anexos',ann.length,annexBody,false,'drawerAnnexes')}${foldSection('Movimientos',moves.length,traceBody,false,'drawerMovements')}</div>`;$('drawerBack').classList.add('show');
 }
-let drawerRequest_,drawerOpener_;
+let drawerRequest_,drawerOpener_,drawerDocumentPreview_;
+function openPdfFromBox_(id){
+ if(!id||!app.token)return;
+ if(!$('drawerBack').classList.contains('show'))drawerOpener_=document.activeElement;
+ drawerRequest_=null;
+ releaseDrawerDocumentPreview_();
+ app.docNavStack=[];app.lastDocDetail=null;
+ $('drawer').innerHTML='<div class="drawer-head"><div class="row"><h2>Documento PDF</h2><div class="drawer-head-actions"><button id="drawerPdfDetail" type="button" class="backbtn">Ficha</button><button class="close" type="button" onclick="closeDrawer()" aria-label="Cerrar">×</button></div></div></div><div class="drawer-body"><div id="drawerInlineFile" class="drawer-inline-file"></div></div>';
+ $('drawerPdfDetail').onclick=()=>openDoc(id);
+ $('drawerBack').classList.add('show');
+ $('drawer').querySelector('.close')?.focus({preventScroll:true});
+ return showDrawerDocumentSection_('pdf',id);
+}
+function releaseDrawerDocumentPreview_(){
+ if(drawerDocumentPreview_?.url)URL.revokeObjectURL(drawerDocumentPreview_.url);
+ drawerDocumentPreview_=null;
+}
+async function showDrawerDocumentSection_(section,documentId=''){
+ if(section!=='pdf'){
+   const panel=$(section==='annexes'?'drawerAnnexes':'drawerMovements');
+   if(!panel)return;
+   panel.open=true;
+   panel.focus({preventScroll:true});
+   panel.scrollIntoView({block:'start'});
+   return;
+ }
+ const panel=$('drawerInlineFile'),detail=app.lastDocDetail,token=app.token,id=documentId||detail?.raw?.Documento_ID;
+ if(!panel||!id||!token)return;
+ if(!documentId&&!detail.finalPdfFileId){toast('La ficha no tiene un PDF disponible.');return;}
+ if(drawerDocumentPreview_?.panel===panel){panel.scrollIntoView({block:'nearest'});return;}
+ const request={panel,url:''};
+ drawerDocumentPreview_=request;
+ panel.hidden=false;
+ panel.innerHTML='<p class="inline-load" role="status">Cargando PDF…</p>';
+ panel.scrollIntoView({block:'nearest'});
+ const current=()=>app.token===token&&drawerDocumentPreview_===request&&panel.isConnected;
+ try{
+   const pdf=await getDocumentPdfPayloadClient_(id);
+   if(!current())return;
+   const blob=sgdPayloadToBlob_(pdf);
+   request.url=URL.createObjectURL(blob);
+   panel.innerHTML=sgdPdfPreviewMarkup_(pdf,request.url,true);
+   panel.querySelector('[data-open-pdf-preview]').onclick=()=>showSgdPdfPreviewTab_(window.open('about:blank','_blank'),pdf,blob);
+ }catch(error){
+   if(!current())return;
+   releaseDrawerDocumentPreview_();
+   if(error?.message==='SESSION_EXPIRED'){err(error);return;}
+   panel.innerHTML=`<p class="warn" role="alert">${esc(error?.message||'No se pudo abrir el PDF.')}</p><button class="smallbtn" type="button">Reintentar</button>`;
+   panel.querySelector('button').onclick=()=>showDrawerDocumentSection_('pdf',id);
+ }
+}
 function showDocumentLoading_(title){
  const drawer=$('drawer');
+ releaseDrawerDocumentPreview_();
  drawer.innerHTML=`<div class="drawer-head"><div class="row"><h2>${esc(title)}</h2><button class="close" type="button" onclick="closeDrawer()" aria-label="Cerrar" title="Cerrar">×</button></div></div><div class="drawer-body"><p class="inline-load" role="status">Consultando los datos y archivos del documento…</p></div>`;
  const modalBack=$('modalBack');
  if(modalBack.classList.contains('show'))modalBack.inert=true;
@@ -1474,6 +1863,7 @@ function openDoc(id,pushCurrent=false){
  return loadDocumentDrawer_(id,stack,0,'Abriendo documento…');
 }
 function closeDrawer(){
+ releaseDrawerDocumentPreview_();
  drawerRequest_=null;
  $('drawerBack').classList.remove('show');
  $('modalBack').inert=false;
@@ -1495,7 +1885,7 @@ async function recipientManagement240(id){let r=app.lastDocDetail;if(!r||r.raw?.
 async function withdrawRecipient240(id,office){const reason=prompt('Motivo para retirar esta remisión antes de que sea recibida:');if(!reason)return;try{loading(true,'Retirando remisión…','Solo se modificará este destinatario');const r=await api('withdrawPendingRecipientSGD',app.token,id,office,reason);closeModal();toast('Remisión retirada');renderDocDrawer224(r);refreshActiveBox240()}catch(e){err(e)}finally{loading(false)}}
 async function restoreRecipient240(id,office){const reason=prompt('Motivo para restituir esta remisión:');if(!reason)return;try{loading(true,'Restituyendo remisión…','Reactivando el envío pendiente');const r=await api('restorePendingRecipientSGD',app.token,id,office,reason);closeModal();toast('Remisión restituida');renderDocDrawer224(r);refreshActiveBox240()}catch(e){err(e)}finally{loading(false)}}
 
-function refreshActiveBox240(){const map={received:'POR_RECIBIR',attention:'ATENCION',sent:'EMITIDOS',drafts:'BORRADORES',archive:'ARCHIVO',tracking:'SEGUIMIENTO'},box=map[app.page];if(box&&$('boxBody'))loadBox(box,false);refreshCountsQuiet224()}
+function refreshActiveBox240(){const map={received:'POR_RECIBIR',attention:'ATENCION','received-history':'RECIBIDOS',sent:'EMITIDOS',drafts:'BORRADORES',archive:'ARCHIVO',tracking:'SEGUIMIENTO'},box=map[app.page];if(box&&$('boxBody'))loadBox(box,false);refreshCountsQuiet224()}
 async function rollbackEmission(id){
  const token=app.token;
  try{
