@@ -124,6 +124,43 @@
 .destination-group-offices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;max-height:42vh;overflow:auto;padding:8px 1px}
 .destination-group-offices label{display:flex;align-items:baseline;gap:6px;font-size:13px}
 </style>
+<style>
+.office-context{display:flex;gap:9px 16px;align-items:center;flex-wrap:wrap;padding:10px clamp(14px,2vw,28px);color:#173e56;background:#f4f9fc;border-bottom:1px solid #d6e3ec;font-size:12px}
+.office-context strong{font-size:13px}
+.office-context-label{color:#46667b}
+.office-context-tag{padding:3px 7px;border-radius:6px;background:#e5eef5;white-space:nowrap}
+.box-date-shortcuts,.agenda-tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.box-date-shortcuts{margin-top:10px}
+.box-date-shortcuts button,.agenda-tools button,.box-doc-actions .smallbtn,#boxExport{background:#fff;border:1px solid #becfdb;border-radius:7px;padding:6px 9px;color:#174968;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.box-date-shortcuts button:hover,.agenda-tools button:hover,.box-doc-actions .smallbtn:hover,#boxExport:hover{background:#e8f3fa}
+.box-doc-actions{min-width:0}
+.table .doclink{border:0;background:none;padding:0;color:#115981;text-align:left;overflow-wrap:anywhere;cursor:pointer}
+.agenda-layout{display:grid;grid-template-columns:minmax(330px,1fr) minmax(285px,.85fr);gap:16px;align-items:start}
+.agenda-panel{padding:16px;min-width:0}
+.agenda-panel h2{margin:0;font-size:17px}
+.agenda-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.agenda-week,.agenda-month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.agenda-week span{text-align:center;padding:6px 0;color:#4d6474;font-size:11px;font-weight:700}
+.agenda-day{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;min-height:52px;padding:5px;border:1px solid #dce7ee;border-radius:6px;background:white;color:#193f58;font:inherit;font-size:13px;cursor:pointer}
+.agenda-day:hover{border-color:#4784a6}
+.agenda-day[aria-pressed=true],.agenda-tools button[aria-pressed=true]{outline:2px solid #2476a4;outline-offset:-2px;background:#eef7fc}
+.agenda-day-count{align-self:flex-end;border-radius:5px;padding:1px 4px;background:#dcecf4;font-weight:800;font-size:11px}
+.agenda-overdue{color:#9b2835;background:#f8e5e8}
+.agenda-today{color:#983d1b;background:#fae9de}
+.agenda-soon{color:#76551d;background:#fbf1d7}
+.agenda-tools{margin:12px 0}
+.agenda-legend{display:flex;gap:6px;flex-wrap:wrap;font-size:11px}
+.agenda-legend span{padding:3px 6px;border-radius:5px}
+.agenda-record{padding:10px 0;border-bottom:1px solid #e1eaf0}
+.agenda-record:last-child{border-bottom:0}
+.agenda-record p{margin:4px 0;font-size:13px}
+.agenda-record .doclink{background:none;border:0;padding:0;text-align:left;cursor:pointer}
+.agenda-record-meta{display:flex;gap:6px 10px;align-items:center;flex-wrap:wrap}
+.account-sessions{margin-top:16px}
+.account-sessions .doc-actions{margin-top:10px}
+@media(max-width:880px){.agenda-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:430px){.agenda-panel{padding:11px}.agenda-day{min-height:42px}.agenda-month,.agenda-week{gap:2px}}
+</style>
 </head>
 <body>
 <section id="loginView" class="login">
@@ -153,6 +190,7 @@
     <div class="clock"><b id="clockTime">--:--:--</b><small id="clockDate">Hora oficial del servidor</small></div>
     <div class="identity"><div class="avatar" id="avatar">AL</div><div style="min-width:0"><b id="identityOffice">—</b><small id="identityUser">—</small></div><button class="smallbtn" type="button" onclick="logout()" title="Cerrar sesión" aria-label="Cerrar sesión">↪</button></div>
   </header>
+  <div class="office-context" id="officeContext" aria-label="Unidad orgánica activa"></div>
   <div class="shell">
     <aside class="sidebar">
       <nav class="nav operational-only" aria-label="Inicio">
@@ -180,6 +218,7 @@
         <button data-page="received-history" onclick="go('received-history')">▣ Recibidos</button>
         <button data-page="expedientes" onclick="go('expedientes')">▤ Expedientes</button>
         <button data-page="tracking" onclick="go('tracking')">⇄ Seguimiento</button>
+        <button data-page="agenda" onclick="go('agenda')">▦ Agenda de atención</button>
         <button data-page="routes" onclick="go('routes')">⌘ Mapa de rutas</button>
         <button data-page="archive" onclick="go('archive')">▰ Archivo</button>
       </nav>
@@ -292,6 +331,7 @@ async function loadApp(){
   app.bootstrap=b;app.session=b.session;
   $('loginView').classList.add('hidden');$('appView').classList.remove('hidden');
   const isMaster=b.session.role==='MAESTRO';
+  renderOfficeContext_(b.session);
   const activeCargo=String(b.firmaInterna?.cargo||'');const isDt=/\(\s*DT\s*\)\s*$/i.test(activeCargo);
   $('identityOffice').textContent=b.session.officeName+(isDt&&!/\(\s*DT\s*\)\s*$/i.test(b.session.officeName)?' (DT)':'');$('identityUser').textContent=(b.session.displayName||b.session.username)+(b.session.registeredEmail?' · '+b.session.registeredEmail:'');
   $('avatar').textContent=isMaster?'M':b.session.officeCode.slice(0,3);$('masterNav').classList.toggle('hidden',!isMaster);$('masterSignNav').classList.toggle('hidden',!isMaster);
@@ -301,6 +341,15 @@ async function loadApp(){
   go(isMaster?'master':'home',false);
   clearInterval(clockSyncTimer_);
   clockSyncTimer_=setInterval(resyncClock,60000);
+}
+function renderOfficeContext_(session){
+ const context=$('officeContext');
+ if(!context)return;
+ const master=session.role==='MAESTRO';
+ const role={MAESTRO:'Usuario maestro',ADMIN:'Administrador',USUARIO:'Usuario'}[session.role]||session.role;
+ context.innerHTML=`<span class="office-context-label">${master?'Ámbito':'Unidad orgánica'}</span><strong>${esc(session.officeName)}</strong>
+  ${!master&&session.officeCode?`<span class="office-context-tag">${esc(session.officeCode)}</span>`:''}
+  <span class="office-context-tag">${esc(role)}</span>`;
 }
 function resetLoginState(msg){
   clearInterval(clockSyncTimer_);
@@ -360,7 +409,7 @@ async function resyncClock(){
 
 function go(page,refreshHome=true){
   const isMaster=app.session?.role==='MAESTRO';
-  const operational=['home','received','attention','received-history','principal-signatures','annex-signatures','resolution-vb','sent','drafts','archive','tracking','new','expedientes','routes','firma','admin'];
+  const operational=['home','received','attention','received-history','principal-signatures','annex-signatures','resolution-vb','sent','drafts','archive','tracking','agenda','new','expedientes','routes','firma','admin'];
   if(isMaster&&operational.includes(page))page='master';
   app.page=page;document.querySelectorAll('.nav button').forEach(b=>{
     const active=b.dataset.page===page;
@@ -368,7 +417,7 @@ function go(page,refreshHome=true){
     if(active)b.setAttribute('aria-current','page');
     else b.removeAttribute('aria-current');
   });
-  if(page==='home')renderHome(refreshHome);else if(page==='received')renderBox('POR_RECIBIR','Por recibir');else if(page==='attention')renderBox('ATENCION','En atención');else if(page==='received-history')renderBox('RECIBIDOS','Documentos recibidos');else if(page==='principal-signatures')renderPrincipalSignatures_();else if(page==='annex-signatures')renderSignatureWorkInbox('ANNEX');else if(page==='resolution-vb')renderSignatureWorkInbox('RESOLUTION');else if(page==='sent')renderBox('EMITIDOS','Documentos emitidos');else if(page==='drafts')renderBox('BORRADORES','Documentos en proyecto');else if(page==='archive')renderBox('ARCHIVO','Archivo de la oficina');else if(page==='tracking')renderBox('SEGUIMIENTO','Seguimiento documental');else if(page==='new')renderNew();else if(page==='expedientes')renderExpedientes();else if(page==='routes')renderRoutes();else if(page==='profile')renderProfile();else if(page==='firma')renderMySignature();else if(page==='admin')renderAdmin();else if(page==='master')renderMaster();
+  if(page==='home')renderHome(refreshHome);else if(page==='received')renderBox('POR_RECIBIR','Por recibir');else if(page==='attention')renderBox('ATENCION','En atención');else if(page==='received-history')renderBox('RECIBIDOS','Documentos recibidos');else if(page==='principal-signatures')renderPrincipalSignatures_();else if(page==='annex-signatures')renderSignatureWorkInbox('ANNEX');else if(page==='resolution-vb')renderSignatureWorkInbox('RESOLUTION');else if(page==='sent')renderBox('EMITIDOS','Documentos emitidos');else if(page==='drafts')renderBox('BORRADORES','Documentos en proyecto');else if(page==='archive')renderBox('ARCHIVO','Archivo de la oficina');else if(page==='tracking')renderBox('SEGUIMIENTO','Seguimiento documental');else if(page==='agenda')renderAttentionAgenda_();else if(page==='new')renderNew();else if(page==='expedientes')renderExpedientes();else if(page==='routes')renderRoutes();else if(page==='profile')renderProfile();else if(page==='firma')renderMySignature();else if(page==='admin')renderAdmin();else if(page==='master')renderMaster();
 }
 let dashboardRefresh_;
 function refreshBootstrap(){
@@ -509,7 +558,7 @@ async function saveMySignaturePassword240(){
 function workBoxNavigation_(box){
  const reception=[['POR_RECIBIR','received','Por recibir'],['ATENCION','attention','En atención'],['RECIBIDOS','received-history','Recibidos']];
  const emission=[['BORRADORES','drafts','En proyecto'],['EMITIDOS','sent','Emitidos']];
- const records=[['SEGUIMIENTO','tracking','Seguimiento general'],['EMITIDOS','sent','Emitidos'],['RECIBIDOS','received-history','Recibidos'],['ARCHIVO','archive','Archivo']];
+ const records=[['SEGUIMIENTO','tracking','Seguimiento general'],['AGENDA','agenda','Agenda de atención'],['EMITIDOS','sent','Emitidos'],['RECIBIDOS','received-history','Recibidos'],['ARCHIVO','archive','Archivo']];
  const items=reception.some(([key])=>key===box)?reception:emission.some(([key])=>key===box)?emission:records;
  return `<nav class="work-nav" aria-label="Bandejas relacionadas">${items.map(([key,page,label])=>`<button type="button" onclick="go('${page}')" ${key===box?'aria-current="page"':''}>${label}</button>`).join('')}</nav>`;
 }
@@ -543,6 +592,9 @@ async function renderBox(box,title){
     <label>Emisión desde<input id="boxDateFrom" class="filter" type="date"></label>
     <label>Emisión hasta<input id="boxDateTo" class="filter" type="date"></label>
    </div>
+   <div class="box-date-shortcuts" aria-label="Atajos para fecha de emisión"><span class="helper">Período de emisión</span>
+    <button type="button" onclick="setBoxDateRange_('${box}','today')">Hoy</button><button type="button" onclick="setBoxDateRange_('${box}','week')">Últimos 7 días</button><button type="button" onclick="setBoxDateRange_('${box}','month')">Este mes</button>
+   </div>
   </div>
   ${toReceive?`<div id="bulkReceiveBar40" class="bulk-receive40"><div class="bulk-receive40-info"><span id="bulkReceiveCount40" class="bulk-receive40-count">0</span><span><b>Recepción múltiple</b><small>Seleccione los documentos que pasarán a En atención.</small></span></div><button id="bulkReceiveBtn40" class="btn btn-primary" type="button" onclick="receiveSelected40_()" disabled>Recibir seleccionados</button></div><div id="bulkReceiveFeedback40"></div>`:''}
   <div class="box-results-bar"><div id="boxStatusLine" class="helper" role="status"></div>${!toReceive&&!drafts?`<button id="boxExport" class="smallbtn" type="button" onclick="exportBoxResults_('${box}')" disabled>Exportar resultados cargados</button>`:''}</div>
@@ -560,6 +612,23 @@ function boxDocumentTypes_(box){
    types.add('Queja');
  }
  return [...types].sort((a,b)=>a.localeCompare(b,'es'));
+}
+function limaCalendarDate_(){
+ const local=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Lima',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+ const values=Object.fromEntries(local.filter(part=>part.type!=='literal').map(part=>[part.type,part.value]));
+ return `${values.year}-${values.month}-${values.day}`;
+}
+function calendarOffset_(date,days){
+ const day=new Date(date+'T00:00:00Z');
+ day.setUTCDate(day.getUTCDate()+days);
+ return day.toISOString().slice(0,10);
+}
+function setBoxDateRange_(box,range){
+ if($('boxBody')?.dataset.box!==box)return;
+ const today=limaCalendarDate_();
+ $('boxDateFrom').value=range==='week'?calendarOffset_(today,-6):range==='month'?today.slice(0,7)+'-01':today;
+ $('boxDateTo').value=today;
+ loadBox(box);
 }
 const boxLoads_=new WeakMap();
 async function loadBox(box,append=false){
@@ -650,6 +719,100 @@ function exportBoxResults_(box){
    ...rows.map(d=>[d.number,d.type,d.expediente,d.subject,officeName(d.origin)||d.origin,d.priority,d.emissionDate||d.date,d.lastActivity,d.status])];
  const csv=data.map(row=>row.map(csvCell).join(';')).join('\r\n');
  downloadBlobDirect_(new Blob(['\ufeff',csv],{type:'text/csv;charset=utf-8'}),'SGD-'+box.toLowerCase()+'.csv');
+}
+const monthFormatter_=new Intl.DateTimeFormat('es-PE',{month:'long',year:'numeric',timeZone:'UTC'});
+const dateFormatter_=new Intl.DateTimeFormat('es-PE',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+const agendaRequests_=new WeakMap();
+function calendarDateLabel_(iso){
+ return iso?dateFormatter_.format(new Date(iso+'T00:00:00Z')):'—';
+}
+function renderAttentionAgenda_(){
+ $('main').innerHTML=pageHead('Agenda de atención','Plazos de documentos recibidos por tu unidad orgánica')+workBoxNavigation_('AGENDA')+
+  '<div id="attentionAgenda"></div><p id="attentionAgendaStatus" class="helper" role="status"></p>';
+ return loadAttentionAgenda_();
+}
+function agendaMonthOffset_(month,delta){
+ const date=new Date(month+'-01T00:00:00Z');
+ date.setUTCMonth(date.getUTCMonth()+delta);
+ return date.toISOString().slice(0,7);
+}
+async function loadAttentionAgenda_(month='',selection='',offset=0){
+ const body=$('attentionAgenda'),status=$('attentionAgendaStatus'),token=app.token;
+ if(!body||!token||!status)return;
+ const previous=agendaRequests_.get(body);
+ const key=JSON.stringify([month,selection,offset]);
+ if(previous?.pending&&previous.key===key)return;
+ const request={key,pending:true};
+ agendaRequests_.set(body,request);
+ status.textContent='Consultando los plazos…';
+ body.setAttribute('aria-busy','true');
+ const current=()=>app.token===token&&$('attentionAgenda')===body&&agendaRequests_.get(body)===request;
+ try{
+   const result=await api('getAttentionAgendaSGD',token,month,selection,offset);
+   if(!current())return;
+   paintAttentionAgenda_(body,result,offset);
+   status.textContent='';
+ }catch(error){
+   if(!current())return;
+   if(error?.message==='SESSION_EXPIRED'){err(error);return;}
+   status.textContent=error?.message||'No se pudo consultar la agenda.';
+   if(!body.children.length){
+    body.innerHTML='<button class="btn btn-outline" type="button">Reintentar</button>';
+    body.firstElementChild.onclick=()=>loadAttentionAgenda_(month,selection,offset);
+   }
+ }finally{
+   request.pending=false;
+   if(current())body.removeAttribute('aria-busy');
+ }
+}
+function paintAttentionAgenda_(body,result,offset){
+ const {today,month,selection,days,overdue,unscheduled,total,items}=result;
+ const first=new Date(month+'-01T00:00:00Z'),leading=(first.getUTCDay()+6)%7;
+ const next=new Date(agendaMonthOffset_(month,1)+'-01T00:00:00Z');
+ const numberOfDays=Math.round((next-first)/86400000);
+ const monthLabel=monthFormatter_.format(first);
+ const soonLimit=calendarOffset_(today,2);
+ const mark=iso=>iso<today?'agenda-overdue':iso===today?'agenda-today':iso<=soonLimit?'agenda-soon':'';
+ const cells=Array.from({length:numberOfDays},(_,index)=>{
+   const day=index+1,iso=month+'-'+String(day).padStart(2,'0'),count=days[iso]||0;
+   return `<button class="agenda-day" type="button" data-day="${iso}" aria-label="${esc(calendarDateLabel_(iso)+(count?', '+count+' con plazo':''))}" aria-pressed="${iso===selection}">${day}
+     ${count?`<span class="agenda-day-count ${mark(iso)}">${count}</span>`:''}</button>`;
+ }).join('');
+ const title=selection==='OVERDUE'?'Documentos vencidos':selection==='UNSCHEDULED'?'Documentos sin plazo calculable':calendarDateLabel_(selection);
+ const prior=document.activeElement;
+ const restoreFocus=body.contains(prior);
+ const rows=items.map(row=>`<article class="agenda-record">
+   <button class="doclink" type="button" data-document-id="${esc(row.documentId)}" onclick="openDoc(this.dataset.documentId)">${esc(row.number||row.documentId)}</button>
+   <p>${esc(row.subject||'Sin asunto')}</p>
+   <div class="agenda-record-meta helper">${pill(row.status)} ${pri(row.priority)} <span>${esc(officeName(row.origin))}</span>${row.expediente?`<span>${esc(row.expediente)}</span>`:''}</div>
+   <p class="helper">Recepción ${esc(calendarDateLabel_(row.received))} · Vence ${esc(calendarDateLabel_(row.due))}</p>
+ </article>`).join('');
+ body.innerHTML=`<div class="agenda-layout">
+  <section class="panel agenda-panel" aria-label="Calendario mensual">
+   <div class="agenda-toolbar"><button type="button" class="btn btn-outline" data-month-offset="-1" aria-label="Mes anterior" ${month==='1900-01'?'disabled':''}>‹</button>
+    <h2 id="agendaMonthLabel" tabindex="-1">${esc(monthLabel)}</h2>
+    <button type="button" class="btn btn-outline" data-month-offset="1" aria-label="Mes siguiente" ${month==='2199-12'?'disabled':''}>›</button></div>
+   <div class="agenda-week" aria-hidden="true">${['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(day=>`<span>${day}</span>`).join('')}</div>
+   <div class="agenda-month">${'<span></span>'.repeat(leading)}${cells}</div>
+   <div class="agenda-tools"><button type="button" data-today>Ir a hoy</button><button type="button" data-group="OVERDUE" aria-pressed="${selection==='OVERDUE'}">Vencidos (${overdue})</button><button type="button" data-group="UNSCHEDULED" aria-pressed="${selection==='UNSCHEDULED'}">Sin plazo (${unscheduled})</button></div>
+   <div class="agenda-legend"><span class="agenda-overdue">Vencido</span><span class="agenda-today">Vence hoy</span><span class="agenda-soon">Próximos 2 días</span></div>
+   <p class="helper">El vencimiento se calcula en días calendario desde la recepción.</p>
+  </section>
+  <section class="panel agenda-panel" aria-label="Documentos del período seleccionado">
+   <h2>${esc(title)}</h2>
+   <p class="helper">${total} documento(s)</p>
+   ${rows||'<p class="helper">No hay documentos con este criterio.</p>'}
+   ${offset||offset+items.length<total?`<div class="agenda-tools">
+     ${offset?'<button type="button" data-agenda-page="-40">Anterior</button>':''}
+     ${offset+items.length<total?'<button type="button" data-agenda-page="40">Siguiente</button>':''}
+    </div>`:''}
+  </section>
+ </div>`;
+ body.querySelectorAll('[data-month-offset]').forEach(button=>{button.onclick=()=>loadAttentionAgenda_(agendaMonthOffset_(month,Number(button.dataset.monthOffset)));});
+ body.querySelectorAll('[data-day],[data-group]').forEach(button=>{button.onclick=()=>loadAttentionAgenda_(month,button.dataset.day||button.dataset.group);});
+ body.querySelector('[data-today]').onclick=()=>loadAttentionAgenda_(today.slice(0,7),today);
+ body.querySelectorAll('[data-agenda-page]').forEach(button=>{button.onclick=()=>loadAttentionAgenda_(month,selection,offset+Number(button.dataset.agendaPage));});
+ if(restoreFocus)(body.querySelector('[aria-pressed="true"]')||$('agendaMonthLabel'))?.focus({preventScroll:true});
 }
 function receiveSelection40_(){if(!(app.bulkReceiveSelection40 instanceof Set))app.bulkReceiveSelection40=new Set();return app.bulkReceiveSelection40;}
 function toggleReceiveSelection40_(id,checked){const set=receiveSelection40_();checked?set.add(id):set.delete(id);const row=[...document.querySelectorAll('[data-receive-row]')].find(x=>x.dataset.receiveRow===id);if(row)row.classList.toggle('selected',checked);updateBulkReceiveBar40_();}
@@ -2042,7 +2205,35 @@ async function openRouteTree(expId,fromExp=false){try{loading(true,'Cargando ár
 
 function renderProfile(){
  const s=app.session,recommend=s.recommendChange?'<div class="password-recommend" style="margin-bottom:14px"><b>Recomendación:</b> puedes personalizar tu contraseña cuando lo desees. Esto no impide continuar trabajando en el SGD.</div>':'';
- $('main').innerHTML=pageHead('Mi acceso','Datos de tu cuenta y cambio voluntario de contraseña.')+recommend+`<div class="grid2"><section class="panel"><div class="panel-head"><h3>Cuenta institucional</h3></div><div class="panel-body"><div class="info-grid"><div class="info"><label>Responsable</label><div>${esc(s.displayName)}</div></div><div class="info"><label>Rol</label><div>${esc(s.role)}</div></div><div class="info" style="grid-column:1/-1"><label>Dependencia</label><div>${esc(s.officeName)}</div></div>${s.registeredEmail?`<div class="info" style="grid-column:1/-1"><label>Correo institucional</label><div>${esc(s.registeredEmail)}</div></div>`:''}</div></div></section><section class="panel"><div class="panel-head"><h3>Contraseña del SGD</h3></div><div class="panel-body"><div class="field"><label>Contraseña actual</label><input id="oldPass" type="password" class="control"></div><div class="field"><label>Nueva contraseña</label><input id="newPass" type="password" class="control"></div><button class="btn btn-primary" onclick="changePass()">Cambiar contraseña</button>${s.role!=='MAESTRO'?'<div class="password-recommend" style="margin-top:12px"><b>Archivos administrados por el SGD.</b> Puede trabajar directamente desde el sistema.</div>':''}</div></section></div>`;
+ $('main').innerHTML=pageHead('Mi acceso','Datos de tu cuenta y cambio voluntario de contraseña.')+recommend+`<div class="grid2"><section class="panel"><div class="panel-head"><h3>Cuenta institucional</h3></div><div class="panel-body"><div class="info-grid"><div class="info"><label>Responsable</label><div>${esc(s.displayName)}</div></div><div class="info"><label>Rol</label><div>${esc(s.role)}</div></div><div class="info" style="grid-column:1/-1"><label>Dependencia</label><div>${esc(s.officeName)}</div></div>${s.registeredEmail?`<div class="info" style="grid-column:1/-1"><label>Correo institucional</label><div>${esc(s.registeredEmail)}</div></div>`:''}</div></div></section><section class="panel"><div class="panel-head"><h3>Contraseña del SGD</h3></div><div class="panel-body"><div class="field"><label>Contraseña actual</label><input id="oldPass" type="password" class="control"></div><div class="field"><label>Nueva contraseña</label><input id="newPass" type="password" class="control"></div><button class="btn btn-primary" onclick="changePass()">Cambiar contraseña</button>${s.role!=='MAESTRO'?'<div class="password-recommend" style="margin-top:12px"><b>Archivos administrados por el SGD.</b> Puede trabajar directamente desde el sistema.</div>':''}</div></section></div>`+accountSessionsMarkup_();
+}
+
+function accountSessionsMarkup_(){
+ return '<section class="panel account-sessions"><div class="panel-head"><h3>Sesiones del SGD</h3></div><div id="accountSessionsBody" class="panel-body"><p>Consulta las sesiones de tu cuenta y, si lo necesitas, cierra las que abriste en otros dispositivos.</p><button type="button" class="btn btn-outline" onclick="loadAccountSessions_()">Consultar sesiones</button></div></section>';
+}
+async function loadAccountSessions_(close=false){
+ const body=$('accountSessionsBody'),token=app.token;
+ if(!body||!token||body.getAttribute('aria-busy')==='true')return;
+ if(close&&!confirm('¿Cerrar las otras sesiones de tu cuenta? Esta pestaña seguirá conectada.'))return;
+ const current=()=>app.token===token&&$('accountSessionsBody')===body;
+ body.setAttribute('aria-busy','true');
+ body.innerHTML=`<p role="status">${close?'Cerrando las otras sesiones…':'Consultando sesiones…'}</p>`;
+ try{
+   const result=await api(close?'closeOtherSgdSessionsSGD':'getSgdSessionOverviewSGD',token);
+   if(!current())return;
+   const currentLogin=new Date(result.loginAt);
+   const date=isNaN(currentLogin.getTime())?'—':new Intl.DateTimeFormat('es-PE',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Lima'}).format(currentLogin);
+   body.innerHTML=`<div class="info-grid"><div class="info"><label>Esta sesión</label><div>${esc(date)}</div></div><div class="info"><label>Otras sesiones registradas</label><div>${Number(result.others)||0}</div></div></div>
+    ${close?`<p class="okbox" role="status">Se cerraron ${Number(result.closed)||0} sesiones.</p>`:''}
+    <div class="doc-actions"><button class="btn btn-outline" type="button" onclick="loadAccountSessions_()">Actualizar</button>
+    ${result.others?'<button class="btn btn-outline" type="button" onclick="loadAccountSessions_(true)">Cerrar otras sesiones</button>':''}</div>`;
+ }catch(error){
+   if(!current())return;
+   if(error?.message==='SESSION_EXPIRED'){err(error);return;}
+   body.innerHTML=`<p class="warn" role="alert">${esc(error?.message||'No se pudieron consultar las sesiones.')}</p><button class="btn btn-outline" type="button" onclick="loadAccountSessions_()">Volver a consultar</button>`;
+ }finally{
+   if(current())body.removeAttribute('aria-busy');
+ }
 }
 
 async function changePass(){try{loading(true);await api('cambiarClaveSGD',app.token,$('oldPass').value,$('newPass').value);toast('Contraseña actualizada');app.session.mustChange=false;app.session.recommendChange=false;if(app.bootstrap?.session){app.bootstrap.session.mustChange=false;app.bootstrap.session.recommendChange=false}go(app.session.role==='MAESTRO'?'master':'home')}catch(e){err(e)}finally{loading(false)}}
