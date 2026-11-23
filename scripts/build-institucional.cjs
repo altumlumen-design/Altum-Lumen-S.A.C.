@@ -181,7 +181,7 @@ function transparency() {
       <a href="#documentos-gestion">${icon('folder')} <span>Documentos de gestión</span> ${icon('arrow')}</a>
     </nav>`;
   const publishedYear = Math.max(...gestion.map(item => item.year));
-  return masthead('Transparencia institucional', 'Consulta resoluciones, instrumentos de gestión y canales de atención de Altum Lumen.',
+  return masthead('Transparencia institucional', 'Consulta los actos resolutivos y los documentos de gestión de Altum Lumen.',
     breadcrumb([['Transparencia']])) + shortcuts + `
   <section id="actos-resolutivos" class="layout content-section" data-catalog="publications">
     <div class="section-title"><h2 tabindex="-1">Actos resolutivos</h2><p>Ordenados por fecha de emisión, del más reciente al más antiguo.</p></div>
@@ -376,7 +376,7 @@ function replaceSection(source, name, content) {
 const corporatePages = portalViews({icon, escape, masthead, breadcrumb, time, shortDate, pdfLink, byCode, recent, base});
 for (const corporate of corporatePages) update(corporate.pagePath, page(corporate));
 update('transparencia.html', page({title:'Transparencia institucional',pagePath:'transparencia.html',active:'publications',script:true,
-  description:'Actos resolutivos y documentos de gestión publicados por Altum Lumen S.A.C. Busca por órgano emisor, tipo de resolución, año o asunto.',main:transparency()}));
+  description:'Actos resolutivos y documentos de gestión de Altum Lumen S.A.C. Busca por tipo de documento, órgano emisor, año o asunto.',main:transparency()}));
 const directorySchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
