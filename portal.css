@@ -86,9 +86,11 @@ main { flex: 1; }
 .button-inverse { border-color: var(--line); }
 
 .home-hero {
-  color: white;
-  background: linear-gradient(110deg, rgba(14,47,66,.98), rgba(18,63,90,.97) 58%, rgba(30,81,107,.94)), #123f5a;
-  border-bottom: 4px solid var(--red);
+  color: var(--night);
+  background:
+    linear-gradient(90deg,rgba(248,252,255,.93) 0%,rgba(237,248,254,.81) 37%,rgba(218,240,254,.32) 68%,rgba(18,63,90,.05) 100%),
+    #d7e8f6 url("cielo.jpg") center 45% / cover no-repeat;
+  border-bottom: 3px solid var(--red);
 }
 .home-hero-inner {
   display: grid;
@@ -98,17 +100,17 @@ main { flex: 1; }
   padding-block: clamp(43px, 5.3vw, 66px);
 }
 .hero-copy { padding-block: 16px; }
-.hero-copy::before { display: block; content: ""; width: 48px; height: 4px; margin-bottom: 23px; background: #e4475c; }
+.hero-copy::before { display: block; content: ""; width: 48px; height: 4px; margin-bottom: 23px; background: var(--red); }
 .hero-copy h1 {
-  color: #fff;
-  font-size: clamp(2.6rem, 5.7vw, 5.1rem);
+  max-width: 14ch;
+  color: var(--night);
+  font-size: clamp(2.55rem, 5.25vw, 4.85rem);
   line-height: 1.02;
   font-weight: 660;
   letter-spacing: -.06em;
 }
-.hero-copy h1 span { font-size: .53em; font-weight: 610; white-space: nowrap; letter-spacing: -.04em; }
-.hero-copy p { max-width: 46ch; margin-top: 20px; color: #deebf1; font-size: clamp(1.05rem,1.7vw,1.24rem); line-height: 1.6; }
-.quick-panel { padding: clamp(18px, 3.4vw, 31px); border-radius: 10px; color: var(--ink); background: #fff; }
+.hero-copy p { max-width: 46ch; margin-top: 20px; color: #28495e; font-size: clamp(1.05rem,1.7vw,1.2rem); line-height: 1.6; }
+.quick-panel { padding: clamp(18px, 3.4vw, 31px); border: 1px solid rgba(227,241,249,.9); border-radius: 11px; color: var(--ink); background: #fff; box-shadow: 0 12px 32px rgba(18,63,90,.12); }
 .quick-panel h2 { color: var(--night); font-size: 1.27rem; font-weight: 720; margin-bottom: 9px; letter-spacing: -.018em; }
 .quick-grid { display: grid; }
 .quick-access {
@@ -159,6 +161,7 @@ main { flex: 1; }
   text-decoration: none;
 }
 .service-preview a:hover { background: var(--paper); border-color: var(--blue); }
+.service-preview-mark { width: min(160px, 100%); height: 46px; object-fit: contain; object-position: left center; margin-bottom: 3px; }
 .service-preview h3 { font-size: 1.06rem; line-height: 1.28; color: var(--night); }
 .service-preview p { color: var(--muted); font-size: .9rem; line-height: 1.43; }
 .service-preview a > svg { margin-top: 4px; justify-self: end; }
@@ -211,8 +214,33 @@ main { flex: 1; }
 .contact-list dd { margin: 4px 0 0; overflow-wrap: anywhere; }
 .contact-list a { display: inline-flex; align-items: center; gap: 5px; }
 .contact-list svg { width: 14px; flex: none; }
-.person-card .person-arrow { display: inline-flex; flex-wrap: nowrap; color: var(--navy); background: transparent; width: auto; height: auto; gap: 4px; font-size: .77rem; font-weight: 680; white-space: nowrap; }
-.person-arrow svg { width: 16px; }
+.position-group { margin-top: 29px; }
+.position-group h3 { color: var(--navy); font-size: 1.24rem; letter-spacing: -.015em; }
+.position-tile {
+  display: grid;
+  grid-template-columns: 84px minmax(0,1fr);
+  gap: 14px;
+  align-items: start;
+  min-height: 152px;
+  height: 100%;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: white;
+}
+.position-tile:hover { border-color: #a3bfce; }
+.position-tile .portrait { width: 84px; height: 102px; }
+.position-card-copy { display: grid; justify-items: start; gap: 4px; overflow-wrap: anywhere; }
+.position-card-copy h4 { margin: 0; color: var(--night); font-size: 1.08rem; line-height: 1.25; }
+.position-title { color: var(--ink); line-height: 1.4; font-size: .92rem; }
+.position-mark, .masthead .position-mark { color: #8a2434; font-size: .795rem; font-weight: 675; }
+.masthead .position-mark { margin-top: 7px; }
+.position-mail { color: var(--muted); font-size: .82rem; }
+.position-card-copy .text-link, .role-heading .text-link { margin-top: 5px; font-size: .87rem; }
+.role-profile-details { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.role-profile-details > div { padding: 14px 16px; background: var(--paper); border-radius: 7px; }
+.role-profile-details .role-designation { grid-column: 1 / -1; }
+.role-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 18px; margin-top: 23px; }
 .publication:target { border-left: 3px solid var(--red); padding-left: 12px; background: var(--paper); }
 
 @media (max-width: 940px) {
@@ -231,12 +259,12 @@ main { flex: 1; }
   .home-hero-inner { grid-template-columns: minmax(0,1fr) minmax(265px,1fr); gap: 24px; padding-block: 36px; }
   .service-preview { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .publication-preview { grid-template-columns: 1fr; gap: 18px; }
-  .person-card .person-arrow span { display: none; }
 }
 @media (max-width: 580px) {
   .layout { width: calc(100% - 30px); }
   .home-hero-inner, .about-layout, .service-body, .channel-grid, .contact-list { grid-template-columns: minmax(0,1fr); }
-  .home-hero-inner { gap: 20px; padding-block: 28px; }
+  .home-hero { background-image:linear-gradient(130deg,rgba(247,251,254,.91),rgba(223,241,254,.58) 61%,rgba(216,235,249,.29)),url("cielo.jpg"); }
+  .home-hero-inner { gap: 23px; padding-block: 34px; }
   .hero-copy { padding: 0; }
   .hero-copy::before { margin-bottom: 13px; width: 36px; }
   .hero-copy p { margin-top: 12px; }
@@ -244,6 +272,7 @@ main { flex: 1; }
   .section-links { grid-template-columns: 1fr; }
   .service-preview { gap: 10px; }
   .service-preview a { padding: 13px; }
+  .role-profile-details { grid-template-columns: minmax(0,1fr); gap: 10px; }
   .latest-list li { grid-template-columns: 1fr; gap: 3px; }
   .section-index { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 3px; }
 }

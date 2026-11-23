@@ -13,10 +13,9 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
   const entries = [...catalog.querySelectorAll('[data-directory-item]')].map(element => ({
     element,
     search: normalize(element.dataset.search),
-    groups: (element.dataset.group || '').split('|'),
-    units: (element.dataset.unit || '').split('|'),
   }));
-  const size = publications ? 10 : entries.length || 1;
+  const sections = catalog.querySelectorAll('[data-catalog-group]');
+  const size = publications ? 10 : 12;
   let selectedPage = 1;
   let lastPage = 1;
 
@@ -36,7 +35,7 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
       if (field.value.trim()) url.searchParams.set(field.name, field.value.trim());
       else url.searchParams.delete(field.name);
     }
-    if (publications && selectedPage > 1) url.searchParams.set('pagina', selectedPage);
+    if (selectedPage > 1) url.searchParams.set('pagina', selectedPage);
     else url.searchParams.delete('pagina');
     if (url.href !== location.href) history.replaceState(history.state, '', url);
   }
@@ -44,13 +43,13 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
   function draw({fromUrl = false} = {}) {
     const {q, tipo, oficina, anio, grupo, unidad} = Object.fromEntries(fields.map(field => [field.name, field.value]));
     const terms = normalize(q || '').split(/\s+/).filter(Boolean);
-    const matches = entries.filter(({element, search, groups, units}) =>
+    const matches = entries.filter(({element, search}) =>
       terms.every(term => search.includes(term)) &&
       (!tipo || tipo === element.dataset.type) &&
       (!oficina || oficina === element.dataset.office) &&
       (!anio || anio === element.dataset.year) &&
-      (!grupo || groups.includes(grupo)) &&
-      (!unidad || units.includes(unidad))
+      (!grupo || grupo === element.dataset.group) &&
+      (!unidad || unidad === element.dataset.unit)
     );
     lastPage = Math.max(1, Math.ceil(matches.length / size));
     if (fromUrl && location.hash) {
@@ -61,8 +60,11 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
     const first = (selectedPage - 1) * size;
     const visible = new Set(matches.slice(first, first + size));
     entries.forEach(entry => { entry.element.hidden = !visible.has(entry); });
+    for (const section of sections) {
+      section.hidden = !section.querySelector('[data-directory-item]:not([hidden])');
+    }
     empty.hidden = matches.length !== 0;
-    const noun = publications ? (matches.length === 1 ? 'acto resolutivo' : 'actos resolutivos') : (matches.length === 1 ? 'persona' : 'personas');
+    const noun = publications ? (matches.length === 1 ? 'acto resolutivo' : 'actos resolutivos') : (matches.length === 1 ? 'cargo' : 'cargos');
     status.textContent = matches.length + ' ' + noun;
     if (pages) {
       pages.hidden = lastPage <= 1;

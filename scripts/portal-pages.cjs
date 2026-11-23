@@ -21,7 +21,7 @@ const channels = [
 const services = [
   {
     id:'formacion', short:'Formación profesional', name:'Centro de Formación y Capacitación Profesional',
-    image:'centro-formacion-altum-lumen.png', icon:'academic', code:'00012-2025-AL/GG',
+    image:'centro-formacion-altum-lumen.png', code:'00012-2025-AL/GG',
     office:'Dirección Académica', site:'https://altumlumen-design.github.io/Altum-Lumen-centro-formacion/',
     brief:'Capacitación, especialización y asistencia técnica.',
     description:'Ofrece formación continua, cursos, diplomados y programas de especialización. Desarrolla asistencia técnica, investigación aplicada y consultoría para profesionales y organizaciones.',
@@ -29,7 +29,7 @@ const services = [
   },
   {
     id:'obras', short:'Obras e inversiones', name:'Constructora & Consultora Altum Obras e Inversiones',
-    image:'altum-obras-inversiones.png', icon:'building', code:'00019-2026-AL/GG',
+    image:'altum-obras-inversiones.png', code:'00019-2026-AL/GG',
     office:'Dirección de Proyectos e Inversiones',
     brief:'Consultoría, estudios y ejecución de proyectos.',
     description:'Acompaña a las organizaciones desde la formulación de una iniciativa de infraestructura o inversión hasta su ejecución y seguimiento.',
@@ -37,7 +37,7 @@ const services = [
   },
   {
     id:'legal', short:'Asesoría jurídica', name:'Altum Abogados & Asociados',
-    image:'altum-abogados.png', icon:'scales', code:'00021-2026-AL/GG',
+    image:'altum-abogados.png', code:'00021-2026-AL/GG',
     office:'Subdirección de Servicios Legales', site:'https://altumlumen-design.github.io/ALTUM.Abogados-Asociados/',
     brief:'Asesoría, defensa y representación legal.',
     description:'Asesora a personas y organizaciones en la prevención y atención de contingencias. Acompaña la toma de decisiones con análisis normativo y estrategia jurídica.',
@@ -45,7 +45,7 @@ const services = [
   },
   {
     id:'contable', short:'Asesoría contable', name:'Altum Contadores & Asociados',
-    image:'altum-contadores.png', icon:'chart', code:'00020-2026-AL/GG',
+    image:'altum-contadores.png', code:'00020-2026-AL/GG',
     office:'Subdirección de Servicios Tributarios y Contables', site:'https://altumlumen-design.github.io/altum-contadores/',
     brief:'Contabilidad, tributos y gestión empresarial.',
     description:'Apoya a empresas y emprendimientos en el cumplimiento de sus obligaciones, la planificación financiera y la organización de su información contable.',
@@ -75,8 +75,8 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
         </a>`).join('');
   const shortServices = services.map(service => `
         <li><a href="${links.services}#${service.id}">
-          <span class="action-icon">${icon(service.icon)}</span>
-          <h3>${service.short}</h3>
+          <img class="service-preview-mark" src="${service.image}" alt="" loading="lazy" decoding="async">
+          <h3>${escape(service.name)}</h3>
           <p>${service.brief}</p>
           ${icon('arrow')}
         </a></li>`).join('');
@@ -103,7 +103,7 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
   <section class="home-hero" id="inicio">
     <div class="layout home-hero-inner">
       <div class="hero-copy">
-        <h1>Altum Lumen <span>S.A.C.</span></h1>
+        <h1>Excelencia que transforma.</h1>
         <p>Formación profesional, consultoría y servicios especializados para personas, empresas e instituciones.</p>
       </div>
       <div class="quick-panel" aria-labelledby="quick-title">

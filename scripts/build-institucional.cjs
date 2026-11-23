@@ -20,10 +20,6 @@ const icons = {
   inbox: '<path d="M4 4h16v12l-3 4H7l-3-4V4Zm0 10h5l1 2h4l1-2h5m-8-7v5m-2-2 2 2 2-2"/>',
   shield: '<path d="M12 3l8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Zm-3 9 2 2 4-5"/>',
   note: '<path d="M7 4h10a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm3 5h5m-5 4h5m-10 4h14"/>',
-  academic: '<path d="m2 9 10-5 10 5-10 5L2 9Zm5 3v5c2 2 8 2 10 0v-5m4-2v6"/>',
-  building: '<path d="M4 21h16M6 21V8l6-5 6 5v13m-9-9h1m4 0h1m-6 4h1m4 0h1m-4 5v-3h2v3"/>',
-  scales: '<path d="M12 4v16m-5 0h10M4 8l8-2 8 2M4 8l-2 6h4L4 8Zm16 0-2 6h4l-2-6Z"/>',
-  chart: '<path d="M4 5v15h16m-12-4v-3m4 3V9m4 7V6"/>',
   menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
   document: '<path d="M7 3h7l4 4v14H7zM14 3v5h4M10 12h5m-5 4h5"/>',
   folder: '<path d="M3 6h7l2 2h9v11H3z"/>',
@@ -75,7 +71,9 @@ assert(new Set(personas.map(person => person.id)).size === personas.length, 'Hay
 for (const person of personas) {
   assert(/^[a-z0-9-]+$/.test(person.id) && person.name && person.roles.length, 'Perfil inválido.');
   if (person.photo) assert(/^funcionario-[\w-]+\.(?:png|webp)$/.test(person.photo) && fs.existsSync(path.join(root, person.photo)), `Retrato inválido: ${person.id}`);
+  assert(new Set(person.roles.map(role => role.id)).size === person.roles.length, `Cargos duplicados: ${person.name}`);
   for (const role of person.roles) {
+    assert(/^[a-z0-9-]+$/.test(role.id) && Number.isSafeInteger(role.orden) && role.orden > 0, `Identificador u orden inválido: ${role.title}`);
     verifyDate(role.effectiveOn);
     assert(groups.includes(role.group) && /^[^\s<>]+@[^\s<>]+$/.test(role.email), `Cargo inválido: ${role.title}`);
     for (const reference of role.references) assert(byCode.has(reference), `Resolución ausente: ${reference}`);
@@ -92,6 +90,10 @@ const types = [...new Set(actos.map(record => record.type))].sort(collator.compa
 const offices = [...new Set(actos.map(record => record.office))].sort(collator.compare);
 const years = [...new Set(actos.map(record => record.year))].sort((a,b) => b-a);
 const profilePath = person => 'funcionarios/' + person.id + '.html';
+const rolePath = (person, role) => 'funcionarios/' + person.id + '/' + role.id + '.html';
+const directoryRoles = personas.flatMap(person => person.roles.map(role => ({person, role})))
+  .sort((a, b) => a.role.orden - b.role.orden);
+assert(new Set(directoryRoles.map(({role}) => role.orden)).size === directoryRoles.length, 'Hay cargos con el mismo orden institucional.');
 const options = values => values.map(value => `<option value="${escape(value)}">${escape(value)}</option>`).join('');
 const page = createLayout({base, icon, escape});
 
@@ -208,37 +210,42 @@ function references(codes, depth = '', fallback = '') {
 }
 
 function directory() {
-  const cards = personas.map(person => {
-    const departments = [...new Set(person.roles.map(role => role.group))].join('|');
-    const units = [...new Set(person.roles.map(role => role.office))].join('|');
-    const roleSearch = [person.name, ...person.roles.map(role => role.title + ' ' + role.office)].join(' ');
-    return `<li data-directory-item data-group="${escape(departments)}" data-unit="${escape(units)}" data-search="${escape(roleSearch)}">
-      <a class="person-card" href="${profilePath(person)}">
+  const sections = groups.map(group => {
+    const cards = directoryRoles.filter(({role}) => role.group === group).map(({person, role}) => {
+      const search = [person.name, role.title, role.office, role.temporary ? 'designación temporal' : ''].join(' ');
+      const title = escape(role.title);
+      return `<li data-directory-item data-group="${escape(group)}" data-unit="${escape(role.office)}" data-search="${escape(search)}">
+      <article class="position-tile">
         ${portrait(person)}
-        <div>
-          <p class="record-office">${escape(person.roles[0].office)}</p>
-          <h2>${escape(person.name)}</h2>
-          <p>${escape(person.roles[0].title)}${person.roles[0].temporary?' (DT)':''}</p>
-${person.roles.length>1?`          <p class="person-meta">${person.roles.length} cargos registrados</p>`:''}
+        <div class="position-card-copy">
+          <p class="record-office">${escape(role.office)}</p>
+          <h4>${escape(person.name)}</h4>
+          <p class="position-title">${title}</p>
+${role.temporary ? '          <p class="position-mark">Designación temporal</p>\n' : ''}          <a class="position-mail" href="mailto:${escape(role.email)}">${escape(role.email)}</a>
+          <a class="text-link" href="${rolePath(person, role)}" aria-label="Ver ficha de ${title}, ${escape(person.name)}">Ver ficha ${icon('arrow')}</a>
         </div>
-        <span class="person-arrow"><span>Ver ficha</span> ${icon('arrow')}</span>
-      </a>
+      </article>
     </li>`;
+    }).join('\n');
+    return `<section class="position-group" data-catalog-group>
+      <h3>${escape(group)}</h3><ul class="person-list">${cards}</ul>
+    </section>`;
   }).join('\n');
   const updates = cambios.map(change =>
     `<li><div class="record-office">${time(change.date, shortDate)}</div><p>${escape(change.summary)}</p>${references(change.references)}</li>`
   ).join('\n');
   return masthead('Directorio institucional', 'Consulta los cargos, contactos institucionales y actos de designación del equipo de Altum Lumen.',
     breadcrumb([['Directorio']])) + `
-  <section class="layout content-section" data-catalog="directory" aria-label="Equipo directivo">
+  <section class="layout content-section" data-catalog="directory" aria-labelledby="directory-results-title">
+    <h2 id="directory-results-title" class="sr-only" tabindex="-1">Cargos del directorio</h2>
     ${searchForm({label:'Buscar en el directorio',placeholder:'Nombre, cargo o dependencia',
       filters:[
-        {name:'unidad',title:'Unidad orgánica',values:[...new Set(personas.flatMap(person=>person.roles.map(role=>role.office)))].sort(collator.compare),empty:'Todas'},
+        {name:'unidad',title:'Unidad orgánica',values:[...new Set(directoryRoles.map(({role})=>role.office))].sort(collator.compare),empty:'Todas'},
         {name:'grupo',title:'Grupo orgánico',values:groups,empty:'Todos'},
       ]})}
     ${catalogStatus}
-    <ul class="person-list" data-catalog-list>${cards}</ul>
-    ${resultControls(false)}
+    ${sections}
+    ${resultControls(true)}
   </section>
   <section class="section-shaded content-section" aria-labelledby="government-title">
     <div class="layout directory-lower">
@@ -256,7 +263,8 @@ function profile(person) {
   const roles = person.roles.map(role => `<article class="role-card">
     <div class="role-heading"><p class="record-office">${escape(role.office)}</p>
       <h3>${escape(role.title)}</h3>
-      ${role.temporary?'<p class="temporary">Designación temporal</p>':''}</div>
+${role.temporary ? '      <p class="temporary">Designación temporal</p>\n' : ''}      <a class="text-link" href="${depth + rolePath(person, role)}">Ver ficha de este cargo ${icon('arrow')}</a>
+    </div>
     <dl class="record-details">
       <div><dt>Fecha de designación</dt><dd>${time(role.effectiveOn)}</dd></div>
       <div><dt>Documento de designación</dt><dd class="designation-links">${references(role.references, depth, role.referenceLabel)}</dd></div>
@@ -277,6 +285,39 @@ function profile(person) {
     worksFor:{'@type':'Organization',name:'ALTUM LUMEN S.A.C.',url:base}};
   if (person.photo) structured.image = base + person.photo;
   return page({title:person.name,pagePath:profilePath(person),description,active:'directory',depth,main,structured});
+}
+
+function roleProfile(person, role) {
+  const depth = '../../';
+  const pagePath = rolePath(person, role);
+  const description = `${person.name}. ${role.title}, ${role.office}, Altum Lumen S.A.C.`;
+  const crumbs = breadcrumb([['Directorio','directorio.html'], [role.title]], depth);
+  const main = `<div class="masthead"><div class="layout">
+    ${crumbs}
+    <div class="profile-heading">
+      ${portrait(person,depth)}
+      <div><h1>${escape(person.name)}</h1><p>${escape(role.title)}</p>
+${role.temporary ? '        <p class="position-mark">Designación temporal</p>\n' : ''}      </div>
+    </div>
+  </div></div>
+  <section class="layout content-section profile-roles" aria-labelledby="role-detail-title">
+    <div class="section-title"><h2 id="role-detail-title">Datos del cargo</h2></div>
+    <dl class="record-details role-profile-details">
+      <div><dt>Unidad orgánica</dt><dd>${escape(role.office)}</dd></div>
+      <div><dt>Grupo orgánico</dt><dd>${escape(role.group)}</dd></div>
+      <div><dt>Fecha de inicio</dt><dd>${time(role.effectiveOn)}</dd></div>
+      <div><dt>Correo institucional</dt><dd><a href="mailto:${escape(role.email)}">${escape(role.email)}</a></dd></div>
+      <div class="role-designation"><dt>Documento de designación</dt><dd class="designation-links">${references(role.references, depth, role.referenceLabel)}</dd></div>
+    </dl>
+    <div class="role-nav">
+      <a class="button button-quiet" href="${depth}directorio.html">Volver al directorio</a>
+${person.roles.length > 1 ? `      <a class="text-link" href="${depth + profilePath(person)}">Ver otros cargos de ${escape(person.name)} ${icon('arrow')}</a>` : ''}
+    </div>
+  </section>`;
+  const structured = {'@context':'https://schema.org','@type':'Person',name:person.name,jobTitle:role.title,
+    url:base + pagePath,worksFor:{'@type':'Organization',name:'ALTUM LUMEN S.A.C.',url:base}};
+  if (person.photo) structured.image = base + person.photo;
+  return page({title:role.title + ' · ' + person.name,pagePath,description,active:'directory',depth,main,structured});
 }
 
 function update(file, content) {
@@ -309,17 +350,18 @@ const directorySchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: 'Directorio institucional de Altum Lumen',
-  itemListElement: personas.map((person, index) => ({
+  itemListElement: directoryRoles.map(({person, role}, index) => ({
     '@type': 'ListItem', position: index + 1,
-    item: {'@type': 'Person', name: person.name, url: base + profilePath(person)},
+    item: {'@type': 'Person', name: person.name, jobTitle: role.title, url: base + rolePath(person, role)},
   })),
 };
 update('directorio.html', page({title:'Directorio institucional',pagePath:'directorio.html',active:'directory',script:true,
   description:'Consulta por nombre, cargo o unidad orgánica el directorio institucional, los contactos y las designaciones del equipo de Altum Lumen S.A.C.',main:directory(),structured:directorySchema}));
 for (const person of personas) update(profilePath(person), profile(person));
+for (const {person, role} of directoryRoles) update(rolePath(person, role), roleProfile(person, role));
 let sitemap = read('sitemap.xml').replace(/\r\n/g,'\n');
-const directoryPages = ['servicios.html', 'atencion.html', 'directorio.html', ...personas.map(profilePath)];
+const directoryPages = ['servicios.html', 'atencion.html', 'directorio.html', ...personas.map(profilePath), ...directoryRoles.map(({person, role}) => rolePath(person, role))];
 const sitemapItems = directoryPages.map(file => `  <url><loc>${base + file}</loc></url>`).join('\n');
 sitemap = replaceSection(sitemap, 'directorio-institucional', sitemapItems);
 update('sitemap.xml', sitemap);
-console.log(`${checkOnly?'Verificados':'Generados'} ${actos.length} actos, ${gestion.length} instrumentos de gestión y ${personas.length} perfiles. `.trim());
+console.log(`${checkOnly?'Verificados':'Generados'} ${actos.length} actos, ${gestion.length} instrumentos de gestión, ${personas.length} personas y ${directoryRoles.length} fichas de cargo.`);
