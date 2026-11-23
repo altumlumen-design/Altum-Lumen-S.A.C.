@@ -2,7 +2,7 @@ const nav = [
   ['./', 'Inicio', 'home'],
   ['informacion-institucional.html', 'Nosotros', 'about'],
   ['servicios.html', 'Servicios', 'services'],
-  ['transparencia.html', 'Transparencia', 'publications'],
+  ['transparencia.html', 'Documentos legales', 'publications'],
   ['directorio.html', 'Directorio', 'directory'],
   ['atencion.html', 'Atención', 'attention'],
 ];

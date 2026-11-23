@@ -3,7 +3,7 @@
 const header = document.querySelector('[data-portal-header]');
 const toggle = header.querySelector('[data-menu-toggle]');
 const navigation = document.getElementById(toggle.getAttribute('aria-controls'));
-const compact = matchMedia('(max-width: 780px)');
+const compact = matchMedia('(max-width: 840px)');
 
 function menuOpen() {
   return toggle.getAttribute('aria-expanded') === 'true';
@@ -36,16 +36,38 @@ compact.addEventListener('change', resetMenu);
 header.closest('.institution-header').classList.add('has-menu');
 resetMenu();
 
-const sectionLinks = document.querySelectorAll('.section-index a[href^="#"]');
-if (sectionLinks.length) {
-  const markSection = () => {
-    for (const link of sectionLinks) {
-      if (link.hash === location.hash) link.setAttribute('aria-current', 'location');
-      else link.removeAttribute('aria-current');
+const serviceDirectory = document.querySelector('[data-service-directory]');
+const documentDirectory = document.querySelector('[data-document-directory]');
+if (serviceDirectory || documentDirectory) {
+  function openPreviousSection() {
+    const url = new URL(location.href);
+    const oldId = url.hash.slice(1);
+    const anchor = document.getElementById(oldId);
+    if (serviceDirectory?.contains(anchor)) {
+      location.replace(anchor.querySelector('a').href);
+      return;
     }
-  };
-  window.addEventListener('hashchange', markSection);
-  markSection();
+    if (!documentDirectory) return;
+    if (oldId === 'mesa-de-partes') {
+      location.replace('atencion.html');
+      return;
+    }
+    if (documentDirectory.contains(anchor)) {
+      const destination = new URL(anchor.href);
+      destination.search = url.search;
+      location.replace(destination.href);
+      return;
+    }
+    const hasFilters = ['q','tipo','oficina','anio','pagina'].some(name => url.searchParams.has(name));
+    if (hasFilters || /^\\d{5}-\\d{4}-al-[a-z0-9-]+$/i.test(oldId)) {
+      const destination = new URL(documentDirectory.querySelector('#actos-resolutivos').href);
+      destination.search = url.search;
+      destination.hash = url.hash;
+      location.replace(destination.href);
+    }
+  }
+  window.addEventListener('hashchange', openPreviousSection);
+  openPreviousSection();
 }
 
 const copyContact = document.querySelector('[data-copy-contact]');

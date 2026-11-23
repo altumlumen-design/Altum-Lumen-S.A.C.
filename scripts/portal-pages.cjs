@@ -2,7 +2,6 @@ const links = {
   home: './',
   about: 'informacion-institucional.html',
   services: 'servicios.html',
-  publications: 'transparencia.html',
   directory: 'directorio.html',
   attention: 'atencion.html',
 };
@@ -58,10 +57,10 @@ const emails = {
   services: 'serviciosyrelaciones.altumlumen@gmail.com',
 };
 
-module.exports = function portalViews({icon, escape, masthead, breadcrumb, time, shortDate, pdfLink, byCode, recent, base}) {
+module.exports = function portalViews({icon, escape, masthead, breadcrumb, time, shortDate, pdfLink, byCode, recent, base, documentPaths}) {
   const latestList = recent.slice(0, 3).map(record => `
       <li>
-        <a href="transparencia.html#${escape(record.id)}">
+        <a href="${documentPaths.projects}#${escape(record.id)}">
           <span class="latest-date">${time(record.issuedOn, shortDate)}</span>
           <span class="latest-description"><small>${escape(record.office)}</small><strong>${escape(record.title)}</strong></span>
           ${icon('arrow')}
@@ -73,9 +72,10 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
           <span><strong>${channel.title}</strong><small>${channel.brief}</small></span>
           ${icon('arrow')}
         </a>`).join('');
-  const shortServices = services.map(service => `
-        <li><a href="${links.services}#${service.id}" data-service="${service.id}">
-          <img class="service-preview-mark" src="${service.image}" alt="" loading="lazy" decoding="async">
+  const servicePath = service => 'servicios/' + service.id + '.html';
+  const serviceCards = lazy => services.map(service => `
+        <li id="${service.id}"><a href="${servicePath(service)}" data-service="${service.id}">
+          <img class="service-preview-mark" src="${service.image}" alt=""${lazy ? ' loading="lazy"' : ''} decoding="async">
           <h3>${escape(service.name)}</h3>
           <p>${service.brief}</p>
           <span class="service-arrow">${icon('arrow')}</span>
@@ -93,7 +93,7 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
     description,
     areaServed:{'@type':'Country',name:'Perú'},
     hasOfferCatalog:{'@type':'OfferCatalog',name:'Líneas de servicio',itemListElement:services.map(service=>({
-      '@type':'Offer', itemOffered:{'@type':'Service',name:service.name,url:base + links.services + '#' + service.id},
+      '@type':'Offer', itemOffered:{'@type':'Service',name:service.name,url:base + servicePath(service)},
     }))},
   };
   const home = {
@@ -114,13 +114,13 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
   </section>
   <section class="layout home-services" id="servicios" aria-labelledby="services-title">
     <div class="section-heading"><h2 id="services-title">Líneas de servicio</h2></div>
-    <ul class="service-preview">${shortServices}</ul>
+    <ul class="service-preview">${serviceCards(true)}</ul>
   </section>
   <section class="home-information" id="documentos" aria-labelledby="latest-title">
     <div class="layout publication-preview">
       <div class="latest-copy">
-        <h2 id="latest-title">Últimos actos resolutivos</h2>
-        <a class="text-link" href="${links.publications}#actos-resolutivos">Ver catálogo completo ${icon('arrow')}</a>
+        <h2 id="latest-title">Proyectos resolutivos recientes</h2>
+        <a class="text-link" href="${documentPaths.index}">Ver documentos legales ${icon('arrow')}</a>
       </div>
       <ul class="latest-list">${latestList}</ul>
     </div>
@@ -138,7 +138,7 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
       <h2>Organización</h2>
       <p>La Junta General de Accionistas y la Gerencia General conducen la sociedad. El organigrama y el Reglamento de Organización y Funciones detallan las dependencias y sus responsabilidades.</p>
       <div class="related-links">
-        <a class="text-link" href="${links.publications}#documentos-gestion">Organigrama e instrumentos de gestión ${icon('arrow')}</a>
+        <a class="text-link" href="${documentPaths.management}">Organigrama e instrumentos de gestión ${icon('arrow')}</a>
         <a class="text-link" href="${links.directory}">Equipo directivo ${icon('arrow')}</a>
       </div>
     </article>
@@ -156,28 +156,36 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
   const servicePage = {
     title:'Líneas de servicio', pagePath:links.services, active:'services',
     description:'Formación, proyectos e inversiones, asesoría jurídica y contable de Altum Lumen S.A.C.',
-    main:masthead('Líneas de servicio', 'Encuentra el equipo adecuado para tu consulta o proyecto.', breadcrumb([['Servicios']])) + `
-  <div class="layout content-section service-body">
-    <nav class="section-index" aria-label="Líneas de servicio">
-      ${services.map(service => `<a href="#${service.id}">${service.short}</a>`).join('\n      ')}
-    </nav>
-    <div class="service-list">${services.map(service => `
-      <section class="service-detail" id="${service.id}">
-        <div class="service-mark"><img src="${service.image}" width="980" height="300" alt="" loading="lazy" decoding="async"></div>
-        <div class="service-copy">
-          <h2>${escape(service.name)}</h2>
-          <p>${service.description}</p>
-          <ul class="service-fields">${service.fields.map(field => `<li>${field}</li>`).join('')}</ul>
-          <dl class="record-details">
-            <div><dt>Unidad responsable</dt><dd>${service.office}</dd></div>
-            <div><dt>Documento de referencia</dt><dd>${pdfLink(byCode.get(service.code).pdf, '', byCode.get(service.code).title)}</dd></div>
-          </dl>
-          <a class="button button-primary" href="${service.site||'mailto:'+emails.services}"${service.site?' target="_blank" rel="noopener"':''}>${service.site?'Abrir sitio de la línea':'Consultar sobre obras e inversiones'} ${icon(service.site?'external':'mail')}</a>
-        </div>
-      </section>`).join('')}
-    </div>
-  </div>`,
+    main:masthead('Líneas de servicio', 'Elige una línea para consultar su oferta y sus canales de atención.', breadcrumb([['Servicios']])) + `
+  <section class="layout content-section service-directory" aria-label="Líneas de servicio">
+    <ul class="service-preview" data-service-directory>${serviceCards(false)}</ul>
+  </section>`,
   };
+  const servicePages = services.map(service => {
+    const depth = '../';
+    const reference = byCode.get(service.code);
+    return {
+      title:service.name, pagePath:servicePath(service), active:'services', depth, description:service.description,
+      main:masthead(service.name, '', breadcrumb([['Servicios', links.services], [service.short]], depth),
+        `      <div class="service-identity"><img src="${depth + service.image}" alt="" decoding="async"></div>`) + `
+  <div class="layout content-section service-detail">
+    <section class="service-copy" aria-labelledby="service-offer">
+      <h2 id="service-offer">Qué ofrece</h2>
+      <p>${service.description}</p>
+      <ul class="service-fields">${service.fields.map(field => `<li>${field}</li>`).join('')}</ul>
+      <a class="button button-primary" href="${service.site || 'mailto:' + emails.services}"${service.site ? ' target="_blank" rel="noopener"' : ''}>${service.site ? 'Abrir sitio de la línea' : 'Consultar sobre obras e inversiones'} ${icon(service.site ? 'external' : 'mail')}</a>
+    </section>
+    <aside class="identity-panel" aria-labelledby="service-reference">
+      <h2 id="service-reference">Información institucional</h2>
+      <dl class="record-details">
+        <div><dt>Unidad responsable</dt><dd>${service.office}</dd></div>
+        <div><dt>Documento de referencia</dt><dd>${pdfLink(reference.pdf, depth, reference.title)}</dd></div>
+      </dl>
+    </aside>
+    <p class="service-back"><a class="button button-quiet" href="${depth + links.services}">Volver a Servicios</a></p>
+  </div>`,
+    };
+  });
   const attention = {
     title:'Atención', pagePath:links.attention, active:'attention',
     description:'Presenta documentos, consulta expedientes, verifica documentos y contacta a Altum Lumen.',
@@ -236,5 +244,5 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
       <a class="button button-primary" href="${base}">Volver al inicio ${icon('arrow')}</a>
     </div>`,
   };
-  return [home, about, servicePage, attention, privacy, terms, notFound];
+  return [home, about, servicePage, ...servicePages, attention, privacy, terms, notFound];
 };

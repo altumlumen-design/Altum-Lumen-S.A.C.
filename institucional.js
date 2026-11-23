@@ -64,7 +64,7 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
       section.hidden = !section.querySelector('[data-directory-item]:not([hidden])');
     }
     empty.hidden = matches.length !== 0;
-    const noun = publications ? (matches.length === 1 ? 'acto resolutivo' : 'actos resolutivos') : (matches.length === 1 ? 'cargo' : 'cargos');
+    const noun = publications ? (matches.length === 1 ? 'documento' : 'documentos') : (matches.length === 1 ? 'cargo' : 'cargos');
     status.textContent = matches.length + ' ' + noun;
     if (pages) {
       pages.hidden = lastPage <= 1;
