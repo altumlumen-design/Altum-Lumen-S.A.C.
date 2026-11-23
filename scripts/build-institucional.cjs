@@ -1,6 +1,7 @@
 const portalViews = require('./portal-pages.cjs');
 const createLayout = require('./portal-layout.cjs');
 const fs = require('node:fs');
+const {createHash} = require('node:crypto');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
@@ -95,7 +96,11 @@ const directoryRoles = personas.flatMap(person => person.roles.map(role => ({per
   .sort((a, b) => a.role.orden - b.role.orden);
 assert(new Set(directoryRoles.map(({role}) => role.orden)).size === directoryRoles.length, 'Hay cargos con el mismo orden institucional.');
 const options = values => values.map(value => `<option value="${escape(value)}">${escape(value)}</option>`).join('');
-const page = createLayout({base, icon, escape});
+const assets = new Map(['institucional.css', 'portal.css', 'portal.js', 'institucional.js'].map(file => {
+  const revision = createHash('sha256').update(read(file)).digest('hex').slice(0, 10);
+  return [file, file + '?v=' + revision];
+}));
+const page = createLayout({base, icon, escape, assets});
 
 function breadcrumb(parts, depth = '') {
   return `<nav class="breadcrumbs" aria-label="Ruta de navegación"><ol><li><a href="${depth}index.html">Inicio</a></li>

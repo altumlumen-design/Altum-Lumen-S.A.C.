@@ -7,7 +7,7 @@ const nav = [
   ['atencion.html', 'Atención', 'attention'],
 ];
 
-module.exports = function createLayout({base, icon, escape}) {
+module.exports = function createLayout({base, icon, escape, assets}) {
   return function page({title, pagePath, description, active, depth = '', main, script = false, structured, noindex = false, linkBase}) {
     const prefix = linkBase || depth;
     const siteNav = nav.map(([href, label, key]) => {
@@ -30,8 +30,8 @@ module.exports = function createLayout({base, icon, escape}) {
   <link rel="canonical" href="${url}">
   <link rel="icon" href="${prefix}favicon.ico">
   <link rel="apple-touch-icon" href="${prefix}favicon.png">
-  <link rel="stylesheet" href="${prefix}institucional.css">
-  <link rel="stylesheet" href="${prefix}portal.css">
+  <link rel="stylesheet" href="${prefix + assets.get('institucional.css')}">
+  <link rel="stylesheet" href="${prefix + assets.get('portal.css')}">
   <meta property="og:locale" content="es_PE">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ALTUM LUMEN">
@@ -40,8 +40,8 @@ module.exports = function createLayout({base, icon, escape}) {
   <meta property="og:url" content="${url}">
   <meta property="og:image" content="${base}social-preview-corporativo-20260808.jpg">
   <meta name="twitter:card" content="summary_large_image">
-${structured ? `  <script type="application/ld+json">${JSON.stringify(structured).replace(/</g, '\\u003c')}</script>\n` : ''}  <script src="${prefix}portal.js" defer></script>
-${script ? `  <script src="${prefix}institucional.js" defer></script>\n` : ''}</head>
+${structured ? `  <script type="application/ld+json">${JSON.stringify(structured).replace(/</g, '\\u003c')}</script>\n` : ''}  <script src="${prefix + assets.get('portal.js')}" defer></script>
+${script ? `  <script src="${prefix + assets.get('institucional.js')}" defer></script>\n` : ''}</head>
 <body${active === 'home' ? ' class="portal-home"' : ''}>
   <a class="skip-link" href="#contenido">Ir al contenido</a>
   <header class="institution-header">
