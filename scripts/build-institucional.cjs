@@ -212,19 +212,27 @@ function portrait(person, depth = '') {
     : `<span class="portrait portrait-placeholder" aria-hidden="true">${icon('silhouette')}</span>`;
 }
 
+function roleName(role) {
+  return role.title + (role.temporary ? ' (DT)' : '');
+}
+
+function roleTitle(role) {
+  return escape(role.title) + (role.temporary ? ' <abbr class="temporary-abbreviation" title="Designación temporal">(DT)</abbr>' : '');
+}
+
 function directory() {
   const sections = groups.map(group => {
     const cards = directoryRoles.filter(({role}) => role.group === group).map(({person, role}) => {
-      const search = [person.name, role.title, role.office, role.temporary ? 'designación temporal' : ''].join(' ');
-      const title = escape(role.title);
+      const search = [person.name, roleName(role), role.office, role.temporary ? 'designación temporal' : ''].join(' ');
+      const title = escape(roleName(role));
       return `<li data-directory-item data-group="${escape(group)}" data-unit="${escape(role.office)}" data-search="${escape(search)}">
       <article class="position-tile">
         ${portrait(person)}
         <div class="position-card-copy">
           <p class="record-office">${escape(role.office)}</p>
           <h4>${escape(person.name)}</h4>
-          <p class="position-title">${title}</p>
-${role.temporary ? '          <p class="position-mark">Designación temporal</p>\n' : ''}          <a class="position-mail" href="mailto:${escape(role.email)}">${escape(role.email)}</a>
+          <p class="position-title">${roleTitle(role)}</p>
+          <a class="position-mail" href="mailto:${escape(role.email)}">${escape(role.email)}</a>
           <a class="text-link" href="${rolePath(person, role)}" aria-label="Ver ficha de ${title}, ${escape(person.name)}">Ver ficha ${icon('arrow')}</a>
         </div>
       </article>
@@ -265,8 +273,8 @@ function profile(person) {
   const depth = '../';
   const roles = [...person.roles].sort((a,b) => a.orden - b.orden).map(role => `<article class="role-card">
     <div class="role-heading"><p class="record-office">${escape(role.office)}</p>
-      <h3>${escape(role.title)}</h3>
-${role.temporary ? '      <p class="position-mark">Designación temporal</p>\n' : ''}    </div>
+      <h3>${roleTitle(role)}</h3>
+    </div>
     <a class="text-link" href="${depth + rolePath(person, role)}">Ver ficha de este cargo ${icon('arrow')}</a>
   </article>`).join('\n');
   const description = `Cargos institucionales y documentos de designación de ${person.name} en Altum Lumen S.A.C.`;
@@ -279,7 +287,7 @@ ${role.temporary ? '      <p class="position-mark">Designación temporal</p>\n' 
     <p class="back-link"><a class="button button-quiet" href="../directorio.html">Volver al directorio</a></p>
   </section>`;
   const structured = {'@context':'https://schema.org','@type':'Person',name:person.name,
-    jobTitle:person.roles.map(role => role.title),url:base + profilePath(person),
+    jobTitle:person.roles.map(roleName),url:base + profilePath(person),
     worksFor:{'@type':'Organization',name:'ALTUM LUMEN S.A.C.',url:base}};
   if (person.photo) structured.image = base + person.photo;
   return page({title:person.name,pagePath:profilePath(person),description,active:'directory',depth,main,structured});
@@ -304,14 +312,13 @@ ${extract ? `      <p class="designation-extract">${escape(extract)}</p>\n` : ''
 function roleProfile(person, role) {
   const depth = '../../';
   const pagePath = rolePath(person, role);
-  const description = `${person.name}. ${role.title}, ${role.office}, Altum Lumen S.A.C.`;
-  const crumbs = breadcrumb([['Directorio','directorio.html'], [role.title]], depth);
+  const description = `${person.name}. ${roleName(role)}, ${role.office}, Altum Lumen S.A.C.`;
+  const crumbs = breadcrumb([['Directorio','directorio.html'], [roleName(role)]], depth);
   const main = `<div class="masthead"><div class="layout">
     ${crumbs}
     <div class="profile-heading">
       ${portrait(person,depth)}
-      <div><h1>${escape(person.name)}</h1><p>${escape(role.title)}</p>
-${role.temporary ? '        <p class="position-mark">Designación temporal</p>\n' : ''}      </div>
+      <div><h1>${escape(person.name)}</h1><p>${roleTitle(role)}</p></div>
     </div>
   </div></div>
   <section class="layout content-section profile-roles" aria-labelledby="role-detail-title">
@@ -338,10 +345,10 @@ ${role.temporary ? '        <p class="position-mark">Designación temporal</p>\n
       <a class="button button-quiet" href="${depth}directorio.html">Volver al directorio</a>
     </div>
   </section>`;
-  const structured = {'@context':'https://schema.org','@type':'Person',name:person.name,jobTitle:role.title,
+  const structured = {'@context':'https://schema.org','@type':'Person',name:person.name,jobTitle:roleName(role),
     url:base + pagePath,worksFor:{'@type':'Organization',name:'ALTUM LUMEN S.A.C.',url:base}};
   if (person.photo) structured.image = base + person.photo;
-  return page({title:role.title + ' · ' + person.name,pagePath,description,active:'directory',depth,main,structured});
+  return page({title:roleName(role) + ' · ' + person.name,pagePath,description,active:'directory',depth,main,structured});
 }
 
 function update(file, content) {
