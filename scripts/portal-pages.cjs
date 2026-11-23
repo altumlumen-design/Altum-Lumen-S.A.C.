@@ -61,9 +61,9 @@ const emails = {
 module.exports = function portalViews({icon, escape, masthead, breadcrumb, time, shortDate, pdfLink, byCode, recent, base}) {
   const latestList = recent.slice(0, 3).map(record => `
       <li>
-        <div class="latest-date">${time(record.publishedAt.slice(0,10), shortDate)}</div>
         <a href="transparencia.html#${escape(record.id)}">
-          <span><small>${escape(record.office)}</small><strong>${escape(record.title)}</strong></span>
+          <span class="latest-date">${time(record.issuedOn, shortDate)}</span>
+          <span class="latest-description"><small>${escape(record.office)}</small><strong>${escape(record.title)}</strong></span>
           ${icon('arrow')}
         </a>
       </li>`).join('');
@@ -74,11 +74,11 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
           ${icon('arrow')}
         </a>`).join('');
   const shortServices = services.map(service => `
-        <li><a href="${links.services}#${service.id}">
+        <li><a href="${links.services}#${service.id}" data-service="${service.id}">
           <img class="service-preview-mark" src="${service.image}" alt="" loading="lazy" decoding="async">
           <h3>${escape(service.name)}</h3>
           <p>${service.brief}</p>
-          ${icon('arrow')}
+          <span class="service-arrow">${icon('arrow')}</span>
         </a></li>`).join('');
 
   const description = 'Altum Lumen ofrece formación profesional, asesoría jurídica y contable, consultoría, obras e inversiones para personas y organizaciones en el Perú.';
@@ -103,7 +103,7 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
   <section class="home-hero" id="inicio">
     <div class="layout home-hero-inner">
       <div class="hero-copy">
-        <h1>Excelencia que transforma.</h1>
+        <h1>Excelencia que <span>transforma.</span></h1>
         <p>Formación profesional, consultoría y servicios especializados para personas, empresas e instituciones.</p>
       </div>
       <div class="quick-panel" aria-labelledby="quick-title">

@@ -62,8 +62,8 @@ section[id] { scroll-margin-top: 22px; }
 .compact-section { padding-block: 35px 43px; }
 .section-shaded { background: var(--paper); border-block: 1px solid #e1ebf0; }
 .section-title { margin-bottom: 17px; }
-.section-title h2, .directory-lower h2 { color: var(--navy); font-size: clamp(24px,3vw,34px); line-height: 1.14; letter-spacing: -.026em; }
-.section-title p, .directory-lower p { margin-top: 6px; color: var(--muted); }
+.section-title h2 { color: var(--navy); font-size: clamp(24px,3vw,34px); line-height: 1.14; letter-spacing: -.026em; }
+.section-title p { margin-top: 6px; color: var(--muted); }
 
 .filter-form { display: flex; flex-wrap: wrap; align-items: end; gap: 11px; margin: 0 0 14px; padding: 17px; border: 1px solid #d2e1e9; border-radius: var(--radius); background: var(--paper); }
 .filter-form > div { min-width: 130px; flex: 1 1 144px; }
@@ -85,7 +85,7 @@ section[id] { scroll-margin-top: 22px; }
 .quick-filter { padding: 4px 9px; font-size: 13px; border-radius: 6px; text-decoration: none; color: var(--navy); background: var(--blue-light); }
 .quick-filter:hover, .quick-filter[aria-current] { background: var(--navy); color: white; }
 
-.publication-list, .person-list, .updates { padding: 0; margin: 0; list-style: none; }
+.publication-list, .person-list { padding: 0; margin: 0; list-style: none; }
 .publication-list { border-top: 1px solid var(--line); }
 .publication { scroll-margin-top: 14px; display: grid; grid-template-columns: 118px minmax(0,1fr) 132px; gap: 18px; align-items: start; padding: 19px 0; border-bottom: 1px solid var(--line); }
 .publication-meta { display: grid; gap: 4px; align-content: start; padding-top: 1px; color: var(--navy); font-size: 14px; }
@@ -95,7 +95,6 @@ section[id] { scroll-margin-top: 22px; }
 .publication h3 a { text-decoration: none; }
 .publication h3 a:hover { text-decoration: underline; }
 .record-summary { color: var(--ink); font-size: 15px; }
-.document-date { margin-top: 7px; color: var(--muted); font-size: 13px; }
 .publication-actions { display: grid; align-content: start; justify-items: start; gap: 7px; }
 .document-link, .download-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; }
 .document-link { padding: 5px 9px; border: 1px solid var(--line); border-radius: 7px; text-decoration: none; }
@@ -121,12 +120,6 @@ section[id] { scroll-margin-top: 22px; }
 .person-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; margin-top: 17px; }
 .person-list li { min-width: 0; }
 .portrait { width: 85px; height: 104px; border-radius: 9px; object-fit: cover; object-position: center 25%; background: var(--blue-light); }
-.portrait-initials { display: grid; place-items: center; color: var(--navy); font-size: 28px; font-weight: 730; letter-spacing: -.035em; }
-.directory-lower { display: grid; grid-template-columns: minmax(245px,.8fr) minmax(0,1.4fr); gap: 35px; }
-.directory-lower h2 { font-size: 24px; }
-.updates li { margin-top: 13px; padding: 0 0 11px; border-bottom: 1px solid var(--line); }
-.updates li:last-child { border-bottom: 0; padding-bottom: 0; }
-.updates p { margin-top: 2px; color: var(--ink); font-size: 14px; }
 .updates .document-link { margin-top: 6px; }
 
 .profile-heading { display: flex; align-items: center; gap: 22px; padding: 27px 0 39px; }
@@ -136,9 +129,7 @@ section[id] { scroll-margin-top: 22px; }
 .role-list { display: grid; gap: 13px; }
 .role-card { display: grid; grid-template-columns: minmax(0,1fr) minmax(260px,1.3fr); gap: 18px; align-items: start; border: 1px solid var(--line); border-radius: var(--radius); padding: 17px; }
 .role-heading h3 { color: var(--navy); font-size: 18px; line-height: 1.3; margin: 3px 0 0; }
-.temporary { margin-top: 6px; color: var(--muted); font-size: 13px; }
 .record-details { margin: 0; display: grid; gap: 11px; }
-.directory-lower .record-details { margin-top: 12px; }
 .record-details dt { font-size: 13px; color: var(--muted); font-weight: 720; }
 .record-details dd { margin: 2px 0 0; min-width: 0; overflow-wrap: anywhere; font-size: 15px; }
 .designation-links { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -171,7 +162,7 @@ section[id] { scroll-margin-top: 22px; }
   .publication { grid-template-columns: 1fr; gap: 6px; padding-block: 13px; }
   .publication-meta { display: flex; gap: 6px; align-items: baseline; }
   .publication-actions { display: flex; align-items: center; margin-top: 3px; }
-  .management-grid, .person-list, .directory-lower, .role-card { grid-template-columns: minmax(0,1fr); }
+  .management-grid, .person-list, .role-card { grid-template-columns: minmax(0,1fr); }
   .role-card { gap: 11px; padding: 13px; }
   .profile-heading { gap: 12px; align-items: flex-start; }
   .profile-heading .portrait { width: 65px; height: 88px; }

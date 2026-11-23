@@ -12,10 +12,11 @@
           "temporary": false,
           "effectiveOn": "2025-07-07",
           "email": "gerenciageneral.altumlumen@gmail.com",
-          "references": [],
-          "referenceLabel": "Partida Registral N.° 15949500",
           "orden": 2,
-          "id": "gerencia-general"
+          "id": "gerencia-general",
+          "designation": {
+            "label": "Partida Registral N.° 15949500"
+          }
         },
         {
           "title": "Jefe de la Oficina de Contabilidad y Tesorería",
@@ -24,12 +25,12 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "contaytesoreria.altumlumen@gmail.com",
-          "references": [
-            "00012-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00012-2026-AL/SDRH",
           "orden": 11,
-          "id": "oficina-de-contabilidad-y-tesoreria"
+          "id": "oficina-de-contabilidad-y-tesoreria",
+          "designation": {
+            "code": "00012-2026-AL/SDRH",
+            "article": 2
+          }
         },
         {
           "title": "Director de Servicios Legales, Tributarios y Contables",
@@ -38,12 +39,12 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "legalestributariosycontables@gmail.com",
-          "references": [
-            "00017-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00017-2026-AL/GG",
           "orden": 21,
-          "id": "direccion-de-servicios-legales-tributarios-y-contables"
+          "id": "direccion-de-servicios-legales-tributarios-y-contables",
+          "designation": {
+            "code": "00017-2026-AL/GG",
+            "article": 1
+          }
         },
         {
           "title": "Subdirector de Servicios Legales",
@@ -52,12 +53,12 @@
           "temporary": true,
           "effectiveOn": "2026-05-04",
           "email": "servicioslegales.altumlumen@gmail.com",
-          "references": [
-            "00018-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00018-2026-AL/GG",
           "orden": 22,
-          "id": "subdireccion-de-servicios-legales"
+          "id": "subdireccion-de-servicios-legales",
+          "designation": {
+            "code": "00018-2026-AL/GG",
+            "article": 4
+          }
         },
         {
           "title": "Subdirector de Servicios Tributarios y Contables",
@@ -66,12 +67,12 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "tributariosyconta.altumlumen@gmail.com",
-          "references": [
-            "00017-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00017-2026-AL/GG",
           "orden": 23,
-          "id": "subdireccion-de-servicios-tributarios-y-contables"
+          "id": "subdireccion-de-servicios-tributarios-y-contables",
+          "designation": {
+            "code": "00017-2026-AL/GG",
+            "article": 2
+          }
         },
         {
           "title": "Jefe de la Unidad Ejecutora de Obras e Inversiones",
@@ -80,12 +81,12 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "unidadejecutora.altumlumen@gmail.com",
-          "references": [
-            "00012-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00012-2026-AL/SDRH",
           "orden": 20,
-          "id": "unidad-ejecutora-de-obras-e-inversiones"
+          "id": "unidad-ejecutora-de-obras-e-inversiones",
+          "designation": {
+            "code": "00012-2026-AL/SDRH",
+            "article": 1
+          }
         }
       ]
     },
@@ -101,12 +102,12 @@
           "temporary": true,
           "effectiveOn": "2026-11-05",
           "email": "secretariageneral.altumlumen@gmail.com",
-          "references": [
-            "00025-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00025-2026-AL/GG",
           "orden": 4,
-          "id": "secretaria-general"
+          "id": "secretaria-general",
+          "designation": {
+            "code": "00025-2026-AL/GG",
+            "article": 2
+          }
         },
         {
           "title": "Jefe de la Oficina de Imagen Institucional e Informática",
@@ -115,12 +116,12 @@
           "temporary": false,
           "effectiveOn": "2026-05-04",
           "email": "imageninstitucional.altumlumen@gmail.com",
-          "references": [
-            "00013-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00013-2026-AL/SDRH",
           "orden": 6,
-          "id": "oficina-de-imagen-institucional-e-informatica"
+          "id": "oficina-de-imagen-institucional-e-informatica",
+          "designation": {
+            "code": "00013-2026-AL/SDRH",
+            "article": 2
+          }
         },
         {
           "title": "Gerente de Servicios Comerciales y Cooperación",
@@ -129,12 +130,12 @@
           "temporary": true,
           "effectiveOn": "2026-11-05",
           "email": "serviciosyrelaciones.altumlumen@gmail.com",
-          "references": [
-            "00025-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00025-2026-AL/GG",
           "orden": 12,
-          "id": "gerencia-de-servicios-comerciales-y-cooperacion"
+          "id": "gerencia-de-servicios-comerciales-y-cooperacion",
+          "designation": {
+            "code": "00025-2026-AL/GG",
+            "article": 1
+          }
         }
       ]
     },
@@ -150,12 +151,12 @@
           "temporary": false,
           "effectiveOn": "2026-07-17",
           "email": "tramiteyatencion.altumlumen@gmail.com",
-          "references": [
-            "00015-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00015-2026-AL/SDRH",
           "orden": 5,
-          "id": "oficina-de-tramite-documentario-y-atencion-al-cliente"
+          "id": "oficina-de-tramite-documentario-y-atencion-al-cliente",
+          "designation": {
+            "code": "00015-2026-AL/SDRH",
+            "article": 2
+          }
         }
       ]
     },
@@ -171,12 +172,12 @@
           "temporary": false,
           "effectiveOn": "2026-02-13",
           "email": "admiyfinanzas.altumlumen@gmail.com",
-          "references": [
-            "00015-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00015-2026-AL/GG",
           "orden": 7,
-          "id": "direccion-de-administracion"
+          "id": "direccion-de-administracion",
+          "designation": {
+            "code": "00015-2026-AL/GG",
+            "article": 1
+          }
         },
         {
           "title": "Jefe de la Oficina de Logística y Control Patrimonial",
@@ -185,12 +186,12 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "logisticapatrimonio.altumlumen@gmail.com",
-          "references": [
-            "00010-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00010-2026-AL/SDRH",
           "orden": 10,
-          "id": "oficina-de-logistica-y-control-patrimonial"
+          "id": "oficina-de-logistica-y-control-patrimonial",
+          "designation": {
+            "code": "00010-2026-AL/SDRH",
+            "article": 1
+          }
         }
       ]
     },
@@ -206,12 +207,12 @@
           "temporary": false,
           "effectiveOn": "2026-02-13",
           "email": "recursoshumanos.altumlumen@gmail.com",
-          "references": [
-            "00014-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00014-2026-AL/GG",
           "orden": 8,
-          "id": "subdireccion-de-recursos-humanos"
+          "id": "subdireccion-de-recursos-humanos",
+          "designation": {
+            "code": "00014-2026-AL/GG",
+            "article": 1
+          }
         }
       ]
     },
@@ -227,12 +228,12 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "prevycontinuidad.altumlumen@gmail.com",
-          "references": [
-            "00006-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00006-2026-AL/SDRH",
           "orden": 9,
-          "id": "oficina-de-prevencion-de-riesgos-seguridad-y-continuidad-operativa"
+          "id": "oficina-de-prevencion-de-riesgos-seguridad-y-continuidad-operativa",
+          "designation": {
+            "code": "00006-2026-AL/SDRH",
+            "article": 2
+          }
         },
         {
           "title": "Jefa de la Unidad de Educación Comunitaria y Riesgos Socioambientales",
@@ -241,12 +242,12 @@
           "temporary": false,
           "effectiveOn": "2026-02-13",
           "email": "educacioncomunit.altumlumen@gmail.com",
-          "references": [
-            "00006-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00006-2026-AL/SDRH",
           "orden": 19,
-          "id": "unidad-de-educacion-comunitaria-y-riesgos-socioambientales"
+          "id": "unidad-de-educacion-comunitaria-y-riesgos-socioambientales",
+          "designation": {
+            "code": "00006-2026-AL/SDRH",
+            "article": 1
+          }
         }
       ]
     },
@@ -262,13 +263,13 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "asesoriajuridica.altumlumen@gmail.com",
-          "references": [
-            "00008-2026-AL/SDRH",
-            "00014-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00008-2026-AL/SDRH, modificada por la Resolución Subdirectoral N.° 00014-2026-AL/SDRH",
           "orden": 3,
-          "id": "oficina-corporativa-de-asesoria-juridica"
+          "id": "oficina-corporativa-de-asesoria-juridica",
+          "designation": {
+            "code": "00014-2026-AL/SDRH",
+            "article": 1,
+            "extract": "Actualiza la designación temporal para que se ejerza en adición a las funciones de Director Académico, desde el 4 de mayo de 2026."
+          }
         },
         {
           "title": "Director Académico",
@@ -277,12 +278,12 @@
           "temporary": false,
           "effectiveOn": "2026-05-04",
           "email": "direccionacademica.altumlumen@gmail.com",
-          "references": [
-            "00018-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00018-2026-AL/GG",
           "orden": 15,
-          "id": "direccion-academica"
+          "id": "direccion-academica",
+          "designation": {
+            "code": "00018-2026-AL/GG",
+            "article": 3
+          }
         }
       ]
     },
@@ -298,12 +299,12 @@
           "temporary": false,
           "effectiveOn": "2026-02-13",
           "email": "desarrolloservicios.altumlumen@gmail.com",
-          "references": [
-            "00016-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00016-2026-AL/GG",
           "orden": 13,
-          "id": "subgerencia-de-planeamiento-desarrollo-corporativo-y-de-servicios"
+          "id": "subgerencia-de-planeamiento-desarrollo-corporativo-y-de-servicios",
+          "designation": {
+            "code": "00016-2026-AL/GG",
+            "article": 1
+          }
         },
         {
           "title": "Jefe de la Unidad de Estrategia y Cooperación Interinstitucional",
@@ -312,12 +313,12 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "estrategiacoordina.altumlumen@gmail.com",
-          "references": [
-            "00011-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00011-2026-AL/SDRH",
           "orden": 14,
-          "id": "unidad-de-estrategia-y-cooperacion-interinstitucional"
+          "id": "unidad-de-estrategia-y-cooperacion-interinstitucional",
+          "designation": {
+            "code": "00011-2026-AL/SDRH",
+            "article": 1
+          }
         },
         {
           "title": "Jefe de la Unidad de Formación y Capacitación Profesional",
@@ -326,12 +327,12 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "capacitacionpro.altumlumen@gmail.com",
-          "references": [
-            "00011-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00011-2026-AL/SDRH",
           "orden": 16,
-          "id": "unidad-de-formacion-y-capacitacion-profesional"
+          "id": "unidad-de-formacion-y-capacitacion-profesional",
+          "designation": {
+            "code": "00011-2026-AL/SDRH",
+            "article": 2
+          }
         }
       ]
     },
@@ -347,12 +348,12 @@
           "temporary": false,
           "effectiveOn": "2026-02-13",
           "email": "direcciondeproyectos.altumlumen@gmail.com",
-          "references": [
-            "00013-2026-AL/GG"
-          ],
-          "referenceLabel": "Resolución de Gerencia General N.° 00013-2026-AL/GG",
           "orden": 17,
-          "id": "direccion-de-proyectos-e-inversiones"
+          "id": "direccion-de-proyectos-e-inversiones",
+          "designation": {
+            "code": "00013-2026-AL/GG",
+            "article": 1
+          }
         },
         {
           "title": "Jefe de la Unidad de Estudios y Proyectos",
@@ -361,12 +362,12 @@
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "estudiosproyectos.altumlumen@gmail.com",
-          "references": [
-            "00009-2026-AL/SDRH"
-          ],
-          "referenceLabel": "Resolución Subdirectoral N.° 00009-2026-AL/SDRH",
           "orden": 18,
-          "id": "unidad-de-estudios-y-proyectos"
+          "id": "unidad-de-estudios-y-proyectos",
+          "designation": {
+            "code": "00009-2026-AL/SDRH",
+            "article": 1
+          }
         }
       ]
     }
