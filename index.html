@@ -185,88 +185,6 @@
     .service-meta { display:grid; gap:9px; margin-top:auto; padding-top:20px; border-top:1px solid #e7eef2; color:#526873; font-size:.82rem; }
     .service-meta span { display:flex; align-items:flex-start; gap:9px; }
     .service-meta svg { width:16px; height:16px; margin-top:2px; flex:0 0 auto; color:var(--blue); }
-    .officials-heading-row { width:100%; max-width:1180px; }
-    .officials-heading-row .section-heading { max-width:none; margin-bottom:0; }
-    .officials-heading-row .section-heading p:not(.eyebrow) { max-width:1140px; text-wrap:pretty; }
-    .movements-panel { display:grid; grid-template-columns:minmax(210px,.7fr) minmax(0,2.3fr); gap:28px; margin-top:38px; padding:clamp(24px,4vw,34px); border:1px solid #cfe0e7; border-radius:var(--radius); background:linear-gradient(135deg,#f8fcfd,#edf7fb); }
-    .movements-intro { display:grid; align-content:start; gap:9px; }
-    .movements-icon { width:46px; height:46px; display:grid; place-items:center; margin-bottom:4px; border-radius:13px; color:var(--blue-deep); background:var(--white); box-shadow:0 8px 20px rgba(18,63,90,.08); }
-    .movements-icon svg { width:22px; height:22px; }
-    .movements-intro h3 { margin:0; color:#17394a; font-size:1.28rem; font-weight:650; letter-spacing:-.025em; }
-    .movements-intro p { margin:0; color:#60747e; font-size:.84rem; line-height:1.6; }
-    .movements-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:0; padding:0; list-style:none; }
-    .movement-item { display:grid; align-content:start; gap:9px; padding:18px; border:1px solid rgba(18,63,90,.1); border-radius:15px; background:rgba(255,255,255,.86); }
-    .movement-date { color:var(--red); font-size:.7rem; font-weight:760; letter-spacing:.08em; text-transform:uppercase; }
-    .movement-item p { margin:0; color:#324c59; font-size:.84rem; line-height:1.6; }
-    .movement-item small { color:#71848e; font-size:.71rem; line-height:1.45; }
-    .movement-note { grid-column:2; margin:-10px 2px 0; color:#617681; font-size:.76rem; line-height:1.55; }
-    .movements-action { grid-column:2; display:flex; justify-content:flex-start; margin-top:-4px; }
-    .movements-action .button { min-height:42px; padding:9px 15px; font-size:.82rem; }
-    .officials-container { width:min(1480px,calc(100% - 40px)); }
-    .official-groups { display:grid; gap:14px; margin-top:32px; }
-    .official-group { overflow:hidden; border:1px solid rgba(18,63,90,.13); border-radius:18px; background:var(--white); box-shadow:0 8px 28px rgba(18,63,90,.055); }
-    .official-group>summary { min-height:72px; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:18px 22px; list-style:none; color:#17394a; font-size:clamp(.94rem,1.5vw,1.08rem); font-weight:680; line-height:1.4; cursor:pointer; transition:color .2s ease,background .2s ease; }
-    .official-group>summary::-webkit-details-marker { display:none; }
-    .official-group>summary::after { width:10px; height:10px; flex:0 0 auto; border-right:2px solid currentColor; border-bottom:2px solid currentColor; content:""; transform:rotate(45deg); transition:transform .2s ease; }
-    .official-group>summary:hover { color:var(--blue-deep); background:#f7fafb; }
-    .official-group>summary:focus-visible { outline:3px solid rgba(35,111,145,.28); outline-offset:-3px; }
-    .official-group[open]>summary { border-bottom:1px solid rgba(18,63,90,.1); color:var(--blue-deep); background:#f3f8fa; }
-    .official-group[open]>summary::after { transform:rotate(225deg); }
-    .official-group>.officials-grid { margin-top:0; padding:22px; background:linear-gradient(180deg,#fbfdfe 0%,#f6fafb 100%); }
-    .officials-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; align-items:stretch; margin-top:32px; }
-    .officials-flow { display:contents; }
-    .officials-grid .official-card { min-height:270px; padding:22px 18px; }
-    .officials-grid .official-head { grid-template-columns:1fr; gap:15px; justify-items:center; text-align:center; }
-    .officials-grid .official-portrait { width:116px; margin-inline:auto; border-radius:50%; transition:border-color .22s ease,box-shadow .22s ease,transform .22s ease; }
-    .officials-grid .official-card h3 { font-size:.94rem; line-height:1.35; }
-    .officials-grid .official-role { font-size:.73rem; line-height:1.45; }
-    .officials-grid .official-data { display:none; }
-    .official-card { position:relative; display:flex; flex-direction:column; height:100%; min-width:0; padding:24px; border:1px solid var(--line); border-radius:18px; background:var(--white); box-shadow:0 8px 26px rgba(18,63,90,.055); transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease; cursor:pointer; }
-    .official-card:hover { transform:translateY(-3px); border-color:#bfd5df; box-shadow:0 15px 34px rgba(18,63,90,.1); }
-    .official-card:hover .official-portrait { border-color:#9fc4d4; box-shadow:0 0 0 5px rgba(35,111,145,.08); transform:scale(1.025); }
-    .official-card:focus-visible { outline:3px solid rgba(35,111,145,.3); outline-offset:3px; border-color:#8eb8ca; }
-    .official-head { display:grid; grid-template-columns:108px minmax(0,1fr); gap:20px; align-items:start; }
-    .official-portrait { width:108px; aspect-ratio:1; display:grid; place-items:center; margin:0; overflow:hidden; border:1px solid #d4e2e8; border-radius:15px; color:var(--blue-deep); background:linear-gradient(145deg,#f6fbfd,#e3f1f7); }
-    .official-portrait img { width:100%; height:100%; object-fit:cover; object-position:center; }
-    .official-silhouette svg { width:58%; height:58%; color:#7896a5; }
-    .official-identity { min-width:0; }
-    .official-card h3 { margin:0; color:#17394a; font-size:1.18rem; font-weight:640; letter-spacing:-.025em; line-height:1.3; }
-    .official-role { margin:8px 0 0; color:#4f6570; font-size:.85rem; line-height:1.5; }
-    .official-email { display:flex; align-items:flex-start; gap:9px; margin-top:20px; padding-top:16px; border-top:1px solid #e8eff2; color:#285f7c; font-size:.8rem; font-weight:590; line-height:1.45; overflow-wrap:anywhere; text-decoration-thickness:1px; text-underline-offset:3px; }
-    .official-email svg { width:16px; height:16px; margin-top:1px; flex:0 0 auto; }
-    .official-resolution { display:grid; gap:2px; margin-top:14px; padding:12px 14px; border-radius:12px; background:#f5f9fb; }
-    .official-resolution span { color:#788b94; font-size:.66rem; font-weight:690; letter-spacing:.05em; text-transform:uppercase; }
-    .official-resolution strong { color:#385361; font-size:.76rem; font-weight:620; line-height:1.5; }
-    .official-data { display:grid; gap:9px; margin:18px 0 0; }
-    .official-data>div { min-width:0; padding:10px 12px; border:1px solid #e4edf1; border-radius:11px; background:#f8fbfc; }
-    .official-data dt { margin:0 0 3px; color:#788b94; font-size:.64rem; font-weight:720; letter-spacing:.05em; line-height:1.35; text-transform:uppercase; }
-    .official-data dd { margin:0; color:#385361; font-size:.75rem; font-weight:610; line-height:1.48; overflow-wrap:anywhere; }
-    .official-data .official-email { display:inline; margin:0; padding:0; border:0; color:#285f7c; font-size:inherit; font-weight:inherit; line-height:inherit; }
-    .official-more { margin-top:14px; border-top:1px solid #e8eff2; }
-    .official-more summary { padding-top:13px; color:var(--blue-deep); font-size:.78rem; font-weight:650; cursor:pointer; }
-    .assignment-list { display:grid; gap:10px; margin:12px 0 0; padding:0; list-style:none; }
-    .assignment-list li { padding-left:13px; border-left:2px solid #c9dee7; }
-    .assignment-list span,.assignment-list small { display:block; }
-    .assignment-list span { color:#405965; font-size:.78rem; font-weight:590; line-height:1.45; }
-    .assignment-list small { margin-top:2px; color:#788b94; font-size:.68rem; line-height:1.45; }
-    .officials-note { margin:20px 0 0; color:#667b85; font-size:.78rem; line-height:1.6; }
-    body.official-dialog-open { overflow:hidden; }
-    .official-dialog { width:min(640px,calc(100% - 32px)); max-height:min(760px,calc(100vh - 32px)); padding:0; overflow:auto; border:0; border-radius:24px; background:var(--white); box-shadow:0 28px 80px rgba(10,42,59,.28); }
-    .official-dialog::backdrop { background:rgba(13,39,52,.58); backdrop-filter:blur(5px); }
-    .official-dialog-shell { position:relative; padding:34px; }
-    .official-dialog-label { margin:0 52px 22px 0; color:var(--red); font-size:.7rem; font-weight:760; letter-spacing:.1em; text-transform:uppercase; }
-    .official-dialog-close { position:absolute; top:18px; right:18px; width:42px; height:42px; display:grid; place-items:center; padding:0; border:1px solid #d9e6eb; border-radius:50%; color:#365662; background:#f7fafb; cursor:pointer; transition:color .2s ease,background .2s ease,border-color .2s ease; }
-    .official-dialog-close:hover { color:var(--blue-deep); border-color:#b9d2dc; background:#edf5f8; }
-    .official-dialog-close:focus-visible { outline:3px solid rgba(35,111,145,.28); outline-offset:2px; }
-    .official-dialog-close svg { width:20px; height:20px; }
-    .official-dialog .official-head { grid-template-columns:132px minmax(0,1fr); gap:24px; align-items:center; }
-    .official-dialog .official-portrait { width:132px; border-radius:50%; }
-    .official-dialog .official-card h3,.official-dialog h3 { font-size:clamp(1.18rem,3vw,1.55rem); }
-    .official-dialog .official-role { margin-top:9px; color:#385361; font-size:.83rem; font-weight:620; }
-    .official-dialog .official-data { display:grid; gap:10px; margin-top:26px; }
-    .official-dialog .official-data>div { padding:13px 15px; }
-    .official-dialog .official-data dt { font-size:.66rem; }
-    .official-dialog .official-data dd { font-size:.8rem; line-height:1.55; }
     .documents-wrap { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:clamp(34px,7vw,88px); align-items:start; }
     .documents-intro { position:sticky; top:124px; }
     .documents-intro h2 { margin:0; color:#15384a; font-size:clamp(2rem,4vw,3.2rem); font-weight:590; letter-spacing:-.042em; line-height:1.12; }
@@ -301,13 +219,19 @@
     .whatsapp-float svg { width:27px; height:27px; }
     .reveal { opacity:0; transform:translateY(18px); transition:opacity .65s ease,transform .65s ease; }
     .reveal.is-visible { opacity:1; transform:translateY(0); }
-    @media(max-width:980px){.menu-toggle{display:grid}.site-nav{position:fixed;top:89px;right:0;left:0;display:grid;align-content:start;gap:4px;max-height:calc(100vh - 89px);padding:16px 20px 24px;overflow:auto;border-bottom:1px solid var(--line);background:rgba(255,255,255,.98);box-shadow:0 24px 45px rgba(18,63,90,.12);visibility:hidden;opacity:0;transform:translateY(-12px);transition:visibility .2s ease,opacity .2s ease,transform .2s ease}.site-nav[data-open="true"]{visibility:visible;opacity:1;transform:translateY(0)}.site-nav a{padding:13px 14px;font-size:.98rem}.site-nav .nav-cta{margin:6px 0 0}.hero{min-height:auto}.hero-inner,.about-sky,.about-overview,.officials-heading-row,.movements-panel,.documents-wrap,.contact-panel{grid-template-columns:1fr}.hero-inner{padding-block:64px}.about-overview,.documents-wrap{gap:44px}.about-sky-brand{width:min(100%,280px);justify-self:start}.documents-intro{position:static}.movement-note{grid-column:1;margin-top:0}.contact-panel{gap:38px}.contact-copy h2{max-width:17ch}.officials-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:720px){.container{width:min(100% - 28px,var(--max))}.header-inner{min-height:78px}.brand img{width:144px;height:58px}.site-nav{top:79px;max-height:calc(100vh - 79px)}.hero-inner{padding-block:40px 48px}.hero-panel{padding:27px 22px;border-radius:23px}.hero h1{font-size:clamp(2.25rem,12vw,3.4rem)}.hero-actions{display:grid}.button{width:100%}.hero-facts,.services-grid,.about-lines-grid,.movements-list,.officials-grid{grid-template-columns:1fr}.hero-facts{gap:0}.hero-fact{min-height:auto;border-top:1px solid rgba(18,63,90,.1)}.hero-fact:first-child{border-top:0}.section{padding-block:72px}.about-page{padding-block:24px 64px}.about-sky{min-height:auto;gap:28px;padding:30px 22px;border-radius:23px;background-position:62% center}.about-sky h2{font-size:clamp(2.15rem,11vw,3.15rem)}.about-sky-brand{min-height:145px;padding:24px;border-radius:24px}.about-overview{gap:18px}.about-story,.identity-card{padding:24px 20px}.about-line-card{grid-template-columns:46px minmax(0,1fr);gap:15px;min-height:0;padding:22px 19px}.about-line-icon{width:46px;height:46px}.about-line-card p{grid-column:1/-1;margin-top:0}.about-articulation{grid-template-columns:1fr;padding:22px 20px}.identity-row{grid-template-columns:1fr;gap:5px}.service-card{min-height:0}.officials-heading-row{gap:24px}.official-group>summary{min-height:64px;padding:16px 18px}.official-group>.officials-grid{padding:16px}.movements-panel,.official-card{padding:20px}.official-head{grid-template-columns:92px minmax(0,1fr);gap:15px}.official-portrait{width:92px}.official-dialog-shell{padding:28px 22px 24px}.official-dialog .official-head{grid-template-columns:1fr;gap:16px;justify-items:center;padding-top:8px;text-align:center}.official-dialog .official-portrait{width:118px}.document-card{grid-template-columns:auto minmax(0,1fr)}.document-arrow{display:none}.contact-panel{padding:28px 20px;border-radius:23px}.footer-inner,.footer-brand{align-items:flex-start;flex-direction:column}.footer-meta{text-align:left}.whatsapp-float{right:16px;bottom:16px;width:52px;height:52px}}
+    @media(max-width:980px){.menu-toggle{display:grid}.site-nav{position:fixed;top:89px;right:0;left:0;display:grid;align-content:start;gap:4px;max-height:calc(100vh - 89px);padding:16px 20px 24px;overflow:auto;border-bottom:1px solid var(--line);background:rgba(255,255,255,.98);box-shadow:0 24px 45px rgba(18,63,90,.12);visibility:hidden;opacity:0;transform:translateY(-12px);transition:visibility .2s ease,opacity .2s ease,transform .2s ease}.site-nav[data-open="true"]{visibility:visible;opacity:1;transform:translateY(0)}.site-nav a{padding:13px 14px;font-size:.98rem}.site-nav .nav-cta{margin:6px 0 0}.hero{min-height:auto}.hero-inner,.about-sky,.about-overview,.documents-wrap,.contact-panel{grid-template-columns:1fr}.hero-inner{padding-block:64px}.about-overview,.documents-wrap{gap:44px}.about-sky-brand{width:min(100%,280px);justify-self:start}.documents-intro{position:static}.contact-panel{gap:38px}.contact-copy h2{max-width:17ch}}
+    @media(max-width:720px){.container{width:min(100% - 28px,var(--max))}.header-inner{min-height:78px}.brand img{width:144px;height:58px}.site-nav{top:79px;max-height:calc(100vh - 79px)}.hero-inner{padding-block:40px 48px}.hero-panel{padding:27px 22px;border-radius:23px}.hero h1{font-size:clamp(2.25rem,12vw,3.4rem)}.hero-actions{display:grid}.button{width:100%}.hero-facts,.services-grid,.about-lines-grid{grid-template-columns:1fr}.hero-facts{gap:0}.hero-fact{min-height:auto;border-top:1px solid rgba(18,63,90,.1)}.hero-fact:first-child{border-top:0}.section{padding-block:72px}.about-page{padding-block:24px 64px}.about-sky{min-height:auto;gap:28px;padding:30px 22px;border-radius:23px;background-position:62% center}.about-sky h2{font-size:clamp(2.15rem,11vw,3.15rem)}.about-sky-brand{min-height:145px;padding:24px;border-radius:24px}.about-overview{gap:18px}.about-story,.identity-card{padding:24px 20px}.about-line-card{grid-template-columns:46px minmax(0,1fr);gap:15px;min-height:0;padding:22px 19px}.about-line-icon{width:46px;height:46px}.about-line-card p{grid-column:1/-1;margin-top:0}.about-articulation{grid-template-columns:1fr;padding:22px 20px}.identity-row{grid-template-columns:1fr;gap:5px}.service-card{min-height:0}.document-card{grid-template-columns:auto minmax(0,1fr)}.document-arrow{display:none}.contact-panel{padding:28px 20px;border-radius:23px}.footer-inner,.footer-brand{align-items:flex-start;flex-direction:column}.footer-meta{text-align:left}.whatsapp-float{right:16px;bottom:16px;width:52px;height:52px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}.reveal{opacity:1;transform:none}}
-    @media print{.site-header,.hero-actions,.whatsapp-float,.site-footer{display:none!important}.hero,.about-sky,.contact-panel{min-height:auto;background:var(--white)!important}.hero-panel,.about-sky,.about-story,.about-line-card,.about-articulation,.service-card,.identity-card,.official-card,.movements-panel,.document-card,.contact-panel{box-shadow:none}.official-card,.about-line-card,.movement-item{break-inside:avoid}.section{padding-block:28px}}
-    @media screen{.movements-disclosure{display:block;margin-top:24px;padding:0;overflow:hidden;border:1px solid #cfe0e7;border-radius:var(--radius);background:linear-gradient(135deg,#f8fcfd,#edf7fb)}.movements-summary{min-height:82px;display:flex;align-items:center;gap:14px;padding:18px 22px;cursor:pointer;list-style:none;user-select:none}.movements-summary::-webkit-details-marker{display:none}.movements-summary-icon{width:44px;height:44px;display:grid;place-items:center;flex:0 0 44px;border-radius:13px;color:var(--blue-deep);background:var(--white);box-shadow:0 8px 20px rgba(18,63,90,.08)}.movements-summary-icon svg,.movements-chevron svg{width:21px;height:21px}.movements-summary-copy{min-width:0;display:grid;gap:3px;flex:1 1 auto}.movements-summary-copy strong{color:#17394a;font-size:1rem;font-weight:700;letter-spacing:-.015em}.movements-summary-copy>span{color:#60747e;font-size:.8rem;line-height:1.5}.movements-chevron{width:34px;height:34px;display:grid;place-items:center;flex:0 0 34px;border-radius:50%;color:var(--blue-deep);background:rgba(255,255,255,.72);transition:transform .2s ease}.movements-disclosure[open] .movements-chevron{transform:rotate(180deg)}.movements-body{padding:20px 22px 22px;border-top:1px solid rgba(18,63,90,.1)}.movements-body .movements-action{display:flex;justify-content:flex-start;margin-top:16px}}
-    @media screen and (max-width:720px){.movements-summary{min-height:74px;padding:15px 16px}.movements-summary-icon{width:40px;height:40px;flex-basis:40px}.movements-summary-copy strong{font-size:.92rem}.movements-summary-copy>span{font-size:.75rem}.movements-body{padding:16px}}
-    .official-card--societaria .official-silhouette svg{width:74px;height:74px}
+    @media print{.site-header,.hero-actions,.whatsapp-float,.site-footer{display:none!important}.hero,.about-sky,.contact-panel{min-height:auto;background:var(--white)!important}.hero-panel,.about-sky,.about-story,.about-line-card,.about-articulation,.service-card,.identity-card,.document-card,.contact-panel{box-shadow:none}.about-line-card{break-inside:avoid}.section{padding-block:28px}}
+    .portal-latest { padding:22px clamp(18px,4vw,36px); margin-bottom:32px; border:1px solid var(--line); border-top:3px solid var(--red); border-radius:16px; background:var(--white); }
+    .portal-latest-heading { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:6px 20px; }
+    .portal-latest-heading h2 { margin:0; color:var(--blue-deep); font-size:1.25rem; font-weight:650; }
+    .portal-latest a { color:var(--blue-deep); font-weight:650; text-decoration-thickness:1px; text-underline-offset:3px; }
+    .portal-latest-heading a { font-size:.84rem; }
+    .portal-latest-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px 28px; padding:0; margin:16px 0 0; list-style:none; }
+    .portal-latest-list li { display:grid; align-content:start; gap:5px; border-top:1px solid var(--line); padding-top:12px; font-size:.88rem; }
+    .portal-latest-list time { color:var(--ink-soft); font-size:.75rem; }
+    @media(max-width:720px) { .portal-latest-list { grid-template-columns:1fr; gap:10px; } }
   </style>
   <meta name="description" content="ALTUM LUMEN S.A.C.: asesoría jurídica y contable, consultoría, obras e inversiones, gestión de proyectos y formación profesional para personas, empresas e instituciones.">
   <!-- ALTUM SEO SEARCH START -->
@@ -315,25 +239,6 @@
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization","name":"ALTUM LUMEN S.A.C.","url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./","logo":{"@type":"ImageObject","url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./logo-1.png"},"slogan":"Excelencia que transforma","description":"ALTUM LUMEN S.A.C.: asesoría jurídica y contable, consultoría, obras e inversiones, gestión de proyectos y formación profesional para personas, empresas e instituciones.","areaServed":{"@type":"Country","name":"Perú"},"hasOfferCatalog":{"@type":"OfferCatalog","name":"Servicios de ALTUM LUMEN S.A.C.","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Asesoría jurídica y consultoría legal","serviceType":"Asesoría jurídica, consultoría legal y defensa técnica"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Asesoría contable y empresarial","serviceType":"Asesoría contable, tributaria, financiera y empresarial"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Obras, inversiones y gestión de proyectos","serviceType":"Consultoría, formulación, gestión y ejecución de obras e inversiones"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Formación y capacitación profesional","serviceType":"Cursos, diplomados, especialización y capacitación profesional"}}]}},{"@type":"WebSite","@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#website","url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./","name":"ALTUM LUMEN S.A.C. | Portal Corporativo","publisher":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"inLanguage":"es-PE"},{"@type":"WebPage","@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#webpage","url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./","name":"ALTUM LUMEN S.A.C. | Consultoría, servicios y formación profesional","description":"ALTUM LUMEN S.A.C.: asesoría jurídica y contable, consultoría, obras e inversiones, gestión de proyectos y formación profesional para personas, empresas e instituciones.","isPartOf":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#website"},"about":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"inLanguage":"es-PE"}]}</script>
   <!-- ALTUM SEO SEARCH END -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"ItemList",
-    "name":"Directorio institucional de ALTUM LUMEN S.A.C.",
-    "url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"item":{"@type":"Person","name":"Jeanfranco Martín Vargas Luque","jobTitle":"Gerente General","image":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionario-1.png","worksFor":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios"}},
-      {"@type":"ListItem","position":2,"item":{"@type":"Person","name":"Piero Alessandro Vargas Luque","jobTitle":"Secretario General (DT); Gerente de Servicios Comerciales y Cooperación (DT); Jefe de la Oficina de Imagen Institucional e Informática","worksFor":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios"}},
-      {"@type":"ListItem","position":3,"item":{"@type":"Person","name":"Víctor Manuel Vásquez Cobos","jobTitle":"Jefe de la Oficina de Trámite Documentario y Atención al Cliente","worksFor":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios"}},
-      {"@type":"ListItem","position":4,"item":{"@type":"Person","name":"Martín Ricardo Vargas Castañeda","jobTitle":"Director de Administración","image":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionario-3.png","worksFor":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios"}},
-      {"@type":"ListItem","position":5,"item":{"@type":"Person","name":"Walter Gerson Angulo Zavaleta","jobTitle":"Subdirector de Recursos Humanos","worksFor":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios"}},
-      {"@type":"ListItem","position":6,"item":{"@type":"Person","name":"María Cecilia Luque Medina","jobTitle":"Jefa de la Oficina de Prevención de Riesgos, Seguridad y Continuidad Operativa (DT)","image":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionario-12.png","worksFor":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios"}},
-      {"@type":"ListItem","position":7,"item":{"@type":"Person","name":"Óscar Felipe Moreno Tupia","jobTitle":"Director Académico","image":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionario-4.png","worksFor":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios"}},
-      {"@type":"ListItem","position":8,"item":{"@type":"Person","name":"Gerardo Martín Guerrero García","jobTitle":"Subgerente de Planeamiento, Desarrollo Corporativo y de Servicios","image":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionario-9.png","worksFor":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios"}},
-      {"@type":"ListItem","position":9,"item":{"@type":"Person","name":"Segundo Raymundo Tabachi Vega","jobTitle":"Director de Proyectos e Inversiones","image":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionario-5.png","worksFor":{"@id":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#organization"},"url":"https://altumlumen-design.github.io/Altum-Lumen-S.A.C./#funcionarios"}}
-    ]
-  }
-  </script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Ir al contenido principal</a>
@@ -361,9 +266,9 @@
         <a href="#inicio" aria-current="true">Inicio</a>
         <a href="#nosotros">Nosotros</a>
         <a href="#servicios">Servicios</a>
-        <a href="#funcionarios">Directorio</a>
+        <a href="directorio.html">Directorio</a>
         <a href="#documentos">Documentos</a>
-        <a href="transparencia.html" target="_blank" rel="noopener noreferrer">Transparencia</a>
+        <a href="transparencia.html">Transparencia</a>
         <a class="nav-cta" href="#contacto">Contacto</a>
       </nav>
     </div>
@@ -425,6 +330,29 @@
           </div>
         </div>
       </div>
+
+      <section class="container portal-latest" aria-labelledby="latest-title">
+        <div class="portal-latest-heading">
+          <h2 id="latest-title">Últimos actos resolutivos</h2>
+          <a href="transparencia.html#actos-resolutivos">Ver todas las publicaciones <span aria-hidden="true">→</span></a>
+        </div>
+        <ol class="portal-latest-list" aria-label="Publicaciones recientes">
+        <!-- publicaciones-recientes -->
+          <li>
+            <time datetime="2026-11-11">11 nov. 2026</time>
+            <a href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00009-2026-AL-DA.pdf" target="_blank" rel="noopener">Resolución Directoral N.° 00009-2026-AL/DA</a>
+          </li>
+          <li>
+            <time datetime="2026-11-11">11 nov. 2026</time>
+            <a href="documentos/actos-resolutivos/2026/direccion-academica/RDA-00008-2026-AL-DA.pdf" target="_blank" rel="noopener">Resolución Directoral N.° 00008-2026-AL/DA</a>
+          </li>
+          <li>
+            <time datetime="2026-11-10">10 nov. 2026</time>
+            <a href="documentos/actos-resolutivos/2026/gerencia-general/RGG-00024-2026-AL-GG.pdf" target="_blank" rel="noopener">Resolución de Gerencia General N.° 00024-2026-AL/GG</a>
+          </li>
+        <!-- /publicaciones-recientes -->
+        </ol>
+      </section>
     </section>
 
     <section class="section about-page page-view" id="nosotros" data-title="Nosotros" aria-labelledby="about-title">
@@ -570,165 +498,11 @@
     </section>
 
     <section class="section section-soft page-view" id="funcionarios" data-title="Directorio institucional" aria-labelledby="officials-title">
-      <div class="container officials-container">
-        <div class="officials-heading-row">
-          <div class="section-heading reveal">
-            <p class="eyebrow">Equipo directivo</p>
-            <h2 id="officials-title">Directorio institucional</h2>
-            <p>Nuestro equipo directivo está conformado por profesionales responsables de conducir, coordinar y supervisar las distintas áreas de la organización. Desde sus respectivas gerencias, direcciones y jefaturas, contribuyen al cumplimiento de los objetivos institucionales, asegurando una gestión articulada, eficiente y orientada a la mejora continua de nuestros servicios.</p>
-          </div>
-        </div>
-
-        <div class="officials-grid">
-          <article class="official-card reveal official-card--societaria">
-            <div class="official-head">
-              <div class="official-portrait official-silhouette" role="img" aria-label="Representación institucional de la Junta General de Accionistas">
-                <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                  <circle cx="32" cy="19" r="9" fill="currentColor"/>
-                  <circle cx="16" cy="25" r="7" fill="currentColor" opacity=".62"/>
-                  <circle cx="48" cy="25" r="7" fill="currentColor" opacity=".62"/>
-                  <path d="M16 54c1.2-10 7.4-16 16-16s14.8 6 16 16H16Z" fill="currentColor"/>
-                  <path d="M3 53c1-8.4 6-13.4 13-13.4 3.1 0 5.8 1 8 2.8-4.1 2.8-6.9 6.3-8.1 10.6H3Z" fill="currentColor" opacity=".62"/>
-                  <path d="M61 53c-1-8.4-6-13.4-13-13.4-3.1 0-5.8 1-8 2.8 4.1 2.8 6.9 6.3 8.1 10.6H61Z" fill="currentColor" opacity=".62"/>
-                </svg>
-              </div>
-              <div class="official-identity"><h3>JUNTA GENERAL DE ACCIONISTAS</h3><p class="official-role">ÓRGANO SUPREMO DE DIRECCIÓN SOCIETARIA</p></div>
-            </div>
-            <dl class="official-data">
-              <div><dt>Razón social</dt><dd>ALTUM LUMEN S.A.C. · Sociedad Anónima Cerrada</dd></div>
-              <div><dt>Constitución</dt><dd><time datetime="2025-06-24">24 de junio de 2025</time></dd></div>
-              <div><dt>RUC</dt><dd>20614458918</dd></div>
-              <div><dt>Acreditación registral</dt><dd>Partida Registral N.° 15949500</dd></div>
-            </dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3><p class="official-role">GERENTE GENERAL</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2025-07-07">07 de julio de 2025</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Partida Registral N.° 15949500</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:gerenciageneral.altumlumen@gmail.com">gerenciageneral.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><div class="official-portrait official-silhouette" role="img" aria-label="Silueta institucional de Piero Alessandro Vargas Luque, sin fotografía disponible"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="22" r="12" fill="currentColor"/><path d="M10 57c1.8-14 10.2-22 22-22s20.2 8 22 22H10Z" fill="currentColor"/></svg></div><div class="official-identity"><h3>PIERO ALESSANDRO VARGAS LUQUE</h3><p class="official-role">SECRETARIO GENERAL (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-11-05">05 de noviembre de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00025-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:secretariageneral.altumlumen@gmail.com">secretariageneral.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><div class="official-portrait official-silhouette" role="img" aria-label="Silueta institucional de Víctor Manuel Vásquez Cobos, sin fotografía disponible"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="22" r="12" fill="currentColor"/><path d="M10 57c1.8-14 10.2-22 22-22s20.2 8 22 22H10Z" fill="currentColor"/></svg></div><div class="official-identity"><h3>VÍCTOR MANUEL VÁSQUEZ COBOS</h3><p class="official-role">JEFE DE LA OFICINA DE TRÁMITE DOCUMENTARIO Y ATENCIÓN AL CLIENTE</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-07-17">17 de julio de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00015-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:tramiteyatencion.altumlumen@gmail.com">tramiteyatencion.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-3.png?v=20260808-2" alt="Retrato institucional de Martín Ricardo Vargas Castañeda" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>MARTÍN RICARDO VARGAS CASTAÑEDA</h3><p class="official-role">DIRECTOR DE ADMINISTRACIÓN</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00015-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:admiyfinanzas.altumlumen@gmail.com">admiyfinanzas.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><div class="official-portrait official-silhouette" role="img" aria-label="Silueta institucional de Walter Gerson Angulo Zavaleta, sin fotografía disponible"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="22" r="12" fill="currentColor"/><path d="M10 57c1.8-14 10.2-22 22-22s20.2 8 22 22H10Z" fill="currentColor"/></svg></div><div class="official-identity"><h3>WALTER GERSON ANGULO ZAVALETA</h3><p class="official-role">SUBDIRECTOR DE RECURSOS HUMANOS</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00014-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:recursoshumanos.altumlumen@gmail.com">recursoshumanos.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-12.png?v=20260808-2" alt="Retrato institucional de María Cecilia Luque Medina" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>MARÍA CECILIA LUQUE MEDINA</h3><p class="official-role">JEFA DE LA OFICINA DE PREVENCIÓN DE RIESGOS, SEGURIDAD Y CONTINUIDAD OPERATIVA (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00006-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:prevycontinuidad.altumlumen@gmail.com">prevycontinuidad.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-3.png?v=20260808-2" alt="Retrato institucional de Martín Ricardo Vargas Castañeda" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>MARTÍN RICARDO VARGAS CASTAÑEDA</h3><p class="official-role">JEFE DE LA OFICINA DE LOGÍSTICA Y CONTROL PATRIMONIAL (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00010-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:logisticapatrimonio.altumlumen@gmail.com">logisticapatrimonio.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3><p class="official-role">JEFE DE LA OFICINA DE CONTABILIDAD Y TESORERÍA (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00012-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:contaytesoreria.altumlumen@gmail.com">contaytesoreria.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><div class="official-portrait official-silhouette" role="img" aria-label="Silueta institucional de Piero Alessandro Vargas Luque, sin fotografía disponible"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="22" r="12" fill="currentColor"/><path d="M10 57c1.8-14 10.2-22 22-22s20.2 8 22 22H10Z" fill="currentColor"/></svg></div><div class="official-identity"><h3>PIERO ALESSANDRO VARGAS LUQUE</h3><p class="official-role">JEFE DE LA OFICINA DE IMAGEN INSTITUCIONAL E INFORMÁTICA</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-05-04">04 de mayo de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00013-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:imageninstitucional.altumlumen@gmail.com">imageninstitucional.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-4.png?v=20260808-2" alt="Retrato institucional de Óscar Felipe Moreno Tupia" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>ÓSCAR FELIPE MORENO TUPIA</h3><p class="official-role">JEFE DE LA OFICINA CORPORATIVA DE ASESORÍA JURÍDICA (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00008-2026-AL/SDRH, modificada por la Resolución Subdirectoral N.° 00014-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:asesoriajuridica.altumlumen@gmail.com">asesoriajuridica.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><div class="official-portrait official-silhouette" role="img" aria-label="Silueta institucional de Piero Alessandro Vargas Luque, sin fotografía disponible"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="22" r="12" fill="currentColor"/><path d="M10 57c1.8-14 10.2-22 22-22s20.2 8 22 22H10Z" fill="currentColor"/></svg></div><div class="official-identity"><h3>PIERO ALESSANDRO VARGAS LUQUE</h3><p class="official-role">GERENTE DE SERVICIOS COMERCIALES Y COOPERACIÓN (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-11-05">05 de noviembre de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00025-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:serviciosyrelaciones.altumlumen@gmail.com">serviciosyrelaciones.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-9.png" alt="Retrato institucional de Gerardo Martín Guerrero García" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>GERARDO MARTÍN GUERRERO GARCÍA</h3><p class="official-role">SUBGERENTE DE PLANEAMIENTO, DESARROLLO CORPORATIVO Y DE SERVICIOS</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00016-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:desarrolloservicios.altumlumen@gmail.com">desarrolloservicios.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-9.png" alt="Retrato institucional de Gerardo Martín Guerrero García" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>GERARDO MARTÍN GUERRERO GARCÍA</h3><p class="official-role">JEFE DE LA UNIDAD DE ESTRATEGIA Y COOPERACIÓN INTERINSTITUCIONAL (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00011-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:estrategiacoordina.altumlumen@gmail.com">estrategiacoordina.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-4.png?v=20260808-2" alt="Retrato institucional de Óscar Felipe Moreno Tupia" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>ÓSCAR FELIPE MORENO TUPIA</h3><p class="official-role">DIRECTOR ACADÉMICO</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-05-04">04 de mayo de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00018-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:direccionacademica.altumlumen@gmail.com">direccionacademica.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-9.png" alt="Retrato institucional de Gerardo Martín Guerrero García" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>GERARDO MARTÍN GUERRERO GARCÍA</h3><p class="official-role">JEFE DE LA UNIDAD DE FORMACIÓN Y CAPACITACIÓN PROFESIONAL (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00011-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:capacitacionpro.altumlumen@gmail.com">capacitacionpro.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3><p class="official-role">DIRECTOR DE SERVICIOS LEGALES, TRIBUTARIOS Y CONTABLES (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00017-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:legalestributariosycontables@gmail.com">legalestributariosycontables@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3><p class="official-role">SUBDIRECTOR DE SERVICIOS LEGALES (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-05-04">04 de mayo de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00018-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:servicioslegales.altumlumen@gmail.com">servicioslegales.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3><p class="official-role">SUBDIRECTOR DE SERVICIOS TRIBUTARIOS Y CONTABLES (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00017-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:tributariosyconta.altumlumen@gmail.com">tributariosyconta.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-5.png" alt="Retrato institucional de Segundo Raymundo Tabachi Vega" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>SEGUNDO RAYMUNDO TABACHI VEGA</h3><p class="official-role">DIRECTOR DE PROYECTOS E INVERSIONES</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución de Gerencia General N.° 00013-2026-AL/GG</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:direcciondeproyectos.altumlumen@gmail.com">direcciondeproyectos.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-5.png" alt="Retrato institucional de Segundo Raymundo Tabachi Vega" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>SEGUNDO RAYMUNDO TABACHI VEGA</h3><p class="official-role">JEFE DE LA UNIDAD DE ESTUDIOS Y PROYECTOS (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00009-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:estudiosproyectos.altumlumen@gmail.com">estudiosproyectos.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-12.png?v=20260808-2" alt="Retrato institucional de María Cecilia Luque Medina" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>MARÍA CECILIA LUQUE MEDINA</h3><p class="official-role">JEFA DE LA UNIDAD DE EDUCACIÓN COMUNITARIA Y RIESGOS SOCIOAMBIENTALES</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00006-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:educacioncomunit.altumlumen@gmail.com">educacioncomunit.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-
-          <article class="official-card reveal">
-            <div class="official-head"><figure class="official-portrait"><img src="funcionario-1.png?v=20260808-2" alt="Retrato institucional de Jeanfranco Martín Vargas Luque" decoding="async" loading="lazy"></figure><div class="official-identity"><h3>JEANFRANCO MARTÍN VARGAS LUQUE</h3><p class="official-role">JEFE DE LA UNIDAD EJECUTORA DE OBRAS E INVERSIONES (DT)</p></div></div>
-            <dl class="official-data"><div><dt>Fecha de nombramiento</dt><dd><time datetime="2026-02-13">13 de febrero de 2026</time></dd></div><div><dt>Documento de nombramiento</dt><dd>Resolución Subdirectoral N.° 00012-2026-AL/SDRH</dd></div><div><dt>Correo</dt><dd><a class="official-email" href="mailto:unidadejecutora.altumlumen@gmail.com">unidadejecutora.altumlumen@gmail.com</a></dd></div></dl>
-          </article>
-        </div>
-
-        <details class="movements-panel movements-disclosure reveal" aria-labelledby="movements-title">
-          <summary class="movements-summary">
-            <span class="movements-summary-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <span class="movements-summary-copy"><strong id="movements-title">Últimas actualizaciones del directorio</strong><span>Consulta los movimientos y disposiciones recientes que modificaron la composición del directorio institucional.</span></span>
-            <span class="movements-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m7 9 5 5 5-5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </summary>
-          <div class="movements-body">
-            <ol class="movements-list">
-              <li class="movement-item"><span class="movement-date">05 nov 2026</span><p>Piero Alessandro Vargas Luque asume temporalmente la Gerencia de Servicios Comerciales y Cooperación y la Secretaría General, en adición a sus funciones; concluyen las designaciones anteriores en ambos puestos.</p><small>Resolución de Gerencia General N.° 00025-2026-AL/GG</small></li>
-              <li class="movement-item"><span class="movement-date">17 jul 2026</span><p>Víctor Manuel Vásquez Cobos asume la Oficina de Trámite Documentario y Atención al Cliente; concluye la asignación temporal de Óscar Felipe Moreno Tupia.</p><small>Resolución Subdirectoral N.° 00015-2026-AL/SDRH</small></li>
-              <li class="movement-item"><span class="movement-date">04 may 2026</span><p>Piero Alessandro Vargas Luque asume la Oficina de Imagen Institucional e Informática; concluye la asignación temporal anterior.</p><small>Resolución Subdirectoral N.° 00013-2026-AL/SDRH</small></li>
-              <li class="movement-item"><span class="movement-date">04 may 2026</span><p>Óscar Felipe Moreno Tupia queda designado como Director Académico y Jeanfranco Martín Vargas Luque asume temporalmente la Subdirección de Servicios Legales.</p><small>Resolución de Gerencia General N.° 00018-2026-AL/GG</small></li>
-            </ol>
-            <div class="movements-action"><a class="button button-secondary" href="transparencia.html#actos-resolutivos" target="_blank" rel="noopener noreferrer">Más información en el Portal de Transparencia<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
-          </div>
-        </details>
+      <div class="container documents-intro">
+        <p class="eyebrow">Altum Lumen S.A.C.</p>
+        <h2 id="officials-title">Directorio institucional</h2>
+        <p>Busca por nombre, cargo o unidad orgánica. En cada ficha encontrarás los datos de contacto institucional y el acto de designación cuando esté publicado.</p>
+        <div class="hero-actions"><a class="button button-primary" href="directorio.html">Abrir directorio</a></div>
       </div>
     </section>
 
@@ -738,15 +512,13 @@
           <p class="eyebrow">Información institucional</p>
           <h2 id="documents-title">Documentos de gestión y transparencia.</h2>
           <p>
-            Accede directamente a los instrumentos de gestión vigentes, al Portal de Transparencia
-            y a la Mesa de Partes institucional, conservando la ubicación y trazabilidad de los
-            documentos en sus repositorios de origen.
+            Consulta los actos resolutivos publicados, los instrumentos de gestión de Altum Lumen y los canales de atención documentaria.
           </p>
         </div>
 
         <div class="reveal">
           <div class="documents-list">
-            <a class="document-card" href="transparencia.html" target="_blank" rel="noopener noreferrer">
+            <a class="document-card" href="transparencia.html">
               <span class="document-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4V5Zm4 4h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
               <div><h3>Portal de Transparencia</h3><p>Actos resolutivos, documentos de gestión y canales de atención institucional.</p></div>
               <svg class="document-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -788,7 +560,6 @@
               <svg class="document-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
-          <p class="documents-note">Los documentos institucionales se abren directamente en modo de consulta. El Portal de Transparencia organiza los actos resolutivos recuperados por año y órgano emisor.</p>
         </div>
       </div>
     </section>
@@ -812,14 +583,6 @@
     </section>
   </main>
 
-  <dialog class="official-dialog" id="officialDialog" aria-label="Ficha de nombramiento">
-    <div class="official-dialog-shell">
-      <button class="official-dialog-close" id="officialDialogClose" type="button" aria-label="Cerrar ficha"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-      <p class="official-dialog-label">Ficha de nombramiento</p>
-      <div id="officialDialogContent"></div>
-    </div>
-  </dialog>
-
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-brand"><img src="logo-1.png" alt="" decoding="async"><p><strong>ALTUM LUMEN S.A.C.</strong>Excelencia que transforma</p></div>
@@ -837,113 +600,6 @@
     const navLinks = [...siteNav.querySelectorAll('a[href^="#"]')];
     const pageViews = [...document.querySelectorAll(".page-view")];
     const viewByHash = new Map(pageViews.map((view) => ["#" + view.id, view]));
-    const officialCards = [...document.querySelectorAll(".official-card")];
-    const officialDialog = document.querySelector("#officialDialog");
-    const officialDialogClose = document.querySelector("#officialDialogClose");
-    const officialDialogContent = document.querySelector("#officialDialogContent");
-    let lastOfficialTrigger = null;
-
-    function groupOfficialsByRof() {
-      const sourceGrid = document.querySelector("#funcionarios > .officials-container > .officials-grid");
-      if (!sourceGrid || officialCards.length === 0) return;
-
-      const groups = [
-        { title: "Órganos de Alta Dirección", roles: ["ÓRGANO SUPREMO DE DIRECCIÓN SOCIETARIA", "GERENTE GENERAL"] },
-        { title: "Administración interna: Órganos de Asesoramiento", roles: ["JEFE DE LA OFICINA CORPORATIVA DE ASESORÍA JURÍDICA (DT)"] },
-        { title: "Administración interna: Órganos de Apoyo", roles: ["SECRETARIO GENERAL (DT)", "JEFE DE LA OFICINA DE TRÁMITE DOCUMENTARIO Y ATENCIÓN AL CLIENTE", "JEFE DE LA OFICINA DE IMAGEN INSTITUCIONAL E INFORMÁTICA", "DIRECTOR DE ADMINISTRACIÓN", "SUBDIRECTOR DE RECURSOS HUMANOS", "JEFA DE LA OFICINA DE PREVENCIÓN DE RIESGOS, SEGURIDAD Y CONTINUIDAD OPERATIVA (DT)", "JEFE DE LA OFICINA DE LOGÍSTICA Y CONTROL PATRIMONIAL (DT)", "JEFE DE LA OFICINA DE CONTABILIDAD Y TESORERÍA (DT)"] },
-        { title: "Órganos de Línea", roles: ["GERENTE DE SERVICIOS COMERCIALES Y COOPERACIÓN (DT)", "SUBGERENTE DE PLANEAMIENTO, DESARROLLO CORPORATIVO Y DE SERVICIOS", "JEFE DE LA UNIDAD DE ESTRATEGIA Y COOPERACIÓN INTERINSTITUCIONAL (DT)", "DIRECTOR ACADÉMICO", "JEFE DE LA UNIDAD DE FORMACIÓN Y CAPACITACIÓN PROFESIONAL (DT)", "DIRECTOR DE PROYECTOS E INVERSIONES", "JEFE DE LA UNIDAD DE ESTUDIOS Y PROYECTOS (DT)", "JEFA DE LA UNIDAD DE EDUCACIÓN COMUNITARIA Y RIESGOS SOCIOAMBIENTALES", "JEFE DE LA UNIDAD EJECUTORA DE OBRAS E INVERSIONES (DT)", "DIRECTOR DE SERVICIOS LEGALES, TRIBUTARIOS Y CONTABLES (DT)", "SUBDIRECTOR DE SERVICIOS LEGALES (DT)", "SUBDIRECTOR DE SERVICIOS TRIBUTARIOS Y CONTABLES (DT)"] }
-      ];
-
-      const cardsByRole = new Map(officialCards.map((card) => [card.querySelector(".official-role")?.textContent.replace(/\s+/g, " ").trim(), card]));
-      const groupedOfficials = document.createElement("div");
-      groupedOfficials.className = "official-groups";
-      groupedOfficials.setAttribute("aria-label", "Funcionarios agrupados según el ROF");
-
-      groups.forEach((group) => {
-        const disclosure = document.createElement("details");
-        disclosure.className = "official-group";
-        disclosure.name = "officials-rof";
-        disclosure.open = false;
-
-        const summary = document.createElement("summary");
-        summary.textContent = group.title;
-        const grid = document.createElement("div");
-        grid.className = "officials-grid";
-        group.roles.forEach((role) => {
-          const card = cardsByRole.get(role);
-          if (!card) return;
-          grid.append(card);
-          cardsByRole.delete(role);
-        });
-        disclosure.append(summary, grid);
-        groupedOfficials.append(disclosure);
-      });
-
-      sourceGrid.replaceWith(groupedOfficials);
-      const disclosures = [...groupedOfficials.querySelectorAll(".official-group")];
-      disclosures.forEach((disclosure) => {
-        disclosure.addEventListener("toggle", () => {
-          if (!disclosure.open) return;
-          disclosures.forEach((other) => { if (other !== disclosure) other.open = false; });
-        });
-      });
-    }
-
-    groupOfficialsByRof();
-
-    function closeOfficialDialog() {
-      if (!officialDialog.hasAttribute("open")) return;
-      if (typeof officialDialog.close === "function") officialDialog.close();
-      else {
-        officialDialog.removeAttribute("open");
-        document.body.classList.remove("official-dialog-open");
-        lastOfficialTrigger?.focus({ preventScroll: true });
-      }
-    }
-
-    function openOfficialDialog(card) {
-      const head = card.querySelector(".official-head");
-      const data = card.querySelector(".official-data");
-      if (!head || !data) return;
-      const headClone = head.cloneNode(true);
-      const dataClone = data.cloneNode(true);
-      headClone.querySelector(".official-portrait")?.removeAttribute("role");
-      headClone.querySelector(".official-portrait")?.removeAttribute("aria-label");
-      officialDialogContent.replaceChildren(headClone, dataClone);
-      lastOfficialTrigger = card;
-      if (typeof officialDialog.showModal === "function") officialDialog.showModal();
-      else officialDialog.setAttribute("open", "");
-      document.body.classList.add("official-dialog-open");
-      officialDialogClose.focus({ preventScroll: true });
-    }
-
-    officialCards.forEach((card) => {
-      const name = card.querySelector("h3")?.textContent.trim() || "funcionario";
-      const role = card.querySelector(".official-role")?.textContent.trim() || "cargo institucional";
-      card.setAttribute("role", "button");
-      card.setAttribute("tabindex", "0");
-      card.setAttribute("aria-haspopup", "dialog");
-      card.setAttribute("aria-label", `Ver ficha de nombramiento de ${name}, ${role}`);
-      card.addEventListener("click", () => openOfficialDialog(card));
-      card.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        openOfficialDialog(card);
-      });
-    });
-
-    officialDialogClose.addEventListener("click", closeOfficialDialog);
-    officialDialog.addEventListener("click", (event) => {
-      if (event.target !== officialDialog) return;
-      const rect = officialDialog.getBoundingClientRect();
-      const isOutside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
-      if (isOutside) closeOfficialDialog();
-    });
-    officialDialog.addEventListener("close", () => {
-      document.body.classList.remove("official-dialog-open");
-      lastOfficialTrigger?.focus({ preventScroll: true });
-    });
-
     function setMenu(open) {
       siteNav.dataset.open = String(open);
       menuToggle.setAttribute("aria-expanded", String(open));
@@ -957,7 +613,6 @@
         window.location.replace("sgd.html");
         return;
       }
-      closeOfficialDialog();
       const resolvedHash = viewByHash.has(hash) ? hash : "#inicio";
       const targetView = viewByHash.get(resolvedHash);
       pageViews.forEach((view) => {
@@ -994,7 +649,6 @@
     document.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
       setMenu(false);
-      if (officialDialog.hasAttribute("open") && typeof officialDialog.close !== "function") closeOfficialDialog();
     });
     window.addEventListener("resize", () => { if (window.innerWidth > 980) setMenu(false); });
     window.addEventListener("popstate", () => { showView(window.location.hash || "#inicio"); });

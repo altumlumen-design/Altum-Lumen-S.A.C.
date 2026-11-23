@@ -1,0 +1,360 @@
+{
+  "personas": [
+    {
+      "id": "jeanfranco-martin-vargas-luque",
+      "name": "Jeanfranco Martín Vargas Luque",
+      "photo": "funcionario-1.png",
+      "roles": [
+        {
+          "title": "Gerente General",
+          "office": "Gerencia General",
+          "group": "Alta dirección",
+          "temporary": false,
+          "effectiveOn": "2025-07-07",
+          "email": "gerenciageneral.altumlumen@gmail.com",
+          "references": [],
+          "referenceLabel": "Partida Registral N.° 15949500"
+        },
+        {
+          "title": "Jefe de la Oficina de Contabilidad y Tesorería",
+          "office": "Oficina de Contabilidad y Tesorería",
+          "group": "Apoyo",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "contaytesoreria.altumlumen@gmail.com",
+          "references": [
+            "00012-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00012-2026-AL/SDRH"
+        },
+        {
+          "title": "Director de Servicios Legales, Tributarios y Contables",
+          "office": "Dirección de Servicios Legales, Tributarios y Contables",
+          "group": "Órganos de línea",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "legalestributariosycontables@gmail.com",
+          "references": [
+            "00017-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00017-2026-AL/GG"
+        },
+        {
+          "title": "Subdirector de Servicios Legales",
+          "office": "Subdirección de Servicios Legales",
+          "group": "Órganos de línea",
+          "temporary": true,
+          "effectiveOn": "2026-05-04",
+          "email": "servicioslegales.altumlumen@gmail.com",
+          "references": [
+            "00018-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00018-2026-AL/GG"
+        },
+        {
+          "title": "Subdirector de Servicios Tributarios y Contables",
+          "office": "Subdirección de Servicios Tributarios y Contables",
+          "group": "Órganos de línea",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "tributariosyconta.altumlumen@gmail.com",
+          "references": [
+            "00017-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00017-2026-AL/GG"
+        },
+        {
+          "title": "Jefe de la Unidad Ejecutora de Obras E Inversiones",
+          "office": "Unidad Ejecutora de Obras e Inversiones",
+          "group": "Órganos de línea",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "unidadejecutora.altumlumen@gmail.com",
+          "references": [
+            "00012-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00012-2026-AL/SDRH"
+        }
+      ]
+    },
+    {
+      "id": "piero-alessandro-vargas-luque",
+      "name": "Piero Alessandro Vargas Luque",
+      "photo": "",
+      "roles": [
+        {
+          "title": "Secretario General",
+          "office": "Secretaría General",
+          "group": "Apoyo",
+          "temporary": true,
+          "effectiveOn": "2026-11-05",
+          "email": "secretariageneral.altumlumen@gmail.com",
+          "references": [
+            "00025-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00025-2026-AL/GG"
+        },
+        {
+          "title": "Jefe de la Oficina de Imagen Institucional E Informática",
+          "office": "Oficina de Imagen Institucional e Informática",
+          "group": "Apoyo",
+          "temporary": false,
+          "effectiveOn": "2026-05-04",
+          "email": "imageninstitucional.altumlumen@gmail.com",
+          "references": [
+            "00013-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00013-2026-AL/SDRH"
+        },
+        {
+          "title": "Gerente de Servicios Comerciales y Cooperación",
+          "office": "Gerencia de Servicios Comerciales y Cooperación",
+          "group": "Órganos de línea",
+          "temporary": true,
+          "effectiveOn": "2026-11-05",
+          "email": "serviciosyrelaciones.altumlumen@gmail.com",
+          "references": [
+            "00025-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00025-2026-AL/GG"
+        }
+      ]
+    },
+    {
+      "id": "victor-manuel-vasquez-cobos",
+      "name": "Víctor Manuel Vásquez Cobos",
+      "photo": "",
+      "roles": [
+        {
+          "title": "Jefe de la Oficina de Trámite Documentario y Atención al Cliente",
+          "office": "Oficina de Trámite Documentario y Atención al Cliente",
+          "group": "Apoyo",
+          "temporary": false,
+          "effectiveOn": "2026-07-17",
+          "email": "tramiteyatencion.altumlumen@gmail.com",
+          "references": [
+            "00015-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00015-2026-AL/SDRH"
+        }
+      ]
+    },
+    {
+      "id": "martin-ricardo-vargas-castaneda",
+      "name": "Martín Ricardo Vargas Castañeda",
+      "photo": "funcionario-3.png",
+      "roles": [
+        {
+          "title": "Director de Administración",
+          "office": "Dirección de Administración",
+          "group": "Apoyo",
+          "temporary": false,
+          "effectiveOn": "2026-02-13",
+          "email": "admiyfinanzas.altumlumen@gmail.com",
+          "references": [
+            "00015-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00015-2026-AL/GG"
+        },
+        {
+          "title": "Jefe de la Oficina de Logística y Control Patrimonial",
+          "office": "Oficina de Logística y Control Patrimonial",
+          "group": "Apoyo",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "logisticapatrimonio.altumlumen@gmail.com",
+          "references": [
+            "00010-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00010-2026-AL/SDRH"
+        }
+      ]
+    },
+    {
+      "id": "walter-gerson-angulo-zavaleta",
+      "name": "Walter Gerson Angulo Zavaleta",
+      "photo": "",
+      "roles": [
+        {
+          "title": "Subdirector de Recursos Humanos",
+          "office": "Subdirección de Recursos Humanos",
+          "group": "Apoyo",
+          "temporary": false,
+          "effectiveOn": "2026-02-13",
+          "email": "recursoshumanos.altumlumen@gmail.com",
+          "references": [
+            "00014-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00014-2026-AL/GG"
+        }
+      ]
+    },
+    {
+      "id": "maria-cecilia-luque-medina",
+      "name": "María Cecilia Luque Medina",
+      "photo": "funcionario-12.png",
+      "roles": [
+        {
+          "title": "Jefa de la Oficina de Prevención de Riesgos, Seguridad y Continuidad Operativa",
+          "office": "Oficina de Prevención de Riesgos, Seguridad y Continuidad Operativa",
+          "group": "Apoyo",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "prevycontinuidad.altumlumen@gmail.com",
+          "references": [
+            "00006-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00006-2026-AL/SDRH"
+        },
+        {
+          "title": "Jefa de la Unidad de Educación Comunitaria y Riesgos Socioambientales",
+          "office": "Unidad de Educación Comunitaria y Riesgos Socioambientales",
+          "group": "Órganos de línea",
+          "temporary": false,
+          "effectiveOn": "2026-02-13",
+          "email": "educacioncomunit.altumlumen@gmail.com",
+          "references": [
+            "00006-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00006-2026-AL/SDRH"
+        }
+      ]
+    },
+    {
+      "id": "oscar-felipe-moreno-tupia",
+      "name": "Óscar Felipe Moreno Tupia",
+      "photo": "funcionario-4.png",
+      "roles": [
+        {
+          "title": "Jefe de la Oficina Corporativa de Asesoría Jurídica",
+          "office": "Oficina Corporativa de Asesoría Jurídica",
+          "group": "Asesoramiento",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "asesoriajuridica.altumlumen@gmail.com",
+          "references": [
+            "00008-2026-AL/SDRH",
+            "00014-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00008-2026-AL/SDRH, modificada por la Resolución Subdirectoral N.° 00014-2026-AL/SDRH"
+        },
+        {
+          "title": "Director Académico",
+          "office": "Dirección Académica",
+          "group": "Órganos de línea",
+          "temporary": false,
+          "effectiveOn": "2026-05-04",
+          "email": "direccionacademica.altumlumen@gmail.com",
+          "references": [
+            "00018-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00018-2026-AL/GG"
+        }
+      ]
+    },
+    {
+      "id": "gerardo-martin-guerrero-garcia",
+      "name": "Gerardo Martín Guerrero García",
+      "photo": "funcionario-9.png",
+      "roles": [
+        {
+          "title": "Subgerente de Planeamiento, Desarrollo Corporativo y de Servicios",
+          "office": "Subgerencia de Planeamiento, Desarrollo Corporativo y de Servicios",
+          "group": "Órganos de línea",
+          "temporary": false,
+          "effectiveOn": "2026-02-13",
+          "email": "desarrolloservicios.altumlumen@gmail.com",
+          "references": [
+            "00016-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00016-2026-AL/GG"
+        },
+        {
+          "title": "Jefe de la Unidad de Estrategia y Cooperación Interinstitucional",
+          "office": "Unidad de Estrategia y Cooperación Interinstitucional",
+          "group": "Órganos de línea",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "estrategiacoordina.altumlumen@gmail.com",
+          "references": [
+            "00011-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00011-2026-AL/SDRH"
+        },
+        {
+          "title": "Jefe de la Unidad de Formación y Capacitación Profesional",
+          "office": "Unidad de Formación y Capacitación Profesional",
+          "group": "Órganos de línea",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "capacitacionpro.altumlumen@gmail.com",
+          "references": [
+            "00011-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00011-2026-AL/SDRH"
+        }
+      ]
+    },
+    {
+      "id": "segundo-raymundo-tabachi-vega",
+      "name": "Segundo Raymundo Tabachi Vega",
+      "photo": "funcionario-5.png",
+      "roles": [
+        {
+          "title": "Director de Proyectos E Inversiones",
+          "office": "Dirección de Proyectos e Inversiones",
+          "group": "Órganos de línea",
+          "temporary": false,
+          "effectiveOn": "2026-02-13",
+          "email": "direcciondeproyectos.altumlumen@gmail.com",
+          "references": [
+            "00013-2026-AL/GG"
+          ],
+          "referenceLabel": "Resolución de Gerencia General N.° 00013-2026-AL/GG"
+        },
+        {
+          "title": "Jefe de la Unidad de Estudios y Proyectos",
+          "office": "Unidad de Estudios y Proyectos",
+          "group": "Órganos de línea",
+          "temporary": true,
+          "effectiveOn": "2026-02-13",
+          "email": "estudiosproyectos.altumlumen@gmail.com",
+          "references": [
+            "00009-2026-AL/SDRH"
+          ],
+          "referenceLabel": "Resolución Subdirectoral N.° 00009-2026-AL/SDRH"
+        }
+      ]
+    }
+  ],
+  "cambios": [
+    {
+      "date": "2026-11-05",
+      "summary": "Piero Alessandro Vargas Luque asume temporalmente la Gerencia de Servicios Comerciales y Cooperación y la Secretaría General, en adición a sus funciones; concluyen las designaciones anteriores en ambos puestos.",
+      "references": [
+        "00025-2026-AL/GG"
+      ]
+    },
+    {
+      "date": "2026-07-17",
+      "summary": "Víctor Manuel Vásquez Cobos asume la Oficina de Trámite Documentario y Atención al Cliente; concluye la asignación temporal de Óscar Felipe Moreno Tupia.",
+      "references": [
+        "00015-2026-AL/SDRH"
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "summary": "Piero Alessandro Vargas Luque asume la Oficina de Imagen Institucional e Informática; concluye la asignación temporal anterior.",
+      "references": [
+        "00013-2026-AL/SDRH"
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "summary": "Óscar Felipe Moreno Tupia queda designado como Director Académico y Jeanfranco Martín Vargas Luque asume temporalmente la Subdirección de Servicios Legales.",
+      "references": [
+        "00018-2026-AL/GG"
+      ]
+    }
+  ]
+}
