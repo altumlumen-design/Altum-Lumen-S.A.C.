@@ -1,3 +1,5 @@
+const portalViews = require('./portal-pages.cjs');
+const createLayout = require('./portal-layout.cjs');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -15,6 +17,14 @@ const collator = new Intl.Collator('es-PE', {sensitivity:'base', numeric:true});
 const escape = value => String(value ?? '').replace(/[&<>"']/g, mark => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[mark]));
 
 const icons = {
+  inbox: '<path d="M4 4h16v12l-3 4H7l-3-4V4Zm0 10h5l1 2h4l1-2h5m-8-7v5m-2-2 2 2 2-2"/>',
+  shield: '<path d="M12 3l8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Zm-3 9 2 2 4-5"/>',
+  note: '<path d="M7 4h10a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm3 5h5m-5 4h5m-10 4h14"/>',
+  academic: '<path d="m2 9 10-5 10 5-10 5L2 9Zm5 3v5c2 2 8 2 10 0v-5m4-2v6"/>',
+  building: '<path d="M4 21h16M6 21V8l6-5 6 5v13m-9-9h1m4 0h1m-6 4h1m4 0h1m-4 5v-3h2v3"/>',
+  scales: '<path d="M12 4v16m-5 0h10M4 8l8-2 8 2M4 8l-2 6h4L4 8Zm16 0-2 6h4l-2-6Z"/>',
+  chart: '<path d="M4 5v15h16m-12-4v-3m4 3V9m4 7V6"/>',
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
   document: '<path d="M7 3h7l4 4v14H7zM14 3v5h4M10 12h5m-5 4h5"/>',
   folder: '<path d="M3 6h7l2 2h9v11H3z"/>',
   people: '<circle cx="10" cy="8" r="3"/><path d="M4 19v-2a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v2m1-14a3 3 0 0 1 0 6m4 8v-2a5 5 0 0 0-3-5"/>',
@@ -83,72 +93,7 @@ const offices = [...new Set(actos.map(record => record.office))].sort(collator.c
 const years = [...new Set(actos.map(record => record.year))].sort((a,b) => b-a);
 const profilePath = person => 'funcionarios/' + person.id + '.html';
 const options = values => values.map(value => `<option value="${escape(value)}">${escape(value)}</option>`).join('');
-const cleanTitle = title => title + ' | ALTUM LUMEN S.A.C.';
-
-function page({title, pagePath, description, active, depth = '', main, script = false, structured = null}) {
-  const nav = [
-    ['index.html', 'Inicio', 'home'],
-    ['index.html#servicios', 'Servicios', 'services'],
-    ['transparencia.html', 'Transparencia', 'publications'],
-    ['directorio.html', 'Directorio', 'directory'],
-    ['mesa-de-partes.html', 'Mesa de Partes', 'intake'],
-  ];
-  const siteNav = nav.map(([href,label,key]) =>
-    `<a href="${depth + href}"${active===key?' aria-current="page"':''}>${label}</a>`
-  ).join('\n      ');
-  const url = base + pagePath;
-  return `<!doctype html>
-<!-- Generado por scripts/build-institucional.cjs -->
-<html lang="es-PE">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#123f5a">
-  <meta name="description" content="${escape(description)}">
-  <title>${escape(cleanTitle(title))}</title>
-  <link rel="canonical" href="${escape(url)}">
-  <link rel="icon" href="${depth}favicon.ico">
-  <link rel="stylesheet" href="${depth}institucional.css">
-  <meta property="og:locale" content="es_PE">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="ALTUM LUMEN">
-  <meta property="og:title" content="${escape(cleanTitle(title))}">
-  <meta property="og:description" content="${escape(description)}">
-  <meta property="og:url" content="${escape(url)}">
-  <meta property="og:image" content="${base}social-preview-corporativo-20260808.jpg">
-${structured?`<script type="application/ld+json">${JSON.stringify(structured).replace(/</g,'\\u003c')}</script>`:''}
-${script?`<script src="${depth}institucional.js" defer></script>`:''}
-</head>
-<body>
-  <a class="skip-link" href="#contenido">Ir al contenido</a>
-  <header class="institution-header">
-    <div class="layout site-header-inner">
-      <a class="brand" href="${depth}index.html">
-        <img src="${depth}logo-1.png" width="58" height="58" alt="">
-        <span><strong>ALTUM LUMEN S.A.C.</strong><small>Excelencia que transforma</small></span>
-      </a>
-      <nav class="institution-nav" aria-label="Navegación principal">
-        ${siteNav}
-      </nav>
-    </div>
-  </header>
-  <main id="contenido">
-${main}
-  </main>
-  <footer class="institution-footer">
-    <div class="layout footer-inner">
-      <div><strong>ALTUM LUMEN S.A.C.</strong><div>Sociedad Anónima Cerrada · RUC 20614458918</div></div>
-      <nav aria-label="Atención institucional">
-        <a href="${depth}mesa-de-partes.html">Mesa de Partes</a>
-        <a href="${depth}verificacion.html">Verificación documental</a>
-        <a href="${depth}libro-de-reclamaciones.html">Libro de Reclamaciones</a>
-      </nav>
-    </div>
-  </footer>
-</body>
-</html>
-`;
-}
+const page = createLayout({base, icon, escape});
 
 function breadcrumb(parts, depth = '') {
   return `<nav class="breadcrumbs" aria-label="Ruta de navegación"><ol><li><a href="${depth}index.html">Inicio</a></li>
@@ -161,7 +106,7 @@ function masthead(title, description, crumbs, aside = '') {
   return `<div class="masthead"><div class="layout">
     ${crumbs}
     <div class="masthead-inner">
-      <div><h1>${escape(title)}</h1><p>${escape(description)}</p></div>
+      <div><h1>${escape(title)}</h1>${description ? `<p>${escape(description)}</p>` : ''}</div>
 ${aside}
     </div>
   </div></div>`;
@@ -222,41 +167,31 @@ function transparency() {
   const shortcuts = `<nav class="layout section-links" aria-label="Secciones de Transparencia">
       <a href="#actos-resolutivos">${icon('document')} <span>Actos resolutivos</span> ${icon('arrow')}</a>
       <a href="#documentos-gestion">${icon('folder')} <span>Documentos de gestión</span> ${icon('arrow')}</a>
-      <a href="directorio.html">${icon('people')} <span>Directorio institucional</span> ${icon('arrow')}</a>
     </nav>`;
-  const compiled = offices.map(office =>
-    `<a class="quick-filter" href="?oficina=${encodeURIComponent(office)}#actos-resolutivos" data-office-filter="${escape(office)}">${escape(office)}</a>`
-  ).join('\n');
   const publishedYear = Math.max(...gestion.map(item => item.year));
   return masthead('Transparencia institucional', 'Consulta resoluciones, instrumentos de gestión y canales de atención de Altum Lumen.',
     breadcrumb([['Transparencia']])) + shortcuts + `
   <section id="actos-resolutivos" class="layout content-section" data-catalog="publications">
-    <div class="section-title"><h2 tabindex="-1">Actos resolutivos</h2><p>Ordenados por fecha de incorporación al repositorio público de Altum Lumen.</p></div>
+    <div class="section-title"><h2 tabindex="-1">Actos resolutivos</h2><p>Ordenados del más reciente al más antiguo por fecha de publicación.</p></div>
     ${searchForm({label:'Buscar actos resolutivos',placeholder:'Número o asunto',filters:[
       {name:'tipo',title:'Tipo de documento',values:types,empty:'Todos'},
       {name:'oficina',title:'Órgano emisor',values:offices,empty:'Todos'},
       {name:'anio',title:'Año del acto',values:years,empty:'Todos'},
     ]})}
-    <div class="office-filters" hidden data-office-filters><span>Por órgano emisor</span>${compiled}</div>
     ${catalogStatus}
     <ol class="publication-list" data-catalog-list>${publicationCards()}</ol>
     ${resultControls(true)}
   </section>
   <section id="documentos-gestion" class="content-section section-shaded">
     <div class="layout">
-      <div class="section-title"><h2>Documentos de gestión</h2><p>Instrumentos de organización institucional.</p></div>
+      <div class="section-title"><h2>Documentos de gestión</h2><p>Consulta los instrumentos de organización institucional y sus versiones anteriores.</p></div>
       <div class="management-grid">${managementCards(gestion.filter(item => item.year === publishedYear))}</div>
       <details class="archive"><summary>Versiones anteriores</summary><div class="management-grid">${managementCards(gestion.filter(item => item.year !== publishedYear))}</div></details>
     </div>
   </section>
-  <section id="mesa-de-partes" class="layout content-section compact-section">
-    <div class="section-title"><h2>Atención documentaria</h2></div>
-    <div class="section-links contact-links">
-      <a href="mesa-de-partes.html">${icon('mail')} <span>Mesa de Partes Virtual</span> ${icon('arrow')}</a>
-      <a href="consultar-expediente.html">${icon('folder')} <span>Consultar expediente</span> ${icon('arrow')}</a>
-      <a href="verificacion.html">${icon('search')} <span>Verificar documento</span> ${icon('arrow')}</a>
-    </div>
-  </section>`;
+  <div id="mesa-de-partes" class="layout compact-section">
+    <a class="text-link" href="atencion.html">Canales de atención documentaria ${icon('arrow')}</a>
+  </div>`;
 }
 
 function portrait(person, depth = '') {
@@ -275,8 +210,9 @@ function references(codes, depth = '', fallback = '') {
 function directory() {
   const cards = personas.map(person => {
     const departments = [...new Set(person.roles.map(role => role.group))].join('|');
+    const units = [...new Set(person.roles.map(role => role.office))].join('|');
     const roleSearch = [person.name, ...person.roles.map(role => role.title + ' ' + role.office)].join(' ');
-    return `<li data-directory-item data-group="${escape(departments)}" data-search="${escape(roleSearch)}">
+    return `<li data-directory-item data-group="${escape(departments)}" data-unit="${escape(units)}" data-search="${escape(roleSearch)}">
       <a class="person-card" href="${profilePath(person)}">
         ${portrait(person)}
         <div>
@@ -285,7 +221,7 @@ function directory() {
           <p>${escape(person.roles[0].title)}${person.roles[0].temporary?' (DT)':''}</p>
 ${person.roles.length>1?`          <p class="person-meta">${person.roles.length} cargos registrados</p>`:''}
         </div>
-        <span class="person-arrow">${icon('arrow')}</span>
+        <span class="person-arrow"><span>Ver ficha</span> ${icon('arrow')}</span>
       </a>
     </li>`;
   }).join('\n');
@@ -293,10 +229,13 @@ ${person.roles.length>1?`          <p class="person-meta">${person.roles.length}
     `<li><div class="record-office">${time(change.date, shortDate)}</div><p>${escape(change.summary)}</p>${references(change.references)}</li>`
   ).join('\n');
   return masthead('Directorio institucional', 'Consulta los cargos, contactos institucionales y actos de designación del equipo de Altum Lumen.',
-    breadcrumb([['Directorio']]), `<a class="button button-inverse" href="transparencia.html#actos-resolutivos">${icon('document')} Actos resolutivos</a>`) + `
+    breadcrumb([['Directorio']])) + `
   <section class="layout content-section" data-catalog="directory" aria-label="Equipo directivo">
     ${searchForm({label:'Buscar en el directorio',placeholder:'Nombre, cargo o dependencia',
-      filters:[{name:'grupo',title:'Grupo orgánico',values:groups,empty:'Todos los grupos'}]})}
+      filters:[
+        {name:'unidad',title:'Unidad orgánica',values:[...new Set(personas.flatMap(person=>person.roles.map(role=>role.office)))].sort(collator.compare),empty:'Todas'},
+        {name:'grupo',title:'Grupo orgánico',values:groups,empty:'Todos'},
+      ]})}
     ${catalogStatus}
     <ul class="person-list" data-catalog-list>${cards}</ul>
     ${resultControls(false)}
@@ -362,13 +301,8 @@ function replaceSection(source, name, content) {
     newline + indent + source.slice(j);
 }
 
-let home = read('index.html');
-const latestItems = recent.slice(0,3).map(record => `          <li>
-            <time datetime="${record.publishedAt.slice(0,10)}">${escape(writtenDate(record.publishedAt.slice(0,10), shortDate))}</time>
-            <a href="${escape(record.pdf)}" target="_blank" rel="noopener">${escape(record.title)}</a>
-          </li>`).join('\n');
-home = replaceSection(home, 'publicaciones-recientes', latestItems);
-update('index.html', home);
+const corporatePages = portalViews({icon, escape, masthead, breadcrumb, time, shortDate, pdfLink, byCode, recent, base});
+for (const corporate of corporatePages) update(corporate.pagePath, page(corporate));
 update('transparencia.html', page({title:'Transparencia institucional',pagePath:'transparencia.html',active:'publications',script:true,
   description:'Actos resolutivos y documentos de gestión publicados por Altum Lumen S.A.C. Busca por órgano emisor, tipo de resolución, año o asunto.',main:transparency()}));
 const directorySchema = {
@@ -384,7 +318,7 @@ update('directorio.html', page({title:'Directorio institucional',pagePath:'direc
   description:'Consulta por nombre, cargo o unidad orgánica el directorio institucional, los contactos y las designaciones del equipo de Altum Lumen S.A.C.',main:directory(),structured:directorySchema}));
 for (const person of personas) update(profilePath(person), profile(person));
 let sitemap = read('sitemap.xml').replace(/\r\n/g,'\n');
-const directoryPages = ['directorio.html', ...personas.map(profilePath)];
+const directoryPages = ['servicios.html', 'atencion.html', 'directorio.html', ...personas.map(profilePath)];
 const sitemapItems = directoryPages.map(file => `  <url><loc>${base + file}</loc></url>`).join('\n');
 sitemap = replaceSection(sitemap, 'directorio-institucional', sitemapItems);
 update('sitemap.xml', sitemap);

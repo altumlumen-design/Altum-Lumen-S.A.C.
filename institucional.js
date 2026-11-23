@@ -9,12 +9,12 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
   const status = catalog.querySelector('[data-catalog-status]');
   const empty = catalog.querySelector('[data-catalog-empty]');
   const pages = catalog.querySelector('[data-catalog-pages]');
-  const shortcuts = catalog.querySelector('[data-office-filters]');
   const fields = [...form.querySelectorAll('input[name], select[name]')];
   const entries = [...catalog.querySelectorAll('[data-directory-item]')].map(element => ({
     element,
     search: normalize(element.dataset.search),
     groups: (element.dataset.group || '').split('|'),
+    units: (element.dataset.unit || '').split('|'),
   }));
   const size = publications ? 10 : entries.length || 1;
   let selectedPage = 1;
@@ -42,14 +42,15 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
   }
 
   function draw({fromUrl = false} = {}) {
-    const {q, tipo, oficina, anio, grupo} = Object.fromEntries(fields.map(field => [field.name, field.value]));
+    const {q, tipo, oficina, anio, grupo, unidad} = Object.fromEntries(fields.map(field => [field.name, field.value]));
     const terms = normalize(q || '').split(/\s+/).filter(Boolean);
-    const matches = entries.filter(({element, search, groups}) =>
+    const matches = entries.filter(({element, search, groups, units}) =>
       terms.every(term => search.includes(term)) &&
       (!tipo || tipo === element.dataset.type) &&
       (!oficina || oficina === element.dataset.office) &&
       (!anio || anio === element.dataset.year) &&
-      (!grupo || groups.includes(grupo))
+      (!grupo || groups.includes(grupo)) &&
+      (!unidad || units.includes(unidad))
     );
     lastPage = Math.max(1, Math.ceil(matches.length / size));
     if (fromUrl && location.hash) {
@@ -69,10 +70,6 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
       pages.querySelector('[data-page-direction="-1"]').disabled = selectedPage <= 1;
       pages.querySelector('[data-page-direction="1"]').disabled = selectedPage >= lastPage;
     }
-    if (shortcuts) shortcuts.querySelectorAll('[data-office-filter]').forEach(link => {
-      if (link.dataset.officeFilter === oficina) link.setAttribute('aria-current','true');
-      else link.removeAttribute('aria-current');
-    });
     if (!fromUrl) writeUrl();
   }
 
@@ -104,17 +101,6 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
     heading?.focus({preventScroll:true});
     catalog.scrollIntoView({block:'start'});
   });
-
-  if (shortcuts) {
-    shortcuts.hidden = false;
-    shortcuts.addEventListener('click', event => {
-      const link = event.target.closest('[data-office-filter]');
-      if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      event.preventDefault();
-      form.elements.oficina.value = link.dataset.officeFilter;
-      changeFilters();
-    });
-  }
 
   function restore() {
     readUrl();

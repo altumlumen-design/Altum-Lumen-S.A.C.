@@ -6,10 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#123f5a">
   <meta name="description" content="Actos resolutivos y documentos de gestión publicados por Altum Lumen S.A.C. Busca por órgano emisor, tipo de resolución, año o asunto.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
   <title>Transparencia institucional | ALTUM LUMEN S.A.C.</title>
   <link rel="canonical" href="https://altumlumen-design.github.io/Altum-Lumen-S.A.C./transparencia.html">
   <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="institucional.css">
+  <link rel="stylesheet" href="portal.css">
   <meta property="og:locale" content="es_PE">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ALTUM LUMEN">
@@ -17,23 +20,25 @@
   <meta property="og:description" content="Actos resolutivos y documentos de gestión publicados por Altum Lumen S.A.C. Busca por órgano emisor, tipo de resolución, año o asunto.">
   <meta property="og:url" content="https://altumlumen-design.github.io/Altum-Lumen-S.A.C./transparencia.html">
   <meta property="og:image" content="https://altumlumen-design.github.io/Altum-Lumen-S.A.C./social-preview-corporativo-20260808.jpg">
-
-<script src="institucional.js" defer></script>
+  <meta name="twitter:card" content="summary_large_image">
+  <script src="portal.js" defer></script>
+  <script src="institucional.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Ir al contenido</a>
   <header class="institution-header">
-    <div class="layout site-header-inner">
-      <a class="brand" href="index.html">
-        <img src="logo-1.png" width="58" height="58" alt="">
-        <span><strong>ALTUM LUMEN S.A.C.</strong><small>Excelencia que transforma</small></span>
+    <div class="layout site-header-inner" data-portal-header>
+      <a class="brand" href="./" aria-label="Altum Lumen, inicio">
+        <img src="logo-1.png" width="176" height="66" alt="ALTUM LUMEN S.A.C.">
       </a>
-      <nav class="institution-nav" aria-label="Navegación principal">
-        <a href="index.html">Inicio</a>
-      <a href="index.html#servicios">Servicios</a>
-      <a href="transparencia.html" aria-current="page">Transparencia</a>
-      <a href="directorio.html">Directorio</a>
-      <a href="mesa-de-partes.html">Mesa de Partes</a>
+      <button type="button" class="portal-menu-toggle" aria-expanded="false" aria-controls="portal-nav" hidden data-menu-toggle><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg> Menú</button>
+      <nav class="institution-nav" id="portal-nav" aria-label="Navegación principal">
+        <a href="./">Inicio</a>
+        <a href="informacion-institucional.html">Nosotros</a>
+        <a href="servicios.html">Servicios</a>
+        <a href="transparencia.html" aria-current="page">Transparencia</a>
+        <a href="directorio.html">Directorio</a>
+        <a href="atencion.html" class="nav-action">Atención</a>
       </nav>
     </div>
   </header>
@@ -48,10 +53,9 @@
   </div></div><nav class="layout section-links" aria-label="Secciones de Transparencia">
       <a href="#actos-resolutivos"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 3h7l4 4v14H7zM14 3v5h4M10 12h5m-5 4h5"/></svg> <span>Actos resolutivos</span> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
       <a href="#documentos-gestion"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6h7l2 2h9v11H3z"/></svg> <span>Documentos de gestión</span> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
-      <a href="directorio.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10" cy="8" r="3"/><path d="M4 19v-2a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v2m1-14a3 3 0 0 1 0 6m4 8v-2a5 5 0 0 0-3-5"/></svg> <span>Directorio institucional</span> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
     </nav>
   <section id="actos-resolutivos" class="layout content-section" data-catalog="publications">
-    <div class="section-title"><h2 tabindex="-1">Actos resolutivos</h2><p>Ordenados por fecha de incorporación al repositorio público de Altum Lumen.</p></div>
+    <div class="section-title"><h2 tabindex="-1">Actos resolutivos</h2><p>Ordenados del más reciente al más antiguo por fecha de publicación.</p></div>
     <form class="filter-form" data-catalog-form role="search" aria-label="Buscar actos resolutivos" hidden>
     <div class="filter-search"><label for="catalog-query">Buscar</label><div class="search-input"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4 4"/></svg>
       <input id="catalog-query" name="q" type="search" autocomplete="off" placeholder="Número o asunto"></div></div>
@@ -60,11 +64,6 @@
 <div><label for="catalog-anio">Año del acto</label><select id="catalog-anio" name="anio"><option value="">Todos</option><option value="2026">2026</option><option value="2025">2025</option></select></div>
     <button class="button button-quiet" type="reset">Limpiar</button>
   </form>
-    <div class="office-filters" hidden data-office-filters><span>Por órgano emisor</span><a class="quick-filter" href="?oficina=Direcci%C3%B3n%20Acad%C3%A9mica#actos-resolutivos" data-office-filter="Dirección Académica">Dirección Académica</a>
-<a class="quick-filter" href="?oficina=Direcci%C3%B3n%20de%20Administraci%C3%B3n#actos-resolutivos" data-office-filter="Dirección de Administración">Dirección de Administración</a>
-<a class="quick-filter" href="?oficina=Gerencia%20General#actos-resolutivos" data-office-filter="Gerencia General">Gerencia General</a>
-<a class="quick-filter" href="?oficina=Subdirecci%C3%B3n%20de%20Recursos%20Humanos#actos-resolutivos" data-office-filter="Subdirección de Recursos Humanos">Subdirección de Recursos Humanos</a>
-<a class="quick-filter" href="?oficina=Subgerencia%20de%20Recursos%20Humanos#actos-resolutivos" data-office-filter="Subgerencia de Recursos Humanos">Subgerencia de Recursos Humanos</a></div>
     <p class="result-status" role="status" data-catalog-status hidden></p>
     <ol class="publication-list" data-catalog-list><li class="publication" id="00009-2026-al-da" data-directory-item data-search="Resolución Directoral N.° 00009-2026-AL/DA Aprueba el Diplomado Especializado en Gerencia Pública, Dirección Estratégica y Gestión por Resultados, de 240 horas académicas. Dirección Académica" data-type="Resolución Directoral" data-office="Dirección Académica" data-year="2026">
       <div class="publication-meta"><span>Publicación</span><strong><time datetime="2026-11-11">11 nov. 2026</time></strong></div>
@@ -1115,7 +1114,7 @@
   </section>
   <section id="documentos-gestion" class="content-section section-shaded">
     <div class="layout">
-      <div class="section-title"><h2>Documentos de gestión</h2><p>Instrumentos de organización institucional.</p></div>
+      <div class="section-title"><h2>Documentos de gestión</h2><p>Consulta los instrumentos de organización institucional y sus versiones anteriores.</p></div>
       <div class="management-grid"><article class="management-card">
     <span class="tile-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6h7l2 2h9v11H3z"/></svg></span>
     <h3><a href="documentos/gestion/organigrama-2026.pdf" target="_blank" rel="noopener">Organigrama institucional 2026</a></h3>
@@ -1148,22 +1147,17 @@
   </article></div></details>
     </div>
   </section>
-  <section id="mesa-de-partes" class="layout content-section compact-section">
-    <div class="section-title"><h2>Atención documentaria</h2></div>
-    <div class="section-links contact-links">
-      <a href="mesa-de-partes.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 5h18v14H3zm0 1 9 7 9-7"/></svg> <span>Mesa de Partes Virtual</span> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
-      <a href="consultar-expediente.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6h7l2 2h9v11H3z"/></svg> <span>Consultar expediente</span> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
-      <a href="verificacion.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4 4"/></svg> <span>Verificar documento</span> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
-    </div>
-  </section>
+  <div id="mesa-de-partes" class="layout compact-section">
+    <a class="text-link" href="atencion.html">Canales de atención documentaria <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
+  </div>
   </main>
   <footer class="institution-footer">
     <div class="layout footer-inner">
-      <div><strong>ALTUM LUMEN S.A.C.</strong><div>Sociedad Anónima Cerrada · RUC 20614458918</div></div>
-      <nav aria-label="Atención institucional">
-        <a href="mesa-de-partes.html">Mesa de Partes</a>
-        <a href="verificacion.html">Verificación documental</a>
-        <a href="libro-de-reclamaciones.html">Libro de Reclamaciones</a>
+      <div><strong>ALTUM LUMEN S.A.C.</strong><div>RUC 20614458918 · Perú</div></div>
+      <nav aria-label="Información legal y acceso institucional">
+        <a href="privacidad.html">Privacidad</a>
+        <a href="terminos.html">Términos</a>
+        <a href="sgd.html">Acceso al SGD <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
       </nav>
     </div>
   </footer>
