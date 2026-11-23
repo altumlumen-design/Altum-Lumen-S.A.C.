@@ -97,7 +97,7 @@ const directoryRoles = personas.flatMap(person => person.roles.map(role => ({per
 assert(new Set(directoryRoles.map(({role}) => role.orden)).size === directoryRoles.length, 'Hay cargos con el mismo orden institucional.');
 const options = values => values.map(value => `<option value="${escape(value)}">${escape(value)}</option>`).join('');
 const assets = new Map(['institucional.css', 'portal.css', 'portal.js', 'institucional.js'].map(file => {
-  const revision = createHash('sha256').update(read(file)).digest('hex').slice(0, 10);
+  const revision = createHash('sha256').update(read(file).replace(/\r\n/g, '\n')).digest('hex').slice(0, 10);
   return [file, file + '?v=' + revision];
 }));
 const page = createLayout({base, icon, escape, assets});
