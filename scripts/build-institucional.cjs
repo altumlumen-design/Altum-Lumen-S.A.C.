@@ -371,7 +371,7 @@ function directory() {
           <h4>${escape(person.name)}</h4>
           <p class="position-title">${roleTitle(role)}</p>
           <a class="position-mail" href="mailto:${escape(role.email)}">${escape(role.email)}</a>
-          <a class="text-link" href="${rolePath(person, role)}" aria-label="Ver ficha de ${title}, ${escape(person.name)}">Ver ficha ${icon('arrow')}</a>
+          <a class="text-link" href="${rolePath(person, role)}" aria-label="Ver más sobre ${title}, ${escape(person.name)}">Ver más ${icon('arrow')}</a>
         </div>
       </article>
     </li>`;
@@ -416,7 +416,7 @@ function profile(person) {
     <div class="role-heading"><p class="record-office">${escape(role.office)}</p>
       <h3>${roleTitle(role)}</h3>
     </div>
-    <a class="text-link" href="${depth + rolePath(person, role)}">Ver ficha ${icon('arrow')}</a>
+    <a class="text-link" href="${depth + rolePath(person, role)}" aria-label="Ver más sobre ${escape(roleName(role))}">Ver más ${icon('arrow')}</a>
   </article>`).join('\n');
   const description = `${person.name}, ${roleName(principal)} de Altum Lumen S.A.C. Consulta su perfil institucional y los documentos de designación.`;
   const main = `<div class="masthead"><div class="layout">
@@ -441,8 +441,7 @@ ${extract ? `      <p class="designation-extract">${escape(extract)}</p>\n` : ''
         <span class="action-icon">${icon('document')}</span>
         <span><strong>${escape(record.title)}</strong><small>Ver PDF</small></span>
         ${icon('external')}
-      </a>
-      <a class="text-link" href="${depth + actPath(record)}">Ver ficha del documento ${icon('arrow')}</a>` : `
+      </a>` : `
       <p class="registration-record"><span class="action-icon">${icon('document')}</span><strong>${escape(label)}</strong></p>`;
   return `<aside class="role-designation" aria-labelledby="designation-title">
       <h2 id="designation-title">Norma de nombramiento</h2>${content}
