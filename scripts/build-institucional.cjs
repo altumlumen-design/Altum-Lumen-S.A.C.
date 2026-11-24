@@ -35,7 +35,6 @@ const icons = {
   people: '<circle cx="10" cy="8" r="3"/><path d="M4 19v-2a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v2m1-14a3 3 0 0 1 0 6m4 8v-2a5 5 0 0 0-3-5"/>',
   arrow: '<path d="M4 12h15m-6-6 6 6-6 6"/>',
   external: '<path d="M13 5h6v6m0-6-8 8m6 0v6H5V7h6"/>',
-  download: '<path d="M12 3v11m-4-4 4 4 4-4M5 17v4h14v-4"/>',
   search: '<circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4 4"/>',
   mail: '<path d="M3 5h18v14H3zm0 1 9 7 9-7"/>',
 };
@@ -48,8 +47,8 @@ function writtenDate(date, format = longDate) {
   return format.format(new Date(date + 'T00:00:00Z'));
 }
 const time = (date, format) => `<time datetime="${escape(date)}">${escape(writtenDate(date, format))}</time>`;
-const pdfLink = (pdf, depth = '', label = 'Ver PDF') =>
-  `<a class="document-link" href="${escape(depth + pdf)}" target="_blank" rel="noopener">${icon('document')} <span>${escape(label)}</span></a>`;
+const pdfLink = (pdf, depth = '') =>
+  `<a class="document-link" href="${escape(depth + pdf)}" target="_blank" rel="noopener">${icon('document')} <span>Ver PDF</span></a>`;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -73,9 +72,6 @@ for (const record of actos) {
   if (record.bundle || record.annex) {
     verifyPdf(record.bundle);
     verifyPdf(record.annex);
-  }
-  if (record.verificationCode) {
-    assert(/^AL-\d{4}-[A-F0-9]{32}$/.test(record.verificationCode), `Código de verificación inválido: ${record.id}`);
   }
   verifyDate(record.issuedOn);
   assert(Number(record.issuedOn.slice(0, 4)) === record.year, `Año de emisión inválido: ${record.id}`);
@@ -152,8 +148,7 @@ function publicationCards() {
         <p class="record-summary">${escape(record.summary)}</p>
       </div>
       <div class="publication-actions">
-        ${pdfLink(pdf, '', record.bundle ? 'Ver PDF con anexo' : 'Ver PDF')}
-        <a class="download-link" href="${escape(pdf)}" download>${icon('download')} <span>Descargar</span><span class="sr-only"> ${escape(record.title)}</span></a>
+        ${pdfLink(pdf)}
       </div>
     </li>`;
   }).join('\n');
@@ -220,15 +215,13 @@ function documentPage(item, isAct) {
   const documents = item.bundle
     ? pdfFile(item.bundle, 'Resolución y anexo', depth) + pdfFile(item.pdf, 'Resolución firmada', depth) + pdfFile(item.annex, 'Anexo firmado', depth)
     : pdfFile(item.pdf, isAct ? item.type : item.title, depth);
-  const verify = item.verificationCode ? `
-      <a class="text-link" href="${depth}verificacion.html?codigo=${item.verificationCode}">Verificar documento ${icon('arrow')}</a>` : '';
   const main = masthead(item.title, '', crumbs) + `
   <article class="layout content-section document-detail" aria-labelledby="extract-title">
     <div class="document-extract">${isAct ? `
       <p class="record-office">${escape(item.office)}</p>` : ''}
       <h2 id="extract-title">Extracto</h2>
       <p>${escape(description)}</p>${isAct ? `
-      <p class="document-issued">Fecha de emisión · ${time(item.issuedOn)}</p>` : ''}${verify}
+      <p class="document-issued">Fecha de emisión · ${time(item.issuedOn)}</p>` : ''}
     </div>
     <section class="role-designation document-files" aria-labelledby="files-title">
       <h2 id="files-title">Archivos PDF</h2>

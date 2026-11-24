@@ -189,7 +189,7 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
       <h2 id="service-reference">Información institucional</h2>
       <dl class="record-details">
         <div><dt>Unidad responsable</dt><dd>${service.office}</dd></div>
-        <div><dt>Documento de referencia</dt><dd>${pdfLink(reference.pdf, depth, reference.title)}</dd></div>
+        <div><dt>Documento de referencia</dt><dd>${escape(reference.title)}<br>${pdfLink(reference.pdf, depth)}</dd></div>
       </dl>
     </aside>
     <p class="service-back"><a class="button button-quiet" href="${depth + links.services}">Volver a Servicios</a></p>

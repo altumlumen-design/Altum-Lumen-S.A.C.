@@ -91,11 +91,10 @@ section[id] { scroll-margin-top: 22px; }
 .publication h3 a:hover { text-decoration: underline; }
 .record-summary { color: var(--ink); font-size: 15px; }
 .publication-actions { display: grid; align-content: start; justify-items: start; gap: 7px; }
-.document-link, .download-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; }
+.document-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; }
 .document-link { padding: 5px 9px; border: 1px solid var(--line); border-radius: 7px; text-decoration: none; }
 .document-link:hover { border-color: var(--blue); background: var(--blue-light); }
-.document-link svg, .download-link svg { width: 16px; height: 16px; flex: none; }
-.download-link { padding-left: 9px; font-size: 13px; font-weight: 590; }
+.document-link svg { width: 16px; height: 16px; flex: none; }
 .result-status { margin: 15px 0 8px; color: var(--muted); font-size: 14px; }
 .empty-state { padding: 20px; margin-top: 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
 .empty-state p { color: var(--muted); }
