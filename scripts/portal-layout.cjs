@@ -8,7 +8,7 @@ const nav = [
 ];
 
 module.exports = function createLayout({base, icon, escape, assets}) {
-  return function page({title, pagePath, description, active, depth = '', main, script = false, structured, noindex = false, linkBase}) {
+  return function page({title, pagePath, description, active, depth = '', main, script = false, structured, noindex = false, linkBase, image = 'social-preview-corporativo-20260808.jpg'}) {
     const prefix = linkBase || depth;
     const siteNav = nav.map(([href, label, key]) => {
       const current = active === key ? ' aria-current="page"' : '';
@@ -38,8 +38,8 @@ module.exports = function createLayout({base, icon, escape, assets}) {
   <meta property="og:title" content="${escape(label)}">
   <meta property="og:description" content="${escape(description)}">
   <meta property="og:url" content="${url}">
-  <meta property="og:image" content="${base}social-preview-corporativo-20260808.jpg">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="${base + escape(image)}">
+  <meta name="twitter:card" content="${image.startsWith('funcionario-') ? 'summary' : 'summary_large_image'}">
 ${structured ? `  <script type="application/ld+json">${JSON.stringify(structured).replace(/</g, '\\u003c')}</script>\n` : ''}  <script src="${prefix + assets.get('portal.js')}" defer></script>
 ${script ? `  <script src="${prefix + assets.get('institucional.js')}" defer></script>\n` : ''}</head>
 <body${active === 'home' ? ' class="portal-home"' : ''}>

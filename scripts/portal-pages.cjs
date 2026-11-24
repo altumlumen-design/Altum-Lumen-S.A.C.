@@ -57,15 +57,23 @@ const emails = {
   services: 'serviciosyrelaciones.altumlumen@gmail.com',
 };
 
-module.exports = function portalViews({icon, escape, masthead, breadcrumb, time, shortDate, pdfLink, byCode, recent, base, documentPaths}) {
-  const latestList = recent.slice(0, 3).map(record => `
+module.exports = function portalViews({icon, escape, masthead, breadcrumb, time, shortDate, pdfLink, byCode, recent, base, documentPaths, actPath}) {
+  const recentOffices = [...new Set(recent.map(record => record.office))].slice(0, 2);
+  const latestGroups = recentOffices.map(office => {
+    const records = recent.filter(record => record.office === office).slice(0, 3);
+    const latestList = records.map(record => `
       <li>
-        <a href="${documentPaths.projects}#${escape(record.id)}">
+        <a href="${actPath(record)}">
           <span class="latest-date">${time(record.issuedOn, shortDate)}</span>
-          <span class="latest-description"><small>${escape(record.office)}</small><strong>${escape(record.title)}</strong></span>
+          <strong>${escape(record.title)}</strong>
           ${icon('arrow')}
         </a>
       </li>`).join('');
+    return `<section class="latest-office">
+      <h3><a href="${documentPaths.projects}?oficina=${encodeURIComponent(office)}">${escape(office)}</a></h3>
+      <ul class="latest-list">${latestList}</ul>
+    </section>`;
+  }).join('');
   const directLinks = channels.map(channel => `
         <a href="${channel.file}" class="quick-access">
           <span class="action-icon">${icon(channel.icon)}</span>
@@ -122,7 +130,7 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
         <h2 id="latest-title">Proyectos resolutivos recientes</h2>
         <a class="text-link" href="${documentPaths.index}">Ver documentos legales ${icon('arrow')}</a>
       </div>
-      <ul class="latest-list">${latestList}</ul>
+      <div class="latest-groups">${latestGroups}</div>
     </div>
   </section>`,
   };
