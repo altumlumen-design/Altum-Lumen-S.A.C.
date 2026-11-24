@@ -195,6 +195,8 @@ const documentPaths = {
   management: 'documentos-gestion.html',
   projects: 'proyectos-resolutivos.html',
 };
+const managementTitle = 'Documentos de gestión';
+const resolutionsTitle = 'Resoluciones emitidas';
 
 function relatedDesignations(record) {
   return directoryRoles.filter(({role}) => role.designation.code === record.code);
@@ -211,7 +213,7 @@ function pdfFile(pdf, title, depth) {
 function documentPage(item, isAct) {
   const depth = isAct ? '../' : '../../';
   const pagePath = isAct ? actPath(item) : managementPath(item);
-  const section = isAct ? ['Proyectos resolutivos', documentPaths.projects] : ['Documentos de gestión', documentPaths.management];
+  const section = isAct ? [resolutionsTitle, documentPaths.projects] : [managementTitle, documentPaths.management];
   const description = isAct ? item.summary : item.description;
   const crumbs = breadcrumb([['Documentos legales', documentPaths.index], section, [item.title]], depth);
   const related = isAct ? relatedDesignations(item) : [];
@@ -253,30 +255,49 @@ function documentPage(item, isAct) {
 
 function legalPages() {
   const title = 'Documentos legales';
-  const management = 'Documentos de gestión';
-  const projects = 'Proyectos resolutivos';
+  const latestYear = Math.max(...gestion.map(item => item.year));
   const categories = [
-    {title:management, description:'Instrumentos de organización y sus versiones anteriores.', href:documentPaths.management, legacyId:'documentos-gestion', iconName:'folder'},
-    {title:projects, description:'Busca y consulta los actos emitidos por Altum Lumen.', href:documentPaths.projects, legacyId:'actos-resolutivos', iconName:'document'},
+    {
+      title:managementTitle, description:'Organización, funciones y documentos vigentes.', href:documentPaths.management,
+      legacyId:'documentos-gestion', iconName:'folder',
+      previews:gestion.filter(item => item.year === latestYear).slice(0, 3).map(item => ({
+        title:item.title, href:managementPath(item), summary:item.description,
+      })),
+    },
+    {
+      title:resolutionsTitle, description:'Catálogo por órgano emisor, año y asunto.', href:documentPaths.projects,
+      legacyId:'actos-resolutivos', iconName:'document',
+      previews:recent.slice(0, 3).map(item => ({
+        title:item.title, href:actPath(item), summary:item.summary, date:item.issuedOn,
+      })),
+    },
   ];
-  const links = categories.map(item => `<a id="${item.legacyId}" class="document-category" href="${item.href}">
-      <span class="action-icon">${icon(item.iconName)}</span>
-      <span><strong>${item.title}</strong><small>${item.description}</small></span>
-      ${icon('arrow')}
-    </a>`).join('\n    ');
+  const links = categories.map(item => `<section class="document-category-panel" aria-label="${item.title}">
+      <a id="${item.legacyId}" class="document-category" href="${item.href}">
+        <span class="action-icon">${icon(item.iconName)}</span>
+        <span><strong>${item.title}</strong><small>${item.description}</small></span>
+        ${icon('arrow')}
+      </a>
+      <ul class="document-previews">
+        ${item.previews.map(preview => `<li>
+          <a href="${preview.href}">${escape(preview.title)}</a>${preview.date ? `
+          ${time(preview.date, shortDate)}` : ''}
+          <p>${escape(preview.summary)}</p>
+        </li>`).join('\n        ')}
+      </ul>
+    </section>`).join('\n    ');
   const index = {
     title, pagePath:documentPaths.index, active:'publications',
-    description:'Accede a Documentos de gestión y Proyectos resolutivos de Altum Lumen S.A.C.',
+    description:'Consulta los documentos de gestión y las resoluciones emitidas por Altum Lumen S.A.C.',
     main:masthead(title, '', breadcrumb([[title]])) + `
   <nav class="layout document-categories" aria-label="Categorías de documentos legales" data-document-directory>
     ${links}
   </nav>`,
   };
-  const latestYear = Math.max(...gestion.map(item => item.year));
   const managementPage = {
-    title:management, pagePath:documentPaths.management, active:'publications',
+    title:managementTitle, pagePath:documentPaths.management, active:'publications',
     description:'Consulta el organigrama, el reglamento, el manual y sus versiones anteriores.',
-    main:masthead(management, 'Consulta el extracto y el PDF de cada instrumento de gestión.', breadcrumb([[title,documentPaths.index],[management]])) + `
+    main:masthead(managementTitle, 'Consulta el extracto y el PDF de cada instrumento de gestión.', breadcrumb([[title,documentPaths.index],[managementTitle]])) + `
   <section class="layout content-section" id="documentos-gestion" aria-label="Instrumentos de gestión">
     <div class="management-grid">${managementCards(gestion.filter(item => item.year === latestYear))}</div>
     <details class="archive">
@@ -286,12 +307,12 @@ function legalPages() {
   </section>`,
   };
   const projectsPage = {
-    title:projects, pagePath:documentPaths.projects, active:'publications', script:true,
+    title:resolutionsTitle, pagePath:documentPaths.projects, active:'publications', script:true,
     description:'Consulta los actos emitidos por Altum Lumen por tipo de documento, órgano emisor, año o asunto.',
-    main:masthead(projects, 'Actos emitidos, del más reciente al más antiguo por fecha de emisión.', breadcrumb([[title,documentPaths.index],[projects]])) + `
+    main:masthead(resolutionsTitle, 'Actos emitidos, del más reciente al más antiguo por fecha de emisión.', breadcrumb([[title,documentPaths.index],[resolutionsTitle]])) + `
   <section id="actos-resolutivos" class="layout content-section" data-catalog="publications">
     <div class="section-title"><h2 tabindex="-1">Catálogo</h2></div>
-    ${searchForm({label:'Buscar en proyectos resolutivos',placeholder:'Número o asunto',filters:[
+    ${searchForm({label:'Buscar en resoluciones emitidas',placeholder:'Número o asunto',filters:[
       {name:'tipo',title:'Tipo de documento',values:types,empty:'Todos'},
       {name:'oficina',title:'Órgano emisor',values:offices,empty:'Todos'},
       {name:'anio',title:'Año de emisión',values:years,empty:'Todos'},
@@ -506,6 +527,7 @@ for (const {person, role} of directoryRoles) update(rolePath(person, role), role
 let sitemap = read('sitemap.xml').replace(/\r\n/g,'\n');
 const sitemapPages = [
   'servicios.html', 'atencion.html', documentPaths.management, documentPaths.projects, 'directorio.html',
+  'mesa-de-partes.html', 'consultar-expediente.html', 'libro-de-reclamaciones.html',
   ...corporatePages.map(item => item.pagePath).filter(file => file.startsWith('servicios/')),
   ...personas.map(profilePath), ...directoryRoles.map(({person, role}) => rolePath(person, role)),
   ...recent.map(actPath), ...gestion.map(managementPath),

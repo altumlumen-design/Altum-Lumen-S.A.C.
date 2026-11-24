@@ -127,7 +127,7 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
   <section class="home-information" id="documentos" aria-labelledby="latest-title">
     <div class="layout publication-preview">
       <div class="latest-copy">
-        <h2 id="latest-title">Proyectos resolutivos recientes</h2>
+        <h2 id="latest-title">Resoluciones recientes</h2>
         <a class="text-link" href="${documentPaths.index}">Ver documentos legales ${icon('arrow')}</a>
       </div>
       <div class="latest-groups">${latestGroups}</div>

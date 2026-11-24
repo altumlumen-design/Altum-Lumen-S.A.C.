@@ -42,7 +42,7 @@ ${page==='mesa'?'<label>Documento principal (PDF obligatorio) <small>Un archivo 
 <p id="attachment-feedback" role="status"></p>
 <ol id="files" aria-label="Documentos que se enviarán"></ol></fieldset>
 <details><summary>Uso de tus datos</summary><p>ALTUM LUMEN S.A.C. usa tus datos y archivos para registrar, atender y responder este trámite. Para consultas sobre tus datos, escribe a tramiteyatencion.altumlumen@gmail.com. <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a></p></details>
-<p></p>${captcha}${message}<button id="send">Registrar expediente</button></form>
+<p></p>${captcha}${message}<button id="send">${page==='libro'?'Registrar reclamo o queja':'Registrar expediente'}</button></form>
 <section class="panel" id="result" hidden tabindex="-1"></section>`;
 const form=document.querySelector('#form'),send=document.querySelector('#send'),result=document.querySelector('#result'),feedback=document.querySelector('#message');
 const refreshButton=document.querySelector('#refresh');

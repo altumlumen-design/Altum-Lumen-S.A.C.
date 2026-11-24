@@ -10,35 +10,46 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=20260925">
   <link rel="icon" type="image/png" href="favicon.png?v=20260925">
   <title>Verificación de documentos | ALTUM LUMEN S.A.C.</title>
-  <style>
-    :root{--ink:#14252e;--muted:#607581;--blue:#2c6f91;--deep:#123f5a;--pale:#eef7fb;--line:#dbe6eb;--surface:#f6f9fb;--white:#fff;--green:#247052;--shadow:0 18px 52px rgba(18,63,90,.10)}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--surface);line-height:1.55}
-    a{color:inherit}.container{width:min(1080px,calc(100% - 34px));margin:auto}
-    header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;backdrop-filter:blur(14px)}
-    .head{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand img{width:164px;height:58px;object-fit:contain}.headnav{display:flex;gap:7px;align-items:center}.headnav a{text-decoration:none;font-size:.88rem;font-weight:650;color:#405864;padding:8px 11px;border-radius:10px}.headnav a:hover{background:var(--pale);color:var(--deep)}
-    .hero{padding:54px 0 28px;background:linear-gradient(180deg,#f5fbfe 0%,#fff 100%);border-bottom:1px solid var(--line)}.eyebrow{margin:0 0 7px;color:var(--blue);font-size:.74rem;font-weight:850;text-transform:uppercase;letter-spacing:.13em}.hero h1{max-width:780px;margin:0;color:var(--deep);font-size:clamp(1.9rem,4.5vw,3.25rem);line-height:1.07;letter-spacing:-.035em}.hero p{max-width:720px;margin:16px 0 0;color:var(--muted);font-size:1rem}
-    main{padding:34px 0 64px}.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:20px;align-items:start}.card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.verify{padding:26px}.verify h2{margin:0;color:var(--deep);font-size:1.32rem}.verify>p{color:var(--muted);margin:7px 0 21px}
-    label{display:block;margin:0 0 7px;font-size:.78rem;font-weight:800;color:#405864}.field{display:flex;gap:9px}.field input{width:100%;min-height:48px;border:1px solid #cfdde5;border-radius:11px;padding:0 14px;font:inherit;outline:none;text-transform:uppercase}.field input:focus{border-color:#79aeca;box-shadow:0 0 0 3px rgba(44,111,145,.12)}button{min-height:48px;border:0;border-radius:11px;padding:0 17px;background:var(--deep);color:#fff;font:inherit;font-weight:800;cursor:pointer;white-space:nowrap}button:hover{background:#0b334b}button:disabled{opacity:.65;cursor:wait}
-    .result{display:none;margin-top:16px;padding:15px;border:1px solid #d6e4eb;border-radius:13px;background:#f8fbfd}.result.show{display:block}.result p{margin:0 0 10px}.result p:last-child{margin-bottom:0}.result b{display:block;color:var(--deep);margin-bottom:2px}.result span{color:var(--muted);font-size:.9rem}
-    .side{padding:22px}.side details{border:0}.side summary{cursor:pointer;list-style:none;font-weight:800;color:var(--deep);display:flex;justify-content:space-between;align-items:center}.side summary::-webkit-details-marker{display:none}.side summary:after{content:"⌄";color:#718591}.side details[open] summary:after{content:"⌃"}.steps{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:12px}.steps li{display:grid;grid-template-columns:29px 1fr;gap:10px;align-items:start;color:#405864;font-size:.87rem}.steps b{width:29px;height:29px;border-radius:9px;background:var(--pale);display:grid;place-items:center;color:var(--blue);font-size:.78rem}.links{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.link{display:inline-flex;text-decoration:none;padding:9px 12px;border-radius:10px;border:1px solid #cedde5;background:#fff;color:var(--deep);font-size:.84rem;font-weight:750}.link:hover{background:var(--pale)}
-    footer{border-top:1px solid var(--line);background:#fff;padding:22px 0;color:#71838d;font-size:.79rem}.foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
-    @media(max-width:780px){.head{min-height:68px}.brand img{width:145px;height:52px}.headnav a:first-child{display:none}.hero{padding:42px 0 24px}.layout{grid-template-columns:1fr}.verify{padding:20px}.field{display:grid}.field button{width:100%}}
-  </style>
+  <link rel="stylesheet" href="atencion.css?v=7">
 </head>
-<body>
-<header><div class="container head"><a class="brand" href="./" aria-label="ALTUM LUMEN S.A.C."><img src="logo-1.png" alt="ALTUM LUMEN S.A.C."></a><nav class="headnav" aria-label="Navegación"><a href="./">Portal corporativo</a><a href="transparencia.html">Documentos legales</a></nav></div></header>
-<section class="hero"><div class="container"><p class="eyebrow">Servicio institucional</p><h1>Verificación de documentos emitidos</h1><p>Consulte documentos emitidos por ALTUM LUMEN S.A.C. mediante el código de verificación o el QR incorporado en el documento.</p></div></section>
-<main><div class="container layout">
-  <section class="card verify" aria-labelledby="consulta-title">
-    <h2 id="consulta-title">Consultar un documento</h2>
-    <p>Ingrese el código que figura al pie del documento.</p>
-    <form id="verifyForm"><label for="codigo">Código de verificación</label><div class="field"><input id="codigo" name="codigo" autocomplete="off" maxlength="100" placeholder="Ej.: AL-2026-A1B2C3D4E5F60718293A4B5C6D7E8F90"><button type="submit">Verificar documento</button></div></form>
-    <div class="result" id="result" aria-live="polite"></div>
-    <div class="links"><a class="link" href="./">← Volver al Portal Corporativo</a><a class="link" href="transparencia.html">Documentos legales</a></div>
-  </section>
-  <aside class="card side"><details><summary>Cómo verificar</summary><ol class="steps"><li><b>1</b><span>Escanee el QR o ingrese el código del documento.</span></li><li><b>2</b><span>Pulse “Verificar documento”.</span></li><li><b>3</b><span>Revise los datos de emisión mostrados.</span></li></ol></details></aside>
-</div></main>
-<footer><div class="container foot"><span>© 2026 ALTUM LUMEN S.A.C. · Portal Corporativo</span><span>Verificación documental institucional</span></div></footer>
+<body data-page="verificacion">
+  <a class="skip" href="#contenido">Ir al contenido</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="./"><img src="logo-1.png" alt="ALTUM LUMEN S.A.C." width="170" height="64"></a>
+      <a class="return" href="atencion.html">Volver a Atención</a>
+    </div>
+  </header>
+  <main class="shell" id="contenido">
+    <div class="heading">
+      <span class="channel-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Zm-3 9 2 2 4-5"/></svg></span>
+      <div>
+        <h1>Verificación de documentos emitidos</h1>
+        <p class="intro">Consulta los datos de emisión con el código o el QR incorporado en el documento.</p>
+      </div>
+    </div>
+    <div class="workspace">
+      <form id="verifyForm" class="verification" aria-labelledby="consulta-title">
+        <h2 id="consulta-title">Consultar un documento</h2>
+        <label for="codigo">Código de verificación</label>
+        <div class="field">
+          <input id="codigo" name="codigo" autocomplete="off" maxlength="100" placeholder="Ej.: AL-2026-A1B2C3D4E5F60718293A4B5C6D7E8F90">
+          <button type="submit">Verificar documento</button>
+        </div>
+        <div class="verification-result" id="result" aria-live="polite"></div>
+      </form>
+      <aside class="guide" aria-labelledby="verify-guide">
+        <h2 id="verify-guide">Cómo verificar</h2>
+        <p>Escanea el QR o escribe el código que figura al pie del documento. Pulsa «Verificar documento» para consultar el resultado.</p>
+      </aside>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <span>ALTUM LUMEN S.A.C. · RUC 20614458918</span>
+      <a href="privacidad.html">Política de privacidad</a>
+    </div>
+  </footer>
 <script>
 (() => {
   const ENDPOINT='https://script.google.com/macros/s/AKfycbxmkUxD9CrJQ4WkEPQnCFfu9x32HiJZOAZMKSkEcs9S9lFB3xSdRE8AzSJhbGC3mhVl/exec';
