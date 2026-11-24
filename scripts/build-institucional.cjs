@@ -259,14 +259,14 @@ function legalPages() {
   const categories = [
     {
       title:managementTitle, description:'Organización, funciones y documentos vigentes.', href:documentPaths.management,
-      legacyId:'documentos-gestion', iconName:'folder',
+      legacyId:'documentos-gestion', iconName:'folder', moreLabel:'Ver más documentos de gestión',
       previews:gestion.filter(item => item.year === latestYear).slice(0, 3).map(item => ({
         title:item.title, href:managementPath(item), summary:item.description,
       })),
     },
     {
-      title:resolutionsTitle, description:'Catálogo por órgano emisor, año y asunto.', href:documentPaths.projects,
-      legacyId:'actos-resolutivos', iconName:'document',
+      title:resolutionsTitle, description:'Últimas resoluciones y catálogo por órgano emisor, año y asunto.', href:documentPaths.projects,
+      legacyId:'actos-resolutivos', iconName:'document', moreLabel:'Ver más resoluciones',
       previews:recent.slice(0, 3).map(item => ({
         title:item.title, href:actPath(item), summary:item.summary, date:item.issuedOn,
       })),
@@ -285,6 +285,9 @@ function legalPages() {
           <p>${escape(preview.summary)}</p>
         </li>`).join('\n        ')}
       </ul>
+      <div class="document-preview-more">
+        <a class="text-link" href="${item.href}">${item.moreLabel} ${icon('arrow')}</a>
+      </div>
     </section>`).join('\n    ');
   const index = {
     title, pagePath:documentPaths.index, active:'publications',

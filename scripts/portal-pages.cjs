@@ -130,7 +130,9 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
         <h2 id="latest-title">Resoluciones recientes</h2>
         <a class="text-link" href="${documentPaths.index}">Ver documentos legales ${icon('arrow')}</a>
       </div>
-      <div class="latest-groups">${latestGroups}</div>
+      <div class="latest-groups">${latestGroups}
+        <a class="text-link" href="${documentPaths.projects}">Ver más resoluciones ${icon('arrow')}</a>
+      </div>
     </div>
   </section>`,
   };
