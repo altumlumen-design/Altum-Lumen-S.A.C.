@@ -48,7 +48,7 @@ function writtenDate(date, format = longDate) {
   return format.format(new Date(date + 'T00:00:00Z'));
 }
 const time = (date, format) => `<time datetime="${escape(date)}">${escape(writtenDate(date, format))}</time>`;
-const pdfLink = (pdf, depth = '', label = 'Abrir PDF') =>
+const pdfLink = (pdf, depth = '', label = 'Ver PDF') =>
   `<a class="document-link" href="${escape(depth + pdf)}" target="_blank" rel="noopener">${icon('document')} <span>${escape(label)}</span></a>`;
 
 function assert(condition, message) {
@@ -152,7 +152,7 @@ function publicationCards() {
         <p class="record-summary">${escape(record.summary)}</p>
       </div>
       <div class="publication-actions">
-        ${pdfLink(pdf, '', record.bundle ? 'PDF con anexo' : 'Abrir PDF')}
+        ${pdfLink(pdf, '', record.bundle ? 'Ver PDF con anexo' : 'Ver PDF')}
         <a class="download-link" href="${escape(pdf)}" download>${icon('download')} <span>Descargar</span><span class="sr-only"> ${escape(record.title)}</span></a>
       </div>
     </li>`;
@@ -200,6 +200,14 @@ function relatedDesignations(record) {
   return directoryRoles.filter(({role}) => role.designation.code === record.code);
 }
 
+function pdfFile(pdf, title, depth) {
+  return `<a class="document-link file-card" href="${escape(depth + pdf)}" target="_blank" rel="noopener" aria-label="Ver PDF · ${escape(title)}">
+        <span class="action-icon">${icon('document')}</span>
+        <span><strong>${escape(title)}</strong><small>Ver PDF</small></span>
+        ${icon('external')}
+      </a>`;
+}
+
 function documentPage(item, isAct) {
   const depth = isAct ? '../' : '../../';
   const pagePath = isAct ? actPath(item) : managementPath(item);
@@ -208,8 +216,8 @@ function documentPage(item, isAct) {
   const crumbs = breadcrumb([['Documentos legales', documentPaths.index], section, [item.title]], depth);
   const related = isAct ? relatedDesignations(item) : [];
   const documents = item.bundle
-    ? pdfLink(item.bundle, depth, 'Resolución y anexo (PDF)') + pdfLink(item.pdf, depth, 'Resolución firmada') + pdfLink(item.annex, depth, 'Anexo firmado')
-    : pdfLink(item.pdf, depth);
+    ? pdfFile(item.bundle, 'Resolución y anexo', depth) + pdfFile(item.pdf, 'Resolución firmada', depth) + pdfFile(item.annex, 'Anexo firmado', depth)
+    : pdfFile(item.pdf, isAct ? item.type : item.title, depth);
   const verify = item.verificationCode ? `
       <a class="text-link" href="${depth}verificacion.html?codigo=${item.verificationCode}">Verificar documento ${icon('arrow')}</a>` : '';
   const main = masthead(item.title, '', crumbs) + `
@@ -411,7 +419,7 @@ ${extract ? `      <p class="designation-extract">${escape(extract)}</p>\n` : ''
         ${icon('external')}
       </a>
       <a class="text-link" href="${depth + actPath(record)}">Ver ficha del documento ${icon('arrow')}</a>` : `
-      <p class="designation-extract">${escape(label)}</p>`;
+      <p class="registration-record"><span class="action-icon">${icon('document')}</span><strong>${escape(label)}</strong></p>`;
   return `<aside class="role-designation" aria-labelledby="designation-title">
       <h2 id="designation-title">Norma de nombramiento</h2>${content}
     </aside>`;
