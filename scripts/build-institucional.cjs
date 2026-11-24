@@ -413,7 +413,7 @@ ${extract ? `      <p class="designation-extract">${escape(extract)}</p>\n` : ''
       <a class="text-link" href="${depth + actPath(record)}">Ver ficha del documento ${icon('arrow')}</a>` : `
       <p class="designation-extract">${escape(label)}</p>`;
   return `<aside class="role-designation" aria-labelledby="designation-title">
-      <h2 id="designation-title">Documento de designación</h2>${content}
+      <h2 id="designation-title">Norma de nombramiento</h2>${content}
     </aside>`;
 }
 
