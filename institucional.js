@@ -6,7 +6,7 @@ const normalize = value => value.normalize('NFD').replace(/\p{Diacritic}/gu, '')
 for (const catalog of document.querySelectorAll('[data-catalog]')) {
   const publications = catalog.dataset.catalog === 'publications';
   const form = catalog.querySelector('[data-catalog-form]');
-  const status = catalog.querySelector('[data-catalog-status]');
+  const status = publications ? catalog.querySelector('[data-catalog-status]') : null;
   const empty = catalog.querySelector('[data-catalog-empty]');
   const pages = catalog.querySelector('[data-catalog-pages]');
   const fields = [...form.querySelectorAll('input[name], select[name]')];
@@ -64,8 +64,10 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
       section.hidden = !section.querySelector('[data-directory-item]:not([hidden])');
     }
     empty.hidden = matches.length !== 0;
-    const noun = publications ? (matches.length === 1 ? 'documento' : 'documentos') : (matches.length === 1 ? 'ficha' : 'fichas');
-    status.textContent = matches.length + ' ' + noun;
+    if (status) {
+      const noun = matches.length === 1 ? 'documento' : 'documentos';
+      status.textContent = matches.length + ' ' + noun;
+    }
     if (pages) {
       pages.hidden = lastPage <= 1;
       pages.querySelector('[data-catalog-page]').textContent = `Página ${selectedPage} de ${lastPage}`;
@@ -81,7 +83,7 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
   }
 
   form.hidden = false;
-  status.hidden = false;
+  if (status) status.hidden = false;
   fields.forEach(field => field.addEventListener(field.type === 'search' ? 'input' : 'change', changeFilters));
   form.addEventListener('submit', event => {
     event.preventDefault();

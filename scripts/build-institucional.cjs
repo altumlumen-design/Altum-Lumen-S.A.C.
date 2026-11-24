@@ -386,7 +386,6 @@ ${subgroup ? `        <p>${escape(heading)}</p>\n` : ''}        <h3>${escape(sub
         {name:'unidad',title:'Unidad orgánica',values:[...new Set([boardName,...directoryRoles.map(({role})=>role.office)])].sort(collator.compare),empty:'Todas'},
         {name:'grupo',title:'Grupo orgánico',values:groups,labels:groupNames,empty:'Todos'},
       ]})}
-    ${catalogStatus}
     ${sections}
     ${resultControls(true)}
   </section>`;
