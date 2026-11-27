@@ -506,35 +506,6 @@ function roleProfile(person, role) {
   return page({title,pagePath,description,active:'directory',depth,main,structured,image:person.photo});
 }
 
-const publicIndexPath = 'indice-del-portal.html';
-
-function publicIndex() {
-  const title = 'Índice del portal';
-  const link = (href, label) => `<li><a href="${escape(href)}">${escape(label)}</a></li>`;
-  const people = personas.map(person => `<li>
-        <a href="${profilePath(person)}">${escape(person.name)}</a>
-        <ul>${person.roles.map(role => link(rolePath(person, role), roleName(role))).join('')}</ul>
-      </li>`).join('\n      ');
-  const resolutions = years.map(year => `<h3>${year}</h3>
-    <ul>${recent.filter(record => record.year === year)
-      .map(record => link(actPath(record), record.title)).join('\n    ')}</ul>`).join('\n    ');
-  const main = masthead(title, '', breadcrumb([[title]])) + `
-  <div class="layout content-section prose">
-    <nav aria-label="Secciones del índice"><ul>
-      <li><a href="#perfiles">Directorio</a></li>
-      <li><a href="#gestion">Documentos de gestión</a></li>
-      <li><a href="#resoluciones">Resoluciones emitidas</a></li>
-    </ul></nav>
-    <h2 id="perfiles">Directorio</h2>
-    <ul>${people}</ul>
-    <h2 id="gestion">Documentos de gestión</h2>
-    <ul>${gestion.map(item => link(managementPath(item), item.title)).join('')}</ul>
-    <h2 id="resoluciones">Resoluciones emitidas</h2>
-    ${resolutions}
-  </div>`;
-  return page({title,pagePath:publicIndexPath,description:'Enlaces directos a los perfiles, documentos de gestión y resoluciones emitidas de Altum Lumen S.A.C.',main});
-}
-
 function update(file, content) {
   const target = path.join(root, file);
   if (checkOnly) {
@@ -573,11 +544,10 @@ update('directorio.html', page({title:'Directorio institucional',pagePath:'direc
   description:'Consulta por nombre o unidad orgánica los perfiles, contactos y las designaciones del equipo de Altum Lumen S.A.C.',main:directory(),structured:directorySchema}));
 for (const person of personas) update(profilePath(person), profile(person));
 for (const {person, role} of directoryRoles) update(rolePath(person, role), roleProfile(person, role));
-update(publicIndexPath, publicIndex());
 let sitemap = read('sitemap.xml').replace(/\r\n/g,'\n');
 const sitemapImages = new Map(personas.filter(person => person.photo).map(person => [profilePath(person), person.photo]));
 const sitemapPages = [
-  'servicios.html', 'atencion.html', documentPaths.management, documentPaths.projects, 'directorio.html', publicIndexPath,
+  'servicios.html', 'atencion.html', documentPaths.management, documentPaths.projects, 'directorio.html',
   'mesa-de-partes.html', 'consultar-expediente.html', 'libro-de-reclamaciones.html',
   ...corporatePages.map(item => item.pagePath).filter(file => file.startsWith('servicios/')),
   ...personas.map(profilePath), ...directoryRoles.map(({person, role}) => rolePath(person, role)),

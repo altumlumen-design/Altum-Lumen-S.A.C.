@@ -7,7 +7,6 @@ https://altumlumen-design.github.io/Altum-Lumen-S.A.C./atencion.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./documentos-gestion.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./proyectos-resolutivos.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./directorio.html
-https://altumlumen-design.github.io/Altum-Lumen-S.A.C./indice-del-portal.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./mesa-de-partes.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./consultar-expediente.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./libro-de-reclamaciones.html
