@@ -80,10 +80,12 @@ for (const item of gestion) verifyPdf(item.pdf);
 assert(new Set(personas.map(person => person.id)).size === personas.length, 'Hay perfiles duplicados.');
 for (const person of personas) {
   assert(/^[a-z0-9-]+$/.test(person.id) && person.name && person.roles.length, 'Perfil inválido.');
+  assert(typeof person.summary === 'string' && person.summary.trim(), `Resumen ausente: ${person.name}`);
   if (person.photo) assert(/^funcionario-[\w-]+\.(?:png|webp)$/.test(person.photo) && fs.existsSync(path.join(root, person.photo)), `Retrato inválido: ${person.id}`);
   assert(new Set(person.roles.map(role => role.id)).size === person.roles.length, `Cargos duplicados: ${person.name}`);
   for (const role of person.roles) {
     assert(/^[a-z0-9-]+$/.test(role.id) && Number.isSafeInteger(role.orden) && role.orden > 0, `Identificador u orden inválido: ${role.title}`);
+    assert(typeof role.responsibilities === 'string' && role.responsibilities.trim(), `Funciones ausentes: ${role.title}`);
     verifyDate(role.effectiveOn);
     assert(groups.includes(role.group) && /^[^\s<>]+@[^\s<>]+$/.test(role.email), `Cargo inválido: ${role.title}`);
     const {code, article, label} = role.designation;
@@ -398,11 +400,21 @@ ${subgroup ? `        <p>${escape(heading)}</p>\n` : ''}        <h3>${escape(sub
 function profileSchema(person, roles, pagePath, title, description) {
   const personPath = base + profilePath(person);
   const entity = {'@type':'Person','@id':personPath + '#persona',name:person.name,
-    jobTitle:roles.map(roleName),url:personPath,worksFor:organization};
+    description:person.summary,jobTitle:roles.map(roleName),url:personPath,worksFor:organization};
   if (person.photo) entity.image = base + person.photo;
   if (person.alternateName) entity.alternateName = person.alternateName;
   return {'@context':'https://schema.org','@type':'ProfilePage',
     name:title,description,url:base + pagePath,mainEntity:entity};
+}
+
+function profileSummary(person, role) {
+  const duties = role
+    ? `\n      <p>Como ${escape(role.title.charAt(0).toLowerCase() + role.title.slice(1))}, ${escape(role.responsibilities)}</p>`
+    : '';
+  return `<section class="prose" aria-labelledby="profile-summary-title">
+      <h2 id="profile-summary-title">Resumen</h2>
+      <p>${escape(person.summary)}</p>${duties}
+    </section>`;
 }
 
 function profile(person) {
@@ -420,10 +432,12 @@ function profile(person) {
     ${breadcrumb([['Directorio','directorio.html'], [person.name]], depth)}
     <div class="profile-heading">${portrait(person,depth,true)}<div><h1>${escape(person.name)}</h1><p>${roleTitle(principal)}</p></div></div>
   </div></div>
-  <section class="layout content-section profile-roles"><div class="section-title"><h2>Designaciones</h2></div>
+  <div class="layout content-section profile-roles">
+    ${profileSummary(person)}
+    <div class="section-title"><h2>Designaciones</h2></div>
     <div class="role-list">${roles}</div>
     <p class="back-link"><a class="button button-quiet" href="../directorio.html">Volver al directorio</a></p>
-  </section>`;
+  </div>`;
   const pagePath = profilePath(person);
   const title = person.name + ' · Perfil institucional';
   const structured = profileSchema(person, orderedRoles, pagePath, title, description);
@@ -461,6 +475,7 @@ function roleProfile(person, role) {
     </div>
   </div></div>
   <section class="layout content-section profile-roles" aria-labelledby="role-detail-title">
+    ${profileSummary(person, role)}
     <div class="role-detail-grid">
       <div>
         <div class="section-title"><h2 id="role-detail-title">Información institucional</h2></div>

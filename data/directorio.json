@@ -16,7 +16,8 @@
           "id": "gerencia-general",
           "designation": {
             "label": "Partida Registral N.° 15949500"
-          }
+          },
+          "responsibilities": "dirige la gestión de la empresa, ejecuta los acuerdos de la Junta General de Accionistas y supervisa el plan estratégico, el presupuesto y los controles internos."
         },
         {
           "title": "Jefe de la Oficina de Contabilidad y Tesorería",
@@ -30,7 +31,8 @@
           "designation": {
             "code": "00012-2026-AL/SDRH",
             "article": 2
-          }
+          },
+          "responsibilities": "supervisa los registros contables, la programación de pagos y el flujo de caja. Coordina las conciliaciones, el cumplimiento tributario interno y los reportes financieros."
         },
         {
           "title": "Director de Servicios Legales, Tributarios y Contables",
@@ -44,7 +46,8 @@
           "designation": {
             "code": "00017-2026-AL/GG",
             "article": 1
-          }
+          },
+          "responsibilities": "dirige los servicios legales, tributarios y contables para clientes. Define estándares de atención y supervisa los equipos, los plazos y la calidad de los entregables."
         },
         {
           "title": "Subdirector de Servicios Legales",
@@ -58,7 +61,8 @@
           "designation": {
             "code": "00018-2026-AL/GG",
             "article": 4
-          }
+          },
+          "responsibilities": "coordina la asesoría legal a clientes, la elaboración y revisión de contratos e informes y el seguimiento de los trámites y plazos de cada caso."
         },
         {
           "title": "Subdirector de Servicios Tributarios y Contables",
@@ -72,7 +76,8 @@
           "designation": {
             "code": "00017-2026-AL/GG",
             "article": 2
-          }
+          },
+          "responsibilities": "coordina la asesoría tributaria y contable a clientes, los registros y cierres contables, las declaraciones y la preparación de reportes financieros."
         },
         {
           "title": "Jefe de la Unidad Ejecutora de Obras e Inversiones",
@@ -86,10 +91,12 @@
           "designation": {
             "code": "00012-2026-AL/SDRH",
             "article": 1
-          }
+          },
+          "responsibilities": "coordina la ejecución de obras e inversiones y supervisa el avance, los costos, la calidad y la seguridad. Gestiona la entrega y el cierre técnico de las obras."
         }
       ],
-      "alternateName": "Jean Franco Vargas"
+      "alternateName": "Jean Franco Vargas",
+      "summary": "Abogado y contador público, graduado de la Maestría en Ingeniería Civil con mención en Gestión y Gerencia de la Construcción. Tiene formación técnica en Gestión de Recursos Humanos. Su trayectoria reúne asesoría jurídica y contable, gestión de infraestructura, evaluación de inversiones y docencia."
     },
     {
       "id": "piero-alessandro-vargas-luque",
@@ -108,7 +115,8 @@
           "designation": {
             "code": "00025-2026-AL/GG",
             "article": 2
-          }
+          },
+          "responsibilities": "conduce la gestión documental de la empresa, custodia actas y acuerdos, supervisa el trámite documentario y coordina la formalización de convenios y contratos."
         },
         {
           "title": "Jefe de la Oficina de Imagen Institucional e Informática",
@@ -122,7 +130,8 @@
           "designation": {
             "code": "00013-2026-AL/SDRH",
             "article": 2
-          }
+          },
+          "responsibilities": "gestiona la identidad visual y los canales digitales de Altum Lumen. Coordina la producción de materiales institucionales y el soporte de las herramientas informáticas."
         },
         {
           "title": "Gerente de Servicios Comerciales y Cooperación",
@@ -136,9 +145,11 @@
           "designation": {
             "code": "00025-2026-AL/GG",
             "article": 1
-          }
+          },
+          "responsibilities": "dirige la estrategia comercial y el desarrollo de la cartera de clientes. Supervisa las propuestas de servicios, las alianzas y la atención posventa."
         }
-      ]
+      ],
+      "summary": "Profesional en Dirección y Diseño Gráfico. Su perfil se orienta al desarrollo de identidades visuales y a la comunicación gráfica. Su enfoque combina la dirección visual de proyectos con el diseño de materiales coherentes con la identidad de marca y los canales en los que se presentan."
     },
     {
       "id": "victor-manuel-vasquez-cobos",
@@ -157,9 +168,11 @@
           "designation": {
             "code": "00015-2026-AL/SDRH",
             "article": 2
-          }
+          },
+          "responsibilities": "supervisa la recepción, el registro y la derivación de documentos. Da seguimiento a los expedientes y canaliza las consultas y reclamos de los clientes."
         }
-      ]
+      ],
+      "summary": "Licenciado en Administración de Empresas y magíster en Gestión Pública, con formación técnica en Computación e Informática. Reúne experiencia en operaciones bancarias, comercio electrónico y gestión de plataformas digitales. Ha coordinado equipos y trabajado en la mejora de procesos operativos y de atención."
     },
     {
       "id": "martin-ricardo-vargas-castaneda",
@@ -179,7 +192,8 @@
           "designation": {
             "code": "00015-2026-AL/GG",
             "article": 1
-          }
+          },
+          "responsibilities": "dirige la administración interna y el seguimiento del presupuesto. Supervisa recursos humanos, logística, contabilidad, tesorería y prevención de riesgos para dar soporte a la operación."
         },
         {
           "title": "Jefe de la Oficina de Logística y Control Patrimonial",
@@ -193,9 +207,11 @@
           "designation": {
             "code": "00010-2026-AL/SDRH",
             "article": 1
-          }
+          },
+          "responsibilities": "coordina las compras y el seguimiento de proveedores y entregas. Supervisa el almacén, los inventarios y el control de los activos de la empresa."
         }
-      ]
+      ],
+      "summary": "Ingeniero en Sistemas Computacionales y doctor honoris causa. Se ha especializado en sistemas de control e ingeniería de la calidad. Su trayectoria comprende la dirección administrativa, el planeamiento y la modernización de procesos, con experiencia en gestión de recursos y control interno."
     },
     {
       "id": "walter-gerson-angulo-zavaleta",
@@ -214,9 +230,11 @@
           "designation": {
             "code": "00014-2026-AL/GG",
             "article": 1
-          }
+          },
+          "responsibilities": "gestiona la selección e incorporación del personal, la capacitación y la evaluación de desempeño. Da seguimiento a la documentación laboral y al desarrollo de competencias."
         }
-      ]
+      ],
+      "summary": "Licenciado en Administración, con trayectoria en banca, telecomunicaciones, industria y gestión académica. Su experiencia comprende la gestión de operaciones y las relaciones institucionales. También ha desarrollado labores de consultoría administrativa y financiera."
     },
     {
       "id": "maria-cecilia-luque-medina",
@@ -235,7 +253,8 @@
           "designation": {
             "code": "00006-2026-AL/SDRH",
             "article": 2
-          }
+          },
+          "responsibilities": "coordina la evaluación de riesgos operativos y el plan de continuidad. Supervisa los protocolos de seguridad y las medidas preventivas para las actividades de la empresa."
         },
         {
           "title": "Jefa de la Unidad de Educación Comunitaria y Riesgos Socioambientales",
@@ -249,9 +268,11 @@
           "designation": {
             "code": "00006-2026-AL/SDRH",
             "article": 1
-          }
+          },
+          "responsibilities": "coordina las acciones de educación y relacionamiento comunitario vinculadas a los proyectos. Identifica riesgos socioambientales y propone medidas de prevención y mitigación."
         }
-      ]
+      ],
+      "summary": "Licenciada en Obstetricia y graduada de la Maestría en Administración y Gestión Pública con mención en Defensa Nacional. Se especializa en gestión del riesgo de desastres. Tiene experiencia en prevención de riesgos, continuidad operativa, salud comunitaria y capacitación para fortalecer la preparación de las comunidades."
     },
     {
       "id": "oscar-felipe-moreno-tupia",
@@ -271,7 +292,8 @@
             "code": "00014-2026-AL/SDRH",
             "article": 1,
             "extract": "Actualiza la designación temporal para que se ejerza en adición a las funciones de Director Académico, desde el 4 de mayo de 2026."
-          }
+          },
+          "responsibilities": "asesora en asuntos legales a la Gerencia General y a las áreas de la empresa, revisa contratos y emite opiniones jurídicas sobre las operaciones de Altum Lumen."
         },
         {
           "title": "Director Académico",
@@ -285,9 +307,11 @@
           "designation": {
             "code": "00018-2026-AL/GG",
             "article": 3
-          }
+          },
+          "responsibilities": "dirige la oferta formativa, aprueba planes de estudio y criterios de evaluación y certificación. Supervisa la labor docente y la calidad de los programas."
         }
-      ]
+      ],
+      "summary": "Abogado y licenciado en Educación, graduado de la Maestría en Gestión Pública. Su experiencia integra la docencia, la consultoría en seguridad y la gestión de riesgos. Ha diseñado y desarrollado programas de capacitación por competencias para instituciones educativas, organizaciones y empresas."
     },
     {
       "id": "gerardo-martin-guerrero-garcia",
@@ -306,7 +330,8 @@
           "designation": {
             "code": "00016-2026-AL/GG",
             "article": 1
-          }
+          },
+          "responsibilities": "coordina el plan operativo, el seguimiento de metas y la mejora de procesos. Gestiona el portafolio de servicios y sus estándares de entrega."
         },
         {
           "title": "Jefe de la Unidad de Estrategia y Cooperación Interinstitucional",
@@ -320,7 +345,8 @@
           "designation": {
             "code": "00011-2026-AL/SDRH",
             "article": 1
-          }
+          },
+          "responsibilities": "gestiona alianzas y convenios, coordina oportunidades de colaboración con otras organizaciones y da seguimiento a los compromisos y su vigencia."
         },
         {
           "title": "Jefe de la Unidad de Formación y Capacitación Profesional",
@@ -334,14 +360,16 @@
           "designation": {
             "code": "00011-2026-AL/SDRH",
             "article": 2
-          }
+          },
+          "responsibilities": "coordina la ejecución de cursos y talleres, las matrículas, las sesiones y la atención a participantes. Supervisa los registros y materiales de las actividades formativas."
         }
-      ]
+      ],
+      "summary": "Bachiller en Comunicación y Publicidad. Tiene experiencia en marketing digital, gestión de redes sociales y producción de contenidos publicitarios. Ha coordinado equipos de comunicación y desarrollado materiales de promoción para mejorar la presencia digital de marcas y negocios."
     },
     {
       "id": "segundo-raymundo-tabachi-vega",
       "name": "Segundo Raymundo Tabachi Vega",
-      "photo": "funcionario-segundo-raymundo-tabachi-vega.png",
+      "photo": "",
       "roles": [
         {
           "title": "Director de Proyectos e Inversiones",
@@ -355,7 +383,8 @@
           "designation": {
             "code": "00013-2026-AL/GG",
             "article": 1
-          }
+          },
+          "responsibilities": "dirige la cartera de proyectos e inversiones. Supervisa estudios y expedientes técnicos y da seguimiento al avance, presupuesto, calidad y seguridad de la ejecución."
         },
         {
           "title": "Jefe de la Unidad de Estudios y Proyectos",
@@ -369,9 +398,11 @@
           "designation": {
             "code": "00009-2026-AL/SDRH",
             "article": 1
-          }
+          },
+          "responsibilities": "coordina la elaboración de estudios y expedientes técnicos, incluidos presupuestos, cronogramas y especificaciones. Supervisa la validación de información y la calidad de los entregables."
         }
-      ]
+      ],
+      "summary": "Economista y magíster en Gestión Pública. Su trayectoria abarca el planeamiento estratégico, la gestión presupuestaria y el rediseño de procesos. Tiene experiencia en la formulación y evaluación de proyectos de inversión y en la consultoría para iniciativas sociales y productivas."
     }
   ],
   "cambios": [
