@@ -62,6 +62,7 @@ ${main}
     <div class="layout footer-inner">
       <div><strong>ALTUM LUMEN S.A.C.</strong><div>RUC 20614458918 · Perú</div></div>
       <nav aria-label="Información legal y acceso institucional">
+        <a href="${prefix}indice-del-portal.html">Índice del portal</a>
         <a href="${prefix}privacidad.html">Privacidad</a>
         <a href="${prefix}terminos.html">Términos</a>
         <a href="${prefix}sgd.html">Acceso al SGD ${icon('arrow')}</a>
