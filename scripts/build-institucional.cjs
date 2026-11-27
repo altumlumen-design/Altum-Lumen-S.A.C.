@@ -210,6 +210,10 @@ function documentPage(item, isAct) {
   const pagePath = isAct ? actPath(item) : managementPath(item);
   const section = isAct ? [resolutionsTitle, documentPaths.projects] : [managementTitle, documentPaths.management];
   const description = isAct ? item.summary : item.description;
+  const searchTitle = isAct && !item.title.toLowerCase().includes(item.office.toLowerCase())
+    ? `${item.title} · ${item.office}`
+    : item.title;
+  const searchDescription = isAct ? `${item.office} de Altum Lumen S.A.C. ${description}` : description;
   const crumbs = breadcrumb([['Documentos legales', documentPaths.index], section, [item.title]], depth);
   const related = isAct ? relatedDesignations(item) : [];
   const documents = item.bundle
@@ -235,15 +239,15 @@ function documentPage(item, isAct) {
     <div class="role-nav"><a class="button button-quiet" href="${depth + section[1]}">Volver a ${section[0]}</a></div>
   </article>`;
   const structured = {
-    '@context':'https://schema.org', '@type':'DigitalDocument', name:item.title, description,
+    '@context':'https://schema.org', '@type':'DigitalDocument', name:item.title, description:searchDescription,
     url:base + pagePath, publisher:organization,
     encoding:{'@type':'MediaObject',contentUrl:base + (item.bundle || item.pdf),encodingFormat:'application/pdf'},
   };
   if (isAct) {
     structured.identifier = item.code;
-    structured.dateIssued = item.issuedOn;
+    structured.creator = {'@type':'Organization',name:item.office,parentOrganization:organization};
   }
-  return {title:item.title,pagePath,description,active:'publications',depth,main,structured};
+  return {title:searchTitle,pagePath,description:searchDescription,active:'publications',depth,main,structured};
 }
 
 function legalPages() {
@@ -354,7 +358,7 @@ function boardCard(group) {
 function directory() {
   const sections = groups.map(group => {
     const cards = directoryRoles.filter(({role}) => role.group === group).map(({person, role}) => {
-      const search = [person.name, roleName(role), role.office, role.temporary ? 'designación temporal' : ''].join(' ');
+      const search = [person.name, person.alternateName, roleName(role), role.office, role.temporary ? 'designación temporal' : ''].join(' ');
       const title = escape(roleName(role));
       return `<li data-directory-item data-group="${escape(group)}" data-unit="${escape(role.office)}" data-search="${escape(search)}">
       <article class="position-tile">
@@ -391,13 +395,14 @@ ${subgroup ? `        <p>${escape(heading)}</p>\n` : ''}        <h3>${escape(sub
   </section>`;
 }
 
-function profileSchema(person, roles, pagePath, description) {
+function profileSchema(person, roles, pagePath, title, description) {
   const personPath = base + profilePath(person);
   const entity = {'@type':'Person','@id':personPath + '#persona',name:person.name,
     jobTitle:roles.map(roleName),url:personPath,worksFor:organization};
   if (person.photo) entity.image = base + person.photo;
+  if (person.alternateName) entity.alternateName = person.alternateName;
   return {'@context':'https://schema.org','@type':'ProfilePage',
-    name:person.name,description,url:base + pagePath,mainEntity:entity};
+    name:title,description,url:base + pagePath,mainEntity:entity};
 }
 
 function profile(person) {
@@ -420,8 +425,9 @@ function profile(person) {
     <p class="back-link"><a class="button button-quiet" href="../directorio.html">Volver al directorio</a></p>
   </section>`;
   const pagePath = profilePath(person);
-  const structured = profileSchema(person, orderedRoles, pagePath, description);
-  return page({title:person.name + ' · ' + roleName(principal),pagePath,description,active:'directory',depth,main,structured,image:person.photo});
+  const title = person.name + ' · Perfil institucional';
+  const structured = profileSchema(person, orderedRoles, pagePath, title, description);
+  return page({title,pagePath,description,active:'directory',depth,main,structured,image:person.photo});
 }
 
 function designationCard(role, depth) {
@@ -443,8 +449,10 @@ ${extract ? `      <p class="designation-extract">${escape(extract)}</p>\n` : ''
 function roleProfile(person, role) {
   const depth = '../../';
   const pagePath = rolePath(person, role);
-  const description = `${person.name}. ${roleName(role)}, ${role.office}, Altum Lumen S.A.C.`;
-  const crumbs = breadcrumb([['Directorio','directorio.html'], [roleName(role)]], depth);
+  const title = person.name + ' · ' + roleName(role);
+  const designation = byCode.get(role.designation.code)?.title || role.designation.label;
+  const description = `${person.name}, ${roleName(role)} de Altum Lumen S.A.C. ${role.office}. ${designation}.`;
+  const crumbs = breadcrumb([['Directorio','directorio.html'], [person.name,profilePath(person)], [roleName(role)]], depth);
   const main = `<div class="masthead"><div class="layout">
     ${crumbs}
     <div class="profile-heading">
@@ -476,8 +484,8 @@ function roleProfile(person, role) {
       <a class="button button-quiet" href="${depth}directorio.html">Volver al directorio</a>
     </div>
   </section>`;
-  const structured = profileSchema(person, [role], pagePath, description);
-  return page({title:person.name + ' · ' + roleName(role),pagePath,description,active:'directory',depth,main,structured,image:person.photo});
+  const structured = profileSchema(person, [role], pagePath, title, description);
+  return page({title,pagePath,description,active:'directory',depth,main,structured,image:person.photo});
 }
 
 function update(file, content) {
@@ -519,6 +527,7 @@ update('directorio.html', page({title:'Directorio institucional',pagePath:'direc
 for (const person of personas) update(profilePath(person), profile(person));
 for (const {person, role} of directoryRoles) update(rolePath(person, role), roleProfile(person, role));
 let sitemap = read('sitemap.xml').replace(/\r\n/g,'\n');
+const sitemapImages = new Map(personas.filter(person => person.photo).map(person => [profilePath(person), person.photo]));
 const sitemapPages = [
   'servicios.html', 'atencion.html', documentPaths.management, documentPaths.projects, 'directorio.html',
   'mesa-de-partes.html', 'consultar-expediente.html', 'libro-de-reclamaciones.html',
@@ -526,7 +535,11 @@ const sitemapPages = [
   ...personas.map(profilePath), ...directoryRoles.map(({person, role}) => rolePath(person, role)),
   ...recent.map(actPath), ...gestion.map(managementPath),
 ];
-const sitemapItems = sitemapPages.map(file => `  <url><loc>${base + file}</loc></url>`).join('\n');
+const sitemapItems = sitemapPages.map(file => {
+  const image = sitemapImages.get(file);
+  const imageEntry = image ? `<image:image><image:loc>${escape(base + image)}</image:loc></image:image>` : '';
+  return `  <url><loc>${escape(base + file)}</loc>${imageEntry}</url>`;
+}).join('\n');
 sitemap = replaceSection(sitemap, 'directorio-institucional', sitemapItems);
 update('sitemap.xml', sitemap);
 console.log(`${checkOnly?'Verificados':'Generados'} ${actos.length} actos, ${gestion.length} instrumentos de gestión, ${personas.length} personas y ${directoryRoles.length} fichas de cargo.`);

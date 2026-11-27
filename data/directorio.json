@@ -3,7 +3,7 @@
     {
       "id": "jeanfranco-martin-vargas-luque",
       "name": "Jeanfranco Martín Vargas Luque",
-      "photo": "funcionario-1.png",
+      "photo": "funcionario-jeanfranco-martin-vargas-luque.png",
       "roles": [
         {
           "title": "Gerente General",
@@ -88,7 +88,8 @@
             "article": 1
           }
         }
-      ]
+      ],
+      "alternateName": "Jean Franco Vargas"
     },
     {
       "id": "piero-alessandro-vargas-luque",
@@ -163,7 +164,7 @@
     {
       "id": "martin-ricardo-vargas-castaneda",
       "name": "Martín Ricardo Vargas Castañeda",
-      "photo": "funcionario-3.png",
+      "photo": "funcionario-martin-ricardo-vargas-castaneda.png",
       "roles": [
         {
           "title": "Director de Administración",
@@ -219,7 +220,7 @@
     {
       "id": "maria-cecilia-luque-medina",
       "name": "María Cecilia Luque Medina",
-      "photo": "funcionario-12.png",
+      "photo": "funcionario-maria-cecilia-luque-medina.png",
       "roles": [
         {
           "title": "Jefa de la Oficina de Prevención de Riesgos, Seguridad y Continuidad Operativa",
@@ -254,7 +255,7 @@
     {
       "id": "oscar-felipe-moreno-tupia",
       "name": "Óscar Felipe Moreno Tupia",
-      "photo": "funcionario-4.png",
+      "photo": "funcionario-oscar-felipe-moreno-tupia.png",
       "roles": [
         {
           "title": "Jefe de la Oficina Corporativa de Asesoría Jurídica",
@@ -290,7 +291,7 @@
     {
       "id": "gerardo-martin-guerrero-garcia",
       "name": "Gerardo Martín Guerrero García",
-      "photo": "funcionario-9.png",
+      "photo": "funcionario-gerardo-martin-guerrero-garcia.png",
       "roles": [
         {
           "title": "Subgerente de Planeamiento, Desarrollo Corporativo y de Servicios",
@@ -339,7 +340,7 @@
     {
       "id": "segundo-raymundo-tabachi-vega",
       "name": "Segundo Raymundo Tabachi Vega",
-      "photo": "funcionario-5.png",
+      "photo": "funcionario-segundo-raymundo-tabachi-vega.png",
       "roles": [
         {
           "title": "Director de Proyectos e Inversiones",
