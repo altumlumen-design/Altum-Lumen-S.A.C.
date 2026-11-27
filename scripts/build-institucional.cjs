@@ -169,10 +169,13 @@ function searchForm({label, placeholder, filters}) {
   return `<form class="filter-form" data-catalog-form role="search" aria-label="${escape(label)}" hidden>
     <div class="filter-search"><label for="catalog-query">Buscar</label><div class="search-input">${icon('search')}
       <input id="catalog-query" name="q" type="search" autocomplete="off" placeholder="${escape(placeholder)}"></div></div>
-    ${filters.map(({name,title,values,empty,labels}) =>
+    <button class="button button-quiet filter-toggle" type="button" aria-expanded="false" aria-controls="catalog-filters" data-filter-toggle>Filtros</button>
+    <div class="filter-options" id="catalog-filters">
+      ${filters.map(({name,title,values,empty,labels}) =>
       `<div><label for="catalog-${name}">${title}</label><select id="catalog-${name}" name="${name}"><option value="">${empty}</option>${options(values, labels)}</select></div>`
-    ).join('\n')}
-    <button class="button button-quiet" type="reset">Limpiar</button>
+      ).join('\n      ')}
+      <button class="button button-quiet" type="reset">Limpiar</button>
+    </div>
   </form>`;
 }
 

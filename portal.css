@@ -481,28 +481,78 @@ main { flex: 1; }
   .service-preview { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .publication-preview { grid-template-columns: 1fr; gap: 18px; }
 }
+@media (max-width: 680px) {
+  :root { --header-height: 61px; }
+  .site-header-inner { padding-block: 6px; }
+  .brand img { width: 120px; height: 46px; }
+  .has-menu .institution-nav { padding-inline: 16px; overscroll-behavior: contain; }
+  .masthead-inner { gap: 14px; padding-block: 18px 25px; }
+  .masthead h1 { font-size: clamp(1.75rem, 6.2vw, 2.5rem); }
+  .masthead p { margin-top: 9px; }
+  .breadcrumbs { padding-top: 13px; }
+  .content-section { padding-block: 23px 32px; }
+  .section-heading { margin-bottom: 14px; }
+  .pagination { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; text-align: center; }
+  .pagination .button { padding-inline: 9px; }
+  :is(.publication-actions, .management-card) .document-link,
+  .copy-contact, .archive summary { min-height: 44px; }
+  .publication-meta { flex-wrap: wrap; }
+  :is(.publication, .management-card) .record-title-link { text-decoration: underline; text-decoration-thickness: 1px; }
+  .institution-footer { padding-block: 22px; }
+  .footer-inner { gap: 6px 20px; }
+  .footer-inner nav { gap: 0 17px; }
+  .footer-inner a { min-height: 44px; }
+}
 @media (max-width: 580px) {
-  .layout { width: calc(100% - 30px); }
+  .layout { width: calc(100% - 32px); }
   .home-hero-inner, .about-layout, .service-detail, .document-categories, .channel-grid, .contact-list { grid-template-columns: minmax(0,1fr); }
   .home-hero { background-image:linear-gradient(130deg,rgba(247,251,254,.91),rgba(223,241,254,.58) 61%,rgba(216,235,249,.29)),url("cielo.jpg"); }
-  .home-hero-inner { gap: 23px; padding-block: 34px; }
+  .home-hero-inner { gap: 17px; padding-block: 22px 25px; }
   .hero-copy { padding: 0; }
-  .hero-copy::before { margin-bottom: 13px; width: 36px; }
-  .hero-copy p { margin-top: 12px; }
-  .quick-panel { padding: 16px; }
+  .hero-copy::before { margin-bottom: 10px; width: 36px; }
+  .hero-copy h1 { max-width: 16ch; font-size: clamp(2.05rem, 8.6vw, 2.65rem); }
+  .hero-copy p { margin-top: 9px; font-size: 1rem; line-height: 1.46; }
+  .quick-panel { padding: 12px; }
+  .quick-panel h2 { margin: 0 6px 7px; font-size: 1.13rem; }
+  .quick-access { min-height: 54px; padding: 7px 6px; gap: 9px; }
+  .quick-access .action-icon { width: 33px; height: 33px; }
+  .quick-access small { line-height: 1.2; }
+  .home-services, .home-information { padding-block: 24px 30px; }
   .service-identity { width: min(64%,190px); align-self: flex-start; }
-  .document-categories { gap: 11px; }
-  .service-preview { gap: 10px; }
-  .service-preview a { padding: 13px; }
+  .document-categories { gap: 15px; padding-block: 19px 29px; }
+  .document-category { min-height: 80px; gap: 10px; }
+  .document-preview-more { padding-block: 2px; }
+  .document-preview-more a, .latest-copy a, .latest-groups > a { min-height: 44px; }
+  .latest-copy .text-link { margin-top: 1px; }
+  .publication-preview { gap: 8px; }
+  .latest-groups { gap: 13px; }
+  .service-preview, .service-directory .service-preview { grid-template-columns: minmax(0,1fr); gap: 9px; }
+  .service-preview a, .service-directory .service-preview a {
+    grid-template: "mark title arrow" auto "mark description arrow" auto / clamp(60px, 19vw, 94px) minmax(0,1fr) 31px;
+    min-height: 82px;
+    align-content: center;
+    gap: 4px 10px;
+    padding: 11px;
+  }
+  .service-preview-mark { grid-area: mark; align-self: center; width: 100%; height: 44px; margin: 0; object-position: center; }
+  .service-preview h3 { grid-area: title; align-self: end; font-size: 1rem; }
+  .service-preview p { grid-area: description; font-size: .86rem; line-height: 1.35; }
+  .service-arrow { grid-area: arrow; align-self: center; width: 30px; height: 30px; margin: 0; }
+  .channel-card { position: relative; grid-template-columns: auto minmax(0,1fr); gap: 5px 10px; }
+  .channel-card .action-icon { grid-row: span 3; }
+  .channel-card a { min-height: 36px; }
+  .channel-card a::after { position: absolute; inset: 0; content: ''; }
+  .channel-card:focus-within { border-color: var(--blue); }
   .role-detail-grid, .role-list .role-card, .document-detail { grid-template-columns: minmax(0,1fr); }
+  .role-list .role-card .text-link { min-height: 44px; }
   .role-designation { padding: 14px; }
-  .latest-list a { grid-template-columns: minmax(0,1fr) auto; gap: 2px 9px; }
-  .latest-date { grid-column: 1 / -1; }
-  .position-tile { grid-template-columns: 61px minmax(0,1fr); }
-  .position-tile .portrait { width: 61px; height: 76px; }
-  .masthead .profile-heading { padding-block: 24px 30px; }
+  .latest-list a { grid-template-columns: minmax(0,1fr) auto; gap: 3px 9px; min-height: 58px; padding: 9px 7px; }
+  .latest-list a > svg { grid-column: 2; grid-row: 1 / 3; }
+  .latest-date { grid-column: 1; }
+  .position-group { margin-top: 19px; }
+  .position-tile { grid-template-columns: 59px minmax(0,1fr); min-height: 115px; gap: 11px; padding: 12px; }
+  .position-tile .portrait { width: 59px; height: 74px; }
+  .masthead .profile-heading { align-items: center; padding-block: 17px 24px; }
+  .masthead .profile-heading .portrait { width: clamp(68px, 19vw, 102px); }
   .masthead .profile-heading h1 { font-size: clamp(1.5rem,6vw,2.1rem); }
-}
-@media (max-width: 350px) {
-  .service-preview, .service-directory .service-preview { grid-template-columns: 1fr; }
 }

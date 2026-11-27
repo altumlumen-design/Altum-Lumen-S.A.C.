@@ -6,6 +6,8 @@ const normalize = value => value.normalize('NFD').replace(/\p{Diacritic}/gu, '')
 for (const catalog of document.querySelectorAll('[data-catalog]')) {
   const publications = catalog.dataset.catalog === 'publications';
   const form = catalog.querySelector('[data-catalog-form]');
+  const filterToggle = form.querySelector('[data-filter-toggle]');
+  const filters = [...form.querySelectorAll('select[name]')];
   const status = publications ? catalog.querySelector('[data-catalog-status]') : null;
   const empty = catalog.querySelector('[data-catalog-empty]');
   const pages = catalog.querySelector('[data-catalog-pages]');
@@ -43,6 +45,9 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
   function draw({fromUrl = false} = {}) {
     const {q, tipo, oficina, anio, grupo, unidad} = Object.fromEntries(fields.map(field => [field.name, field.value]));
     const terms = normalize(q || '').split(/\s+/).filter(Boolean);
+    const activeFilters = filters.filter(field => field.value).length;
+    filterToggle.textContent = activeFilters ? `Filtros (${activeFilters})` : 'Filtros';
+    if (fromUrl && activeFilters) filterToggle.setAttribute('aria-expanded', 'true');
     const matches = entries.filter(({element, search}) =>
       terms.every(term => search.includes(term)) &&
       (!tipo || tipo === element.dataset.type) &&
@@ -83,6 +88,10 @@ for (const catalog of document.querySelectorAll('[data-catalog]')) {
   }
 
   form.hidden = false;
+  filterToggle.addEventListener('click', () => {
+    const expanded = filterToggle.getAttribute('aria-expanded') === 'true';
+    filterToggle.setAttribute('aria-expanded', String(!expanded));
+  });
   if (status) status.hidden = false;
   fields.forEach(field => field.addEventListener(field.type === 'search' ? 'input' : 'change', changeFilters));
   form.addEventListener('submit', event => {

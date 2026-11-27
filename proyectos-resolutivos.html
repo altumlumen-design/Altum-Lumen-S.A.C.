@@ -11,8 +11,8 @@
   <link rel="canonical" href="https://altumlumen-design.github.io/Altum-Lumen-S.A.C./proyectos-resolutivos.html">
   <link rel="icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="institucional.css?v=78f0e67593">
-  <link rel="stylesheet" href="portal.css?v=d280626ced">
+  <link rel="stylesheet" href="institucional.css?v=713faf981a">
+  <link rel="stylesheet" href="portal.css?v=8b95bc91cb">
   <meta property="og:locale" content="es_PE">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ALTUM LUMEN">
@@ -22,7 +22,7 @@
   <meta property="og:image" content="https://altumlumen-design.github.io/Altum-Lumen-S.A.C./social-preview-corporativo-20260808.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <script src="portal.js?v=d2bd5ac076" defer></script>
-  <script src="institucional.js?v=1427389752" defer></script>
+  <script src="institucional.js?v=fa3477a425" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Ir al contenido</a>
@@ -56,10 +56,13 @@
     <form class="filter-form" data-catalog-form role="search" aria-label="Buscar en resoluciones emitidas" hidden>
     <div class="filter-search"><label for="catalog-query">Buscar</label><div class="search-input"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4 4"/></svg>
       <input id="catalog-query" name="q" type="search" autocomplete="off" placeholder="Número o asunto"></div></div>
-    <div><label for="catalog-tipo">Tipo de documento</label><select id="catalog-tipo" name="tipo"><option value="">Todos</option><option value="Resolución de Gerencia General">Resolución de Gerencia General</option><option value="Resolución Directoral">Resolución Directoral</option><option value="Resolución Subdirectoral">Resolución Subdirectoral</option><option value="Resolución Subgerencial">Resolución Subgerencial</option></select></div>
-<div><label for="catalog-oficina">Órgano emisor</label><select id="catalog-oficina" name="oficina"><option value="">Todos</option><option value="Dirección Académica">Dirección Académica</option><option value="Dirección de Administración">Dirección de Administración</option><option value="Gerencia General">Gerencia General</option><option value="Subdirección de Recursos Humanos">Subdirección de Recursos Humanos</option><option value="Subgerencia de Recursos Humanos">Subgerencia de Recursos Humanos</option></select></div>
-<div><label for="catalog-anio">Año de emisión</label><select id="catalog-anio" name="anio"><option value="">Todos</option><option value="2026">2026</option><option value="2025">2025</option></select></div>
-    <button class="button button-quiet" type="reset">Limpiar</button>
+    <button class="button button-quiet filter-toggle" type="button" aria-expanded="false" aria-controls="catalog-filters" data-filter-toggle>Filtros</button>
+    <div class="filter-options" id="catalog-filters">
+      <div><label for="catalog-tipo">Tipo de documento</label><select id="catalog-tipo" name="tipo"><option value="">Todos</option><option value="Resolución de Gerencia General">Resolución de Gerencia General</option><option value="Resolución Directoral">Resolución Directoral</option><option value="Resolución Subdirectoral">Resolución Subdirectoral</option><option value="Resolución Subgerencial">Resolución Subgerencial</option></select></div>
+      <div><label for="catalog-oficina">Órgano emisor</label><select id="catalog-oficina" name="oficina"><option value="">Todos</option><option value="Dirección Académica">Dirección Académica</option><option value="Dirección de Administración">Dirección de Administración</option><option value="Gerencia General">Gerencia General</option><option value="Subdirección de Recursos Humanos">Subdirección de Recursos Humanos</option><option value="Subgerencia de Recursos Humanos">Subgerencia de Recursos Humanos</option></select></div>
+      <div><label for="catalog-anio">Año de emisión</label><select id="catalog-anio" name="anio"><option value="">Todos</option><option value="2026">2026</option><option value="2025">2025</option></select></div>
+      <button class="button button-quiet" type="reset">Limpiar</button>
+    </div>
   </form>
     <p class="result-status" role="status" data-catalog-status hidden></p>
     <ol class="publication-list" data-catalog-list><li class="publication" id="00015-2026-al-da" data-directory-item data-search="Resolución Directoral N.° 00015-2026-AL/DA 00015-2026-AL/DA Aprueba el Plan de Organización Académica Funcional de Escuelas de Especialización y Laboratorios Virtuales del Centro de Formación y Capacitación Profesional de Altum Lumen S.A.C. Dirección Académica" data-type="Resolución Directoral" data-office="Dirección Académica" data-year="2026">
