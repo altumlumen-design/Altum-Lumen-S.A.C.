@@ -467,7 +467,7 @@ function roleProfile(person, role) {
   const title = person.name + ' · ' + roleName(role);
   const designation = byCode.get(role.designation.code)?.title || role.designation.label;
   const description = `${person.name}, ${roleName(role)} de Altum Lumen S.A.C. desde el ${writtenDate(role.effectiveOn)}. ${designation}.`;
-  const crumbs = breadcrumb([['Directorio','directorio.html'], [person.name,profilePath(person)], [roleName(role)]], depth);
+  const crumbs = breadcrumb([['Directorio','directorio.html'], [roleName(role)]], depth);
   const main = `<div class="masthead"><div class="layout">
     ${crumbs}
     <div class="profile-heading">
