@@ -408,8 +408,9 @@ function profileSchema(person, roles, pagePath, title, description) {
 }
 
 function profileSummary(person, role) {
+  const title = role?.title.replace(/^.+?(?= de |$)/, words => words.toLowerCase());
   const duties = role
-    ? `\n      <p>Como ${escape(role.title.charAt(0).toLowerCase() + role.title.slice(1))}, ${escape(role.responsibilities)}</p>`
+    ? `\n      <p>Como ${escape(title)}, ${escape(role.responsibilities)}</p>`
     : '';
   return `<section class="prose" aria-labelledby="profile-summary-title">
       <h2 id="profile-summary-title">Resumen</h2>
