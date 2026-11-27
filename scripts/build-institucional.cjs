@@ -475,7 +475,6 @@ function roleProfile(person, role) {
     </div>
   </div></div>
   <section class="layout content-section profile-roles" aria-labelledby="role-detail-title">
-    ${profileSummary(person, role)}
     <div class="role-detail-grid">
       <div>
         <div class="section-title"><h2 id="role-detail-title">Información institucional</h2></div>
@@ -493,7 +492,10 @@ function roleProfile(person, role) {
           </div>
         </dl>
       </div>
-      ${designationCard(role, depth)}
+      <div class="role-overview">
+        ${designationCard(role, depth)}
+        ${profileSummary(person, role)}
+      </div>
     </div>
     <div class="role-nav">
       <a class="button button-quiet" href="${depth}directorio.html">Volver al directorio</a>

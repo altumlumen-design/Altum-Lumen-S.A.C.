@@ -369,6 +369,8 @@ main { flex: 1; }
 .role-list .role-card .text-link { font-size: .9rem; }
 .role-detail-grid { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(275px,1fr); gap: 22px 32px; align-items: start; }
 .role-detail-grid .section-title h2 { font-size: 1.35rem; letter-spacing: -.025em; }
+.role-overview { display: grid; gap: 18px; }
+.role-overview .prose p:last-child { margin-bottom: 0; }
 .role-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 18px; margin-top: 23px; }
 .publication:target { box-shadow: inset 3px 0 var(--red); padding-inline-start: 12px; background: var(--paper); }
 .archive summary { width: fit-content; padding: 6px 10px; border-radius: 6px; }
@@ -379,7 +381,7 @@ main { flex: 1; }
   border-radius: 13px;
   background: var(--paper);
 }
-.role-designation h2 { color: var(--navy); font-size: 1.16rem; letter-spacing: -.018em; }
+.role-designation h2, .role-overview h2 { color: var(--navy); font-size: 1.16rem; letter-spacing: -.018em; }
 .designation-meta { margin-top: 5px; color: var(--muted); font-size: .82rem; }
 .designation-extract { margin-top: 8px; font-size: .92rem; }
 .designation-document, .file-card, .registration-record {
