@@ -222,7 +222,7 @@ function documentPage(item, isAct) {
   const crumbs = breadcrumb([['Documentos legales', documentPaths.index], section, [item.title]], depth);
   const related = isAct ? relatedDesignations(item) : [];
   const documents = item.bundle
-    ? pdfFile(item.bundle, 'Resolución y anexo', depth) + pdfFile(item.pdf, 'Resolución firmada', depth) + pdfFile(item.annex, 'Anexo firmado', depth)
+    ? pdfFile(item.bundle, 'Resolución y anexo', depth) + pdfFile(item.pdf, 'Resolución', depth) + pdfFile(item.annex, 'Anexo', depth)
     : pdfFile(item.pdf, isAct ? item.type : item.title, depth);
   const main = masthead(item.title, '', crumbs) + `
   <article class="layout content-section document-detail" aria-labelledby="extract-title">
