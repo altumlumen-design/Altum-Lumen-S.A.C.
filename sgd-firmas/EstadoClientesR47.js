@@ -213,7 +213,7 @@ resetLoginState=function(message){
   fd47PriorReset_(message);
   fd47Operations_.clear();fd47Emissions_.clear();fdUI.busy=false;fdUI.signing=null;fdUI.signingAndEmitting=null;
   fdClose();
-  fdUI.postAnnexNext=null;fdUI.emittingProveido=null;
+  fdUI.postAnnexNext=null;
 };
 function fd47FinishEmission_(id,receipt,panel){
   if(receipt?.countsHint)applyCountHint224(receipt.countsHint);

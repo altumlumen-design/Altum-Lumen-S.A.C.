@@ -95,6 +95,56 @@ function device(server,options={}){
  const proveido=device({complete:true});proveido.ui.doc.type='PROVEIDO';await proveido.c.fdContinueEmission();
  assert.deepEqual(proveido.calls.map(x=>x.name),['PROVEIDO_CONTINUE']);
 
+ function enableProveidoEmission(d){
+  d.ui.doc.type='PROVEIDO';
+  d.nodes.fdSignButton.dataset={signAndEmit:'proveido'};
+  d.nodes.fdSignButton.textContent='Firmar y emitir proveído';
+  vm.runInContext(source('fdCanSignAndEmitProveido_'),d.c);
+  vm.runInContext(source('fdEmitProveidoAfterSign39_').split('\nfdContinueEmission=')[0],d.c);
+  d.c.confirm=()=>{throw Error('El proveído no debe abrir una confirmación adicional');};
+ }
+ const automaticProveido=device({}, {handler:(name,args,{server})=>{
+  if(name==='fdSignSGD')assert.equal(args[2].emitAfterSign,undefined);
+  if(name==='fd3EmitProveidoSGD'){
+   assert(server.complete);
+   assert.deepEqual(Array.from(args),['TOKEN-A','DOC-test',true]);
+   server.emitted=true;return {ok:true,targets:2};
+  }
+ }});
+ enableProveidoEmission(automaticProveido);
+ await automaticProveido.c.fdSignUI();
+ assert.deepEqual(automaticProveido.calls.map(x=>x.name),['fdSignSGD','fd3EmitProveidoSGD']);
+ assert.deepEqual(automaticProveido.routes,['sent']);
+ assert.equal(automaticProveido.app.currentDraft,null);
+
+ const recoveredProveido=device({}, {handler:(name,args,{server})=>{
+  if(name==='fd3EmitProveidoSGD'){server.emitted=true;return Promise.reject(Error('Network error'));}
+ }});
+ enableProveidoEmission(recoveredProveido);
+ await recoveredProveido.c.fdSignUI();
+ assert.deepEqual(recoveredProveido.calls.map(x=>x.name),['fdSignSGD','fd3EmitProveidoSGD','getDraftStateSGD']);
+ assert.deepEqual(recoveredProveido.routes,['sent']);
+
+ const failedProveido=device({}, {handler:(name,args,{server})=>{
+  if(name==='fd3EmitProveidoSGD'){
+   if(!server.failed){server.failed=true;return Promise.reject(Error('No se pudo registrar la emisión'));}
+   server.emitted=true;return {ok:true};
+  }
+ }});
+ enableProveidoEmission(failedProveido);
+ await failedProveido.c.fdSignUI();
+ assert.match(failedProveido.screens.at(-1)[1],/La firma quedó guardada/);
+ assert.match(failedProveido.screens.at(-1)[3],/Reintentar emisión/);
+ assert.deepEqual(failedProveido.routes,[]);
+ await failedProveido.c.fdEmitProveidoAfterSign39_('DOC-test');
+ assert.deepEqual(failedProveido.calls.map(x=>x.name),['fdSignSGD','fd3EmitProveidoSGD','fd3EmitProveidoSGD']);
+ assert.deepEqual(failedProveido.routes,['sent']);
+
+ const otherSigner=device({});enableProveidoEmission(otherSigner);otherSigner.ui.doc.plan.main='OTHER';
+ await otherSigner.c.fdSignUI();assert.deepEqual(otherSigner.calls,[]);
+ const noProveidoConsent=device({});enableProveidoEmission(noProveidoConsent);noProveidoConsent.nodes.fdConsent.checked=false;
+ await noProveidoConsent.c.fdSignUI();assert.deepEqual(noProveidoConsent.calls,[]);
+
  const continueState=device({complete:true});continueState.ui.postSignState={documentId:'WRONG',canContinueEmission:true};await continueState.c.fdContinueEmission();
  assert.deepEqual(continueState.calls.map(x=>x.name),['getDraftStateSGD']);
  assert.equal(continueState.screens[0][0],'Consultando el circuito');assert.equal(continueState.screens.at(-1)[0],'Listo para emitir');
