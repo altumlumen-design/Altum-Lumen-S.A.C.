@@ -147,8 +147,11 @@ module.exports = function portalViews({icon, escape, masthead, breadcrumb, time,
       <p>El planeamiento, la asistencia técnica, la supervisión y la cooperación institucional conectan nuestras líneas especializadas. Las alianzas y los convenios amplían su alcance.</p>
       <h2>Organización</h2>
       <p>La Junta General de Accionistas y la Gerencia General conducen la sociedad. El organigrama y el Reglamento de Organización y Funciones detallan las dependencias y sus responsabilidades.</p>
+      <p>Según el ROF, con vigencia desde el 29 de noviembre de 2026, la Gerencia de Servicios Comerciales y Cooperación asesora a la Gerencia General y conduce la planificación comercial y la cooperación institucional. De ella depende la Subgerencia de Planeamiento, Desarrollo Corporativo y de Servicios, que tiene a su cargo la Unidad de Estrategia y Cooperación Interinstitucional. Los tres forman parte de Asesoramiento.</p>
+      <p>Las direcciones de línea conducen la prestación de los servicios y su gestión comercial operativa dentro de sus competencias.</p>
       <div class="related-links">
         <a class="text-link" href="${documentPaths.management}">Organigrama e instrumentos de gestión ${icon('arrow')}</a>
+        <a class="text-link" href="${actPath(byCode.get('00027-2026-AL/GG'))}">Resolución que aprueba el ROF ${icon('arrow')}</a>
         <a class="text-link" href="${links.directory}">Equipo directivo ${icon('arrow')}</a>
       </div>
     </article>

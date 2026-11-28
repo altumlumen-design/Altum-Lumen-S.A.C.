@@ -258,11 +258,13 @@ function documentPage(item, isAct) {
 function legalPages() {
   const title = 'Documentos legales';
   const latestYear = Math.max(...gestion.map(item => item.year));
+  const currentManagement = gestion.filter(item => item.year === latestYear && !item.archived);
+  const pastManagement = gestion.filter(item => item.year !== latestYear || item.archived);
   const categories = [
     {
       title:managementTitle, description:'Organización, funciones y documentos vigentes.', href:documentPaths.management,
       legacyId:'documentos-gestion', iconName:'folder', moreLabel:'Ver más documentos de gestión',
-      previews:gestion.filter(item => item.year === latestYear).slice(0, 3).map(item => ({
+      previews:currentManagement.slice(0, 3).map(item => ({
         title:item.title, href:managementPath(item), summary:item.description,
       })),
     },
@@ -304,10 +306,10 @@ function legalPages() {
     description:'Consulta el organigrama, el reglamento, el manual y sus versiones anteriores.',
     main:masthead(managementTitle, 'Consulta el extracto y el PDF de cada instrumento de gestión.', breadcrumb([[title,documentPaths.index],[managementTitle]])) + `
   <section class="layout content-section" id="documentos-gestion" aria-label="Instrumentos de gestión">
-    <div class="management-grid">${managementCards(gestion.filter(item => item.year === latestYear))}</div>
+    <div class="management-grid">${managementCards(currentManagement)}</div>
     <details class="archive">
       <summary>Versiones anteriores</summary>
-      <div class="management-grid">${managementCards(gestion.filter(item => item.year !== latestYear))}</div>
+      <div class="management-grid">${managementCards(pastManagement)}</div>
     </details>
   </section>`,
   };
@@ -484,7 +486,8 @@ function roleProfile(person, role) {
         <div class="section-title"><h2 id="role-detail-title">Información institucional</h2></div>
         <dl class="record-details role-profile-details">
           <div><dt>Unidad orgánica</dt><dd>${escape(role.office)}</dd></div>
-          <div><dt>Grupo orgánico</dt><dd>${escape(groupNames[role.group])}</dd></div>
+          <div><dt>Grupo orgánico</dt><dd>${escape(groupNames[role.group])}</dd></div>${role.parentOffice ? `
+          <div><dt>Dependencia jerárquica</dt><dd>${escape(role.parentOffice)}</dd></div>` : ''}
           <div><dt>Fecha de inicio</dt><dd>${time(role.effectiveOn)}</dd></div>
           <div class="profile-contact">
             <dt>Correo institucional</dt>

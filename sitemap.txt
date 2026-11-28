@@ -45,6 +45,7 @@ https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionarios/jeanfranco-m
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionarios/jeanfranco-martin-vargas-luque/direccion-de-servicios-legales-tributarios-y-contables.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionarios/jeanfranco-martin-vargas-luque/subdireccion-de-servicios-legales.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./funcionarios/jeanfranco-martin-vargas-luque/subdireccion-de-servicios-tributarios-y-contables.html
+https://altumlumen-design.github.io/Altum-Lumen-S.A.C./actos/00027-2026-al-gg.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./actos/00015-2026-al-da.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./actos/00014-2026-al-da.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./actos/00013-2026-al-da.html
@@ -132,6 +133,8 @@ https://altumlumen-design.github.io/Altum-Lumen-S.A.C./actos/00003-2025-al-sgrh.
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./actos/00003-2025-al-gg.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./actos/00002-2025-al-sgrh.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./actos/00001-2025-al-sgrh.html
+https://altumlumen-design.github.io/Altum-Lumen-S.A.C./documentos/gestion/organigrama-2026-noviembre.html
+https://altumlumen-design.github.io/Altum-Lumen-S.A.C./documentos/gestion/rof-2026-noviembre.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./documentos/gestion/organigrama-2026.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./documentos/gestion/rof-2026.html
 https://altumlumen-design.github.io/Altum-Lumen-S.A.C./documentos/gestion/manual-clasificador-cargos-2026.html

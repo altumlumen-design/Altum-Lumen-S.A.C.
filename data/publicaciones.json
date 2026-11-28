@@ -805,6 +805,19 @@
       "pdf": "documentos/actos-resolutivos/2026/gerencia-general/RGG-00026-2026-AL-GG.pdf"
     },
     {
+      "id": "00027-2026-al-gg",
+      "code": "00027-2026-AL/GG",
+      "title": "Resolución de Gerencia General N.° 00027-2026-AL/GG",
+      "type": "Resolución de Gerencia General",
+      "office": "Gerencia General",
+      "year": 2026,
+      "issuedOn": "2026-11-28",
+      "summary": "Aprueba el nuevo Reglamento de Organización y Funciones como texto sustitutorio integral, con vigencia desde el 29 de noviembre de 2026. Reclasifica en Asesoramiento a la Gerencia de Servicios Comerciales y Cooperación, su Subgerencia de Planeamiento, Desarrollo Corporativo y de Servicios y la Unidad de Estrategia y Cooperación Interinstitucional.",
+      "pdf": "documentos/actos-resolutivos/2026/gerencia-general/RGG-00027-2026-AL-GG.pdf",
+      "annex": "documentos/gestion/rof-2026-noviembre.pdf",
+      "bundle": "documentos/actos-resolutivos/2026/gerencia-general/RGG-00027-2026-AL-GG-con-anexo.pdf"
+    },
+    {
       "id": "00001-2026-al-sdrh",
       "code": "00001-2026-AL/SDRH",
       "title": "Resolución Subdirectoral N.° 00001-2026-AL/SDRH",
@@ -974,14 +987,28 @@
     {
       "title": "Organigrama institucional 2026",
       "year": 2026,
-      "description": "Representa la estructura de Altum Lumen y las relaciones de dependencia entre sus órganos y unidades.",
-      "pdf": "documentos/gestion/organigrama-2026.pdf"
+      "description": "Organigrama del ROF aprobado por la Resolución N.° 00027-2026-AL/GG. Corresponde a la página 26 del anexo único y muestra la nueva clasificación de Asesoramiento, vigente desde el 29 de noviembre de 2026.",
+      "pdf": "documentos/gestion/organigrama-2026-noviembre.pdf"
     },
     {
       "title": "Reglamento de Organización y Funciones 2026",
       "year": 2026,
-      "description": "Define la estructura orgánica, las funciones y responsabilidades de cada unidad y sus relaciones de coordinación.",
-      "pdf": "documentos/gestion/rof-2026.pdf"
+      "description": "Texto sustitutorio integral aprobado por la Resolución de Gerencia General N.° 00027-2026-AL/GG. Incluye los 65 artículos y el organigrama. Vigencia desde el 29 de noviembre de 2026.",
+      "pdf": "documentos/gestion/rof-2026-noviembre.pdf"
+    },
+    {
+      "title": "Organigrama institucional 2026 · Febrero",
+      "year": 2026,
+      "description": "Versión histórica correspondiente al ROF aprobado en febrero de 2026.",
+      "pdf": "documentos/gestion/organigrama-2026.pdf",
+      "archived": true
+    },
+    {
+      "title": "Reglamento de Organización y Funciones 2026 · Febrero",
+      "year": 2026,
+      "description": "Versión aprobada por la Resolución de Gerencia General N.° 00001-2026-AL/GG. Fue sustituida por el nuevo ROF con vigencia desde el 29 de noviembre de 2026.",
+      "pdf": "documentos/gestion/rof-2026.pdf",
+      "archived": true
     },
     {
       "title": "Manual del Clasificador de Cargos 2026",

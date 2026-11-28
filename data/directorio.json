@@ -136,7 +136,7 @@
         {
           "title": "Gerente de Servicios Comerciales y Cooperación",
           "office": "Gerencia de Servicios Comerciales y Cooperación",
-          "group": "Órganos de línea",
+          "group": "Asesoramiento",
           "temporary": true,
           "effectiveOn": "2026-11-05",
           "email": "serviciosyrelaciones.altumlumen@gmail.com",
@@ -146,7 +146,8 @@
             "code": "00025-2026-AL/GG",
             "article": 1
           },
-          "responsibilities": "dirige la estrategia comercial, define las condiciones de prestación de servicios y gestiona la cartera de clientes. Supervisa las alianzas y el servicio posventa."
+          "responsibilities": "conduce la planificación comercial, el posicionamiento institucional y la cooperación interinstitucional. Asesora a la Gerencia General, evalúa los resultados de las líneas de servicio y propone mejoras en la oferta y la atención.",
+          "parentOffice": "Gerencia General"
         }
       ],
       "summary": "Profesional en Dirección y Diseño Gráfico. Su perfil se orienta al desarrollo de identidades visuales y a la comunicación gráfica. Su enfoque combina la dirección visual de proyectos con el diseño de materiales coherentes con la identidad de marca y los canales en los que se presentan."
@@ -321,7 +322,7 @@
         {
           "title": "Subgerente de Planeamiento, Desarrollo Corporativo y de Servicios",
           "office": "Subgerencia de Planeamiento, Desarrollo Corporativo y de Servicios",
-          "group": "Órganos de línea",
+          "group": "Asesoramiento",
           "temporary": false,
           "effectiveOn": "2026-02-13",
           "email": "desarrolloservicios.altumlumen@gmail.com",
@@ -331,12 +332,13 @@
             "code": "00016-2026-AL/GG",
             "article": 1
           },
-          "responsibilities": "conduce el planeamiento institucional, la formulación del plan operativo y el seguimiento de metas. Dirige la gestión del portafolio de servicios y propone mejoras a los procesos y estándares de entrega."
+          "responsibilities": "conduce el planeamiento institucional y la revisión técnica de los instrumentos de gestión. Evalúa el portafolio de servicios, da seguimiento a metas e indicadores y propone mejoras a los procesos y estándares de entrega.",
+          "parentOffice": "Gerencia de Servicios Comerciales y Cooperación"
         },
         {
           "title": "Jefe de la Unidad de Estrategia y Cooperación Interinstitucional",
           "office": "Unidad de Estrategia y Cooperación Interinstitucional",
-          "group": "Órganos de línea",
+          "group": "Asesoramiento",
           "temporary": true,
           "effectiveOn": "2026-02-13",
           "email": "estrategiacoordina.altumlumen@gmail.com",
@@ -346,7 +348,8 @@
             "code": "00011-2026-AL/SDRH",
             "article": 1
           },
-          "responsibilities": "conduce la gestión de convenios, alianzas y auspicios. Coordina con las áreas responsables la viabilidad de las propuestas de cooperación y verifica los compromisos y plazos."
+          "responsibilities": "conduce la formulación y coordinación de propuestas de convenios, alianzas y auspicios para las líneas de servicio. Da seguimiento a los compromisos asumidos y coordina la evaluación de las propuestas con las áreas competentes.",
+          "parentOffice": "Subgerencia de Planeamiento, Desarrollo Corporativo y de Servicios"
         },
         {
           "title": "Jefe de la Unidad de Formación y Capacitación Profesional",
