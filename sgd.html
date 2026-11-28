@@ -98,7 +98,7 @@
 .work-nav button[aria-current=page]{background:#e8f2f8;color:#16577d;border-color:#cbdfea}
 .work-nav button:hover{background:#f3f8fb}
 .box-toolbar{padding:14px;border-bottom:1px solid var(--line)}
-.box-search-form,.box-filters,.box-results-bar,.drawer-shortcuts{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.box-search-form,.box-filters,.box-results-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
 .box-search-form label,.box-filters label{display:grid;gap:4px;font-size:12px;font-weight:700}
 .box-search-form label{flex:1 1 255px}
 .box-search-form .search{width:100%;max-width:none;box-sizing:border-box}
@@ -110,15 +110,32 @@
 .box-doc-actions .smallbtn{white-space:nowrap}
 .box-office{min-width:140px;max-width:220px}
 .box-subject{min-width:170px}
-.drawer-shortcuts{margin:12px 0;align-items:center}
 .drawer-body .sgd-fold:focus{outline:2px solid #2476a4;outline-offset:2px}
 .drawer-inline-file{margin:12px 0}
-.upload-files-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
-.upload-file-card{display:grid;gap:8px;align-content:start;padding:14px;border:1px solid var(--line);border-radius:10px;background:#f8fbfd}
+.drawer-document-files{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:12px 0}
+.drawer-annex-name,.annex-sign-main .doclink{font-size:14px;overflow-wrap:anywhere}
+.upload-files-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px}
+.upload-file-card{position:relative;min-width:0;display:grid;gap:10px;align-content:start;padding:14px;border:1px solid var(--line);border-radius:10px;background:#f8fbfd}
 .upload-file-card.drag-over{border-color:#1c76a6;background:#e9f4fb}
-.upload-file-card input{width:100%;font:inherit;color:inherit}
-.upload-file-card input::file-selector-button{font:inherit;margin-right:8px;cursor:pointer}
-.upload-file-status{min-height:1.4em}
+.upload-file-card h4{margin:0;font-size:16px}
+.upload-file-picker{display:flex;flex-wrap:wrap;align-items:center;gap:6px 9px}
+.upload-file-picker .btn{margin:0;min-height:38px;cursor:pointer}
+.upload-file-picker input{position:absolute;width:1px;height:1px;margin:0;opacity:0}
+.upload-file-picker input:focus-visible + label{outline:2px solid #1871a7;outline-offset:3px}
+.upload-file-picker input:disabled + label{opacity:.55;cursor:wait;pointer-events:none}
+.upload-file-picker small{font-size:12px;color:#445d72}
+.upload-file-status{display:grid;gap:3px;padding:10px 12px;border:1px solid #d4e0e9;border-radius:8px;background:#fff;color:#40596d;font-size:14px;line-height:1.35;overflow-wrap:anywhere;scroll-margin-block-start:85px}
+.upload-file-status > b{display:flex;gap:6px;align-items:center}
+.upload-file-status > span{display:block}
+.upload-file-status.is-working{background:#edf6fc;border-color:#a9cfeb;color:#125a85}
+.upload-file-status.is-saved{background:#eff8f2;border-color:#b8dcc5;color:#165d38}
+.upload-file-status.is-error{background:#fff3f1;border-color:#e7bbb4;color:#91271f}
+.upload-file-status .sgd-icon{flex:none}
+.upload-file-confirmation{display:flex;flex-wrap:wrap;gap:8px}
+.upload-file-confirmation .upload-file-status{flex:1 1 210px}
+.upload-annex-feedback:not(:empty){margin:10px 0}
+.loader.show .loader-box:has(.loader-sub[data-file-upload]) .loader-title{font-size:16px}
+.loader-sub[data-file-upload]{font-size:14px;overflow-wrap:anywhere;line-height:1.4}
 .home-secondary{grid-template-columns:repeat(3,minmax(0,1fr))}
 .home-secondary button{font:inherit;color:inherit;text-align:left;cursor:pointer}
 .destination-group-offices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;max-height:42vh;overflow:auto;padding:8px 1px}
@@ -541,7 +558,7 @@ function refreshBootstrap(){
 }
 function refreshCountsQuiet224(){if(app.session?.role!=='APOYO')refreshBootstrap()}
 function applyCountHint224(h){if(!h||!app.bootstrap?.counts)return;const c=app.bootstrap.counts;if(Number.isFinite(h.drafts))c.drafts=Math.max(0,Number(c.drafts||0)+h.drafts);if(Number.isFinite(h.sent))c.sent=Math.max(0,Number(c.sent||0)+h.sent);setCounts(c)}
-function renderDraftFromResult224(r){const d=r.raw||{};let legacy=[];try{legacy=JSON.parse(d.Destinos_JSON||'[]')}catch(e){}let copies=[];try{copies=JSON.parse(d.Copias_JSON||'[]')}catch(e){}let primaries=safeJsonArray(d.Destinos_Principales_JSON);if(!primaries.length&&(d.Destino_Principal||legacy[0]))primaries=[d.Destino_Principal||legacy[0]];renderNew({documentId:d.Documento_ID,clientRequestId:d.Cliente_Request_ID||'',type:d.Tipo,subject:d.Asunto,priority:d.Prioridad,days:d['Días_Atención'],principal:primaries[0]||'',primaryDestinations:primaries,copies:copies.length?copies:legacy.filter(x=>!primaries.includes(x)).map(office=>({office,type:'COPIA'})),destinations:legacy,externalDestinations:safeJsonArray(d.Destinos_Externos_JSON),indication:d.Indicación,expedienteId:d.Expediente_ID,internalObservation:d.Observación_Interna,replyToDocumentId:d.Responde_A_Documento_ID,attendsDocumentIds:r.attentionDocumentIds||[],attendsDocuments:r.attentionDocuments||[],signatureMethod:d['Método_Firma'],number:d['Número'],state:d.Estado,version:d['Versión'],wordProjectId:d.Word_Proyecto_ID||'',wordFinalId:d.Word_Final_ID||'',pdfFinalId:d.PDF_Final_ID||'',signatureConfirmed:d['Firma_Confirmada']||'NO',preparedBy:d.Elaborador_Nombre||d.Usuario_Creador||'',projectBody:d.Proyecto_Texto_Apoyo||'',submittedForReview:d.Presentado_Revision||'',delegatedDocumentId:d.Proyecto_Delegado_ID||'',signatureCircuit:r.signatureCircuit||null,annexSigning:r.annexSigning||[],annexSignaturePhase:r.annexSignaturePhase||null,projectWordDownloadUrl:'',projectWordFileId:r.projectWordFileId||d.Word_Proyecto_ID||'',finalWordFileId:r.finalWordFileId||d.Word_Final_ID||'',finalPdfFileId:r.finalPdfFileId||d.PDF_Final_ID||'',aiDraft:r.aiDraft||null})}
+function renderDraftFromResult224(r,savedFile){const d=r.raw||{},previous=app.flowDraft?.documentId===d.Documento_ID?app.flowDraft:{};let legacy=[];try{legacy=JSON.parse(d.Destinos_JSON||'[]')}catch(e){}let copies=[];try{copies=JSON.parse(d.Copias_JSON||'[]')}catch(e){}let primaries=safeJsonArray(d.Destinos_Principales_JSON);if(!primaries.length&&(d.Destino_Principal||legacy[0]))primaries=[d.Destino_Principal||legacy[0]];renderNew({documentId:d.Documento_ID,clientRequestId:d.Cliente_Request_ID||'',type:d.Tipo,subject:d.Asunto,priority:d.Prioridad,days:d['Días_Atención'],principal:primaries[0]||'',primaryDestinations:primaries,copies:copies.length?copies:legacy.filter(x=>!primaries.includes(x)).map(office=>({office,type:'COPIA'})),destinations:legacy,externalDestinations:safeJsonArray(d.Destinos_Externos_JSON),indication:d.Indicación,expedienteId:d.Expediente_ID,internalObservation:d.Observación_Interna,replyToDocumentId:d.Responde_A_Documento_ID,attendsDocumentIds:r.attentionDocumentIds||[],attendsDocuments:r.attentionDocuments||[],signatureMethod:d['Método_Firma'],number:d['Número'],state:d.Estado,version:d['Versión'],wordProjectId:d.Word_Proyecto_ID||'',wordFinalId:d.Word_Final_ID||'',pdfFinalId:d.PDF_Final_ID||'',wordFinalName:finalFileName_(r,d,previous,'word',savedFile),pdfFinalName:finalFileName_(r,d,previous,'pdf',savedFile),signatureConfirmed:d['Firma_Confirmada']||'NO',preparedBy:d.Elaborador_Nombre||d.Usuario_Creador||'',projectBody:d.Proyecto_Texto_Apoyo||'',submittedForReview:d.Presentado_Revision||'',delegatedDocumentId:d.Proyecto_Delegado_ID||'',signatureCircuit:r.signatureCircuit||null,annexSigning:r.annexSigning||[],annexSignaturePhase:r.annexSignaturePhase||null,projectWordDownloadUrl:'',projectWordFileId:r.projectWordFileId||d.Word_Proyecto_ID||'',finalWordFileId:r.finalWordFileId||d.Word_Final_ID||'',finalPdfFileId:r.finalPdfFileId||d.PDF_Final_ID||'',aiDraft:r.aiDraft||null})}
 
 
 function quickLinkIcon240(k){return sgdIcon_(({portal:'home',centro:'course',aula:'manual',sira:'certificate',verificacion:'approval'})[k]||'external')}
@@ -566,7 +583,7 @@ function renderHome(refresh=true){
  $('main').innerHTML=pageHead('Inicio','',`<button class="btn btn-primary" onclick="go('new')"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-add"></use></svg> Nuevo documento</button>`)+firmaNotice+
  `<div class="home-priority"><button class="home-priority-card urgent" type="button" onclick="go('received')"><div class="hp-top"><span class="hp-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-inbox"></use></svg></span><strong data-home-count="pending"></strong></div><b>Por recibir</b><small>Documentos que todavía requieren recepción.</small></button><button class="home-priority-card" type="button" onclick="go('attention')"><div class="hp-top"><span class="hp-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-activity"></use></svg></span><strong data-home-count="attentionWork"></strong></div><b>En atención</b><small>Recibidos y actuaciones actualmente abiertas.</small></button><button class="home-priority-card sign" type="button" onclick="go('annex-signatures')"><div class="hp-top"><span class="hp-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-attachment-sign"></use></svg></span><strong data-home-count="annexSignaturePending"></strong></div><b>Anexos por firmar</b><small>Firmas y V°B° de anexos asignados a usted.</small></button><button class="home-priority-card sign" type="button" onclick="go('resolution-vb')"><div class="hp-top"><span class="hp-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-approval"></use></svg></span><strong data-home-count="resolutionVbPending"></strong></div><b>V°B° de resoluciones</b><small>Actos resolutivos que esperan su visto bueno.</small></button></div>`+
  `<div class="home-secondary"><button class="metric" type="button" onclick="go('drafts')"><small>En proyecto</small><strong data-home-count="drafts"></strong></button><button class="metric" type="button" onclick="go('principal-signatures')"><small>Para firma</small><strong data-home-count="documentSignaturePending"></strong></button><button class="metric green" type="button" onclick="go('sent')"><small>Emitidos</small><strong data-home-count="sent"></strong></button></div>`+homeWorkQueues_()+
- `<div class="grid2"><section class="panel"><div class="panel-head"><h3>Acciones rápidas</h3></div><div class="panel-body"><div class="quick-links"><button class="quick-link" type="button" onclick="go('drafts')"><span class="quick-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-draft"></use></svg></span><span><b>Continuar borradores</b><small>Documentos en preparación</small></span></button><button class="quick-link" type="button" onclick="go('firma')"><span class="quick-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-certificate"></use></svg></span><span><b>Mi firma digital</b><small>${firma.status==='ACTIVO'?'Certificado y contraseña de firma':'Configurar firma digital'}</small></span></button><button class="quick-link" type="button" onclick="go('expedientes')"><span class="quick-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-folder"></use></svg></span><span><b>Expedientes</b><small>Consulta documental por expediente</small></span></button><button class="quick-link" type="button" onclick="go('tracking')"><span class="quick-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-route"></use></svg></span><span><b>Seguimiento</b><small>Trazabilidad de documentos</small></span></button></div></div></section><section class="panel"><div class="panel-head"><h3>Accesos institucionales</h3></div><div class="panel-body"><div class="quick-links">${linkHtml||'<div class="helper">No hay accesos adicionales habilitados.</div>'}</div></div></section></div>`+
+ `<div class="grid2"><section class="panel"><div class="panel-head"><h3>Acciones rápidas</h3></div><div class="panel-body"><div class="quick-links">${firmaNotice?'':`<button class="quick-link" type="button" onclick="go('firma')"><span class="quick-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-certificate"></use></svg></span><span><b>Mi firma digital</b><small>${firma.status==='ACTIVO'?'Certificado y contraseña de firma':'Configurar firma digital'}</small></span></button>`}<button class="quick-link" type="button" onclick="go('expedientes')"><span class="quick-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-folder"></use></svg></span><span><b>Expedientes</b><small>Consulta documental por expediente</small></span></button><button class="quick-link" type="button" onclick="go('tracking')"><span class="quick-icon"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-route"></use></svg></span><span><b>Seguimiento</b><small>Trazabilidad de documentos</small></span></button></div></div></section><section class="panel"><div class="panel-head"><h3>Accesos institucionales</h3></div><div class="panel-body"><div class="quick-links">${linkHtml||'<div class="helper">No hay accesos adicionales habilitados.</div>'}</div></div></section></div>`+
  `<div class="institutional-note"><b>SGD ALTUM LUMEN</b> · Gestión documental, trazabilidad y firma digital institucional.</div>`;
  setCounts(b.counts);
  if(refresh)refreshBootstrap();
@@ -972,7 +989,7 @@ function docTable(items,box=''){
      :`<button class="doclink" type="button" data-document-id="${id}" onclick="openDoc(this.dataset.documentId)">${number}</button>`;
    const delegate=eligibleForDelegation&&!support&&['RECIBIDO','EN_ATENCIÓN'].includes(d.status);
    return `<tr ${receiveMode?`data-receive-row="${id}" class="bulk-receive-row40 ${set.has(d.documentId)?'selected':''}"`:''}>
-    ${pickup}<td>${docLabel}${d.historical?'<span class="history-tag">HISTÓRICO</span>':''}<div class="helper">${esc(d.type||'')}</div>
+    ${pickup}<td>${docLabel}${d.historical?'<span class="history-tag">HISTÓRICO</span>':''}${d.type&&!normalizedTypeUI233_(d.number).startsWith(normalizedTypeUI233_(d.type)+' ')?`<div class="helper">${esc(d.type)}</div>`:''}
       ${d.preparedBy||d.queueAuthor?`<div class="helper">Elaborado por ${esc(d.preparedBy||d.queueAuthor)}</div>`:''}</td>
     <td class="box-subject">${esc(d.subject||'—')}${delegated&&d.queueNote?`<div class="helper">Indicación: ${esc(d.queueNote)}</div>`:''}</td>
     <td>${esc(d.expediente||'—')}</td>
@@ -1241,7 +1258,7 @@ function stagePanelUI(step,d={}){
   const preserved=signedAnnexes.length?`<p class="okbox">${signedAnnexes.length} anexo(s) conservan sus firmas digitales.</p>`:'';
   return `<section class="stage-card">
    <div class="stage-head"><div class="stage-num">3</div><h3>Archivos finales</h3></div>
-   <div class="stage-body"><div class="upload-files-grid">${finalFileCard_('word',d.wordFinalId)}${finalFileCard_('pdf',d.pdfFinalId)}</div>${preserved}</div>
+   <div class="stage-body"><div class="upload-files-grid">${finalFileCard_('word',d.wordFinalId,d.wordFinalName)}${finalFileCard_('pdf',d.pdfFinalId,d.pdfFinalName)}</div>${preserved}</div>
    <div class="stage-actionbar">
     <button class="backbtn" type="button" onclick="leaveDocumentFlow()"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-arrow-left"></use></svg> Volver</button>
     ${d.wordProjectId?`<button class="btn word-download-main" type="button" onclick="downloadSgdFile('${esc(d.wordProjectId)}')">Descargar plantilla Word</button>`:''}
@@ -1249,7 +1266,7 @@ function stagePanelUI(step,d={}){
    </div>
   </section>`;
  }
- if(step===4)return `<section class="stage-card"><div class="stage-head"><div class="stage-num">4</div><div><h3>Revisión final</h3><div class="helper">Revise el PDF que será sometido al circuito de firma. Después de confirmar, esta versión queda cerrada para firma.</div></div></div><div class="stage-actionbar"><button class="backbtn" type="button" onclick="leaveDocumentFlow()"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-arrow-left"></use></svg> Volver</button><div class="action-primary"><button class="btn btn-primary" type="button" onclick="reviewFinal()">Revisar documento</button></div><details class="more-actions"><summary>Más opciones</summary><div class="danger-zone"><button class="btn btn-danger" type="button" onclick="discardProject()">Descartar archivos del proyecto</button></div></details></div></section>`;
+ if(step===4)return `<section class="stage-card"><div class="stage-head"><div class="stage-num">4</div><div><h3>Revisión final</h3><div class="helper">Revise el PDF que será sometido al circuito de firma. Después de confirmar, esta versión queda cerrada para firma.</div></div></div><div class="stage-body upload-file-confirmation">${finalFilesConfirmed_(d)}</div><div class="stage-actionbar"><button class="backbtn" type="button" onclick="leaveDocumentFlow()"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-arrow-left"></use></svg> Volver</button><div class="action-primary"><button class="btn btn-primary" type="button" onclick="reviewFinal()">Revisar documento</button></div><details class="more-actions"><summary>Más opciones</summary><div class="danger-zone"><button class="btn btn-danger" type="button" onclick="discardProject()">Descartar archivos del proyecto</button></div></details></div></section>`;
  if(step===5){
   const c=d.signatureCircuit||{},ann=d.annexSigning||[],req=ann.filter(x=>x.required),pending=req.filter(x=>!x.signed),resolution=!!c.resolutionMode,canEmit=!!c.complete&&!pending.length,annexOpen=!c.prepared&&d.signatureConfirmed==='SI'&&(!d.annexSignaturePhase||d.annexSignaturePhase.canConfigure!==false),vbRows=Array.isArray(c.resolutionVbs)?c.resolutionVbs:[],vbPending=vbRows.filter(x=>!x.done),waitingVb=resolution&&c.prepared&&vbPending.length>0;
   const annexStatus=!req.length?'Sin solicitudes de firma en anexos':pending.length?`${pending.length} anexo(s) en espera de firma / V°B°`:'Anexos requeridos completados';
@@ -1348,7 +1365,7 @@ function renderNew(prefill={}){
    $('main').innerHTML=pageHead(app.currentDraft?'Proyecto documental':'Nuevo proyecto',prefill.delegatedDocumentId?'Proyecto de un documento delegado':'','<button class="btn btn-outline" type="button" onclick="go(\'support-projects\')">Mis proyectos</button>')+dataBlock+actions;
  }else{
    $('main').innerHTML=pageHead(prefill.documentId?'Preparación del documento':'Nuevo documento')+workflowStepsUI(step)+supportProposalMarkup_(prefill)+dataBlock+referencePickerMarkup_()+stagePanelUI(step,prefill)+
-    (app.currentDraft?`<details class="collapsible-data"><summary>Antecedentes y anexos</summary><div class="form-body"><div id="refsArea"><div class="inline-load">Cargando información complementaria…</div></div></div></details>`:'');
+    (app.currentDraft?`<details class="collapsible-data"><summary>Antecedentes y anexos</summary><div class="form-body"><div id="annexUploadStatus" class="upload-annex-feedback" role="status" aria-atomic="true"></div><div id="refsArea"><div class="inline-load">Cargando información complementaria…</div></div></div></details>`:'');
  }
  renderPrimaryDestinations233();renderCopies();renderExternalDestinations();renderAttendsSelected240();signatureHelp();onDocumentTypeChange233(false);if(app.currentDraft&&!support)loadDraftExtras(app.currentDraft);
 }
@@ -1602,6 +1619,13 @@ async function loadDraftExtras(id){
  try{
  const r=await api('getDocumentDetailSGD',app.token,id),d=r.raw;
  if(id!==app.currentDraft||picker!==app.manualReferencePicker||area!==$('refsArea'))return;
+ for(const kind of ['word','pdf']){
+  const file=r.files?.[kind],slot=$('uploadStatus-'+kind);
+  if(file?.name&&file.id===app.flowDraft?.[kind+'FinalId']){
+   app.flowDraft[kind+'FinalName']=file.name;
+   if(slot?.classList.contains('is-saved'))setUploadFileStatus_(slot,'saved',slot.querySelector('b').textContent.trim(),file.name);
+  }
+ }
  const refs=r.references||[];
  const manual=ref=>String(ref.type||'').trim().toUpperCase()==='REFERENCIA DOCUMENTAL';
  picker.selected=refs.filter(manual);
@@ -1609,7 +1633,7 @@ async function loadDraftExtras(id){
  renderManualReferences_();
  if(picker.results.size)renderReferenceResults_();
  let html=`<div class="numberbox"><small>Documento en preparación</small><b>${esc(d['Número']||'Sin correlativo reservado')}</b></div>`;
- const links=[];if(r.projectWordFileId)links.push(`<button class="btn" type="button" onclick="downloadSgdFile('${r.projectWordFileId}')">Descargar proyecto Word</button>`);if(r.finalPdfFileId)links.push(`<button class="btn" type="button" onclick="previewSgdFile('${r.finalPdfFileId}')">Ver PDF cargado</button>`);if(r.finalWordFileId)links.push(`<button class="btn" type="button" onclick="downloadSgdFile('${r.finalWordFileId}')">Descargar Word final</button>`);if(links.length)html+=`<div class="file-links">${links.join('')}</div>`;
+ const links=[];if(r.projectWordFileId&&draftStepUI(app.flowDraft)!==3)links.push(`<button class="btn" type="button" onclick="downloadSgdFile('${r.projectWordFileId}')">Descargar proyecto Word</button>`);if(r.finalPdfFileId)links.push(`<button class="btn" type="button" onclick="previewSgdFile('${r.finalPdfFileId}')">Ver PDF cargado</button>`);if(r.finalWordFileId)links.push(`<button class="btn" type="button" onclick="downloadSgdFile('${r.finalWordFileId}')">Descargar Word final</button>`);if(links.length)html+=`<div class="file-links">${links.join('')}</div>`;
  if(d['Método_Firma']==='FIRMA_DIGITAL'&&d.PDF_Final_ID)html+=`<div class="${d['Firma_Digital_Detectada']==='SI'?'okbox':'warn'}" style="margin-top:10px"><b>Firma digital:</b> ${d['Firma_Digital_Detectada']==='SI'?'detectada.':'no detectada.'}</div>`;
  html+=`<div class="section-label">Antecedentes y vínculos de atención</div><div class="ref-auto-note">El documento que esta actuación atiende forma parte de los antecedentes y se muestra junto con las demás referencias. Los vínculos de atención se administran desde <b>Documentos que atiende</b>.</div>${refs.filter(x=>!manual(x)).map(x=>{const attendsRef=String(x.type||'').toUpperCase().split('/').map(y=>y.trim()).includes('ATIENDE');return `<div class="chip" title="${esc(x.document.subject||'')}">${attendsRef?'<span class="ref-kind">Documento que atiende</span> · ':''}${esc(x.document.number||x.document.documentId)} · ${esc(x.document.subject||'Sin asunto')}${attendsRef?'':`<button type="button" aria-label="Quitar referencia" onclick="removeRef('${x.id}')"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-close"></use></svg></button>`}</div>`}).join('')||'<div class="helper" style="margin-top:8px">Sin antecedentes ni referencias vinculados.</div>'}`;
  const annexFilesLocked=app.newState?.signatureConfirmed==='SI';html+=`<div class="section-label">Anexos</div>${(r.annexes||[]).map(a=>annexSigningControlsUI_(a,id,false)).join('')||'<div class="helper">Sin anexos.</div>'}${annexFilesLocked?'':`<div style="margin-top:9px;display:flex;gap:7px;flex-wrap:wrap"><label class="btn btn-outline">Cargar anexos<input type="file" multiple style="display:none" onchange="uploadAnnexes240(this)"></label><button type="button" class="btn btn-secondary" onclick="openAnnexInheritance240()">Heredar anexos vinculados</button></div>`}<div class="helper" style="margin-top:7px">${annexFilesLocked?(app.annexConfigOpen?'La revisión final cerró la carga de archivos. Ahora configure, únicamente en esta etapa, las firmas o V°B° que necesiten los anexos PDF.':'La etapa de anexos está cerrada porque ya comenzó el circuito principal.'):'Cargue o herede los anexos antes de confirmar la revisión final.'}</div>`;area.innerHTML=html;}catch(e){if(area===$('refsArea'))area.innerHTML=`<div class="warn">${esc(e.message)}</div>`}}
@@ -1734,14 +1758,37 @@ const finalFileTypes_={
  word:{title:'Word final',extension:'.docx',maxMB:35,method:'uploadFinalWordSGD'},
  pdf:{title:'PDF principal',extension:'.pdf',maxMB:25,method:'uploadFinalPdfSGD'}
 };
-function finalFileCard_(kind,saved){
- const type=finalFileTypes_[kind];
+function finalFileName_(result,raw,previous,kind,savedFile){
+ const id=raw[kind==='word'?'Word_Final_ID':'PDF_Final_ID'];
+ if(!id)return '';
+ const item=result.files?.[kind];
+ return (item?.id===id&&item.name)||(savedFile?.kind===kind&&savedFile.name)||
+   (previous[kind+'FinalId']===id&&previous[kind+'FinalName'])||'';
+}
+function uploadFileStatus_(state,title,detail=''){
+ const icon=state==='saved'?'<svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-check"></use></svg>':'';
+ return `<b>${icon}${esc(title)}</b>${detail?`<span>${esc(detail)}</span>`:''}`;
+}
+function setUploadFileStatus_(node,state,title,detail=''){
+ if(!node)return;
+ node.classList.remove('is-working','is-saved','is-error');
+ node.classList.add('upload-file-status','is-'+state);
+ node.innerHTML=uploadFileStatus_(state,title,detail);
+}
+function finalFileCard_(kind,saved,name){
+ const type=finalFileTypes_[kind],action=saved?'Reemplazar':'Seleccionar',shortType=kind==='word'?'Word':'PDF';
  return `<div class="upload-file-card" data-final-upload="${kind}" ondragover="finalFileDrag_(event,true)" ondragleave="finalFileDrag_(event,false)" ondrop="dropFinalFile_(event)">
-  <label for="uploadFinal-${kind}"><b>${type.title}</b></label>
-  <input id="uploadFinal-${kind}" type="file" accept="${type.extension}" onchange="uploadFinalFile_('${kind}',this.files[0])" aria-describedby="uploadHelp-${kind} uploadStatus-${kind}">
-  <small id="uploadHelp-${kind}" class="helper">Seleccione o arrastre un ${type.extension} de hasta ${type.maxMB} MB.</small>
-  <span id="uploadStatus-${kind}" class="upload-file-status helper" role="status">${saved?'<svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-check"></use></svg> Guardado':'Pendiente de carga'}</span>
+  <h4>${type.title}</h4>
+  <div class="upload-file-status ${saved?'is-saved':''}" id="uploadStatus-${kind}" role="status" tabindex="-1">${uploadFileStatus_(saved?'saved':'waiting',saved?'Guardado':'Pendiente de carga',name)}</div>
+  <div class="upload-file-picker">
+   <input id="uploadFinal-${kind}" type="file" accept="${type.extension}" onchange="uploadFinalFile_('${kind}',this.files[0])" aria-describedby="uploadHelp-${kind} uploadStatus-${kind}">
+   <label class="btn btn-outline" for="uploadFinal-${kind}">${action} ${shortType}</label>
+   <small id="uploadHelp-${kind}">${type.extension.toUpperCase().slice(1)} · Máximo ${type.maxMB} MB</small>
+  </div>
  </div>`;
+}
+function finalFilesConfirmed_(draft){
+ return ['word','pdf'].map(kind=>`<div class="upload-file-status is-saved" id="uploadStatus-${kind}" tabindex="-1">${uploadFileStatus_('saved',finalFileTypes_[kind].title+' guardado',draft[kind+'FinalName'])}</div>`).join('');
 }
 function finalFileDrag_(event,over){
  event.preventDefault();
@@ -1761,7 +1808,7 @@ async function uploadFinalFile_(kind,file){
  if(finalFileUploads_.has(key)){input.value='';toast('Ya hay un archivo en proceso de carga.');return;}
  const extension=type.extension;
  if(!file.size||!file.name.toLowerCase().endsWith(extension)||file.size>type.maxMB*1024*1024){
-   status.textContent=`Selecciona un archivo ${extension} de hasta ${type.maxMB} MB que no esté vacío.`;
+   setUploadFileStatus_(status,'error','Archivo no aceptado',`Selecciona un archivo ${extension} de hasta ${type.maxMB} MB que no esté vacío.`);
    input.value='';
    return;
  }
@@ -1769,18 +1816,22 @@ async function uploadFinalFile_(kind,file){
  const controls=[...input.closest('.stage-card').querySelectorAll('input[type="file"],.danger-zone button')];
  const unlocked=controls.filter(control=>!control.disabled);
  unlocked.forEach(control=>{control.disabled=true;});
- status.textContent='Cargando '+file.name+'…';
+ setUploadFileStatus_(status,'working','Cargando archivo…',file.name);
  const stillOpen=()=>app.token===token&&app.currentDraft===id&&input.isConnected;
  try{
    const data=await fileObjectData240_(file,type.maxMB*1024*1024,type.title);
    const result=await api(type.method,token,id,data);
    if(app.token!==token)return;
-   toast(type.title+' guardado');
-   if(stillOpen())renderDraftFromResult224(result);
+   if(stillOpen()){
+     renderDraftFromResult224(result,{kind,name:file.name});
+     const saved=$('uploadStatus-'+kind);
+     saved?.focus({preventScroll:true});
+     saved?.scrollIntoView({block:'nearest'});
+   }else toast(type.title+' guardado');
  }catch(error){
    if(app.token!==token)return;
    if(error?.message==='SESSION_EXPIRED'){err(error);return;}
-   if(stillOpen())status.textContent=error?.message||'No se pudo cargar el archivo.';
+   if(stillOpen())setUploadFileStatus_(status,'error','No se pudo guardar el archivo',error?.message||file.name);
    else err(error);
  }finally{
    finalFileUploads_.delete(key);
@@ -1789,36 +1840,52 @@ async function uploadFinalFile_(kind,file){
  }
 }
 function blobBase64Data240_(blob){return blob.arrayBuffer().then(buf=>{const bytes=new Uint8Array(buf);let binary='';const step=0x8000;for(let i=0;i<bytes.length;i+=step)binary+=String.fromCharCode.apply(null,bytes.subarray(i,Math.min(i+step,bytes.length)));return btoa(binary)})}
-async function uploadAnnexResumable240_(f,fileIndex,totalFiles){
+async function uploadAnnexResumable240_(f,fileIndex,totalFiles,token,documentId){
  let session=null;
  try{
-  session=await api('beginAnnexUploadSGD',app.token,app.currentDraft,{name:f.name,mime:f.type||'application/octet-stream',size:f.size});
+  session=await api('beginAnnexUploadSGD',token,documentId,{name:f.name,mime:f.type||'application/octet-stream',size:f.size});
   const chunkSize=Math.max(1024*1024,Number(session.chunkBytes||4*1024*1024));let offset=Number(session.nextOffset||0);
   while(offset<f.size){
    const end=Math.min(offset+chunkSize,f.size),pct=Math.min(99,Math.round(end/f.size*100));loading(true,'Cargando anexos…','Archivo '+fileIndex+' de '+totalFiles+' · '+f.name+' · '+pct+'%');
-   const b64=await blobBase64Data240_(f.slice(offset,end));const r=await api('uploadAnnexChunkSGD',app.token,session.uploadId,offset,b64);offset=Number(r.nextOffset??end);if(r.done)break;
+   const b64=await blobBase64Data240_(f.slice(offset,end));const r=await api('uploadAnnexChunkSGD',token,session.uploadId,offset,b64);offset=Number(r.nextOffset??end);if(r.done)break;
   }
   return true;
- }catch(e){if(session?.uploadId){try{await api('cancelAnnexUploadSGD',app.token,session.uploadId)}catch(_e){}}throw e}
+ }catch(e){if(session?.uploadId){try{await api('cancelAnnexUploadSGD',token,session.uploadId)}catch(_e){}}throw e}
 }
 async function uploadAnnexes240(input){
- const files=Array.from(input.files||[]);if(!files.length)return;
- const oversized=files.filter(f=>f.size>50*1024*1024);if(oversized.length){err(new Error('Estos anexos superan 50 MB: '+oversized.map(f=>f.name).join(', ')));input.value='';return}
- const empty=files.filter(f=>!f.size);if(empty.length){err(new Error('Estos anexos están vacíos: '+empty.map(f=>f.name).join(', ')));input.value='';return}
+ const files=Array.from(input.files||[]),token=app.token,documentId=app.currentDraft,feedback=$('annexUploadStatus');
+ if(!files.length||!token||!documentId||input.disabled)return;
+ const oversized=files.filter(f=>f.size>50*1024*1024),empty=files.filter(f=>!f.size);
+ if(oversized.length||empty.length){
+  const detail=[oversized.length?'Superan 50 MB: '+oversized.map(f=>f.name).join(', '):'',empty.length?'Están vacíos: '+empty.map(f=>f.name).join(', '):''].filter(Boolean).join(' · ');
+  setUploadFileStatus_(feedback,'error','No se guardó ningún anexo',detail);
+  input.value='';return;
+ }
+ input.disabled=true;
+ const loaderSub=$('loaderSub');
+ if(loaderSub)loaderSub.dataset.fileUpload='annex';
  let uploaded=0;const failures=[];
  try{
   for(let i=0;i<files.length;i++){
-   const f=files[i];loading(true,'Cargando anexos…','Archivo '+(i+1)+' de '+files.length+' · '+f.name);
+   if(app.token!==token)return;
+   const f=files[i],progress='Archivo '+(i+1)+' de '+files.length;
+   setUploadFileStatus_(feedback,'working','Cargando anexos · '+progress,f.name);
+   loading(true,'Cargando anexos…',progress+' · '+f.name);
    try{
-    if(f.size>5*1024*1024)await uploadAnnexResumable240_(f,i+1,files.length);
-    else{const data=await fileObjectData240_(f,50*1024*1024,'anexo');await api('uploadAnnexSGD',app.token,app.currentDraft,data)}
+    if(f.size>5*1024*1024)await uploadAnnexResumable240_(f,i+1,files.length,token,documentId);
+    else{const data=await fileObjectData240_(f,50*1024*1024,'anexo');await api('uploadAnnexSGD',token,documentId,data)}
     uploaded++;
    }catch(e){failures.push(f.name+': '+(e?.message||String(e)))}
   }
-  if(uploaded)toast(uploaded+' anexo(s) cargado(s)');
-  await loadDraftExtras(app.currentDraft);
-  if(failures.length)showModal('Algunos anexos no se cargaron',`<div class="warn">${failures.map(x=>esc(x)).join('<br>')}</div>`,`<button class="btn btn-primary" onclick="closeModal()">Cerrar</button>`);
- }finally{loading(false);input.value=''}
+  if(app.token!==token||app.currentDraft!==documentId)return;
+  if(uploaded)await loadDraftExtras(documentId);
+  const saved=uploaded===1?'1 anexo guardado':uploaded+' anexos guardados';
+  const title=failures.length?(uploaded?saved+' · '+failures.length+' sin guardar':'No se guardó ningún anexo'):saved;
+  setUploadFileStatus_(feedback,failures.length?'error':'saved',title,failures.join(' · '));
+ }finally{
+  if(loaderSub)delete loaderSub.dataset.fileUpload;
+  loading(false);input.value='';input.disabled=false;
+ }
 }
 async function uploadAnnex(input){return uploadAnnexes240(input)}
 function annexInheritanceFind240_(annexId){for(const x of (app.annexInheritanceResults240||[])){const a=(x.annexes||[]).find(y=>y.annexId===annexId);if(a)return{sourceDocumentId:x.document.documentId,annex:a,document:x.document}}return null}
@@ -2261,8 +2328,8 @@ function workflowActionHtml(d,r,rec,id,own){
 function renderDocDrawer224(r){
  releaseDrawerDocumentPreview_();
  app.lastDocDetail=r;const d=r.raw||{},id=d.Documento_ID,own=d.Oficina_Origen===app.session.officeCode,rec=(r.destinations||[]).filter(x=>x.Oficina_Destino===app.session.officeCode&&!['REMISIÓN_REVOCADA','ANULADO'].includes(x.Estado)).slice(-1)[0];
- const fileWarnings=[];if(r.files?.pdf?.id&&!r.files.pdf.available)fileWarnings.push(r.history?'PDF histórico no disponible.':'El PDF oficial no está disponible.');if(!r.files?.pdf?.id&&['EMITIDO','HISTÓRICO'].includes(String(d.Estado||'').toUpperCase()))fileWarnings.push(r.history?'Este documento histórico no tiene un PDF registrado.':'Este documento emitido no tiene un PDF registrado.');if(r.history&&own&&r.files?.word?.id&&!r.files.word.available)fileWarnings.push('Word histórico no disponible.');
- const fileLinks=`<div class="file-links">${r.finalPdfFileId?`<button type="button" onclick="showDrawerDocumentSection_('pdf')" class="btn">Ver PDF</button><button type="button" onclick="downloadDocumentPdf('${id}')" class="btn">Descargar PDF</button>`:''}${own&&r.finalWordFileId?`<button type="button" onclick="downloadSgdFile('${r.finalWordFileId}')" class="btn">Descargar Word</button>`:''}${(own||(r.history&&!r.finalPdfFileId))&&r.sourceFileId?`<button type="button" onclick="previewSgdFile('${r.sourceFileId}')" class="btn">Abrir archivo fuente <svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-external"></use></svg></button>`:''}</div>${!own&&r.finalPdfFileId?'<span class="chip">PDF disponible</span>':''}`;
+ const fileWarnings=[];if(r.files?.pdf?.id&&!r.files.pdf.available)fileWarnings.push(r.history?'PDF histórico no disponible.':'El PDF oficial no está disponible.');if(!r.finalPdfFileId&&!r.files?.pdf?.id&&['EMITIDO','HISTÓRICO'].includes(String(d.Estado||'').toUpperCase()))fileWarnings.push(r.history?'Este documento histórico no tiene un PDF registrado.':'Este documento emitido no tiene un PDF registrado.');if(r.history&&own&&r.files?.word?.id&&!r.files.word.available)fileWarnings.push('Word histórico no disponible.');
+ const fileLinks=r.finalPdfFileId||own&&r.finalWordFileId||(own||(r.history&&!r.finalPdfFileId))&&r.sourceFileId?`<div class="drawer-document-files">${r.finalPdfFileId?`<button type="button" onclick="showDrawerDocumentSection_('pdf')" class="btn">Ver PDF</button><button type="button" onclick="downloadDocumentPdf('${id}')" class="btn">Descargar PDF</button>`:''}${own&&r.finalWordFileId?`<button type="button" onclick="downloadSgdFile('${r.finalWordFileId}')" class="btn">Descargar Word</button>`:''}${(own||(r.history&&!r.finalPdfFileId))&&r.sourceFileId?`<button type="button" onclick="previewSgdFile('${r.sourceFileId}')" class="btn">Abrir archivo fuente <svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-external"></use></svg></button>`:''}</div>`:'';
  const source=r.transferSource?`<div class="proveido-card"><label>Documento trasladado</label><b>${esc(r.transferSource.number||r.transferSource.documentId)}</b><div class="doc-actions"><button class="btn btn-outline" onclick="openDoc('${esc(r.transferSource.documentId)}',true)">Abrir documento</button></div></div>`:'';
  const workflow=workflowActionHtml(d,r,rec,id,own),attends=(r.attends||[]),normalRefs=(r.references||[]);
  const ext=normalizeExternalRecipientsUI233(safeJsonArray(d.Destinos_Externos_JSON)),destRows=r.destinations||[],ann=r.annexes||[],moves=r.movements||[];
@@ -2271,9 +2338,9 @@ function renderDocDrawer224(r){
  
  const externalDestHtml=ext.length?`<div class="external-drawer-list"><div class="helper" style="margin-bottom:6px">Destinatario(s) externo(s)</div>${ext.map((x,i)=>`<div class="external-recipient-card"><div class="external-recipient-index">${i+1}</div><div class="external-recipient-copy"><b>${esc(x.name||'')}</b>${x.cargo?`<span>${esc(x.cargo)}</span>`:''}${x.entity?`<span>${esc(x.entity)}</span>`:''}<span>${esc(x.address||'')}</span></div></div>`).join('')}</div>`:'';const destBody=destRows.map(x=>`<div class="info" style="margin-bottom:7px"><label>${esc(officeName(x.Oficina_Destino))}</label><div>${pill(x.Estado)}${x.Indicación?' · '+esc(x.Indicación):''}</div></div>`).join('')+externalDestHtml||'<div class="helper">Sin destinatarios.</div>';
  const refsBody=normalRefs.map(x=>{const attendsRef=String(x.type||'').toUpperCase().split('/').map(y=>y.trim()).includes('ATIENDE');return `<div class="chip" title="${esc(x.document.subject||'')}">${attendsRef?'<span class="ref-kind">Documento que atiende</span> · ':''}<span class="doclink" onclick="openDoc('${x.document.documentId}',true)">${esc(x.document.number||x.document.documentId)} · ${esc(x.document.subject||'Sin asunto')}</span></div>`}).join('')||'<div class="helper">Sin antecedentes ni referencias.</div>';
- const annexDownloadMode=!r.canEditDraft;const annexBody=ann.length?`${annexDownloadMode?`<div class="doc-actions" style="margin:0 0 10px"><button class="btn btn-outline" type="button" onclick="downloadDocumentAnnexesZip('${id}')"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-download"></use></svg> Descargar todos (.zip)</button></div>`:''}${ann.map(a=>`<div class="attention-result" style="align-items:flex-start"><div style="min-width:0;flex:1"><b>${esc(a.name)}</b><div class="helper">${esc(a.mime||'Archivo')}</div>${Array.isArray(a.requests)&&a.requests.length?`<div class="annex-request-list">${a.requests.map(annexRequestStatusUI_).join('')}</div>`:''}</div><div class="doc-actions"><button class="btn btn-subtle" type="button" onclick="previewSgdFile('${a.fileId}')">Ver</button>${annexDownloadMode?`<button class="btn btn-outline" type="button" onclick="downloadSgdFile('${a.fileId}')">Descargar</button>`:''}</div></div>`).join('')}`:'<div class="helper">Sin anexos.</div>';
+ const annexDownloadMode=!r.canEditDraft;const annexBody=ann.length?`${annexDownloadMode?`<div class="doc-actions" style="margin:0 0 10px"><button class="btn btn-outline" type="button" onclick="downloadDocumentAnnexesZip('${id}')"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-download"></use></svg> Descargar todos (.zip)</button></div>`:''}${ann.map(a=>`<div class="attention-result" style="align-items:flex-start"><div style="min-width:0;flex:1"><b class="drawer-annex-name">${esc(a.name)}</b>${Array.isArray(a.requests)&&a.requests.length?`<div class="annex-request-list">${a.requests.map(annexRequestStatusUI_).join('')}</div>`:''}</div><div class="doc-actions"><button class="btn btn-subtle" type="button" onclick="previewSgdFile('${a.fileId}')">Ver</button>${annexDownloadMode?`<button class="btn btn-outline" type="button" onclick="downloadSgdFile('${a.fileId}')">Descargar</button>`:''}</div></div>`).join('')}`:'<div class="helper">Sin anexos.</div>';
  const traceBody=`<div class="timeline">${moves.map(m=>`<div class="timeline-item"><b>${esc(m.Tipo)}</b><p>${esc(officeName(m.Oficina_Origen))}${m.Oficina_Destino?' → '+esc(officeName(m.Oficina_Destino)):''}${m.Indicación?' · '+esc(m.Indicación):''}</p><time>${esc(m.Fecha_Hora)}</time></div>`).join('')||'<div class="helper">Sin movimientos.</div>'}</div>`;
- $('drawer').innerHTML=`<div class="drawer-head"><div class="row"><div><div class="eyebrow">${esc(d.Expediente_ID||d.Documento_ID)}</div><h2>${esc(d['Número']||('BORRADOR · '+d.Tipo))}${r.history?'<span class="history-tag">HISTÓRICO</span>':''}</h2>${pill(r.document?.status||rec?.Estado||d.Estado)}${r.document?.flowProgress?`<span class="flow-progress">${r.document.flowProgress.attended}/${r.document.flowProgress.total} atendido(s)</span>`:''}</div><div class="drawer-head-actions">${(app.docNavStack||[]).length?'<button class="backbtn" onclick="backDoc()"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-arrow-left"></use></svg> Volver</button>':''}<button class="close" type="button" onclick="closeDrawer()" aria-label="Cerrar" title="Cerrar"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-close"></use></svg></button></div></div></div><div class="drawer-body"><div class="info-grid"><div class="info"><label>Emisor</label><div>${esc(officeName(d.Oficina_Origen))}</div></div>${d.Elaborador_Nombre||d.Usuario_Creador?`<div class="info"><label>Elaborado por</label><div>${esc(d.Elaborador_Nombre||d.Usuario_Creador)}</div></div>`:''}<div class="info"><label>Prioridad</label><div>${pri(d.Prioridad)}</div></div><div class="info" style="grid-column:1/-1"><label>Asunto</label><div>${esc(d.Asunto)}</div></div><div class="info"><label>Emisión</label><div>${esc(d['Fecha_Emisión']||'—')}</div></div><div class="info"><label>Última gestión</label><div>${esc(d['Última_Gestión']||'—')}</div></div></div>${fileWarnings.length?`<div class="warn" style="margin:12px 0">${fileWarnings.map(x=>esc(x)).join('<br>')}</div>`:''}${fileLinks}<div class="drawer-shortcuts"><button class="smallbtn" type="button" onclick="showDrawerDocumentSection_('annexes')">Anexos (${ann.length})</button><button class="smallbtn" type="button" onclick="showDrawerDocumentSection_('movements')">Movimientos (${moves.length})</button></div><div id="drawerInlineFile" class="drawer-inline-file" hidden></div>${source}${workflow}${related.length?foldSection('Documentos relacionados',related.length,related.join('')):''}${foldSection('Destinatarios',destRows.length+ext.length,destBody)}${foldSection('Antecedentes / referencias',normalRefs.length,refsBody)}${foldSection('Anexos',ann.length,annexBody,false,'drawerAnnexes')}${foldSection('Movimientos',moves.length,traceBody,false,'drawerMovements')}</div>`;$('drawerBack').classList.add('show');
+ $('drawer').innerHTML=`<div class="drawer-head"><div class="row"><div><div class="eyebrow">${esc(d.Expediente_ID||d.Documento_ID)}</div><h2>${esc(d['Número']||('BORRADOR · '+d.Tipo))}${r.history?'<span class="history-tag">HISTÓRICO</span>':''}</h2>${pill(r.document?.status||rec?.Estado||d.Estado)}${r.document?.flowProgress?`<span class="flow-progress">${r.document.flowProgress.attended}/${r.document.flowProgress.total} atendido(s)</span>`:''}</div><div class="drawer-head-actions">${(app.docNavStack||[]).length?'<button class="backbtn" onclick="backDoc()"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-arrow-left"></use></svg> Volver</button>':''}<button class="close" type="button" onclick="closeDrawer()" aria-label="Cerrar" title="Cerrar"><svg class="sgd-icon" aria-hidden="true" focusable="false"><use href="#sgd-icon-close"></use></svg></button></div></div></div><div class="drawer-body"><div class="info-grid"><div class="info"><label>Emisor</label><div>${esc(officeName(d.Oficina_Origen))}</div></div>${d.Elaborador_Nombre||d.Usuario_Creador?`<div class="info"><label>Elaborado por</label><div>${esc(d.Elaborador_Nombre||d.Usuario_Creador)}</div></div>`:''}<div class="info"><label>Prioridad</label><div>${pri(d.Prioridad)}</div></div><div class="info" style="grid-column:1/-1"><label>Asunto</label><div>${esc(d.Asunto)}</div></div><div class="info"><label>Emisión</label><div>${esc(d['Fecha_Emisión']||'—')}</div></div>${d['Última_Gestión']&&d['Última_Gestión']!==d['Fecha_Emisión']?`<div class="info"><label>Última gestión</label><div>${esc(d['Última_Gestión'])}</div></div>`:''}</div>${fileWarnings.length?`<div class="warn" style="margin:12px 0">${fileWarnings.map(x=>esc(x)).join('<br>')}</div>`:''}${fileLinks}<div id="drawerInlineFile" class="drawer-inline-file" hidden></div>${source}${workflow}${related.length?foldSection('Documentos relacionados',related.length,related.join('')):''}${foldSection('Destinatarios',destRows.length+ext.length,destBody)}${foldSection('Antecedentes / referencias',normalRefs.length,refsBody)}${foldSection('Anexos',ann.length,annexBody,false,'drawerAnnexes')}${foldSection('Movimientos',moves.length,traceBody,false,'drawerMovements')}</div>`;$('drawerBack').classList.add('show');
 }
 let drawerRequest_,drawerOpener_,drawerDocumentPreview_;
 function openPdfFromBox_(id){
