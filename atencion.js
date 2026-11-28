@@ -8,41 +8,58 @@ const select=(name,label,options)=>`<label>${label}<select name="${name}" requir
 const captcha=`<div class="captcha"><label><span id="question">Comprobación de seguridad</span><input name="answer" inputmode="numeric" pattern="[0-9]{1,2}" required autocomplete="off"></label><button type="button" id="refresh" class="secondary">Actualizar comprobación</button></div>`;
 const message='<p id="message" role="status" aria-live="polite"></p>';
 const docs=['Carta','Solicitud','Oficio','Informe','Escrito','Otro'];
-const person=`<fieldset><legend>Datos de la persona que presenta</legend><div class="grid">
-${select('person','¿Quién presenta el trámite?',[['','Selecciona una opción'],['natural','Persona natural'],['juridica','Persona jurídica (empresa u organización)']])}
+const claimForm=page==='libro';
+const procedure=claimForm?'reclamo o queja':'trámite';
+const person=`<fieldset><legend>${claimForm?'Identificación del consumidor':'Datos de quien presenta'}</legend><div class="grid">
+${select('person','¿Quién presenta '+(claimForm?'la reclamación?':'el trámite?'),[['','Selecciona una opción'],['natural','Persona natural'],['juridica','Persona jurídica (empresa u organización)']])}
 ${field('name','<span id="name-label">Nombres y apellidos</span>','maxlength="160" required autocomplete="name"')}
 <div class="wide grid" id="company" hidden>${field('company','Razón social','maxlength="180" autocomplete="organization"')}${field('ruc','RUC','inputmode="numeric" pattern="[0-9]{11}" maxlength="11"')}</div>
 ${select('idType','Documento de identidad',[['DNI','DNI'],['CE','Carné de extranjería'],['Pasaporte','Pasaporte']])}
 ${field('idNumber','Número de identificación','maxlength="20" required')}
 ${field('address','Dirección','maxlength="240" required autocomplete="street-address"')}
 ${field('phone','Teléfono','type="tel" maxlength="30" required autocomplete="tel"')}
-</div></fieldset>
-<fieldset><legend>Correo para la respuesta</legend><div class="grid">
-${field('email','Correo electrónico (opcional)','type="email" maxlength="180" autocomplete="email" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
-${field('alternate','Otro correo (opcional)','type="email" maxlength="180" autocapitalize="none" spellcheck="false"')}
-</div><p class="support" id="email-use">Si indicas un correo, lo usaremos para comunicaciones y para responder tu trámite.</p></fieldset>`;
-const intake=`<fieldset><legend>Documento</legend><div class="grid">
+${claimForm?field('representative','Padre, madre o representante (si corresponde)','maxlength="160"'):''}
+</div><div class="grid email-fields">
+${field('email','Correo electrónico','type="email" maxlength="180" required autocomplete="email" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
+${field('confirmEmail','Confirma el correo electrónico','type="email" maxlength="180" required autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
+</div><p class="support" id="email-use">Consigna un correo al que tengas acceso. Puedes elegir el medio de respuesta en las autorizaciones.</p></fieldset>`;
+const intake=`<fieldset><legend>Datos del documento</legend><div class="grid">
 ${select('docType','Tipo de documento',docs.map(v=>[v,v]))}
 ${field('number','Número del documento (si corresponde)','maxlength="80"')}
 <div id="other" hidden>${field('other','Especifica el tipo de documento','maxlength="80"')}</div>
 ${field('addressee','Persona u oficina a quien diriges el documento (opcional)','maxlength="120" aria-describedby="intake-office"')}
-</div><p class="notice" id="intake-office">La Oficina de Trámite Documentario y Atención al Cliente recibe todos los documentos y los deriva a quien corresponda.</p></fieldset>`;
+</div><p class="support" id="intake-office">La Oficina de Trámite Documentario y Atención al Cliente deriva el documento a quien corresponda.</p>
+${field('subject','Asunto','maxlength="300" required')}
+<label>Detalle <textarea name="detail" maxlength="3750" required></textarea></label></fieldset>`;
+const claim=`<fieldset><legend>Producto o servicio</legend><div class="grid">
+${select('productType','Tipo',[['','Selecciona una opción'],['Producto','Producto'],['Servicio','Servicio'],['No aplica','No aplica']])}
+${field('amount','Monto reclamado en soles (opcional)','inputmode="decimal" maxlength="16" pattern="[0-9]+([.,][0-9]{1,2})?"')}
+${field('product','Descripción del producto o servicio','maxlength="220" required')}
+</div></fieldset>
+<fieldset><legend>Detalle y pedido</legend>
+${select('claimType','¿Qué deseas registrar?',[['','Selecciona una opción'],['Reclamo','Reclamo'],['Queja','Queja']])}
+${field('subject','Asunto','maxlength="300" required')}
+<label>Describe lo ocurrido <textarea name="detail" maxlength="2300" required></textarea></label>
+<label>¿Qué solución solicitas? <textarea name="request" maxlength="950" required></textarea></label></fieldset>`;
+const permissions=`<fieldset class="permissions"><legend>Datos personales y notificaciones</legend>
+<p>ALTUM LUMEN S.A.C. utilizará los datos y documentos que proporciones para registrar, atender y dar seguimiento a este ${procedure}. Consulta la <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a>.</p>
+<label class="check-option"><input type="checkbox" name="privacyConsent" value="si" required><span>Autorizo el tratamiento de mis datos personales para la gestión de este ${procedure}.</span></label>
+<label class="check-option"><input type="checkbox" name="emailNotifications" value="si" aria-describedby="notification-help"><span>Autorizo que me envíen la respuesta y las futuras comunicaciones de este ${procedure} al correo electrónico consignado (opcional).</span></label>
+<p class="support" id="notification-help">${claimForm?'Si no marcas esta opción, señalas el domicilio consignado para recibir la respuesta.':'Si no marcas esta opción, puedes consultar el estado con el número de expediente y la contraseña del acuse.'}</p></fieldset>`;
 app.innerHTML=page==='consulta'?`<form id="form"><div class="grid">
 ${field('expediente','Número de expediente','placeholder="EXP-2026-000001" maxlength="32" required autocomplete="off"')}
 <div class="password-row">${field('password','Contraseña de consulta','type="password" maxlength="48" required autocomplete="off" autocapitalize="none" spellcheck="false"')}<button type="button" class="secondary" id="toggle-password" aria-label="Mostrar contraseña de consulta" aria-pressed="false">Mostrar</button></div>
 </div><p></p>${captcha}${message}<button id="send">Consultar</button></form><section class="panel" id="result" hidden tabindex="-1"></section>`:
-`<form id="form" autocomplete="off">${person}${page==='mesa'?intake:''}
-<fieldset><legend>${page==='libro'?'Cuéntanos qué ocurrió':'Asunto y detalle'}</legend>
-${page==='libro'?select('claimType','¿Qué deseas registrar?',[['','Selecciona una opción'],['Reclamo','Reclamo'],['Queja','Queja']]):''}
-${field('subject','Asunto <small>Hasta 300 caracteres</small>','maxlength="300" required')}
-<label>Detalle<textarea name="detail" maxlength="4000" required></textarea></label></fieldset>
+`<form id="form" class="intake-form" aria-labelledby="form-title" autocomplete="off">
+<div class="form-heading"><h2 id="form-title">${claimForm?'Hoja de Reclamación':'Presentación de documentos'}</h2><p>Completa los campos. Los opcionales están indicados.</p></div>
+${person}${claimForm?claim:intake}
 <fieldset><legend>Documentos adjuntos</legend>
 ${page==='mesa'?'<label>Documento principal (PDF obligatorio) <small>Un archivo de hasta 20 MB.</small><input id="principal" type="file" accept=".pdf,application/pdf" required></label>':''}
 <label>Copias y anexos (PDF opcionales) <small>Hasta 20 MB en conjunto. Puedes agregarlos uno por uno.</small><input id="annex" type="file" accept=".pdf,application/pdf" multiple></label>
 <p id="attachment-feedback" role="status"></p>
 <ol id="files" aria-label="Documentos que se enviarán"></ol></fieldset>
-<details><summary>Uso de tus datos</summary><p>ALTUM LUMEN S.A.C. usa tus datos y archivos para registrar, atender y responder este trámite. Para consultas sobre tus datos, escribe a tramiteyatencion.altumlumen@gmail.com. <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a></p></details>
-<p></p>${captcha}${message}<button id="send">${page==='libro'?'Registrar reclamo o queja':'Registrar expediente'}</button></form>
+${permissions}
+<div class="form-submit">${captcha}${message}<button id="send">${claimForm?'Registrar reclamo o queja':'Registrar expediente'}</button></div></form>
 <section class="panel" id="result" hidden tabindex="-1"></section>`;
 const form=document.querySelector('#form'),send=document.querySelector('#send'),result=document.querySelector('#result'),feedback=document.querySelector('#message');
 const refreshButton=document.querySelector('#refresh');
@@ -113,6 +130,23 @@ function filesList(){
   });
 }
 if(page!=='consulta'){
+  const {email,confirmEmail,productType,product}=form.elements;
+  const matchEmail=()=>{
+    const mismatch=confirmEmail.value&&email.value.trim().toLowerCase()!==confirmEmail.value.trim().toLowerCase();
+    confirmEmail.setCustomValidity(mismatch?'Los correos electrónicos deben coincidir.':'');
+  };
+  email.addEventListener('input',matchEmail);
+  confirmEmail.addEventListener('input',matchEmail);
+  if(claimForm){
+    const showProduct=()=>{
+      const applicable=productType.value!=='No aplica';
+      product.required=applicable;
+      product.disabled=!applicable;
+      product.closest('label').hidden=!applicable;
+    };
+    productType.addEventListener('change',showProduct);
+    showProduct();
+  }
   const synchronize=()=>{
     const company=form.elements.person.value==='juridica';
     document.querySelector('#company').hidden=!company;
@@ -198,6 +232,7 @@ function receipt(data,password){
   const url=new URL('consultar-expediente.html',location.href).href;
   const formatted=password.match(/.{4}/g).join('-'),details=element('dl','');
   for(const [label,value] of [['Expediente',data.expediente],['Fecha de ingreso',data.date],['Contraseña de consulta',formatted]])details.append(element('dt',label),element('dd',value));
+  details.append(element('dt','Medio indicado'),element('dd',operation.communications));
   const download=element('a','Descargar acuse en PDF');
   download.className='button';download.download='Acuse-'+data.expediente+'.pdf';
   download.href=URL.createObjectURL(receiptPdf(data.expediente,formatted,data.date,url));
@@ -206,6 +241,22 @@ function receipt(data,password){
   const actions=element('div','');actions.className='actions';actions.append(download,track);
   result.replaceChildren(element('h2','Expediente ingresado'),details,actions);
   form.reset();annexes=[];operation=null;form.hidden=true;
+}
+function submissionData(fields,communications){
+  const {confirmEmail,privacyConsent,emailNotifications,productType,product,amount,representative,request,detail,...data}=fields;
+  // El canal público del SGD conserva el pedido y las autorizaciones en el detalle del expediente.
+  const parts=[];
+  if(claimForm){
+    parts.push('Bien o servicio: '+[productType,product?.trim()].filter(Boolean).join(' · '));
+    if(amount)parts.push('Monto reclamado (S/): '+amount.trim());
+    if(representative?.trim())parts.push('Padre, madre o representante: '+representative.trim());
+  }
+  parts.push('Detalle: '+detail.trim());
+  if(claimForm)parts.push('Pedido: '+request.trim());
+  parts.push('Autorización de tratamiento de datos para este trámite: '+(privacyConsent==='si'?'Sí.':'No.'),
+    'Autoriza notificaciones por correo para este trámite: '+(emailNotifications==='si'?'Sí.':'No.'),
+    'Medio indicado para las comunicaciones: '+communications+'.');
+  return {...data,detail:parts.join('\n\n'),kind:page,channel:claimForm?'interno':''};
 }
 async function submit(e){
   e.preventDefault();
@@ -229,10 +280,13 @@ async function submit(e){
       if(files.length>30||files.some(f=>f.size<8||f.size>limit||f.name.length>180||!/\.pdf$/i.test(f.name)))throw Error('Revisa que los adjuntos sean archivos PDF de hasta 20 MB.');
       if(annexes.reduce((sum,f)=>sum+f.size,0)>limit)throw Error('Los anexos juntos pueden pesar hasta 20 MB.');
       const manifest=files.map(f=>({name:f.name,size:f.size})),snapshot=JSON.stringify([fields,manifest,files.map(f=>f.lastModified)]);
-      if(!operation||operation.snapshot!==snapshot)operation={snapshot,id:randomKey(),password:randomKey()};
+      if(!operation||operation.snapshot!==snapshot){
+        const communications=fields.emailNotifications==='si'?'Correo electrónico':claimForm?'Domicilio consignado':'Consulta de expediente';
+        operation={snapshot,id:randomKey(),password:randomKey(),communications};
+      }
       const {id,password}=operation,auth={id,password};
       status('Preparando ingreso…');
-      const data={...fields,kind:page,channel:page==='libro'?'interno':''};
+      const data=submissionData(fields,operation.communications);
       const start=await rpc('begin',{...proof,...auth,data,files:manifest});
       if(start.state!=='REGISTRADO'){
         for(const [index,file] of files.entries()){
