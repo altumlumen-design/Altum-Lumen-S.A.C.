@@ -22,7 +22,7 @@ ${claimForm?field('representative','Padre, madre o representante (si corresponde
 </div><div class="grid email-fields">
 ${field('email','Correo electrónico','type="email" maxlength="180" required autocomplete="email" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
 ${field('confirmEmail','Confirma el correo electrónico','type="email" maxlength="180" required autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="email-use"')}
-</div><p class="support" id="email-use">Consigna un correo al que tengas acceso. Puedes elegir el medio de respuesta en las autorizaciones.</p></fieldset>`;
+</div><p class="support" id="email-use">Consigna un correo al que tengas acceso. ${claimForm?'Al final del formulario elige cómo recibir la respuesta.':'Al final del formulario autoriza las notificaciones a ese correo.'}</p></fieldset>`;
 const intake=`<fieldset><legend>Datos del documento</legend><div class="grid">
 ${select('docType','Tipo de documento',docs.map(v=>[v,v]))}
 ${field('number','Número del documento (si corresponde)','maxlength="80"')}
@@ -44,8 +44,12 @@ ${field('subject','Asunto','maxlength="300" required')}
 const permissions=`<fieldset class="permissions"><legend>Datos personales y notificaciones</legend>
 <p>ALTUM LUMEN S.A.C. utilizará los datos y documentos que proporciones para registrar, atender y dar seguimiento a este ${procedure}. Consulta la <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a>.</p>
 <label class="check-option"><input type="checkbox" name="privacyConsent" value="si" required><span>Autorizo el tratamiento de mis datos personales para la gestión de este ${procedure}.</span></label>
-<label class="check-option"><input type="checkbox" name="emailNotifications" value="si" aria-describedby="notification-help"><span>Autorizo que me envíen la respuesta y las futuras comunicaciones de este ${procedure} al correo electrónico consignado (opcional).</span></label>
-<p class="support" id="notification-help">${claimForm?'Si no marcas esta opción, señalas el domicilio consignado para recibir la respuesta.':'Si no marcas esta opción, puedes consultar el estado con el número de expediente y la contraseña del acuse.'}</p></fieldset>`;
+${claimForm?`<div role="group" aria-labelledby="notification-help">
+<p class="support" id="notification-help">Elige cómo deseas recibir la respuesta y las comunicaciones de tu reclamo o queja.</p>
+<label class="check-option"><input type="radio" name="emailNotifications" value="si" required><span>Autorizo que me las envíen al correo electrónico consignado.</span></label>
+<label class="check-option"><input type="radio" name="emailNotifications" value="no" required><span>Solicito recibirlas por carta en el domicilio consignado.</span></label>
+</div>`:`<label class="check-option"><input type="checkbox" name="emailNotifications" value="si" required aria-describedby="notification-help"><span>Autorizo que me envíen la respuesta y las futuras comunicaciones de este trámite al correo electrónico consignado.</span></label>
+<p class="support" id="notification-help">Marca esta autorización para registrar el expediente.</p>`}</fieldset>`;
 app.innerHTML=page==='consulta'?`<form id="form"><div class="grid">
 ${field('expediente','Número de expediente','placeholder="EXP-2026-000001" maxlength="32" required autocomplete="off"')}
 <div class="password-row">${field('password','Contraseña de consulta','type="password" maxlength="48" required autocomplete="off" autocapitalize="none" spellcheck="false"')}<button type="button" class="secondary" id="toggle-password" aria-label="Mostrar contraseña de consulta" aria-pressed="false">Mostrar</button></div>
@@ -281,7 +285,7 @@ async function submit(e){
       if(annexes.reduce((sum,f)=>sum+f.size,0)>limit)throw Error('Los anexos juntos pueden pesar hasta 20 MB.');
       const manifest=files.map(f=>({name:f.name,size:f.size})),snapshot=JSON.stringify([fields,manifest,files.map(f=>f.lastModified)]);
       if(!operation||operation.snapshot!==snapshot){
-        const communications=fields.emailNotifications==='si'?'Correo electrónico':claimForm?'Domicilio consignado':'Consulta de expediente';
+        const communications=fields.emailNotifications==='si'?'Correo electrónico':'Domicilio consignado';
         operation={snapshot,id:randomKey(),password:randomKey(),communications};
       }
       const {id,password}=operation,auth={id,password};
